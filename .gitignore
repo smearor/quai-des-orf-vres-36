@@ -10,3 +10,5 @@ Cargo.lock.orig
 .idea/**/dataSources/
 .idea/**/sqlDataSources.xml
 .DS_Store
+
+logs
