@@ -1,0 +1,11 @@
+Quai des Orfèvres 36
+Copyright (c) 2026 Andreas Schaeffer
+
+This product includes icons derived from the following upstream
+projects (bundled via the fonts-rs icon set crates):
+
+* Lucide — https://lucide.dev — ISC License
+* Tabler Icons — https://tabler.io/icons — MIT License
+
+Self-authored SVG artwork under crates/app/resources/art/ is MIT
+licensed, same as this project.
