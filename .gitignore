@@ -1,0 +1,12 @@
+/target
+Cargo.lock.orig
+*.rs.bk
+*.pdb
+.idea/.name
+.idea/dynamic.xml
+.idea/aws.xml
+.idea/jarRepositories.xml
+.idea/copilot
+.idea/**/dataSources/
+.idea/**/sqlDataSources.xml
+.DS_Store
