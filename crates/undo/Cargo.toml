@@ -9,6 +9,7 @@ repository.workspace = true
 description = "Physical undo for Quai des Orfèvres 36: marker steps restoring a previous position"
 
 [dependencies]
+qdo36-map.workspace = true
 qdo36-material.workspace = true
 qdo36-moves.workspace = true
 serde.workspace = true
