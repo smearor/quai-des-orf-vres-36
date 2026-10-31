@@ -3,13 +3,13 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::collections::BTreeSet;
 
-/// The rounds on which Corbeau's position is revealed to the
+/// The rounds on which Fugitive's position is revealed to the
 /// detectives.
 ///
 /// Classic Scotland Yard reveals on rounds 3, 8, 13, 18 and 24.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RevealSchedule {
-    /// Round numbers at which Corbeau surfaces.
+    /// Round numbers at which Fugitive surfaces.
     pub rounds: BTreeSet<RoundNumber>,
 }
 
@@ -21,7 +21,7 @@ impl RevealSchedule {
         }
     }
 
-    /// An empty schedule - Corbeau is never revealed until caught.
+    /// An empty schedule - Fugitive is never revealed until caught.
     pub fn empty() -> Self {
         Self { rounds: BTreeSet::new() }
     }
@@ -33,7 +33,7 @@ impl RevealSchedule {
         }
     }
 
-    /// Returns `true` when the given round reveals Corbeau.
+    /// Returns `true` when the given round reveals Fugitive.
     pub fn is_reveal(&self, round: RoundNumber) -> bool {
         self.rounds.contains(&round)
     }

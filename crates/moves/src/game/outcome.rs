@@ -6,11 +6,11 @@ use serde::Serialize;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum GameOutcome {
-    /// A detective landed on Corbeau's station - the hunt is over.
+    /// A detective landed on Fugitive's station - the hunt is over.
     DetectivesWin {
-        /// Station where Corbeau was caught.
+        /// Station where Fugitive was caught.
         caught_at: StationId,
     },
-    /// Corbeau survived all 24 rounds.
-    CorbeauEscapes,
+    /// Fugitive survived all 24 rounds.
+    FugitiveEscapes,
 }

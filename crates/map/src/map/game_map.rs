@@ -251,6 +251,7 @@ bounds_mm = [0.0, 0.0, 100.0, 100.0]
             assert_eq!(map.meta().name.as_str(), city.name());
             assert!(map.stations().count() > 0, "{city}");
             assert!(!map.meta().slogan.is_empty() && !map.meta().story.is_empty(), "{city} should carry flavor text");
+            assert!(!map.meta().fugitive.is_empty(), "{city} should name its fugitive");
             let anchor = map.meta().anchor.as_ref().unwrap_or_else(|| panic!("{city}: missing anchor spec"));
             assert!(!anchor.profile.as_str().is_empty() && !anchor.name.as_str().is_empty(), "{city}: incomplete anchor spec");
             // Viewport invariant: the drawable surroundings extend at

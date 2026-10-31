@@ -8,7 +8,7 @@ use serde::Serialize;
 /// The ordered record of all committed moves.
 ///
 /// The log is the single source of truth for the HUD column, the
-/// `move_log` MCP tool and the replay mode. Corbeau's destinations are
+/// `move_log` MCP tool and the replay mode. Fugitive's destinations are
 /// stored truthfully - secrecy is enforced by *projections*, never by
 /// hiding data inconsistently.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -18,12 +18,12 @@ pub struct GameLog {
 }
 
 impl GameLog {
-    /// The detectives' view: detective destinations are public, Corbeau's
+    /// The detectives' view: detective destinations are public, Fugitive's
     /// only on reveal rounds.
     ///
     /// Used by the HUD, the public MCP state and the move-log tool - the
     /// same projection everywhere, so secrecy cannot drift.
-    pub fn corbeau_public_view(&self, reveal: &RevealSchedule) -> Vec<PublicEntry> {
+    pub fn fugitive_public_view(&self, reveal: &RevealSchedule) -> Vec<PublicEntry> {
         self.entries
             .iter()
             .map(|entry| PublicEntry {
@@ -31,7 +31,7 @@ impl GameLog {
                 ticket: entry.ticket,
                 destination: match entry.actor {
                     Role::Detective(_) => Some(entry.kind.destination()),
-                    Role::Corbeau => reveal.is_reveal(entry.round).then(|| entry.kind.destination()),
+                    Role::Fugitive => reveal.is_reveal(entry.round).then(|| entry.kind.destination()),
                 },
             })
             .collect()
@@ -64,15 +64,15 @@ mod tests {
     }
 
     #[test]
-    fn public_view_redacts_corbeau_until_reveal() {
+    fn public_view_redacts_fugitive_until_reveal() {
         let log = GameLog {
             entries: vec![
-                record(Role::Corbeau, 1, 10),
-                record(Role::Corbeau, 3, 20),
+                record(Role::Fugitive, 1, 10),
+                record(Role::Fugitive, 3, 20),
                 record(Role::Detective(PawnId::new(0)), 3, 30),
             ],
         };
-        let view = log.corbeau_public_view(&RevealSchedule::classic());
+        let view = log.fugitive_public_view(&RevealSchedule::classic());
         assert_eq!(view[0].destination, None, "round 1 stays hidden");
         assert_eq!(view[1].destination, Some(StationId::new(20)), "round 3 is revealed");
         assert_eq!(view[2].destination, Some(StationId::new(30)), "detectives are always public");

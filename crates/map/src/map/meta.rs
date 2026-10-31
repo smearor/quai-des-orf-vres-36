@@ -1,5 +1,6 @@
 use crate::AnchorSpec;
 use crate::CityName;
+use crate::FugitiveAlias;
 use crate::MapSlogan;
 use crate::MapStory;
 use qdo36_material::RoundNumber;
@@ -25,6 +26,9 @@ pub struct MapMeta {
     /// Short noir framing text (2-3 sentences) for the setup dialog.
     #[serde(default)]
     pub story: MapStory,
+    /// The city's fugitive alias ("Monsieur Corbeau", "Der Fuchs").
+    #[serde(default)]
+    pub fugitive: FugitiveAlias,
     /// Map coordinate bounds, TOML shape `bounds_mm = [x_min, y_min, x_max, y_max]`.
     #[serde(rename = "bounds_mm", with = "serde_quad")]
     pub bounds: Region,

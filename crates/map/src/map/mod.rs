@@ -4,6 +4,7 @@
 
 pub mod edge;
 pub mod error;
+pub mod fugitive;
 pub mod game_map;
 pub mod meta;
 pub mod slogan;
@@ -13,6 +14,7 @@ pub mod transport;
 
 pub use edge::Edge;
 pub use error::MapError;
+pub use fugitive::FugitiveAlias;
 pub use game_map::GameMap;
 pub use meta::MapMeta;
 pub use slogan::MapSlogan;

@@ -6,7 +6,7 @@ use serde::Serialize;
 
 /// One log entry as seen by the detectives (public view).
 ///
-/// Corbeau's ticket is always public - the detectives *hear* which
+/// Fugitive's ticket is always public - the detectives *hear* which
 /// transport he took - but his destination stays hidden unless the
 /// round is a reveal round.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -17,7 +17,7 @@ pub struct PublicEntry {
     pub ticket: TicketKind,
     /// Destination, if this entry is publicly visible.
     ///
-    /// Always `Some` for detective moves; `Some` for Corbeau only on
+    /// Always `Some` for detective moves; `Some` for Fugitive only on
     /// reveal rounds, `None` otherwise.
     pub destination: Option<StationId>,
 }

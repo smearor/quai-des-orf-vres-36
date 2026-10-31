@@ -6,7 +6,7 @@ use std::fmt;
 ///
 /// Taxi/bus/metro tickets are public for everyone; the black ticket
 /// (any route incl. batobus) and the double ticket (two consecutive
-/// moves) are Corbeau-only, as in Scotland Yard.
+/// moves) are Fugitive-only, as in Scotland Yard.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum TicketKind {
@@ -16,9 +16,9 @@ pub enum TicketKind {
     Bus,
     /// Pays one metro edge.
     Metro,
-    /// Corbeau-only: pays any route including batobus.
+    /// Fugitive-only: pays any route including batobus.
     Black,
-    /// Corbeau-only: pays two consecutive hops in one turn.
+    /// Fugitive-only: pays two consecutive hops in one turn.
     Double,
 }
 

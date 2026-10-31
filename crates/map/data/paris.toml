@@ -169,7 +169,8 @@ edges = [
 [map]
 name = "paris"
 slogan = "The city of light holds its breath."
-story = "Corbeau vanished at dawn beneath the Eiffel Tower. The detectives of Quai des Orfèvres 36 fan out through the boulevards - every métro gate, every Batobus pier is watched. Catch him before the last round ends."
+story = "Monsieur Corbeau vanished at dawn beneath the Eiffel Tower. The detectives of Quai des Orfèvres 36 fan out through the boulevards - every métro gate, every Batobus pier is watched. Catch him before the last round ends."
+fugitive = "Monsieur Corbeau"
 bounds_mm = [0.0, 0.0, 600.0, 420.0]
 max_rounds = 24
 reveal_rounds = [3, 8, 13, 18, 24]

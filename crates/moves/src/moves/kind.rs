@@ -8,7 +8,7 @@ use serde::Serialize;
 pub enum MoveKind {
     /// A single hop paid with one transport ticket.
     Single(Hop),
-    /// Corbeau's double ticket: two consecutive hops in one turn.
+    /// Fugitive's double ticket: two consecutive hops in one turn.
     Double {
         /// First hop of the double move.
         first: Hop,

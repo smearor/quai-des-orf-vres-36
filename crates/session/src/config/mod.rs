@@ -19,7 +19,7 @@ use std::collections::BTreeSet;
 /// Configuration chosen in the setup dialog.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GameConfig {
-    /// How many detectives hunt Corbeau (2-5).
+    /// How many detectives hunt the fugitive (2-5).
     pub detectives: DetectiveCount,
     /// Pawn colors in seat order; `colors.len() == detectives.count()`.
     pub colors: Vec<PawnColor>,
@@ -27,9 +27,9 @@ pub struct GameConfig {
     pub mode: TangibleMode,
     /// Whether undo/redo is offered (chess's `allow_undo` gate).
     pub allow_undo: bool,
-    /// Rounds on which Corbeau's position is revealed.
+    /// Rounds on which the fugitive's position is revealed.
     pub reveal: RevealPreset,
-    /// Maximum game length; Corbeau escapes when reached.
+    /// Maximum game length; the fugitive escapes when reached.
     ///
     /// Defaults to the city's dataset value (Paris: 24); other cities
     /// may ship a different default in their `[map]` meta.

@@ -49,10 +49,10 @@ pub enum MoveError {
     /// The station does not exist on the map.
     #[error("unknown station {0}")]
     UnknownStation(StationId),
-    /// This ticket kind is reserved for Corbeau.
-    #[error("{0} tickets are Corbeau-only")]
-    CorbeauOnlyTicket(TicketKind),
-    /// A batobus route needs Corbeau's black ticket.
+    /// This ticket kind is reserved for Fugitive.
+    #[error("{0} tickets are Fugitive-only")]
+    FugitiveOnlyTicket(TicketKind),
+    /// A batobus route needs Fugitive's black ticket.
     #[error("batobus routes require the black ticket")]
     BatobusRequiresBlack,
 }

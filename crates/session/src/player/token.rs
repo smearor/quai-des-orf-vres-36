@@ -6,7 +6,7 @@ use std::fmt::Write as _;
 /// Credential issued by `join_game` on the MCP server.
 ///
 /// Scopes agent access to one seat: a detective token sees only the
-/// public projection, the Corbeau token also sees his hidden position
+/// public projection, the fugitive token also sees his hidden position
 /// - the same secrecy split as the shield zone.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct PlayerToken(u64);

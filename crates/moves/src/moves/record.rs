@@ -7,8 +7,8 @@ use serde::Serialize;
 
 /// A committed move in the game log.
 ///
-/// `destination` is the truth (where Corbeau actually went); the public
-/// projection [`crate::GameLog::corbeau_public_view`] redacts it until
+/// `destination` is the truth (where Fugitive actually went); the public
+/// projection [`crate::GameLog::fugitive_public_view`] redacts it until
 /// the round is a reveal round.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MoveRecord {

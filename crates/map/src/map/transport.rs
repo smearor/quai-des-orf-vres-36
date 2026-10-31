@@ -5,7 +5,7 @@ use std::fmt;
 /// Transport mode of an edge (a travel route between two stations).
 ///
 /// Maps to the Scotland Yard ticket types: taxis and buses are public
-/// for everyone, the river route is Corbeau's black-ticket territory.
+/// for everyone, the river route is Fugitive's black-ticket territory.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Transport {
@@ -15,7 +15,7 @@ pub enum Transport {
     Bus,
     /// Long-range metro connection; paid with a metro ticket.
     Metro,
-    /// Seine river route (Batobus); Corbeau's black ticket.
+    /// Seine river route (Batobus); Fugitive's black ticket.
     Batobus,
 }
 

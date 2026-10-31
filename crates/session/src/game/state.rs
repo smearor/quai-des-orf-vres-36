@@ -12,15 +12,15 @@ use std::collections::BTreeMap;
 
 /// The complete state of one game snapshot.
 ///
-/// `corbeau_pos` is the hidden truth - it must never leak into public
+/// `fugitive_pos` is the hidden truth - it must never leak into public
 /// projections (HUD, public MCP state); the private view is served
-/// only inside the shield zone / to the Corbeau token.
+/// only inside the shield zone / to the Fugitive token.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GameState {
     /// Detective pawn positions.
     pub positions: BTreeMap<PawnId, StationId>,
-    /// Corbeau's true position - hidden from the public view.
-    pub corbeau_pos: StationId,
+    /// Fugitive's true position - hidden from the public view.
+    pub fugitive_pos: StationId,
     /// Ticket inventories per role.
     pub tickets: BTreeMap<Role, TicketCounts>,
     /// Current round.

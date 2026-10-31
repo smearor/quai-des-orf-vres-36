@@ -3,9 +3,9 @@ use serde::Serialize;
 use std::fmt;
 use thiserror::Error;
 
-/// The number of detectives hunting Corbeau.
+/// The number of detectives hunting Fugitive.
 ///
-/// Scotland Yard plays with 2-5 detectives (the sixth seat is Corbeau
+/// Scotland Yard plays with 2-5 detectives (the sixth seat is Fugitive
 /// himself).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[serde(try_from = "u8", into = "u8")]

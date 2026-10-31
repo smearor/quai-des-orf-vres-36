@@ -15,7 +15,7 @@ pub enum RevealPreset {
     /// The Scotland Yard classic: rounds 3, 8, 13, 18, 24.
     #[default]
     Classic,
-    /// Corbeau is never revealed until caught.
+    /// the fugitive is never revealed until caught.
     None,
     /// A custom schedule edited in the setup dialog.
     Custom(RevealSchedule),

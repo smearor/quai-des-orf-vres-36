@@ -1,5 +1,5 @@
 //! The game domain: lifecycle phase, outcome, the move log with its
-//! public (Corbeau-redacted) projection and the reveal schedule.
+//! public (Fugitive-redacted) projection and the reveal schedule.
 
 pub mod log;
 pub mod outcome;

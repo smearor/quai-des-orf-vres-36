@@ -16,6 +16,7 @@ pub use anchor::AnchorSpec;
 pub use city::City;
 pub use city::CityName;
 pub use map::Edge;
+pub use map::FugitiveAlias;
 pub use map::GameMap;
 pub use map::MapError;
 pub use map::MapMeta;

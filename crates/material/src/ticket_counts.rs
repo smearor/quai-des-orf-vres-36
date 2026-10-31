@@ -11,9 +11,9 @@ pub struct TicketCounts {
     pub bus: u8,
     /// Remaining metro tickets.
     pub metro: u8,
-    /// Remaining black tickets (Corbeau only).
+    /// Remaining black tickets (Fugitive only).
     pub black: u8,
-    /// Remaining double tickets (Corbeau only).
+    /// Remaining double tickets (Fugitive only).
     pub double: u8,
 }
 
