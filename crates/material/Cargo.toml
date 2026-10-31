@@ -10,3 +10,4 @@ description = "Material vocabulary for Quai des Orfèvres 36: roles, pawns and t
 
 [dependencies]
 serde.workspace = true
+thiserror.workspace = true
