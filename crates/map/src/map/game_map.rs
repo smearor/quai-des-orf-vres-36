@@ -106,6 +106,27 @@ impl GameMap {
             .map(|station| (station.id, pos.distance(&station.pos)))
             .min_by(|a, b| a.1.total_cmp(&b.1))
     }
+
+    /// Stations unreachable from the rest of the graph (BFS over
+    /// neighbors).
+    ///
+    /// A soft dataset-quality check, not a load error: an island is
+    /// legal TOML but almost certainly a data bug (a Scotland Yard map
+    /// must be one component). Bundled maps are asserted connected in
+    /// tests; callers may warn on non-empty results.
+    pub fn disconnected(&self) -> Vec<StationId> {
+        let Some(start) = self.stations.keys().next() else {
+            return Vec::new();
+        };
+        let mut visited = BTreeSet::new();
+        let mut stack = vec![*start];
+        while let Some(id) = stack.pop() {
+            if visited.insert(id) {
+                stack.extend(self.neighbors(id).iter().map(|n| n.station));
+            }
+        }
+        self.stations.keys().filter(|id| !visited.contains(id)).copied().collect()
+    }
 }
 
 impl FromStr for GameMap {
@@ -274,6 +295,7 @@ bounds_mm = [0.0, 0.0, 100.0, 100.0]
             assert!(!map.meta().slogan.is_empty() && !map.meta().story.is_empty(), "{city} should carry flavor text");
             let fugitive = map.meta().fugitive.as_ref().unwrap_or_else(|| panic!("{city}: missing fugitive spec"));
             assert!(!fugitive.alias.is_empty(), "{city} should name its fugitive");
+            assert!(map.disconnected().is_empty(), "{city} graph must be connected: {:?}", map.disconnected());
             let anchor = map.meta().anchor.as_ref().unwrap_or_else(|| panic!("{city}: missing anchor spec"));
             assert!(!anchor.profile.as_str().is_empty() && !anchor.name.as_str().is_empty(), "{city}: incomplete anchor spec");
             // Viewport invariant: the drawable surroundings extend at
