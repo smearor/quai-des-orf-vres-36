@@ -23,6 +23,11 @@ pub enum Transport {
     Underground,
 }
 
+impl Transport {
+    /// Every transport kind.
+    pub const ALL: [Self; 5] = [Self::Taxi, Self::Bus, Self::Metro, Self::Batobus, Self::Underground];
+}
+
 impl fmt::Display for Transport {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let name = match self {
@@ -47,7 +52,7 @@ mod tests {
             /// Transport under test.
             t: Transport,
         }
-        for transport in [Transport::Taxi, Transport::Bus, Transport::Metro, Transport::Batobus, Transport::Underground] {
+        for transport in Transport::ALL {
             let encoded = toml::to_string(&Wrapper { t: transport }).unwrap_or_default();
             assert_eq!(toml::from_str::<Wrapper>(&encoded).ok(), Some(Wrapper { t: transport }));
         }
