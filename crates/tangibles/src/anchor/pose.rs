@@ -8,7 +8,7 @@ use tangible_objects_model::Vec2;
 ///
 /// `center` is the smoothed centroid in surface millimeters,
 /// `rotation_rad` is correspondence-anchored to the profile's pin
-/// frame (robofigure-rs pin-map fix), so it is stable and repeatable.
+/// frame (tangible-objects-rs pin-map fix), so it is stable and repeatable.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct AnchorPose {
     /// Tangible centroid on the touch surface.

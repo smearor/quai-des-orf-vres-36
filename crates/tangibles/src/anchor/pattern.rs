@@ -8,7 +8,7 @@ use tangible_objects_model::ProfileFile;
 /// (`data/<city>/<landmark>.toml` - Paris: Tour Eiffel, Berlin:
 /// Fernsehturm) so the app can `registerPattern` them without file
 /// I/O. Rotation stability comes from the daemon's
-/// correspondence-anchored pin map (robofigure-rs >= bc109b8) - no
+/// correspondence-anchored pin map (tangible-objects-rs >= bc109b8) - no
 /// client-side solving needed.
 #[derive(Debug, Clone)]
 pub struct AnchorPattern {
@@ -25,8 +25,8 @@ impl AnchorPattern {
     /// by tests).
     pub fn for_city(city: City) -> Result<Self, DaemonError> {
         match city {
-            City::Paris => Self::from_toml(include_str!("../data/paris/tour-de-eifel.toml")),
-            City::Berlin => Self::from_toml(include_str!("../data/berlin/fernsehturm.toml")),
+            City::Paris => Self::from_toml(include_str!("../../data/paris/tour-de-eifel.toml")),
+            City::Berlin => Self::from_toml(include_str!("../../data/berlin/fernsehturm.toml")),
         }
     }
 
