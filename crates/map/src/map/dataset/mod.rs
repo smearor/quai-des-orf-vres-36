@@ -5,8 +5,6 @@
 
 pub mod map_meta;
 pub mod map_toml;
-pub mod station_toml;
 
 pub use map_meta::MapMeta;
 pub use map_toml::MapToml;
-pub use station_toml::StationToml;

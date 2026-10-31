@@ -131,21 +131,13 @@ impl TryFrom<MapToml> for GameMap {
         }
 
         let mut stations = BTreeMap::new();
-        for station_toml in &dataset.stations {
-            let id = station_toml.id;
-            let pos = station_toml.pos;
+        for station in &dataset.stations {
+            let pos = station.pos;
             if !pos.x.is_finite() || !pos.y.is_finite() || !bounds.contains(&pos) {
-                return Err(MapError::OutOfBounds(id));
+                return Err(MapError::OutOfBounds(station.id));
             }
-            let station = Station {
-                id,
-                name: station_toml.name.clone(),
-                pos,
-                kinds: station_toml.kinds.clone(),
-                neighbors: Vec::new(),
-            };
-            if stations.insert(id, station).is_some() {
-                return Err(MapError::DuplicateStationId(id));
+            if stations.insert(station.id, station.clone()).is_some() {
+                return Err(MapError::DuplicateStationId(station.id));
             }
         }
 

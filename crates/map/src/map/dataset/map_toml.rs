@@ -1,6 +1,6 @@
 use crate::map::Edge;
 use crate::map::dataset::MapMeta;
-use crate::map::dataset::StationToml;
+use crate::station::Station;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -13,7 +13,7 @@ pub struct MapToml {
     /// Map-wide metadata.
     pub map: MapMeta,
     /// Station table.
-    pub stations: Vec<StationToml>,
+    pub stations: Vec<Station>,
     /// Edge list (undirected routes; endpoint order is irrelevant).
     pub edges: Vec<Edge>,
 }
