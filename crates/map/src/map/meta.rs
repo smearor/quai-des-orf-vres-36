@@ -1,11 +1,16 @@
 use crate::AnchorSpec;
 use crate::CityName;
-use crate::FugitiveAlias;
+use crate::FugitiveSpec;
+use crate::LineColor;
+use crate::LineName;
 use crate::MapSlogan;
 use crate::MapStory;
+use crate::Transport;
+use crate::TransportName;
 use qdo36_material::RoundNumber;
 use serde::Deserialize;
 use serde::Serialize;
+use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use tangible_objects_model::Region;
 use tangible_objects_model::serde_quad;
@@ -26,9 +31,21 @@ pub struct MapMeta {
     /// Short noir framing text (2-3 sentences) for the setup dialog.
     #[serde(default)]
     pub story: MapStory,
-    /// The city's fugitive alias ("Monsieur Corbeau", "Dagobert").
+    /// The city's fugitive: alias + home station (`[map.fugitive]`).
+    ///
+    /// `None` for generated maps without a designated fugitive.
     #[serde(default)]
-    pub fugitive: FugitiveAlias,
+    pub fugitive: Option<FugitiveSpec>,
+    /// The city's own transport names
+    /// (`[map.transport_names]` - batobus becomes "Spreefähre" in
+    /// Berlin, "Batobus" in Paris).
+    #[serde(default)]
+    pub transport_names: BTreeMap<Transport, TransportName>,
+    /// Transit lines with brand colors
+    /// (`[map.lines]` - "U1" = "#7DAD4C" in Berlin, "M1" = "#FFCD00" in
+    /// Paris); referenced by metro edges.
+    #[serde(default)]
+    pub lines: BTreeMap<LineName, LineColor>,
     /// Map coordinate bounds, TOML shape `bounds_mm = [x_min, y_min, x_max, y_max]`.
     #[serde(rename = "bounds_mm", with = "serde_quad")]
     pub bounds: Region,

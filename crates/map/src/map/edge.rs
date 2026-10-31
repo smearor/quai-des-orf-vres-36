@@ -1,3 +1,4 @@
+use crate::LineName;
 use crate::Neighbor;
 use crate::StationId;
 use crate::Transport;
@@ -8,7 +9,7 @@ use serde::Serialize;
 ///
 /// Stored canonicalized with `from < to` - the game graph has no
 /// one-way routes.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub struct Edge {
     /// Station at one end (the lower id after canonicalization).
     pub from: StationId,
@@ -16,13 +17,22 @@ pub struct Edge {
     pub to: StationId,
     /// Transport mode this route is used with.
     pub transport: Transport,
+    /// Transit line serving this route (metro edges only - the line's
+    /// brand color styles the drawn route).
+    #[serde(default)]
+    pub line: Option<LineName>,
 }
 
 impl Edge {
     /// Creates an edge, canonicalizing the endpoint order.
     pub fn new(a: StationId, b: StationId, transport: Transport) -> Self {
         let (from, to) = if a <= b { (a, b) } else { (b, a) };
-        Self { from, to, transport }
+        Self {
+            from,
+            to,
+            transport,
+            line: None,
+        }
     }
 
     /// The neighbor entry as seen from `from` (points to `to`).
@@ -30,6 +40,7 @@ impl Edge {
         Neighbor {
             station: self.to,
             transport: self.transport,
+            line: self.line.clone(),
         }
     }
 
@@ -38,6 +49,7 @@ impl Edge {
         Neighbor {
             station: self.from,
             transport: self.transport,
+            line: self.line.clone(),
         }
     }
 }

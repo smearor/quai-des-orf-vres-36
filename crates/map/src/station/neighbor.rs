@@ -1,3 +1,4 @@
+use crate::LineName;
 use crate::StationId;
 use crate::Transport;
 use serde::Deserialize;
@@ -7,10 +8,12 @@ use serde::Serialize;
 ///
 /// Materialized adjacency of the game graph - one `Neighbor` per
 /// direction of each [`crate::Edge`].
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub struct Neighbor {
     /// The adjacent station.
     pub station: StationId,
     /// Transport mode of the connecting route.
     pub transport: Transport,
+    /// Transit line serving the route (metro routes only).
+    pub line: Option<LineName>,
 }

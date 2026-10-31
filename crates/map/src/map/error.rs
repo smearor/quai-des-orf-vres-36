@@ -1,3 +1,4 @@
+use crate::LineName;
 use crate::StationId;
 use crate::Transport;
 use thiserror::Error;
@@ -39,4 +40,17 @@ pub enum MapError {
     /// The dataset contains no stations.
     #[error("map dataset has no stations")]
     EmptyMap,
+    /// An edge references a line not declared in `[map.lines]`.
+    #[error("edge references unknown line {0}")]
+    UnknownLine(LineName),
+    /// A non-metro edge carries a line (lines belong to metro routes).
+    #[error("edge between {from} and {to} carries line {line} but is not a metro route")]
+    LineOnNonMetro {
+        /// One endpoint of the offending edge.
+        from: StationId,
+        /// The other endpoint.
+        to: StationId,
+        /// The misplaced line.
+        line: LineName,
+    },
 }

@@ -7,7 +7,7 @@ use std::fmt;
 /// Thematic flavor like the anchor landmark: each city names its own
 /// fugitive. The internal identity stays `Role::Fugitive`; this is
 /// the display name. Serializes transparently.
-#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct FugitiveAlias(String);
 

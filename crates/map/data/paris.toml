@@ -140,22 +140,22 @@ edges = [
     { from = 40, to = 41, transport = "bus" },
     { from = 39, to = 30, transport = "bus" },
 
-    # --- Metro edges (long-range lines) ---
-    { from = 5, to = 20, transport = "metro" },
-    { from = 20, to = 30, transport = "metro" },
-    { from = 4, to = 24, transport = "metro" },
-    { from = 17, to = 20, transport = "metro" },
-    { from = 20, to = 22, transport = "metro" },
-    { from = 22, to = 34, transport = "metro" },
-    { from = 34, to = 35, transport = "metro" },
-    { from = 13, to = 35, transport = "metro" },
-    { from = 14, to = 4, transport = "metro" },
-    { from = 15, to = 19, transport = "metro" },
-    { from = 25, to = 32, transport = "metro" },
-    { from = 32, to = 35, transport = "metro" },
-    { from = 15, to = 41, transport = "metro" },
-    { from = 39, to = 29, transport = "metro" },
-    { from = 36, to = 1, transport = "metro" },
+    # --- Metro edges (long-range lines, assigned to real RATP lines) ---
+    { from = 5, to = 20, transport = "metro", line = "M1" },
+    { from = 20, to = 30, transport = "metro", line = "M1" },
+    { from = 4, to = 24, transport = "metro", line = "M4" },
+    { from = 17, to = 20, transport = "metro", line = "M4" },
+    { from = 20, to = 22, transport = "metro", line = "M1" },
+    { from = 22, to = 34, transport = "metro", line = "M4" },
+    { from = 34, to = 35, transport = "metro", line = "M6" },
+    { from = 13, to = 35, transport = "metro", line = "M13" },
+    { from = 14, to = 4, transport = "metro", line = "M12" },
+    { from = 15, to = 19, transport = "metro", line = "M5" },
+    { from = 25, to = 32, transport = "metro", line = "M8" },
+    { from = 32, to = 35, transport = "metro", line = "M5" },
+    { from = 15, to = 41, transport = "metro", line = "M2" },
+    { from = 39, to = 29, transport = "metro", line = "M11" },
+    { from = 36, to = 1, transport = "metro", line = "M6" },
 
     # --- Batobus edges (Seine, Corbeau's black ticket) ---
     { from = 1, to = 8, transport = "batobus" },
@@ -170,12 +170,35 @@ edges = [
 name = "paris"
 slogan = "The city of light holds its breath."
 story = "Monsieur Corbeau vanished at dawn beneath the Eiffel Tower. The detectives of Quai des Orfèvres 36 fan out through the boulevards - every métro gate, every Batobus pier is watched. Catch him before the last round ends."
-fugitive = "Monsieur Corbeau"
 bounds_mm = [0.0, 0.0, 600.0, 420.0]
 max_rounds = 24
 reveal_rounds = [3, 8, 13, 18, 24]
+
+[map.fugitive]
+alias = "Monsieur Corbeau"
+station = 1
 
 [map.anchor]
 profile = "tour-de-eifel"
 name = "Tour Eiffel"
 station = 1
+
+[map.transport_names]
+taxi = "Taxi"
+bus = "Bus"
+metro = "Métro"
+batobus = "Batobus"
+
+[map.lines]
+M1 = "#FFCD00"
+M2 = "#003CA6"
+M4 = "#BE418D"
+M5 = "#F28E42"
+M6 = "#83C491"
+M7 = "#F3A4BA"
+M8 = "#CEADD2"
+M9 = "#D5C900"
+M11 = "#8D5E2A"
+M12 = "#00814F"
+M13 = "#98D4E2"
+M14 = "#662483"

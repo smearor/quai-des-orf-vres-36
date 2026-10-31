@@ -129,22 +129,22 @@ edges = [
     { from = 32, to = 40, transport = "bus" },
     { from = 12, to = 34, transport = "bus" },
     { from = 26, to = 37, transport = "bus" },
-    # metro - U-/S-Bahn long-range
-    { from = 1, to = 9, transport = "metro" },
-    { from = 3, to = 9, transport = "metro" },
-    { from = 4, to = 33, transport = "metro" },
-    { from = 5, to = 19, transport = "metro" },
-    { from = 5, to = 36, transport = "metro" },
-    { from = 9, to = 19, transport = "metro" },
-    { from = 11, to = 29, transport = "metro" },
-    { from = 12, to = 32, transport = "metro" },
-    { from = 16, to = 33, transport = "metro" },
-    { from = 19, to = 22, transport = "metro" },
-    { from = 19, to = 26, transport = "metro" },
-    { from = 19, to = 38, transport = "metro" },
-    { from = 19, to = 39, transport = "metro" },
-    { from = 26, to = 37, transport = "metro" },
-    { from = 31, to = 40, transport = "metro" },
+    # metro - U-/S-Bahn long-range, assigned to real BVG lines
+    { from = 1, to = 9, transport = "metro", line = "S5" },
+    { from = 3, to = 9, transport = "metro", line = "S5" },
+    { from = 4, to = 33, transport = "metro", line = "U6" },
+    { from = 5, to = 19, transport = "metro", line = "U2" },
+    { from = 5, to = 36, transport = "metro", line = "S7" },
+    { from = 9, to = 19, transport = "metro", line = "S5" },
+    { from = 11, to = 29, transport = "metro", line = "U1" },
+    { from = 12, to = 32, transport = "metro", line = "U8" },
+    { from = 16, to = 33, transport = "metro", line = "U6" },
+    { from = 19, to = 22, transport = "metro", line = "U8" },
+    { from = 19, to = 26, transport = "metro", line = "S3" },
+    { from = 19, to = 38, transport = "metro", line = "U5" },
+    { from = 19, to = 39, transport = "metro", line = "U5" },
+    { from = 26, to = 37, transport = "metro", line = "S3" },
+    { from = 31, to = 40, transport = "metro", line = "S9" },
     # batobus - Spreefahre chain (west to east)
     { from = 1, to = 9, transport = "batobus" },
     { from = 9, to = 14, transport = "batobus" },
@@ -156,14 +156,38 @@ edges = [
 
 [map]
 name = "berlin"
-slogan = "Berlin never sleeps - neither does the hunt."
+slogan = "He robbed KaDeWe and vanished into the Nahverkehr. Again."
 story = "Dagobert struck again at Wittenbergplatz and vanished into the Nahverkehr. The city is larger, the clock runs longer - the Spree ferries and night lines of the U-Bahn are his escape routes. Hunt him down through Mitte and beyond."
-fugitive = "Dagobert"
 bounds_mm = [0.0, 0.0, 600.0, 420.0]
 max_rounds = 28
 reveal_rounds = [4, 9, 14, 19, 24, 28]
+
+[map.fugitive]
+alias = "Dagobert"
+station = 8
 
 [map.anchor]
 profile = "fernsehturm"
 name = "Fernsehturm"
 station = 19
+
+[map.transport_names]
+taxi = "Taxi"
+bus = "Bus"
+metro = "U-/S-Bahn"
+batobus = "Spreefähre"
+
+[map.lines]
+U1 = "#7DAD4C"
+U2 = "#DA421E"
+U3 = "#007A5B"
+U4 = "#F0D722"
+U5 = "#7E5330"
+U6 = "#8C6DAB"
+U7 = "#528DBA"
+U8 = "#224F86"
+U9 = "#F3791D"
+S3 = "#0064AD"
+S5 = "#EB6E00"
+S7 = "#993366"
+S9 = "#992241"
