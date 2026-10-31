@@ -1,0 +1,168 @@
+# QDO36 map dataset - Berlin (stylized map in abstract millimeters)
+#
+# Layout approximates real geography on a ~600x420mm playing area.
+# X grows eastward, Y grows southward.
+#
+# Transport mapping: "bus" = Bus lines, "metro" = U-/S-Bahn trunk,
+# "taxi" = street-level connections, "batobus" = Spreefahre piers.
+#
+# Berlin is a larger sprawl than Paris: the dataset ships a longer
+# game (28 rounds) and a custom reveal schedule - exercising the
+# city-defaults path in GameConfig::for_map.
+
+stations = [
+    { id = 1, name = "Schloss Charlottenburg", pos_mm = [90.0, 175.0], kinds = ["start", "batobus"] },
+    { id = 2, name = "Olympiastadion", pos_mm = [45.0, 115.0], kinds = ["start"] },
+    { id = 3, name = "Spandau", pos_mm = [60.0, 45.0], kinds = ["start"] },
+    { id = 4, name = "Tegel", pos_mm = [150.0, 35.0], kinds = ["start"] },
+    { id = 5, name = "Zoologischer Garten", pos_mm = [140.0, 200.0], kinds = ["start"] },
+    { id = 6, name = "Siegessäule", pos_mm = [170.0, 160.0], kinds = ["start"] },
+    { id = 7, name = "Kurfürstendamm", pos_mm = [115.0, 220.0], kinds = ["start"] },
+    { id = 8, name = "Wittenbergplatz", pos_mm = [155.0, 235.0], kinds = ["start"] },
+    { id = 9, name = "Hauptbahnhof", pos_mm = [205.0, 140.0], kinds = ["start", "batobus"] },
+    { id = 10, name = "Reichstag", pos_mm = [195.0, 165.0], kinds = ["start"] },
+    { id = 11, name = "Brandenburger Tor", pos_mm = [212.0, 178.0], kinds = ["start"] },
+    { id = 12, name = "Potsdamer Platz", pos_mm = [215.0, 208.0], kinds = ["start"] },
+    { id = 13, name = "Tiergarten", pos_mm = [183.0, 190.0], kinds = ["start"] },
+    { id = 14, name = "Friedrichstraße", pos_mm = [237.0, 168.0], kinds = ["batobus"] },
+    { id = 15, name = "Gendarmenmarkt", pos_mm = [242.0, 192.0], kinds = ["start"] },
+    { id = 16, name = "Checkpoint Charlie", pos_mm = [248.0, 218.0], kinds = ["start"] },
+    { id = 17, name = "Unter den Linden", pos_mm = [228.0, 180.0], kinds = ["start"] },
+    { id = 18, name = "Museuminsel", pos_mm = [257.0, 182.0], kinds = ["start", "batobus"] },
+    { id = 19, name = "Alexanderplatz", pos_mm = [278.0, 162.0], kinds = ["start"] },
+    { id = 20, name = "Hackescher Markt", pos_mm = [258.0, 158.0], kinds = ["start"] },
+    { id = 21, name = "Mauerpark", pos_mm = [268.0, 95.0], kinds = ["start"] },
+    { id = 22, name = "Gesundbrunnen", pos_mm = [232.0, 68.0], kinds = ["start"] },
+    { id = 23, name = "Wedding", pos_mm = [212.0, 90.0], kinds = ["start"] },
+    { id = 24, name = "Prenzlauer Berg", pos_mm = [292.0, 108.0], kinds = ["start"] },
+    { id = 25, name = "Friedrichshain", pos_mm = [312.0, 148.0], kinds = ["start"] },
+    { id = 26, name = "Ostbahnhof", pos_mm = [318.0, 178.0], kinds = ["start", "batobus"] },
+    { id = 27, name = "Warschauer Straße", pos_mm = [318.0, 208.0], kinds = ["start"] },
+    { id = 28, name = "East Side Gallery", pos_mm = [328.0, 195.0], kinds = ["batobus"] },
+    { id = 29, name = "Kreuzberg", pos_mm = [258.0, 248.0], kinds = ["start"] },
+    { id = 30, name = "Görlitzer Park", pos_mm = [288.0, 248.0], kinds = ["start"] },
+    { id = 31, name = "Treptower Park", pos_mm = [348.0, 228.0], kinds = ["start", "batobus"] },
+    { id = 32, name = "Neukölln", pos_mm = [278.0, 298.0], kinds = ["start"] },
+    { id = 33, name = "Tempelhofer Feld", pos_mm = [228.0, 292.0], kinds = ["start"] },
+    { id = 34, name = "Schöneberg", pos_mm = [188.0, 252.0], kinds = ["start"] },
+    { id = 35, name = "Steglitz", pos_mm = [152.0, 312.0], kinds = ["start"] },
+    { id = 36, name = "Zehlendorf", pos_mm = [98.0, 332.0], kinds = ["start"] },
+    { id = 37, name = "Friedrichsfelde", pos_mm = [362.0, 162.0], kinds = ["start"] },
+    { id = 38, name = "Lichtenberg", pos_mm = [358.0, 118.0], kinds = ["start"] },
+    { id = 39, name = "Marzahn", pos_mm = [402.0, 78.0], kinds = ["start"] },
+    { id = 40, name = "Flughafen BER", pos_mm = [345.0, 368.0], kinds = ["start"] },
+    { id = 41, name = "Westend", pos_mm = [128.0, 140.0], kinds = ["start"] },
+]
+
+edges = [
+    # taxi - street-level short hops
+    { from = 1, to = 2, transport = "taxi" },
+    { from = 1, to = 41, transport = "taxi" },
+    { from = 2, to = 41, transport = "taxi" },
+    { from = 3, to = 4, transport = "taxi" },
+    { from = 4, to = 23, transport = "taxi" },
+    { from = 4, to = 41, transport = "taxi" },
+    { from = 5, to = 6, transport = "taxi" },
+    { from = 5, to = 7, transport = "taxi" },
+    { from = 5, to = 8, transport = "taxi" },
+    { from = 5, to = 13, transport = "taxi" },
+    { from = 6, to = 9, transport = "taxi" },
+    { from = 6, to = 13, transport = "taxi" },
+    { from = 6, to = 41, transport = "taxi" },
+    { from = 7, to = 8, transport = "taxi" },
+    { from = 8, to = 34, transport = "taxi" },
+    { from = 9, to = 10, transport = "taxi" },
+    { from = 9, to = 14, transport = "taxi" },
+    { from = 9, to = 23, transport = "taxi" },
+    { from = 10, to = 11, transport = "taxi" },
+    { from = 10, to = 13, transport = "taxi" },
+    { from = 11, to = 12, transport = "taxi" },
+    { from = 11, to = 13, transport = "taxi" },
+    { from = 11, to = 17, transport = "taxi" },
+    { from = 12, to = 15, transport = "taxi" },
+    { from = 12, to = 16, transport = "taxi" },
+    { from = 12, to = 34, transport = "taxi" },
+    { from = 14, to = 17, transport = "taxi" },
+    { from = 14, to = 20, transport = "taxi" },
+    { from = 15, to = 16, transport = "taxi" },
+    { from = 15, to = 17, transport = "taxi" },
+    { from = 16, to = 29, transport = "taxi" },
+    { from = 17, to = 18, transport = "taxi" },
+    { from = 18, to = 19, transport = "taxi" },
+    { from = 18, to = 20, transport = "taxi" },
+    { from = 19, to = 24, transport = "taxi" },
+    { from = 19, to = 25, transport = "taxi" },
+    { from = 20, to = 24, transport = "taxi" },
+    { from = 21, to = 22, transport = "taxi" },
+    { from = 21, to = 24, transport = "taxi" },
+    { from = 22, to = 23, transport = "taxi" },
+    { from = 25, to = 26, transport = "taxi" },
+    { from = 25, to = 38, transport = "taxi" },
+    { from = 26, to = 28, transport = "taxi" },
+    { from = 27, to = 28, transport = "taxi" },
+    { from = 27, to = 30, transport = "taxi" },
+    { from = 29, to = 30, transport = "taxi" },
+    { from = 29, to = 32, transport = "taxi" },
+    { from = 29, to = 33, transport = "taxi" },
+    { from = 30, to = 31, transport = "taxi" },
+    { from = 32, to = 33, transport = "taxi" },
+    { from = 33, to = 34, transport = "taxi" },
+    { from = 33, to = 35, transport = "taxi" },
+    { from = 34, to = 35, transport = "taxi" },
+    { from = 35, to = 36, transport = "taxi" },
+    { from = 37, to = 38, transport = "taxi" },
+    { from = 38, to = 39, transport = "taxi" },
+    # bus - mid-range
+    { from = 1, to = 5, transport = "bus" },
+    { from = 2, to = 5, transport = "bus" },
+    { from = 4, to = 22, transport = "bus" },
+    { from = 5, to = 11, transport = "bus" },
+    { from = 6, to = 12, transport = "bus" },
+    { from = 8, to = 33, transport = "bus" },
+    { from = 11, to = 19, transport = "bus" },
+    { from = 12, to = 19, transport = "bus" },
+    { from = 15, to = 29, transport = "bus" },
+    { from = 19, to = 38, transport = "bus" },
+    { from = 24, to = 38, transport = "bus" },
+    { from = 26, to = 31, transport = "bus" },
+    { from = 30, to = 32, transport = "bus" },
+    { from = 32, to = 40, transport = "bus" },
+    { from = 12, to = 34, transport = "bus" },
+    { from = 26, to = 37, transport = "bus" },
+    # metro - U-/S-Bahn long-range
+    { from = 1, to = 9, transport = "metro" },
+    { from = 3, to = 9, transport = "metro" },
+    { from = 4, to = 33, transport = "metro" },
+    { from = 5, to = 19, transport = "metro" },
+    { from = 5, to = 36, transport = "metro" },
+    { from = 9, to = 19, transport = "metro" },
+    { from = 11, to = 29, transport = "metro" },
+    { from = 12, to = 32, transport = "metro" },
+    { from = 16, to = 33, transport = "metro" },
+    { from = 19, to = 22, transport = "metro" },
+    { from = 19, to = 26, transport = "metro" },
+    { from = 19, to = 38, transport = "metro" },
+    { from = 19, to = 39, transport = "metro" },
+    { from = 26, to = 37, transport = "metro" },
+    { from = 31, to = 40, transport = "metro" },
+    # batobus - Spreefahre chain (west to east)
+    { from = 1, to = 9, transport = "batobus" },
+    { from = 9, to = 14, transport = "batobus" },
+    { from = 14, to = 18, transport = "batobus" },
+    { from = 18, to = 26, transport = "batobus" },
+    { from = 26, to = 28, transport = "batobus" },
+    { from = 28, to = 31, transport = "batobus" },
+]
+
+[map]
+name = "berlin"
+slogan = "Berlin never sleeps - neither does the hunt."
+story = "Corbeau slipped the perimeter at Hauptbahnhof and vanished into the night. The city is larger, the clock runs longer - the Spree ferries and night lines of the U-Bahn are his escape routes. Hunt him down through Mitte and beyond."
+bounds_mm = [0.0, 0.0, 600.0, 420.0]
+max_rounds = 28
+reveal_rounds = [4, 9, 14, 19, 24, 28]
+
+[map.anchor]
+profile = "fernsehturm"
+name = "Fernsehturm"
+station = 19
