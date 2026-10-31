@@ -12,6 +12,7 @@ use tangible_objects_model::ProfileFile;
 /// client-side solving needed.
 #[derive(Debug, Clone)]
 pub struct AnchorPattern {
+    /// The parsed profile, ready to `registerPattern` with the daemon.
     profile: ProfileFile,
 }
 

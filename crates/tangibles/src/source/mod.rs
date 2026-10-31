@@ -3,17 +3,24 @@
 
 pub mod error;
 pub mod event;
+pub mod graphql_source;
 pub mod surface;
 
-use async_channel::Receiver;
 pub use error::DaemonError;
 pub use event::TangibleEvent;
+pub use graphql_source::GraphQlSource;
 pub use surface::SurfaceMm;
 
 use crate::AnchorPattern;
+use async_channel::Receiver;
+use std::future::Future;
 use tangible_objects_model::PatternId;
 use tangible_objects_model::TouchPoint;
 use tangible_objects_model::TrackedTangible;
+
+/// Registration owner stamped on runtime patterns/field sets, used
+/// for `unregisterOwner` cleanup on shutdown.
+pub const REGISTRATION_OWNER: &str = "qdo36";
 
 /// Abstraction over the tangible-objects daemon.
 ///
@@ -51,4 +58,12 @@ pub trait TangibleSource: Send {
     ///
     /// [`DaemonError::Query`] on a failed query.
     fn surface(&self) -> impl Future<Output = Result<SurfaceMm, DaemonError>> + Send;
+
+    /// Removes all registrations owned by this application
+    /// (`unregisterOwner`) - session cleanup on shutdown.
+    ///
+    /// # Errors
+    ///
+    /// [`DaemonError::Query`] on a failed mutation.
+    fn unregister(&mut self) -> impl Future<Output = Result<(), DaemonError>> + Send;
 }
