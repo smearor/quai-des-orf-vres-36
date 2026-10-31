@@ -1,3 +1,4 @@
+use std::collections::BTreeSet;
 use crate::RevealPreset;
 use crate::SessionError;
 use crate::TangibleMode;
@@ -6,6 +7,8 @@ use qdo36_material::PawnColor;
 use qdo36_material::RoundNumber;
 use serde::Deserialize;
 use serde::Serialize;
+use qdo36_map::MapMeta;
+use qdo36_moves::RevealSchedule;
 
 /// Configuration chosen in the setup dialog.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -29,7 +32,7 @@ pub struct GameConfig {
 
 impl GameConfig {
     /// Builds a config from a map's city defaults.
-    pub fn for_map(meta: &qdo36_map::dataset::MapMeta) -> Self {
+    pub fn for_map(meta: &MapMeta) -> Self {
         Self {
             max_rounds: meta.max_rounds,
             reveal: RevealPreset::from_city(&meta.reveal_rounds),
@@ -38,7 +41,7 @@ impl GameConfig {
     }
 
     /// The effective reveal schedule.
-    pub fn reveal_schedule(&self) -> qdo36_moves::RevealSchedule {
+    pub fn reveal_schedule(&self) -> RevealSchedule {
         self.reveal.schedule()
     }
 
@@ -62,7 +65,7 @@ impl GameConfig {
                 max_rounds: self.max_rounds,
             });
         }
-        let mut seen = std::collections::BTreeSet::new();
+        let mut seen = BTreeSet::new();
         for color in &self.colors {
             if !seen.insert(*color) {
                 return Err(SessionError::DuplicatePawnColor(*color));

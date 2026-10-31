@@ -1,5 +1,5 @@
 use crate::map::Edge;
-use crate::map::dataset::MapMeta;
+use crate::map::MapMeta;
 use crate::station::Station;
 use serde::Deserialize;
 use serde::Serialize;
