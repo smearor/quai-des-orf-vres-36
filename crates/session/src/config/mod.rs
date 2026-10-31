@@ -1,6 +1,12 @@
-use crate::RevealPreset;
+//! Game configuration: the setup dialog's choices.
+
+pub mod mode;
+pub mod preset;
+
+pub use mode::TangibleMode;
+pub use preset::RevealPreset;
+
 use crate::SessionError;
-use crate::TangibleMode;
 use qdo36_map::MapMeta;
 use qdo36_material::DetectiveCount;
 use qdo36_material::PawnColor;

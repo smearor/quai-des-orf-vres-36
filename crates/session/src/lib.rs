@@ -1,22 +1,18 @@
-//! Game session for Quai des Orfèvres 36.
+//! `qdo36-session` - game/session lifecycle of Quai des Orfèvres 36.
 //!
-//! Session lifecycle ([`GameSession`]), configuration
-//! ([`GameConfig`]/[`TangibleMode`]), the past/future undo stacks and
-//! autosave persistence (`game.toml`). Move validation lives in
-//! `qdo36-moves`; physical restoration steps in `qdo36-undo`.
+//! [`GameConfig`] (setup choices incl. [`TangibleMode`] and
+//! [`RevealPreset`]), [`GameState`] snapshots, [`GameSession`] with
+//! undo/redo stacks, [`PlayerToken`] MCP seats and [`SessionError`].
 
-pub mod game_config;
-pub mod game_session;
-pub mod game_state;
-pub mod player_token;
-pub mod reveal_preset;
-pub mod session_error;
-pub mod tangible_mode;
+pub mod config;
+pub mod error;
+pub mod game;
+pub mod player;
 
-pub use game_config::GameConfig;
-pub use game_session::GameSession;
-pub use game_state::GameState;
-pub use player_token::PlayerToken;
-pub use reveal_preset::RevealPreset;
-pub use session_error::SessionError;
-pub use tangible_mode::TangibleMode;
+pub use config::GameConfig;
+pub use config::RevealPreset;
+pub use config::TangibleMode;
+pub use error::SessionError;
+pub use game::GameSession;
+pub use game::GameState;
+pub use player::PlayerToken;
