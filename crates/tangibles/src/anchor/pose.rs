@@ -16,3 +16,12 @@ pub struct AnchorPose {
     /// Tangible orientation in radians (profile pin frame).
     pub rotation_rad: RotationRad,
 }
+
+impl From<&tangible_objects_model::TrackedTangible> for AnchorPose {
+    fn from(tangible: &tangible_objects_model::TrackedTangible) -> Self {
+        Self {
+            center: tangible.center,
+            rotation_rad: tangible.rotation_rad,
+        }
+    }
+}

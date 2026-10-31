@@ -17,6 +17,8 @@ pub use map::MapScale;
 pub use map::MapScaleError;
 pub use map::MapTransform;
 pub use source::DaemonError;
+pub use source::GraphQlSource;
 pub use source::SurfaceMm;
 pub use source::TangibleEvent;
 pub use source::TangibleSource;
+pub use tangible_objects_model::PatternId;

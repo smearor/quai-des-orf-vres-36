@@ -1,7 +1,9 @@
 //! Quai des Orfèvres 36 - Scotland Yard tabletop game for the smart desk.
 
+mod controller;
 mod l10n;
 mod settings;
+mod tangible_host;
 mod ui;
 
 use crate::l10n::L10n;
@@ -109,6 +111,9 @@ fn install_shutdown_handlers(app: &adw::Application) {
     let app = app.clone();
     MainContext::default().spawn_local(async move {
         if rx.recv().await.is_ok() {
+            controller::with_controller(|controller| {
+                controller.borrow_mut().release_registrations();
+            });
             app.quit();
         }
     });
