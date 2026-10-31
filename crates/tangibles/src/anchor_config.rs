@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Region;
+use tangible_objects_model::RotationRad;
 use tangible_objects_model::Vec2;
 
 /// Calibration of the map anchor: which map point the tower pins down,
@@ -16,7 +17,7 @@ pub struct AnchorConfig {
     /// Offset between the profile's pin frame and "map north", in
     /// degrees. Calibrated once per physical tower build (the profile
     /// has no canonical "forward").
-    pub heading_offset_deg: f64,
+    pub heading_offset: RotationRad,
     /// Resting zoom; the overlay's zoom controls move from here.
     pub base_scale: MapScale,
     /// Map coordinate bounds (from the dataset, kept for the transform).
@@ -36,7 +37,7 @@ impl AnchorConfig {
     pub fn at_station(map_bounds: Region, tower_station: Vec2<Millimeters>) -> Self {
         Self {
             anchor_map_pos: tower_station,
-            heading_offset_deg: 0.0,
+            heading_offset: RotationRad::new(0.0),
             base_scale: MapScale::default(),
             map_bounds,
         }

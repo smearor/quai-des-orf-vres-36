@@ -1,6 +1,7 @@
 use crate::AnchorPose;
 use serde::Deserialize;
 use serde::Serialize;
+use tangible_objects_model::RotationRad;
 use tangible_objects_model::Vec2;
 
 /// Where the map anchor currently is.
@@ -20,7 +21,7 @@ impl AnchorState {
     pub fn default_virtual() -> Self {
         Self::Virtual(AnchorPose {
             center: Vec2::new(0.0, 0.0),
-            rotation_rad: 0.0,
+            rotation_rad: RotationRad::new(0.0),
         })
     }
 

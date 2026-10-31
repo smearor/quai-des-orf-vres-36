@@ -1,6 +1,7 @@
 use serde::Deserialize;
 use serde::Serialize;
 use tangible_objects_model::Millimeters;
+use tangible_objects_model::RotationRad;
 use tangible_objects_model::Vec2;
 
 /// The Eiffel tower's measured pose on the surface.
@@ -13,5 +14,5 @@ pub struct AnchorPose {
     /// Tangible centroid on the touch surface.
     pub center: Vec2<Millimeters>,
     /// Tangible orientation in radians (profile pin frame).
-    pub rotation_rad: f64,
+    pub rotation_rad: RotationRad,
 }
