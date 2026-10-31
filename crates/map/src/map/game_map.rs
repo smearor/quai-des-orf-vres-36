@@ -1,15 +1,17 @@
-use crate::Bounds;
+use crate::City;
 use crate::Edge;
 use crate::MapError;
 use crate::Neighbor;
 use crate::Station;
 use crate::StationId;
 use crate::Transport;
-use crate::dataset::MapToml;
+use crate::map::dataset::MapMeta;
+use crate::map::dataset::MapToml;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::str::FromStr;
 use tangible_objects_model::Millimeters;
+use tangible_objects_model::Region;
 use tangible_objects_model::Vec2;
 
 /// The validated Paris game graph.
@@ -18,17 +20,36 @@ use tangible_objects_model::Vec2;
 /// lifetime of a game. All coordinates are map millimeters.
 #[derive(Debug, Clone, PartialEq)]
 pub struct GameMap {
+    /// Stations indexed by their station number (ordered by id).
     stations: BTreeMap<StationId, Station>,
+    /// Canonicalized routes (`from < to`), one entry per dataset edge.
     edges: Vec<Edge>,
-    bounds: Bounds,
+    /// Map coordinate bounds from the dataset meta.
+    bounds: Region,
+    /// City rule defaults (max rounds, reveal schedule).
+    meta: MapMeta,
 }
 
 impl GameMap {
-    /// The bundled `paris.toml` dataset.
+    /// The bundled dataset of a city.
     ///
     /// Compiled into the binary - the game works fully offline.
+    ///
+    /// # Errors
+    ///
+    /// [`MapError`] variants for an invalid bundled dataset (a broken
+    /// build artifact, verified by tests).
+    pub fn for_city(city: City) -> Result<Self, MapError> {
+        Self::from_str(city.dataset())
+    }
+
+    /// The default city (Paris).
+    ///
+    /// # Errors
+    ///
+    /// Same as [`Self::for_city`].
     pub fn bundled() -> Result<Self, MapError> {
-        Self::from_str(include_str!("../data/paris.toml"))
+        Self::for_city(City::Paris)
     }
 
     /// Looks up a station by id.
@@ -47,8 +68,13 @@ impl GameMap {
     }
 
     /// Map coordinate bounds.
-    pub fn bounds(&self) -> Bounds {
+    pub fn bounds(&self) -> Region {
         self.bounds
+    }
+
+    /// The dataset's city rule defaults (max rounds, reveal schedule).
+    pub fn meta(&self) -> &MapMeta {
+        &self.meta
     }
 
     /// Stations eligible for the start deal.
@@ -96,11 +122,10 @@ impl TryFrom<MapToml> for GameMap {
     type Error = MapError;
 
     fn try_from(dataset: MapToml) -> Result<Self, Self::Error> {
-        let bounds = Bounds {
-            min: Vec2::new(dataset.map.bounds_mm[0], dataset.map.bounds_mm[1]),
-            max: Vec2::new(dataset.map.bounds_mm[2], dataset.map.bounds_mm[3]),
-        };
-        bounds.validate()?;
+        let bounds = dataset.map.bounds;
+        if bounds.is_degenerate() {
+            return Err(MapError::InvalidBounds);
+        }
         if dataset.stations.is_empty() {
             return Err(MapError::EmptyMap);
         }
@@ -108,8 +133,8 @@ impl TryFrom<MapToml> for GameMap {
         let mut stations = BTreeMap::new();
         for station_toml in &dataset.stations {
             let id = station_toml.id;
-            let pos = Vec2::new(station_toml.pos_mm[0], station_toml.pos_mm[1]);
-            if !pos.x.is_finite() || !pos.y.is_finite() || !bounds.contains(pos) {
+            let pos = station_toml.pos;
+            if !pos.x.is_finite() || !pos.y.is_finite() || !bounds.contains(&pos) {
                 return Err(MapError::OutOfBounds(id));
             }
             let station = Station {
@@ -122,6 +147,12 @@ impl TryFrom<MapToml> for GameMap {
             if stations.insert(id, station).is_some() {
                 return Err(MapError::DuplicateStationId(id));
             }
+        }
+
+        if let Some(anchor) = &dataset.map.anchor
+            && !stations.contains_key(&anchor.station)
+        {
+            return Err(MapError::MissingStation(anchor.station));
         }
 
         let mut edges = Vec::with_capacity(dataset.edges.len());
@@ -159,7 +190,12 @@ impl TryFrom<MapToml> for GameMap {
             }
         }
 
-        Ok(Self { stations, edges, bounds })
+        Ok(Self {
+            stations,
+            edges,
+            bounds,
+            meta: dataset.map,
+        })
     }
 }
 
@@ -167,6 +203,7 @@ impl TryFrom<MapToml> for GameMap {
 mod tests {
     use super::*;
     use crate::StationKind;
+    use qdo36_material::RoundNumber;
 
     fn mini_map() -> &'static str {
         r#"
@@ -183,6 +220,7 @@ edges = [
 ]
 
 [map]
+name = "mini"
 bounds_mm = [0.0, 0.0, 100.0, 100.0]
 "#
     }
@@ -211,6 +249,30 @@ bounds_mm = [0.0, 0.0, 100.0, 100.0]
         assert!(map.stations().count() >= 30, "curated map should have >= 30 stations");
         assert!(map.edges().iter().any(|e| e.transport == Transport::Batobus));
         assert!(map.edges().iter().all(|e| e.from < e.to), "edges are canonicalized");
+    }
+
+    #[test]
+    fn all_bundled_cities_are_valid_and_named() {
+        for city in City::ALL {
+            let map = GameMap::for_city(city).unwrap_or_else(|e| panic!("{city}: {e}"));
+            assert_eq!(map.meta().name.as_str(), city.name());
+            assert!(map.stations().count() > 0, "{city}");
+            assert!(!map.meta().slogan.is_empty() && !map.meta().story.is_empty(), "{city} should carry flavor text");
+            let anchor = map.meta().anchor.as_ref().unwrap_or_else(|| panic!("{city}: missing anchor spec"));
+            assert!(!anchor.profile.as_str().is_empty() && !anchor.name.as_str().is_empty(), "{city}: incomplete anchor spec");
+            // Viewport invariant: the drawable surroundings extend at
+            // least 30 mm beyond every station, so panning keeps the
+            // map on the table.
+            let inner = map.bounds().inset(Millimeters::from(30.0));
+            assert!(map.stations().all(|s| inner.contains(&s.pos)), "{city}: a station sits inside the 30 mm edge band");
+        }
+    }
+
+    #[test]
+    fn berlin_ships_custom_rule_defaults() {
+        let map = GameMap::for_city(City::Berlin).unwrap_or_else(|e| panic!("{e}"));
+        assert_ne!(map.meta().max_rounds, RoundNumber::DEFAULT_MAX);
+        assert!(map.meta().reveal_rounds.iter().all(|r| *r <= map.meta().max_rounds));
     }
 
     #[test]
@@ -253,7 +315,7 @@ bounds_mm = [0.0, 0.0, 100.0, 100.0]
     fn rejects_invalid_and_empty() {
         let invalid_bounds = mini_map().replace("[0.0, 0.0, 100.0, 100.0]", "[0.0, 0.0, 0.0, 0.0]");
         assert!(matches!(GameMap::from_str(&invalid_bounds), Err(MapError::InvalidBounds)));
-        let empty = "stations = []\nedges = []\n[map]\nbounds_mm = [0.0, 0.0, 100.0, 100.0]";
+        let empty = "stations = []\nedges = []\n[map]\nname = \"empty\"\nbounds_mm = [0.0, 0.0, 100.0, 100.0]";
         assert!(matches!(GameMap::from_str(empty), Err(MapError::EmptyMap)));
     }
 

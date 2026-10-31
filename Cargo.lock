@@ -2087,6 +2087,7 @@ dependencies = [
 name = "qdo36-map"
 version = "0.1.0"
 dependencies = [
+ "qdo36-material",
  "serde",
  "serde_json",
  "tangible-objects-model",
@@ -2108,6 +2109,7 @@ name = "qdo36-material"
 version = "0.1.0"
 dependencies = [
  "serde",
+ "thiserror 2.0.21",
 ]
 
 [[package]]
@@ -2162,6 +2164,7 @@ dependencies = [
  "tangible-objects-model",
  "thiserror 2.0.21",
  "tokio",
+ "toml 1.1.8+spec-1.1.0",
  "tracing",
 ]
 
@@ -2169,6 +2172,7 @@ dependencies = [
 name = "qdo36-undo"
 version = "0.1.0"
 dependencies = [
+ "qdo36-map",
  "qdo36-material",
  "qdo36-moves",
  "serde",
@@ -2712,9 +2716,9 @@ checksum = "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
 
 [[package]]
 name = "signal-hook"
-version = "0.4.5"
+version = "0.4.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b29ffa27d3d59a049bb328258de100f8012848d1b08d444e08bbc02ac468435e"
+checksum = "49f7447afd772ca79ad17ae0a3972a6b0df0cb4b80990fd82707593e9e012a74"
 dependencies = [
  "libc",
  "signal-hook-registry",
@@ -2909,7 +2913,7 @@ dependencies = [
 [[package]]
 name = "tangible-objects-analysis"
 version = "0.1.0"
-source = "git+https://github.com/smearor/tangible-objects-rs.git#36fa50bf079ea8408cfad2cd250fd51df177811e"
+source = "git+https://github.com/smearor/tangible-objects-rs.git#eacd53e05191a0239c3f78f2dbf80875b73fab9d"
 dependencies = [
  "serde",
  "serde-jsonlines",
@@ -2921,7 +2925,7 @@ dependencies = [
 [[package]]
 name = "tangible-objects-client"
 version = "0.1.0"
-source = "git+https://github.com/smearor/tangible-objects-rs.git#36fa50bf079ea8408cfad2cd250fd51df177811e"
+source = "git+https://github.com/smearor/tangible-objects-rs.git#eacd53e05191a0239c3f78f2dbf80875b73fab9d"
 dependencies = [
  "cynic",
  "futures",
@@ -2942,7 +2946,7 @@ dependencies = [
 [[package]]
 name = "tangible-objects-model"
 version = "0.1.0"
-source = "git+https://github.com/smearor/tangible-objects-rs.git#36fa50bf079ea8408cfad2cd250fd51df177811e"
+source = "git+https://github.com/smearor/tangible-objects-rs.git#eacd53e05191a0239c3f78f2dbf80875b73fab9d"
 dependencies = [
  "cynic",
  "serde",

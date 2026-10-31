@@ -1,32 +1,32 @@
-//! Paris map domain for Quai des Orfèvres 36.
+//! `qdo36-map` - the Paris (and future cities) game map domain.
 //!
-//! The station graph the game is played on ([`GameMap`]), authored as a
-//! reviewable TOML dataset ([`dataset`]) and validated at load time. All
-//! positions and distances are in **millimeters** on the physical table
-//! surface - pixel conversion happens in the app layer via the anchor
-//! transform.
+//! Loads a curated TOML dataset into a validated station graph
+//! ([`GameMap`]): stations, undirected transport edges, coordinate
+//! bounds in map millimeters, city rule defaults and the city's
+//! anchor landmark spec. No GTK, no daemon - pure domain model.
 
-pub mod bounds;
-pub mod dataset;
-pub mod edge;
-pub mod game_map;
-pub mod map_error;
-pub mod neighbor;
+pub mod anchor;
+pub mod city;
+pub mod map;
 pub mod station;
-pub mod station_id;
-pub mod station_kind;
-pub mod station_name;
-pub mod transport;
 
-pub use bounds::Bounds;
-pub use edge::Edge;
-pub use game_map::GameMap;
-pub use map_error::MapError;
-pub use neighbor::Neighbor;
+pub use anchor::AnchorName;
+pub use anchor::AnchorProfile;
+pub use anchor::AnchorSpec;
+pub use city::City;
+pub use city::CityName;
+pub use map::Edge;
+pub use map::GameMap;
+pub use map::MapError;
+pub use map::MapSlogan;
+pub use map::MapStory;
+pub use map::Transport;
+pub use map::dataset;
+pub use station::Neighbor;
 pub use station::Station;
-pub use station_id::StationId;
-pub use station_kind::StationKind;
-pub use station_name::StationName;
+pub use station::StationId;
+pub use station::StationKind;
+pub use station::StationName;
 pub use tangible_objects_model::Millimeters;
+pub use tangible_objects_model::Region;
 pub use tangible_objects_model::Vec2;
-pub use transport::Transport;

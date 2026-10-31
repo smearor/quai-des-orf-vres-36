@@ -1,12 +1,21 @@
-use crate::Neighbor;
-use crate::StationId;
-use crate::StationKind;
-use crate::StationName;
+//! Station graph vocabulary: stations, their ids/kinds/names and
+//! adjacency entries.
+
+pub mod id;
+pub mod kind;
+pub mod name;
+pub mod neighbor;
+
+pub use id::StationId;
+pub use kind::StationKind;
+pub use name::StationName;
+pub use neighbor::Neighbor;
+
 use std::collections::BTreeSet;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Vec2;
 
-/// A node of the Paris game graph.
+/// A node of the city game graph.
 ///
 /// `pos` is the station's drawing position in map millimeters;
 /// `neighbors` is materialized by [`crate::GameMap`] validation
