@@ -167,6 +167,7 @@ impl TryFrom<MapToml> for GameMap {
                     return Err(MapError::MissingStation(id));
                 }
             }
+            // canonicalize: deserialization does not enforce `from < to`
             let edge = Edge::new(a, b, edge_toml.transport);
             if edge_toml.transport == Transport::Batobus {
                 let both_piers = [edge.from, edge.to].iter().all(|id| stations.get(id).is_some_and(|s| s.is_batobus()));
