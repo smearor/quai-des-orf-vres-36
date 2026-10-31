@@ -1,0 +1,11 @@
+/* Quai des Orfèvres 36 - application stylesheet. */
+
+window {
+  background-color: #1a1816;
+}
+
+/* Fullscreen tabletop surface: keep everything ink-dark so the map
+   scene's own palette owns the screen. */
+statuspage {
+  background-color: #1a1816;
+}
