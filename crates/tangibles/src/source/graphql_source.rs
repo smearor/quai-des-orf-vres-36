@@ -8,12 +8,12 @@ use async_channel::Receiver;
 use futures_lite::StreamExt;
 use tangible_objects_client::Endpoint;
 use tangible_objects_client::GraphQLClient;
-use tangible_objects_client::ProfileQuery;
 use tangible_objects_model::Lifetime;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Owner;
 use tangible_objects_model::PatternId;
 use tangible_objects_model::RawAxisValue;
+use tangible_objects_model::RegisterPatternResult;
 use tangible_objects_model::TouchPoint;
 use tangible_objects_model::TrackedTangible;
 use tangible_objects_model::UnitsPerMm;
@@ -56,21 +56,13 @@ impl GraphQlSource {
 
 impl TangibleSource for GraphQlSource {
     async fn register_anchor_profile(&mut self, profile: &AnchorPattern) -> Result<PatternId, DaemonError> {
-        self.client.register_pattern(profile.profile(), Some(&self.owner), Lifetime::Session).await?;
-        // registerPattern returns bool - resolve the assigned runtime
-        // pattern id via the profiles query filtered to our owner.
-        let infos = self
-            .client
-            .profiles(&ProfileQuery {
-                owner: Some(self.owner.clone()),
-                static_only: Some(false),
-            })
-            .await?;
-        infos
-            .iter()
-            .find(|info| info.name == profile.profile().name)
-            .map(|info| info.pattern_id)
-            .ok_or_else(|| DaemonError::Unavailable(format!("registered pattern '{}' not found", profile.profile().name)))
+        let result = self.client.register_pattern(profile.profile(), Some(&self.owner), Lifetime::Session).await?;
+        match result {
+            RegisterPatternResult::Registered(registered) => Ok(registered.pattern_id),
+            RegisterPatternResult::Rejected(rejected) => {
+                Err(DaemonError::Registration(format!("registerPattern rejected {}: {}", profile.profile().name, rejected.reason)))
+            }
+        }
     }
 
     async fn tangible_events(&self, pattern: PatternId) -> Receiver<TangibleEvent> {
