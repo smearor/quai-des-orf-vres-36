@@ -1,0 +1,27 @@
+use serde::Deserialize;
+use serde::Serialize;
+use std::fmt;
+
+/// Special role a station can play, in addition to being a regular
+/// node of the graph.
+///
+/// Stored per station as a `BTreeSet` - a river stop can also be a
+/// start station (e.g. the Eiffel tower pier).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum StationKind {
+    /// Eligible in the random start deal.
+    Start,
+    /// Batobus pier: `Transport::Batobus` edges may terminate here.
+    Batobus,
+}
+
+impl fmt::Display for StationKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let name = match self {
+            Self::Start => "start",
+            Self::Batobus => "batobus",
+        };
+        f.write_str(name)
+    }
+}

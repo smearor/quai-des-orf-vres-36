@@ -1,0 +1,45 @@
+[package]
+name = "qdo36"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Quai des Orfèvres 36 - Scotland Yard tabletop game for the smart desk (GTK4/libadwaita)"
+
+[[bin]]
+name = "qdo36"
+path = "src/main.rs"
+
+[dependencies]
+qdo36-map.workspace = true
+qdo36-material.workspace = true
+qdo36-moves.workspace = true
+qdo36-session.workspace = true
+qdo36-undo.workspace = true
+qdo36-tangibles.workspace = true
+qdo36-icons.workspace = true
+qdo36-mcp.workspace = true
+cairo-rs.workspace = true
+clap.workspace = true
+fluent.workspace = true
+fluent-langneg.workspace = true
+gdk4.workspace = true
+gio.workspace = true
+glib.workspace = true
+gtk4.workspace = true
+libadwaita.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+signal-hook.workspace = true
+smearor-wrot-rotation.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+toml.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+unic-langid.workspace = true
+async-channel.workspace = true
+futures-lite.workspace = true
+fonts-rs-cuernavaca.workspace = true

@@ -1,0 +1,22 @@
+[package]
+name = "qdo36-tangibles"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Tangible input for Quai des Orfèvres 36: daemon adapter and Eiffel tower anchor transform"
+
+[dependencies]
+qdo36-map.workspace = true
+qdo36-material.workspace = true
+tangible-objects-client.workspace = true
+tangible-objects-model.workspace = true
+async-channel.workspace = true
+futures-lite.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true

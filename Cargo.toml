@@ -1,0 +1,70 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.98.0"
+version = "0.1.0"
+license = "MIT"
+authors = ["Andreas Schaeffer <hanack@nooblounge.net>"]
+repository = "https://github.com/smearor/quai-des-orf-vres-36"
+homepage = "https://github.com/smearor/quai-des-orf-vres-36"
+
+[workspace.dependencies]
+# workspace crates
+qdo36-map = { path = "crates/map" }
+qdo36-material = { path = "crates/material" }
+qdo36-moves = { path = "crates/moves" }
+qdo36-session = { path = "crates/session" }
+qdo36-undo = { path = "crates/undo" }
+qdo36-tangibles = { path = "crates/tangibles" }
+qdo36-icons = { path = "crates/icons" }
+qdo36-mcp = { path = "crates/mcp" }
+# core
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1"
+toml = "0.9"
+thiserror = "2.0"
+miette = "7.6"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+signal-hook = "0.3"
+# gtk
+gtk4 = { version = "0.11", features = ["v4_20"] }
+libadwaita = { version = "0.9", features = ["v1_5"] }
+gio = "0.22"
+glib = "0.22"
+cairo-rs = "0.22"
+gdk4 = "0.11"
+smearor-wrot-rotation = "0.2"
+# icons & fonts (git deps until 0.6 is published)
+fonts-rs-generator = { git = "https://github.com/smearor/fonts-rs.git" }
+fonts-rs-model = { git = "https://github.com/smearor/fonts-rs.git" }
+fonts-rs-lucide = { git = "https://github.com/smearor/fonts-rs.git" }
+fonts-rs-tabler = { git = "https://github.com/smearor/fonts-rs.git" }
+fonts-rs-cuernavaca = { git = "https://github.com/smearor/fonts-rs.git" }
+phf = "0.14"
+# i18n
+fluent = "0.16"
+fluent-langneg = "0.13"
+unic-langid = "0.9"
+# tangible-objects daemon (typed GraphQL client, upstream)
+tangible-objects-client = { git = "https://github.com/smearor/tangible-objects-rs.git" }
+tangible-objects-model = { git = "https://github.com/smearor/tangible-objects-rs.git" }
+# async / network
+tokio = { version = "1", features = ["full"] }
+futures-lite = "2"
+async-channel = "2"
+# MCP server (game-domain introspection/control)
+rmcp = { version = "3.5", features = ["server", "macros", "schemars", "transport-streamable-http-server"] }
+axum = "0.8"
+schemars = "1"
+# misc
+url = "2"
+clap = { version = "4.5", features = ["derive"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = "symbols"

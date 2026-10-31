@@ -1,0 +1,83 @@
+# icons.toml - custom icon set for Quai des Orfèvres 36.
+#
+# Built by fonts_rs_generator::IconSetBuild in build.rs. The whitelist
+# `name` is the upstream SVG file stem; `rename` becomes the exported
+# base name (`qdo-<rename>-symbolic`).
+#
+# Inventory: concepts/planned/ARTWORK.md section 1.
+
+[iconset]
+name = "Qdo36Icons"
+display_name = "Quai des Orfèvres 36 Icons"
+icon_prefix = "qdo"
+gresource_prefix = "/io/github/smearor/qdo36/icons"
+icons_context = "actions"
+
+[[iconset.sources]]
+crate = "fonts-rs-lucide"
+post_processors = ["symbolic-classes"]
+icons = [
+    "bird",
+    "bot",
+    "bus-front",
+    "car-taxi-front",
+    "check",
+    "check-check",
+    "compass",
+    "dices",
+    "eye",
+    "eye-off",
+    "feather",
+    "flag",
+    "footprints",
+    "hash",
+    "hourglass",
+    "info",
+    "keyboard",
+    "key-round",
+    "landmark",
+    "languages",
+    "list-checks",
+    "locate-fixed",
+    "map",
+    "map-pin",
+    "mouse-pointer-click",
+    "pause",
+    "play",
+    "palette",
+    "radio-tower",
+    "redo-2",
+    "route",
+    "save",
+    "settings",
+    "ship",
+    "shield",
+    "ticket",
+    "timer",
+    "train-front",
+    "triangle-alert",
+    "trophy",
+    "undo-2",
+    "user",
+    "users-round",
+    "volume-2",
+    "volume-x",
+    "wifi",
+    "wifi-off",
+    "x",
+    "zoom-in",
+    "zoom-out",
+]
+
+[[iconset.sources]]
+crate = "fonts-rs-tabler"
+subdirectory = "outline"
+post_processors = ["symbolic-classes"]
+icons = [
+    "building-eiffel-tower",
+    "building-castle",
+    "building-monument",
+    "building-bridge",
+    "building-carousel",
+    "building-skyscraper",
+]

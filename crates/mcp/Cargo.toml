@@ -1,0 +1,21 @@
+[package]
+name = "qdo36-mcp"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Game-domain MCP server for Quai des Orfèvres 36 (introspection and agent play API)"
+
+[dependencies]
+qdo36-map.workspace = true
+qdo36-session.workspace = true
+axum.workspace = true
+rmcp.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
