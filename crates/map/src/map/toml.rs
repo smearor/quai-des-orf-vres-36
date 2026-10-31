@@ -1,5 +1,6 @@
 use crate::map::Edge;
 use crate::map::MapMeta;
+use crate::map::backdrop::Backdrop;
 use crate::station::Station;
 use serde::Deserialize;
 use serde::Serialize;
@@ -16,4 +17,8 @@ pub struct MapToml {
     pub stations: Vec<Station>,
     /// Edge list (undirected routes; endpoint order is irrelevant).
     pub edges: Vec<Edge>,
+    /// Decorative backdrop layer (`[backdrop]` - optional,
+    /// gameplay-inert).
+    #[serde(default)]
+    pub backdrop: Backdrop,
 }

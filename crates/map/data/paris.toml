@@ -11,7 +11,7 @@ stations = [
     # --- Rive Gauche / west ---
     { id = 1, name = "Tour Eiffel", pos_mm = [80.0, 220.0], kinds = ["start", "batobus"] },
     { id = 2, name = "École Militaire", pos_mm = [95.0, 265.0], kinds = ["start"] },
-    { id = 3, name = "Invalides", pos_mm = [130.0, 215.0], kinds = ["start"] },
+    { id = 3, name = "Invalides", pos_mm = [130.0, 215.0], kinds = ["start", "underground"] },
     { id = 4, name = "Trocadéro", pos_mm = [55.0, 165.0], kinds = ["start"] },
     { id = 5, name = "Étoile", pos_mm = [105.0, 115.0], kinds = ["start"] },
     { id = 6, name = "Champs-Élysées", pos_mm = [160.0, 165.0], kinds = ["start"] },
@@ -21,33 +21,33 @@ stations = [
     { id = 10, name = "Louvre", pos_mm = [208.0, 195.0], kinds = ["start", "batobus"] },
     { id = 11, name = "Palais Royal", pos_mm = [218.0, 178.0], kinds = ["start"] },
     { id = 12, name = "Opéra", pos_mm = [185.0, 140.0], kinds = ["start"] },
-    { id = 13, name = "Saint-Lazare", pos_mm = [160.0, 112.0], kinds = ["start"] },
+    { id = 13, name = "Saint-Lazare", pos_mm = [160.0, 112.0], kinds = ["start", "underground"] },
     { id = 14, name = "Place Clichy", pos_mm = [150.0, 78.0], kinds = ["start"] },
     { id = 15, name = "Sacré-Cœur", pos_mm = [195.0, 58.0], kinds = ["start"] },
     { id = 16, name = "Barbès", pos_mm = [232.0, 82.0], kinds = ["start"] },
-    { id = 17, name = "Gare du Nord", pos_mm = [258.0, 108.0], kinds = ["start"] },
+    { id = 17, name = "Gare du Nord", pos_mm = [258.0, 108.0], kinds = ["start", "underground"] },
     { id = 18, name = "Gare de l'Est", pos_mm = [278.0, 120.0], kinds = ["start"] },
-    { id = 19, name = "République", pos_mm = [268.0, 150.0], kinds = ["start"] },
+    { id = 19, name = "République", pos_mm = [268.0, 150.0], kinds = ["start", "underground"] },
     { id = 20, name = "Châtelet", pos_mm = [232.0, 195.0], kinds = ["start"] },
-    { id = 21, name = "Pont Neuf", pos_mm = [222.0, 205.0], kinds = ["batobus"] },
+    { id = 21, name = "Pont Neuf", pos_mm = [222.0, 205.0], kinds = ["batobus", "underground"] },
     { id = 22, name = "Saint-Michel", pos_mm = [228.0, 228.0], kinds = ["start"] },
     { id = 23, name = "Notre-Dame", pos_mm = [262.0, 225.0], kinds = ["batobus"] },
     { id = 24, name = "Hôtel de Ville", pos_mm = [252.0, 198.0], kinds = ["start"] },
-    { id = 25, name = "Bastille", pos_mm = [288.0, 215.0], kinds = ["start"] },
+    { id = 25, name = "Bastille", pos_mm = [288.0, 215.0], kinds = ["start", "underground"] },
     { id = 26, name = "Panthéon", pos_mm = [242.0, 258.0], kinds = ["start"] },
     { id = 27, name = "Luxembourg", pos_mm = [205.0, 250.0], kinds = ["start"] },
     { id = 28, name = "Jardin des Plantes", pos_mm = [312.0, 255.0], kinds = ["batobus"] },
-    { id = 29, name = "Austerlitz", pos_mm = [318.0, 272.0], kinds = ["start", "batobus"] },
+    { id = 29, name = "Austerlitz", pos_mm = [318.0, 272.0], kinds = ["start", "batobus", "underground"] },
     { id = 30, name = "Gare de Lyon", pos_mm = [322.0, 235.0], kinds = ["start"] },
     { id = 31, name = "Bercy", pos_mm = [372.0, 272.0], kinds = ["start"] },
     { id = 32, name = "Place d'Italie", pos_mm = [278.0, 312.0], kinds = ["start"] },
     { id = 33, name = "Gobelins", pos_mm = [268.0, 288.0], kinds = ["start"] },
-    { id = 34, name = "Denfert-Rochereau", pos_mm = [215.0, 305.0], kinds = ["start"] },
-    { id = 35, name = "Montparnasse", pos_mm = [162.0, 270.0], kinds = ["start"] },
+    { id = 34, name = "Denfert-Rochereau", pos_mm = [215.0, 305.0], kinds = ["start", "underground"] },
+    { id = 35, name = "Montparnasse", pos_mm = [162.0, 270.0], kinds = ["start", "underground"] },
     { id = 36, name = "Vaugirard", pos_mm = [112.0, 282.0], kinds = ["start"] },
     { id = 37, name = "Convention", pos_mm = [105.0, 312.0], kinds = ["start"] },
     { id = 38, name = "Porte de Versailles", pos_mm = [95.0, 345.0], kinds = ["start"] },
-    { id = 39, name = "Père Lachaise", pos_mm = [332.0, 158.0], kinds = ["start"] },
+    { id = 39, name = "Père Lachaise", pos_mm = [332.0, 158.0], kinds = ["start", "underground"] },
     { id = 40, name = "Ménilmontant", pos_mm = [312.0, 130.0], kinds = ["start"] },
     { id = 41, name = "Buttes-Chaumont", pos_mm = [292.0, 75.0], kinds = ["start"] },
 ]
@@ -164,6 +164,17 @@ edges = [
     { from = 21, to = 23, transport = "batobus" },
     { from = 23, to = 28, transport = "batobus" },
     { from = 28, to = 29, transport = "batobus" },
+
+    # underground - Les Égouts (fugitive-only tunnels, Valjean-style)
+    { from = 3, to = 21, transport = "underground" },
+    { from = 21, to = 29, transport = "underground" },
+    { from = 17, to = 39, transport = "underground" },
+    { from = 19, to = 34, transport = "underground" },
+    { from = 13, to = 35, transport = "underground" },
+    { from = 3, to = 25, transport = "underground" },
+    { from = 29, to = 39, transport = "underground" },
+    { from = 25, to = 17, transport = "underground" },
+    { from = 34, to = 13, transport = "underground" },
 ]
 
 [map]
@@ -188,6 +199,7 @@ taxi = "Taxi"
 bus = "Bus"
 metro = "Métro"
 batobus = "Batobus"
+underground = "Égouts"
 
 [map.lines]
 M1 = "#FFCD00"
@@ -202,3 +214,105 @@ M11 = "#8D5E2A"
 M12 = "#00814F"
 M13 = "#98D4E2"
 M14 = "#662483"
+
+# Decorative backdrop: the Seine (stylized, gameplay-inert) and
+# landmark markers at real positions.
+[backdrop]
+water = [[
+    0.0, 225.0,
+    50.0, 220.0,
+    80.0, 215.0,   # Tour Eiffel pier
+    115.0, 225.0,
+    160.0, 235.0,  # Invalides bend
+    200.0, 230.0,
+    228.0, 222.0,  # Saint-Michel
+    262.0, 220.0,  # Notre-Dame
+    300.0, 225.0,
+    340.0, 235.0,
+    400.0, 250.0,  # Austerlitz bend
+    470.0, 260.0,
+    600.0, 255.0
+]]
+landmarks = [
+    # monuments - towers, memorials, historic buildings
+    { name = "Tour Eiffel", pos_mm = [80.0, 220.0], kind = "monument" },
+    { name = "Arc de Triomphe", pos_mm = [105.0, 115.0], kind = "monument" },
+    { name = "Opéra Garnier", pos_mm = [185.0, 140.0], kind = "monument" },
+    { name = "Panthéon", pos_mm = [242.0, 258.0], kind = "monument" },
+    { name = "Colonne de Juillet", pos_mm = [288.0, 215.0], kind = "monument" },
+    # museums
+    { name = "Musée du Louvre", pos_mm = [208.0, 195.0], kind = "museum" },
+    { name = "Musée d'Orsay", pos_mm = [150.0, 205.0], kind = "museum" },
+    # churches
+    { name = "Sacré-Cœur", pos_mm = [195.0, 58.0], kind = "church" },
+    { name = "Notre-Dame", pos_mm = [262.0, 225.0], kind = "church" },
+    { name = "Sainte-Chapelle", pos_mm = [250.0, 222.0], kind = "church" },
+    { name = "Église de la Madeleine", pos_mm = [172.0, 165.0], kind = "church" },
+    # squares
+    { name = "Place de la Concorde", pos_mm = [185.0, 190.0], kind = "square" },
+    { name = "Place de la Bastille", pos_mm = [292.0, 220.0], kind = "square" },
+    { name = "Place Vendôme", pos_mm = [195.0, 155.0], kind = "square" },
+    { name = "Place de la République", pos_mm = [268.0, 150.0], kind = "square" },
+    # parks & gardens
+    { name = "Champ de Mars", pos_mm = [95.0, 265.0], kind = "park" },
+    { name = "Jardin des Tuileries", pos_mm = [197.0, 192.0], kind = "park" },
+    { name = "Jardin du Luxembourg", pos_mm = [205.0, 250.0], kind = "park" },
+    { name = "Jardin des Plantes", pos_mm = [312.0, 255.0], kind = "park" },
+    { name = "Parc des Buttes-Chaumont", pos_mm = [292.0, 75.0], kind = "park" },
+    { name = "Parc Monceau", pos_mm = [140.0, 100.0], kind = "park" },
+    { name = "Cimetière du Père Lachaise", pos_mm = [332.0, 158.0], kind = "park" },
+    # railway termini
+    { name = "Gare du Nord", pos_mm = [258.0, 108.0], kind = "station" },
+    { name = "Gare de l'Est", pos_mm = [278.0, 120.0], kind = "station" },
+    { name = "Gare de Lyon", pos_mm = [322.0, 235.0], kind = "station" },
+    { name = "Gare Montparnasse", pos_mm = [162.0, 270.0], kind = "station" },
+    { name = "Gare Saint-Lazare", pos_mm = [160.0, 112.0], kind = "station" },
+    # airports - off-city, edge markers
+    { name = "Aéroport Charles-de-Gaulle", pos_mm = [355.0, 35.0], kind = "airport" },
+    { name = "Aéroport de Paris-Orly", pos_mm = [255.0, 395.0], kind = "airport" },
+    { name = "Aéroport de Beauvais-Tillé", pos_mm = [15.0, 15.0], kind = "airport" },
+    # topography & waterways
+    { name = "La Seine", pos_mm = [300.0, 228.0], kind = "waterway" },
+    { name = "Canal Saint-Martin", pos_mm = [300.0, 140.0], kind = "waterway" },
+    { name = "Bassin de la Villette", pos_mm = [330.0, 80.0], kind = "waterway" },
+    { name = "Pont Neuf", pos_mm = [222.0, 205.0], kind = "bridge" },
+    { name = "Pont Alexandre III", pos_mm = [160.0, 192.0], kind = "bridge" },
+    { name = "Pont des Arts", pos_mm = [235.0, 210.0], kind = "bridge" },
+    { name = "Île de la Cité", pos_mm = [252.0, 218.0], kind = "island" },
+    { name = "Île Saint-Louis", pos_mm = [272.0, 228.0], kind = "island" },
+    { name = "Butte de Montmartre", pos_mm = [193.0, 68.0], kind = "hill" },
+    { name = "Mont Valérien", pos_mm = [5.0, 140.0], kind = "hill" },
+    # culture & sport
+    { name = "Moulin Rouge", pos_mm = [172.0, 72.0], kind = "venue" },
+    { name = "Opéra Bastille", pos_mm = [292.0, 212.0], kind = "venue" },
+    { name = "Le Bataclan", pos_mm = [275.0, 172.0], kind = "venue" },
+    { name = "Philharmonie de Paris", pos_mm = [340.0, 60.0], kind = "venue" },
+    { name = "Parc des Princes", pos_mm = [12.0, 298.0], kind = "stadium" },
+    { name = "Stade de France", pos_mm = [290.0, 12.0], kind = "stadium" },
+    { name = "Stade Roland Garros", pos_mm = [10.0, 280.0], kind = "stadium" },
+    { name = "Accor Arena", pos_mm = [372.0, 268.0], kind = "stadium" },
+    { name = "Parc Zoologique de Paris", pos_mm = [450.0, 270.0], kind = "zoo" },
+    { name = "Ménagerie du Jardin des Plantes", pos_mm = [318.0, 252.0], kind = "zoo" },
+    # architecture, history & government
+    { name = "Château de Versailles", pos_mm = [8.0, 185.0], kind = "palace" },
+    { name = "Château de Fontainebleau", pos_mm = [300.0, 405.0], kind = "palace" },
+    { name = "Palais de l'Élysée", pos_mm = [170.0, 175.0], kind = "palace" },
+    { name = "Porte Saint-Denis", pos_mm = [262.0, 172.0], kind = "fortification" },
+    { name = "Porte Saint-Martin", pos_mm = [268.0, 168.0], kind = "fortification" },
+    { name = "Château de Vincennes", pos_mm = [450.0, 240.0], kind = "fortification" },
+    { name = "Hôtel de Ville", pos_mm = [252.0, 198.0], kind = "civic" },
+    { name = "Palais Bourbon", pos_mm = [158.0, 200.0], kind = "civic" },
+    { name = "Palais du Luxembourg", pos_mm = [210.0, 248.0], kind = "civic" },
+    # urban life & economy
+    { name = "Galeries Lafayette", pos_mm = [187.0, 128.0], kind = "market" },
+    { name = "Printemps Haussmann", pos_mm = [182.0, 125.0], kind = "market" },
+    { name = "Passages Couverts", pos_mm = [218.0, 158.0], kind = "market" },
+    { name = "Marché aux Puces de Saint-Ouen", pos_mm = [240.0, 45.0], kind = "market" },
+    { name = "Champs-Élysées", pos_mm = [160.0, 165.0], kind = "boulevard" },
+    { name = "Boulevard Haussmann", pos_mm = [175.0, 130.0], kind = "boulevard" },
+    { name = "Rue de Rivoli", pos_mm = [230.0, 190.0], kind = "boulevard" },
+    { name = "Tour Montparnasse", pos_mm = [166.0, 272.0], kind = "skyscraper" },
+    { name = "La Défense", pos_mm = [8.0, 108.0], kind = "skyscraper" },
+    { name = "La Grande Arche", pos_mm = [10.0, 95.0], kind = "skyscraper" },
+    { name = "Tour First", pos_mm = [15.0, 88.0], kind = "skyscraper" }
+]

@@ -14,6 +14,9 @@ pub enum StationKind {
     Start,
     /// Batobus pier: `Transport::Batobus` edges may terminate here.
     Batobus,
+    /// Underground access hatch: `Transport::Underground` edges may
+    /// terminate here (Paris: Égouts, Berlin: Unterwelten).
+    Underground,
 }
 
 impl fmt::Display for StationKind {
@@ -21,6 +24,7 @@ impl fmt::Display for StationKind {
         let name = match self {
             Self::Start => "start",
             Self::Batobus => "batobus",
+            Self::Underground => "underground",
         };
         f.write_str(name)
     }

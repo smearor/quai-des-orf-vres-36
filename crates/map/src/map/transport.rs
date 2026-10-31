@@ -5,7 +5,8 @@ use std::fmt;
 /// Transport mode of an edge (a travel route between two stations).
 ///
 /// Maps to the Scotland Yard ticket types: taxis and buses are public
-/// for everyone, the river route is Fugitive's black-ticket territory.
+/// for everyone, river and underground routes are Fugitive's
+/// secret-ticket territory (black ticket / sewer pass).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Transport {
@@ -17,6 +18,9 @@ pub enum Transport {
     Metro,
     /// Seine river route (Batobus); Fugitive's black ticket.
     Batobus,
+    /// Underground network (Paris: Égouts, Berlin: Unterwelten) -
+    /// the fugitive's secret tunnels.
+    Underground,
 }
 
 impl fmt::Display for Transport {
@@ -26,6 +30,7 @@ impl fmt::Display for Transport {
             Self::Bus => "bus",
             Self::Metro => "metro",
             Self::Batobus => "batobus",
+            Self::Underground => "underground",
         };
         f.write_str(name)
     }
@@ -42,7 +47,7 @@ mod tests {
             /// Transport under test.
             t: Transport,
         }
-        for transport in [Transport::Taxi, Transport::Bus, Transport::Metro, Transport::Batobus] {
+        for transport in [Transport::Taxi, Transport::Bus, Transport::Metro, Transport::Batobus, Transport::Underground] {
             let encoded = toml::to_string(&Wrapper { t: transport }).unwrap_or_default();
             assert_eq!(toml::from_str::<Wrapper>(&encoded).ok(), Some(Wrapper { t: transport }));
         }

@@ -13,7 +13,7 @@
 stations = [
     { id = 1, name = "Schloss Charlottenburg", pos_mm = [90.0, 175.0], kinds = ["start", "batobus"] },
     { id = 2, name = "Olympiastadion", pos_mm = [45.0, 115.0], kinds = ["start"] },
-    { id = 3, name = "Spandau", pos_mm = [60.0, 45.0], kinds = ["start"] },
+    { id = 3, name = "Spandau", pos_mm = [60.0, 45.0], kinds = ["start", "underground"] },
     { id = 4, name = "Tegel", pos_mm = [150.0, 35.0], kinds = ["start"] },
     { id = 5, name = "Zoologischer Garten", pos_mm = [140.0, 200.0], kinds = ["start"] },
     { id = 6, name = "Siegessäule", pos_mm = [170.0, 160.0], kinds = ["start"] },
@@ -22,31 +22,31 @@ stations = [
     { id = 9, name = "Hauptbahnhof", pos_mm = [205.0, 140.0], kinds = ["start", "batobus"] },
     { id = 10, name = "Reichstag", pos_mm = [195.0, 165.0], kinds = ["start"] },
     { id = 11, name = "Brandenburger Tor", pos_mm = [212.0, 178.0], kinds = ["start"] },
-    { id = 12, name = "Potsdamer Platz", pos_mm = [215.0, 208.0], kinds = ["start"] },
+    { id = 12, name = "Potsdamer Platz", pos_mm = [215.0, 208.0], kinds = ["start", "underground"] },
     { id = 13, name = "Tiergarten", pos_mm = [183.0, 190.0], kinds = ["start"] },
     { id = 14, name = "Friedrichstraße", pos_mm = [237.0, 168.0], kinds = ["batobus"] },
     { id = 15, name = "Gendarmenmarkt", pos_mm = [242.0, 192.0], kinds = ["start"] },
-    { id = 16, name = "Checkpoint Charlie", pos_mm = [248.0, 218.0], kinds = ["start"] },
+    { id = 16, name = "Checkpoint Charlie", pos_mm = [248.0, 218.0], kinds = ["start", "underground"] },
     { id = 17, name = "Unter den Linden", pos_mm = [228.0, 180.0], kinds = ["start"] },
     { id = 18, name = "Museuminsel", pos_mm = [257.0, 182.0], kinds = ["start", "batobus"] },
     { id = 19, name = "Alexanderplatz", pos_mm = [278.0, 162.0], kinds = ["start"] },
     { id = 20, name = "Hackescher Markt", pos_mm = [258.0, 158.0], kinds = ["start"] },
     { id = 21, name = "Mauerpark", pos_mm = [268.0, 95.0], kinds = ["start"] },
-    { id = 22, name = "Gesundbrunnen", pos_mm = [232.0, 68.0], kinds = ["start"] },
-    { id = 23, name = "Wedding", pos_mm = [212.0, 90.0], kinds = ["start"] },
-    { id = 24, name = "Prenzlauer Berg", pos_mm = [292.0, 108.0], kinds = ["start"] },
+    { id = 22, name = "Gesundbrunnen", pos_mm = [232.0, 68.0], kinds = ["start", "underground"] },
+    { id = 23, name = "Wedding", pos_mm = [212.0, 90.0], kinds = ["start", "underground"] },
+    { id = 24, name = "Prenzlauer Berg", pos_mm = [292.0, 108.0], kinds = ["start", "underground"] },
     { id = 25, name = "Friedrichshain", pos_mm = [312.0, 148.0], kinds = ["start"] },
     { id = 26, name = "Ostbahnhof", pos_mm = [318.0, 178.0], kinds = ["start", "batobus"] },
     { id = 27, name = "Warschauer Straße", pos_mm = [318.0, 208.0], kinds = ["start"] },
     { id = 28, name = "East Side Gallery", pos_mm = [328.0, 195.0], kinds = ["batobus"] },
-    { id = 29, name = "Kreuzberg", pos_mm = [258.0, 248.0], kinds = ["start"] },
+    { id = 29, name = "Kreuzberg", pos_mm = [258.0, 248.0], kinds = ["start", "underground"] },
     { id = 30, name = "Görlitzer Park", pos_mm = [288.0, 248.0], kinds = ["start"] },
-    { id = 31, name = "Treptower Park", pos_mm = [348.0, 228.0], kinds = ["start", "batobus"] },
-    { id = 32, name = "Neukölln", pos_mm = [278.0, 298.0], kinds = ["start"] },
+    { id = 31, name = "Treptower Park", pos_mm = [348.0, 228.0], kinds = ["start", "batobus", "underground"] },
+    { id = 32, name = "Neukölln", pos_mm = [278.0, 298.0], kinds = ["start", "underground"] },
     { id = 33, name = "Tempelhofer Feld", pos_mm = [228.0, 292.0], kinds = ["start"] },
     { id = 34, name = "Schöneberg", pos_mm = [188.0, 252.0], kinds = ["start"] },
     { id = 35, name = "Steglitz", pos_mm = [152.0, 312.0], kinds = ["start"] },
-    { id = 36, name = "Zehlendorf", pos_mm = [98.0, 332.0], kinds = ["start"] },
+    { id = 36, name = "Zehlendorf", pos_mm = [98.0, 332.0], kinds = ["start", "underground"] },
     { id = 37, name = "Friedrichsfelde", pos_mm = [362.0, 162.0], kinds = ["start"] },
     { id = 38, name = "Lichtenberg", pos_mm = [358.0, 118.0], kinds = ["start"] },
     { id = 39, name = "Marzahn", pos_mm = [402.0, 78.0], kinds = ["start"] },
@@ -152,6 +152,18 @@ edges = [
     { from = 18, to = 26, transport = "batobus" },
     { from = 26, to = 28, transport = "batobus" },
     { from = 28, to = 31, transport = "batobus" },
+    # underground - Berliner Unterwelten: WWII bunkers, GDR escape
+    # tunnels and brewery cellars (fugitive-only, like the sewers)
+    { from = 22, to = 23, transport = "underground" },
+    { from = 22, to = 24, transport = "underground" },
+    { from = 16, to = 29, transport = "underground" },
+    { from = 12, to = 29, transport = "underground" },
+    { from = 29, to = 31, transport = "underground" },
+    { from = 32, to = 29, transport = "underground" },
+    { from = 12, to = 16, transport = "underground" },
+    { from = 3, to = 22, transport = "underground" },
+    { from = 36, to = 32, transport = "underground" },
+    { from = 24, to = 16, transport = "underground" },
 ]
 
 [map]
@@ -176,6 +188,7 @@ taxi = "Taxi"
 bus = "Bus"
 metro = "U-/S-Bahn"
 batobus = "Spreefähre"
+underground = "Unterwelten"
 
 [map.lines]
 U1 = "#7DAD4C"
@@ -191,3 +204,103 @@ S3 = "#0064AD"
 S5 = "#EB6E00"
 S7 = "#993366"
 S9 = "#992241"
+
+# Decorative backdrop: the Spree (stylized, gameplay-inert) running
+# through Mitte past the ferry piers, plus landmark markers.
+[backdrop]
+water = [[
+    0.0, 120.0,
+    60.0, 160.0,   # west bend
+    90.0, 172.0,   # Schloss Charlottenburg pier
+    140.0, 150.0,
+    205.0, 140.0,  # Hauptbahnhof pier
+    237.0, 168.0,  # Friedrichstraße
+    257.0, 182.0,  # Museuminsel
+    318.0, 178.0,  # Ostbahnhof
+    328.0, 195.0,  # East Side Gallery
+    348.0, 228.0,  # Treptower Park
+    420.0, 258.0,
+    600.0, 285.0   # east toward Oberschöneweide
+]]
+landmarks = [
+    # monuments - towers, memorials, historic buildings
+    { name = "Fernsehturm", pos_mm = [278.0, 162.0], kind = "monument" },
+    { name = "Brandenburger Tor", pos_mm = [212.0, 178.0], kind = "monument" },
+    { name = "Reichstag", pos_mm = [195.0, 165.0], kind = "monument" },
+    { name = "Schloss Charlottenburg", pos_mm = [90.0, 175.0], kind = "palace" },
+    { name = "Olympiastadion", pos_mm = [45.0, 115.0], kind = "stadium" },
+    { name = "Siegessäule", pos_mm = [170.0, 160.0], kind = "monument" },
+    { name = "Checkpoint Charlie", pos_mm = [248.0, 218.0], kind = "monument" },
+    { name = "East Side Gallery", pos_mm = [328.0, 195.0], kind = "monument" },
+    # museums
+    { name = "Museuminsel", pos_mm = [257.0, 182.0], kind = "museum" },
+    { name = "Museum für Naturkunde", pos_mm = [222.0, 115.0], kind = "museum" },
+    # churches
+    { name = "Berliner Dom", pos_mm = [262.0, 175.0], kind = "church" },
+    { name = "Gedächtniskirche", pos_mm = [140.0, 195.0], kind = "church" },
+    { name = "Marienkirche", pos_mm = [270.0, 155.0], kind = "church" },
+    { name = "Deutscher Dom", pos_mm = [240.0, 196.0], kind = "church" },
+    { name = "Französischer Dom", pos_mm = [245.0, 189.0], kind = "church" },
+    # squares
+    { name = "Alexanderplatz", pos_mm = [278.0, 170.0], kind = "square" },
+    { name = "Potsdamer Platz", pos_mm = [215.0, 208.0], kind = "square" },
+    { name = "Gendarmenmarkt", pos_mm = [242.0, 192.0], kind = "square" },
+    { name = "Pariser Platz", pos_mm = [212.0, 185.0], kind = "square" },
+    { name = "Bebelplatz", pos_mm = [232.0, 178.0], kind = "square" },
+    # parks & gardens
+    { name = "Tiergarten", pos_mm = [183.0, 190.0], kind = "park" },
+    { name = "Mauerpark", pos_mm = [268.0, 95.0], kind = "park" },
+    { name = "Tempelhofer Feld", pos_mm = [228.0, 292.0], kind = "park" },
+    { name = "Viktoriapark", pos_mm = [252.0, 258.0], kind = "park" },
+    { name = "Treptower Park", pos_mm = [348.0, 228.0], kind = "park" },
+    # railway termini
+    { name = "Hauptbahnhof", pos_mm = [205.0, 140.0], kind = "station" },
+    { name = "Ostbahnhof", pos_mm = [318.0, 178.0], kind = "station" },
+    { name = "Bahnhof Zoologischer Garten", pos_mm = [140.0, 200.0], kind = "station" },
+    { name = "Bahnhof Südkreuz", pos_mm = [200.0, 322.0], kind = "station" },
+    { name = "Hamburger Bahnhof", pos_mm = [208.0, 126.0], kind = "station" },
+    # airports
+    { name = "Flughafen BER", pos_mm = [345.0, 368.0], kind = "airport" },
+    { name = "Flughafen Tegel (ehem.)", pos_mm = [150.0, 35.0], kind = "airport" },
+    # topography & waterways
+    { name = "Die Spree", pos_mm = [290.0, 182.0], kind = "waterway" },
+    { name = "Landwehrkanal", pos_mm = [245.0, 240.0], kind = "waterway" },
+    { name = "Wannsee", pos_mm = [30.0, 320.0], kind = "waterway" },
+    { name = "Oberbaumbrücke", pos_mm = [330.0, 200.0], kind = "bridge" },
+    { name = "Glienicker Brücke", pos_mm = [15.0, 350.0], kind = "bridge" },
+    { name = "Schlossbrücke", pos_mm = [240.0, 175.0], kind = "bridge" },
+    { name = "Pfaueninsel", pos_mm = [15.0, 180.0], kind = "island" },
+    { name = "Teufelsberg", pos_mm = [38.0, 150.0], kind = "hill" },
+    { name = "Kreuzberg", pos_mm = [255.0, 262.0], kind = "hill" },
+    { name = "Ahrensfelder Berge", pos_mm = [420.0, 55.0], kind = "hill" },
+    # culture & sport
+    { name = "Berliner Philharmonie", pos_mm = [210.0, 198.0], kind = "venue" },
+    { name = "Friedrichstadt-Palast", pos_mm = [245.0, 158.0], kind = "venue" },
+    { name = "Deutsche Oper Berlin", pos_mm = [95.0, 145.0], kind = "venue" },
+    { name = "Volksbühne", pos_mm = [285.0, 148.0], kind = "venue" },
+    { name = "Uber Arena", pos_mm = [340.0, 190.0], kind = "stadium" },
+    { name = "Stadion An der Alten Försterei", pos_mm = [440.0, 290.0], kind = "stadium" },
+    { name = "Max-Schmeling-Halle", pos_mm = [300.0, 120.0], kind = "stadium" },
+    { name = "Zoologischer Garten", pos_mm = [143.0, 197.0], kind = "zoo" },
+    { name = "Tierpark", pos_mm = [365.0, 165.0], kind = "zoo" },
+    { name = "Botanischer Garten", pos_mm = [120.0, 350.0], kind = "zoo" },
+    # architecture, history & government
+    { name = "Schloss Bellevue", pos_mm = [185.0, 150.0], kind = "palace" },
+    { name = "Berliner Schloss", pos_mm = [250.0, 178.0], kind = "palace" },
+    { name = "Schloss Köpenick", pos_mm = [450.0, 320.0], kind = "palace" },
+    { name = "Zitadelle Spandau", pos_mm = [50.0, 52.0], kind = "fortification" },
+    { name = "Berliner Stadtmauer", pos_mm = [255.0, 215.0], kind = "fortification" },
+    { name = "Rotes Rathaus", pos_mm = [272.0, 182.0], kind = "civic" },
+    { name = "Bundeskanzleramt", pos_mm = [198.0, 158.0], kind = "civic" },
+    { name = "Paul-Löbe-Haus", pos_mm = [202.0, 152.0], kind = "civic" },
+    # urban life & economy
+    { name = "KaDeWe", pos_mm = [155.0, 235.0], kind = "market" },
+    { name = "Markthalle Neun", pos_mm = [265.0, 245.0], kind = "market" },
+    { name = "Hackesche Höfe", pos_mm = [258.0, 155.0], kind = "market" },
+    { name = "Unter den Linden", pos_mm = [228.0, 180.0], kind = "boulevard" },
+    { name = "Kurfürstendamm", pos_mm = [115.0, 220.0], kind = "boulevard" },
+    { name = "Karl-Marx-Allee", pos_mm = [300.0, 168.0], kind = "boulevard" },
+    { name = "Kollhoff-Tower", pos_mm = [218.0, 212.0], kind = "skyscraper" },
+    { name = "Upper West", pos_mm = [145.0, 192.0], kind = "skyscraper" },
+    { name = "Treptowers", pos_mm = [360.0, 240.0], kind = "skyscraper" }
+]

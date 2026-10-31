@@ -31,6 +31,9 @@ pub enum MapError {
     /// A batobus edge terminates at a station that is no pier.
     #[error("batobus edge between {0} and {1} requires both ends to be batobus piers")]
     BatobusOnLand(StationId, StationId),
+    /// An underground edge terminates at a station with no access.
+    #[error("underground edge between {0} and {1} requires both ends to be underground accesses")]
+    UndergroundOnSurface(StationId, StationId),
     /// A station position lies outside the declared map bounds.
     #[error("station {0} lies outside the map bounds")]
     OutOfBounds(StationId),

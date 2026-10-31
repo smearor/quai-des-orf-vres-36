@@ -53,4 +53,9 @@ impl Station {
     pub fn is_batobus(&self) -> bool {
         self.kinds.contains(&StationKind::Batobus)
     }
+
+    /// Returns `true` when this station has an underground access.
+    pub fn is_underground(&self) -> bool {
+        self.kinds.contains(&StationKind::Underground)
+    }
 }

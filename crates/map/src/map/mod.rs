@@ -2,6 +2,7 @@
 //! transport modes, flavor text, city rule defaults and loading
 //! errors.
 
+pub mod backdrop;
 pub mod edge;
 pub mod error;
 pub mod fugitive;
@@ -15,6 +16,11 @@ pub mod toml;
 pub mod transport;
 pub mod transport_name;
 
+pub use backdrop::Backdrop;
+pub use backdrop::Landmark;
+pub use backdrop::LandmarkKind;
+pub use backdrop::LandmarkName;
+pub use backdrop::Polyline;
 pub use edge::Edge;
 pub use error::MapError;
 pub use fugitive::FugitiveAlias;

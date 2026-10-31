@@ -1,10 +1,10 @@
-use async_channel::Receiver;
 use crate::AnchorPattern;
 use crate::DaemonError;
 use crate::SurfaceMm;
 use crate::TangibleEvent;
 use crate::TangibleSource;
 use crate::source::REGISTRATION_OWNER;
+use async_channel::Receiver;
 use futures_lite::StreamExt;
 use tangible_objects_client::Endpoint;
 use tangible_objects_client::GraphQLClient;

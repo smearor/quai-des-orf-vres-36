@@ -7,6 +7,7 @@ use crate::StationId;
 use crate::Transport;
 use crate::map::MapMeta;
 use crate::map::MapToml;
+use crate::map::backdrop::Backdrop;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::str::FromStr;
@@ -28,6 +29,9 @@ pub struct GameMap {
     bounds: Region,
     /// City rule defaults (max rounds, reveal schedule).
     meta: MapMeta,
+    /// Decorative backdrop (water, landmarks, streets) - empty when
+    /// the dataset carries none.
+    backdrop: Backdrop,
 }
 
 impl GameMap {
@@ -75,6 +79,12 @@ impl GameMap {
     /// The dataset's city rule defaults (max rounds, reveal schedule).
     pub fn meta(&self) -> &MapMeta {
         &self.meta
+    }
+
+    /// The decorative backdrop layer (empty when the dataset carries
+    /// none).
+    pub fn backdrop(&self) -> &Backdrop {
+        &self.backdrop
     }
 
     /// Stations eligible for the start deal.
@@ -208,6 +218,12 @@ impl TryFrom<MapToml> for GameMap {
                     return Err(MapError::BatobusOnLand(edge.from, edge.to));
                 }
             }
+            if edge_toml.transport == Transport::Underground {
+                let both_accesses = [edge.from, edge.to].iter().all(|id| stations.get(id).is_some_and(|s| s.is_underground()));
+                if !both_accesses {
+                    return Err(MapError::UndergroundOnSurface(edge.from, edge.to));
+                }
+            }
             if !seen.insert(edge.clone()) {
                 return Err(MapError::DuplicateEdge {
                     from: edge.from,
@@ -229,6 +245,7 @@ impl TryFrom<MapToml> for GameMap {
             edges,
             bounds,
             meta: dataset.map,
+            backdrop: dataset.backdrop,
         })
     }
 }
@@ -296,6 +313,7 @@ bounds_mm = [0.0, 0.0, 100.0, 100.0]
             let fugitive = map.meta().fugitive.as_ref().unwrap_or_else(|| panic!("{city}: missing fugitive spec"));
             assert!(!fugitive.alias.is_empty(), "{city} should name its fugitive");
             assert!(map.disconnected().is_empty(), "{city} graph must be connected: {:?}", map.disconnected());
+            assert!(!map.backdrop().is_empty(), "{city} should carry a backdrop layer");
             let anchor = map.meta().anchor.as_ref().unwrap_or_else(|| panic!("{city}: missing anchor spec"));
             assert!(!anchor.profile.as_str().is_empty() && !anchor.name.as_str().is_empty(), "{city}: incomplete anchor spec");
             // Viewport invariant: the drawable surroundings extend at
@@ -335,6 +353,12 @@ bounds_mm = [0.0, 0.0, 100.0, 100.0]
     fn rejects_duplicate_edge() {
         let source = mini_map().replace("{ from = 2, to = 3, transport = \"bus\" }", "{ from = 1, to = 3, transport = \"taxi\" }");
         assert!(matches!(GameMap::from_str(&source), Err(MapError::DuplicateEdge { .. })));
+    }
+
+    #[test]
+    fn rejects_underground_edge_without_access() {
+        let source = mini_map().replace("{ from = 1, to = 3, transport = \"taxi\" }", "{ from = 1, to = 3, transport = \"underground\" }");
+        assert!(matches!(GameMap::from_str(&source), Err(MapError::UndergroundOnSurface(..))));
     }
 
     #[test]
