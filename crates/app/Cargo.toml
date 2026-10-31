@@ -42,4 +42,3 @@ tracing-subscriber.workspace = true
 unic-langid.workspace = true
 async-channel.workspace = true
 futures-lite.workspace = true
-fonts-rs-cuernavaca.workspace = true
