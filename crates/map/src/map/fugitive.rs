@@ -2,7 +2,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
 
-/// The city's fugitive alias ("Monsieur Corbeau", "Der Fuchs").
+/// The city's fugitive alias ("Monsieur Corbeau", "Dagobert").
 ///
 /// Thematic flavor like the anchor landmark: each city names its own
 /// fugitive. The internal identity stays `Role::Fugitive`; this is

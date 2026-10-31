@@ -157,8 +157,8 @@ edges = [
 [map]
 name = "berlin"
 slogan = "Berlin never sleeps - neither does the hunt."
-story = "Der Fuchs slipped the perimeter at Hauptbahnhof and vanished into the night. The city is larger, the clock runs longer - the Spree ferries and night lines of the U-Bahn are his escape routes. Hunt him down through Mitte and beyond."
-fugitive = "Der Fuchs"
+story = "Dagobert struck again at Wittenbergplatz and vanished into the Nahverkehr. The city is larger, the clock runs longer - the Spree ferries and night lines of the U-Bahn are his escape routes. Hunt him down through Mitte and beyond."
+fugitive = "Dagobert"
 bounds_mm = [0.0, 0.0, 600.0, 420.0]
 max_rounds = 28
 reveal_rounds = [4, 9, 14, 19, 24, 28]
