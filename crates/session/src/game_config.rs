@@ -72,7 +72,10 @@ impl GameConfig {
             }
         }
         if self.colors.len() != self.detectives.count() as usize {
-            return Err(SessionError::ColorCountMismatch(self.colors.len(), self.detectives.count()));
+            return Err(SessionError::ColorCountMismatch {
+                given: self.colors.len(),
+                expected: self.detectives,
+            });
         }
         Ok(())
     }

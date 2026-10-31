@@ -1,3 +1,4 @@
+use qdo36_material::DetectiveCount;
 use qdo36_material::DetectiveCountError;
 use qdo36_material::PawnColor;
 use qdo36_material::RoundNumber;
@@ -13,8 +14,13 @@ pub enum SessionError {
     #[error("duplicate pawn color {0}")]
     DuplicatePawnColor(PawnColor),
     /// The color list does not match the detective count.
-    #[error("{0} colors configured for {1} detectives")]
-    ColorCountMismatch(usize, u8),
+    #[error("{given} colors configured for {expected} detectives")]
+    ColorCountMismatch {
+        /// Colors actually configured (may be an invalid count).
+        given: usize,
+        /// The configured number of detectives.
+        expected: DetectiveCount,
+    },
     /// The game length is zero.
     #[error("max rounds must be at least 1, got {0}")]
     InvalidMaxRounds(RoundNumber),
