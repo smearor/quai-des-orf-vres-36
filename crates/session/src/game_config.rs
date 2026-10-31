@@ -1,14 +1,14 @@
-use std::collections::BTreeSet;
 use crate::RevealPreset;
 use crate::SessionError;
 use crate::TangibleMode;
+use qdo36_map::MapMeta;
 use qdo36_material::DetectiveCount;
 use qdo36_material::PawnColor;
 use qdo36_material::RoundNumber;
+use qdo36_moves::RevealSchedule;
 use serde::Deserialize;
 use serde::Serialize;
-use qdo36_map::MapMeta;
-use qdo36_moves::RevealSchedule;
+use std::collections::BTreeSet;
 
 /// Configuration chosen in the setup dialog.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
