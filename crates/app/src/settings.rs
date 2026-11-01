@@ -68,3 +68,45 @@ impl AppSettings {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use qdo36_map::City;
+
+    /// Fields missing from the file keep their defaults (file >
+    /// default precedence relies on serde defaults).
+    #[test]
+    fn missing_fields_fall_back_to_defaults() {
+        let settings: AppSettings = toml::from_str("daemon_url = \"http://surface:4711\"\ncity = \"berlin\"").unwrap_or_default();
+        assert_eq!(settings.daemon_url, "http://surface:4711");
+        assert_eq!(settings.city, City::Berlin);
+        assert_eq!(settings.locale, None);
+        assert_eq!(settings.map_style, MapStyle::default());
+    }
+
+    /// A corrupt settings file does not fail startup - the defaults
+    /// apply.
+    #[test]
+    fn invalid_toml_falls_back_to_defaults() {
+        let settings: AppSettings = toml::from_str("= not toml").unwrap_or_default();
+        assert_eq!(settings.daemon_url, AppSettings::default().daemon_url);
+    }
+
+    /// The settings round-trip through TOML losslessly.
+    #[test]
+    fn save_load_round_trip() {
+        let settings = AppSettings {
+            daemon_url: "http://surface:4711".to_string(),
+            locale: Some("de".to_string()),
+            city: City::Berlin,
+            ..AppSettings::default()
+        };
+        let text = toml::to_string_pretty(&settings).unwrap_or_default();
+        let restored: AppSettings = toml::from_str(&text).unwrap_or_default();
+        assert_eq!(restored.daemon_url, settings.daemon_url);
+        assert_eq!(restored.locale, settings.locale);
+        assert_eq!(restored.city, settings.city);
+        assert_eq!(restored.map_style, settings.map_style);
+    }
+}
