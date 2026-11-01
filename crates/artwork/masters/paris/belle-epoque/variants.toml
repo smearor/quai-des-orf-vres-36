@@ -18,6 +18,8 @@
 # Namespace segments substituted into output templates as {city}/{style}.
 city = "paris"
 style = "belle-epoque"
+fonts_dir = "../../../../app/resources/fonts"
+outline = true
 
 [[asset]]
 master = "pawn-disc.svg"
@@ -1119,3 +1121,23 @@ texts = [
   { id = "ticket-serial", content = "N° 03652-SECRET" },
 ]
 
+
+# Static assets routed through the text outline pass.
+[[static]]
+path = "corbeau/{city}/{style}/emblem.svg"
+[[static]]
+path = "corbeau/{city}/{style}/reveal-flash.svg"
+[[static]]
+path = "corbeau/{city}/{style}/shield-zone.svg"
+[[static]]
+path = "map/{city}/{style}/compass.svg"
+[[static]]
+path = "map/{city}/{style}/frame.svg"
+[[static]]
+path = "splash/{city}/{style}/title.svg"
+[[static]]
+path = "landmarks/{city}/{style}/eiffel-anchor.svg"
+[[static]]
+path = "ticket/{city}/{style}/double.svg"
+[[static]]
+path = "ticket/{city}/{style}/black.svg"

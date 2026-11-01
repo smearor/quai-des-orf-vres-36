@@ -48,6 +48,6 @@
     <circle cx="28" cy="0" r="2" fill="#C9D4FF" filter="url(#neonGlow)" />
 
     <!-- Monospace Uppercase Line Name (parametrized via #line-name) -->
-    <text id="line-name" x="0" y="9" font-family="&#39;Orbitron&#39;, &#39;Share Tech Mono&#39;, monospace" font-size="24" font-weight="bold" fill="#C9D4FF" text-anchor="middle" letter-spacing="1" filter="url(#neonGlow)">M14</text>
+    <g id="line-name" fill="#C9D4FF" filter="url(#neonGlow)"><path d="M-24.24,9.00 L-24.24,-8.28 L-20.76,-8.28 L-14.50,-0.82 L-8.26,-8.28 L-4.76,-8.28 L-4.76,9.00 L-7.95,9.00 L-7.95,-3.67 L-14.50,4.13 L-21.08,-3.65 L-21.08,9.00 L-24.24,9.00 ZM3.23,9.00 L3.23,9.00 L3.23,-3.74 L1.86,-2.06 L-2.29,-2.06 L2.92,-8.28 L6.40,-8.28 L6.40,9.00 L3.23,9.00 ZM19.08,9.00 L19.08,9.00 L19.08,4.66 L8.21,4.66 L8.21,1.70 L19.28,-8.28 L22.23,-8.28 L22.23,1.49 L24.65,1.49 L24.65,4.66 L22.23,4.66 L22.23,9.00 L19.08,9.00 ZM13.11,1.49 L13.11,1.49 L19.08,1.49 L19.08,-3.50 L13.11,1.49 Z"/></g>
   </g>
 </svg>
