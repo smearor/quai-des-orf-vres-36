@@ -3,6 +3,7 @@
 mod asset;
 mod inner_fill;
 mod spec;
+mod static_asset;
 mod substitution;
 mod text_fill;
 mod variant;
@@ -10,6 +11,7 @@ mod variant;
 pub use asset::Asset;
 pub use inner_fill::InnerFill;
 pub use spec::Spec;
+pub use static_asset::StaticAsset;
 pub use substitution::Substitution;
 pub use text_fill::TextFill;
 pub use variant::Variant;

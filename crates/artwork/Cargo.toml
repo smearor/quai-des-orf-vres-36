@@ -10,7 +10,8 @@ description = "Artwork generator for Quai des Orfèvres 36: parametrized SVG mas
 
 [features]
 default = ["cli"]
-cli = ["dep:clap", "dep:miette"]
+cli = ["dep:clap", "dep:miette", "outline"]
+outline = ["dep:fontdb", "dep:rustybuzz"]
 
 [dependencies]
 serde.workspace = true
@@ -18,6 +19,8 @@ thiserror.workspace = true
 toml.workspace = true
 clap = { workspace = true, optional = true }
 miette = { workspace = true, optional = true }
+fontdb = { workspace = true, optional = true }
+rustybuzz = { workspace = true, optional = true }
 
 [[bin]]
 name = "qdo36-artwork"

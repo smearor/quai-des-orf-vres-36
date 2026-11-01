@@ -9,12 +9,17 @@
 mod color;
 mod engine;
 mod error;
+#[cfg(feature = "outline")]
+mod fonts;
 mod model;
+#[cfg(feature = "outline")]
+mod outline;
 
 pub use crate::error::ArtworkError;
 pub use crate::model::Asset;
 pub use crate::model::InnerFill;
 pub use crate::model::Spec;
+pub use crate::model::StaticAsset;
 pub use crate::model::Substitution;
 pub use crate::model::TextFill;
 pub use crate::model::Variant;
@@ -47,6 +52,17 @@ pub fn generate(config_path: &Path, out_dir: &Path) -> Result<Vec<PathBuf>, Artw
     let city = spec.city.as_deref().unwrap_or("paris");
     let style = spec.style.as_deref().unwrap_or("belle-epoque");
     let masters_dir = config_path.parent().unwrap_or(Path::new("."));
+    #[cfg(feature = "outline")]
+    let fonts = if spec.outline.unwrap_or(true) {
+        let fonts_dir = spec
+            .fonts_dir
+            .as_deref()
+            .map(|dir| masters_dir.join(dir))
+            .ok_or(ArtworkError::MissingFontsDir)?;
+        Some(fonts::FontRegistry::load(&fonts_dir))
+    } else {
+        None
+    };
     fs::create_dir_all(out_dir).map_err(|source| ArtworkError::Io {
         path: out_dir.to_owned(),
         source,
@@ -70,6 +86,10 @@ pub fn generate(config_path: &Path, out_dir: &Path) -> Result<Vec<PathBuf>, Artw
             for text_fill in &variant.texts {
                 svg = engine::set_text(&svg, &asset.master, &text_fill.id, &text_fill.content)?;
             }
+            #[cfg(feature = "outline")]
+            if let Some(fonts) = &fonts {
+                svg = outline::outline_texts(&svg, fonts)?;
+            }
             let file_name = asset.output.replace("{name}", &variant.name).replace("{city}", city).replace("{style}", style);
             let out_path = out_dir.join(&file_name);
             if let Some(parent) = out_path.parent() {
@@ -83,6 +103,16 @@ pub fn generate(config_path: &Path, out_dir: &Path) -> Result<Vec<PathBuf>, Artw
                 source,
             })?;
             written.push(out_path);
+        }
+    }
+    #[cfg(feature = "outline")]
+    if let Some(fonts) = &fonts {
+        for static_asset in &spec.statics {
+            let file_name = static_asset.path.replace("{city}", city).replace("{style}", style);
+            let path = out_dir.join(&file_name);
+            let source = fs::read_to_string(&path).map_err(|source| ArtworkError::Io { path: path.clone(), source })?;
+            let outlined = outline::outline_texts(&source, fonts)?;
+            fs::write(&path, &outlined).map_err(|source| ArtworkError::Io { path: path.clone(), source })?;
         }
     }
     Ok(written)

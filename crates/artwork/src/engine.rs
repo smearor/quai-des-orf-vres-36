@@ -8,7 +8,7 @@
 use crate::error::ArtworkError;
 
 /// Reports whether `position` lies inside an `<!-- ... -->` XML comment.
-fn inside_comment(svg: &str, position: usize) -> bool {
+pub(crate) fn inside_comment(svg: &str, position: usize) -> bool {
     match svg[..position].rfind("<!--") {
         Some(comment_start) => match svg[..position].rfind("-->") {
             Some(comment_end) => comment_start > comment_end,
@@ -82,7 +82,7 @@ fn element_name(svg: &str, tag_start: usize) -> Option<&str> {
 /// non-identifier character after the name (so `<g` does not match
 /// `<gradient`). Returns the tag start and the position after its `>`,
 /// plus whether the tag is self-closing.
-fn find_open_tag(svg: &str, name: &str, cursor: usize) -> Option<(usize, usize, bool)> {
+pub(crate) fn find_open_tag(svg: &str, name: &str, cursor: usize) -> Option<(usize, usize, bool)> {
     let open_marker = format!("<{name}");
     let mut search_from = cursor;
     while let Some(relative) = svg[search_from..].find(&open_marker) {

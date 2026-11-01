@@ -37,4 +37,13 @@ pub enum ArtworkError {
     /// A colour value is not a `#rrggbb` hex literal.
     #[error("invalid colour value `{0}` (expected `#rrggbb`)")]
     InvalidColour(String),
+    /// Text outlining is enabled but no `fonts_dir` is configured.
+    #[error("`outline` enabled but no `fonts_dir` configured in variants.toml")]
+    MissingFontsDir,
+    /// No bundled font face matches the requested family/weight.
+    #[error("no bundled font face matches family `{family}`")]
+    MissingFontFamily {
+        /// The font-family value that could not be resolved.
+        family: String,
+    },
 }
