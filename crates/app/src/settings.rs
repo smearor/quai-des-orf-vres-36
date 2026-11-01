@@ -4,6 +4,7 @@ use qdo36_map::City;
 use qdo36_tangibles::MapScale;
 use serde::Deserialize;
 use serde::Serialize;
+use tangible_objects_model::DisplayRotation;
 
 /// Persisted app-level settings (daemon endpoint, city board, locale).
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -18,6 +19,10 @@ pub struct AppSettings {
     /// Base zoom of the map viewport.
     #[serde(default)]
     pub map_scale: MapScale,
+    /// Display rotation: quarter turns applied to surface positions
+    /// before the px scale (rotated desktop panels).
+    #[serde(default)]
+    pub display_rotation: DisplayRotation,
 }
 
 impl Default for AppSettings {
@@ -27,6 +32,7 @@ impl Default for AppSettings {
             locale: None,
             city: City::default(),
             map_scale: MapScale::default(),
+            display_rotation: DisplayRotation::default(),
         }
     }
 }

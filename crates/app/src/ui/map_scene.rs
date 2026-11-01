@@ -16,6 +16,7 @@ use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::MapScale;
 use qdo36_tangibles::MapTransform;
 use qdo36_tangibles::SurfaceMm;
+use tangible_objects_model::DisplayRotation;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Vec2;
 
@@ -35,6 +36,9 @@ pub struct SceneState {
     pub scale: MapScale,
     /// Highlighted station (tap selection).
     pub selected: Option<qdo36_map::StationId>,
+    /// Display rotation applied to surface-mm positions before the
+    /// px scale (rotated desktop panels).
+    pub display_rotation: DisplayRotation,
 }
 
 mod imp {
@@ -104,29 +108,102 @@ impl MapScene {
         *self.imp().state.borrow_mut() = Some(state);
         self.queue_draw();
     }
+
+    /// The station nearest to a widget-px tap (snap radius ~12 mm).
+    pub fn station_at(&self, state: &SceneState, px: f64, py: f64) -> Option<qdo36_map::StationId> {
+        let stage = RenderStage::new(state, self.width() as f64, self.height() as f64);
+        state
+            .map
+            .nearest_station(stage.to_map(px, py))
+            .filter(|(_, distance)| distance.as_f64() <= SNAP_RADIUS_MM)
+            .map(|(id, _)| id)
+    }
+}
+
+/// Snap radius for tap hit-testing, in map millimeters.
+const SNAP_RADIUS_MM: f64 = 12.0;
+
+/// The shared transform/pixel plumbing for one render frame (or one
+/// inverse query): surface dims, letterbox, `MapTransform`.
+struct RenderStage {
+    /// Effective surface width after display rotation.
+    effective_w: Millimeters,
+    /// Effective surface height after display rotation.
+    effective_h: Millimeters,
+    /// Pixels per surface millimeter.
+    px_per_mm: f64,
+    /// Letterbox offset x.
+    offset_x: f64,
+    /// Letterbox offset y.
+    offset_y: f64,
+    /// Map-mm -> surface-mm transform.
+    transform: MapTransform,
+    /// Raw (unrotated) surface dims.
+    surface: SurfaceMm,
+    /// Display rotation applied before the px scale.
+    display_rotation: DisplayRotation,
+}
+
+impl RenderStage {
+    /// Builds the stage for `state` at widget size `w`x`h`.
+    fn new(state: &SceneState, width: f64, height: f64) -> Self {
+        let bounds = state.map.bounds();
+        let surface = state.surface.unwrap_or_else(|| SurfaceMm {
+            width: Millimeters::new(width.max(bounds.width().as_f64())),
+            height: Millimeters::new(height.max(bounds.height().as_f64())),
+        });
+        // A quarter-turned display swaps the effective surface dims;
+        // the rotation itself applies to each surface-mm position.
+        let (effective_w, effective_h) = if state.display_rotation.swaps_axes() {
+            (surface.height, surface.width)
+        } else {
+            (surface.width, surface.height)
+        };
+        let px_per_mm = (width / effective_w.as_f64()).min(height / effective_h.as_f64());
+        Self {
+            effective_w,
+            effective_h,
+            px_per_mm,
+            offset_x: (width - effective_w.as_f64() * px_per_mm) / 2.0,
+            offset_y: (height - effective_h.as_f64() * px_per_mm) / 2.0,
+            transform: MapTransform::new(state.anchor.pose(), &state.config, state.scale),
+            surface,
+            display_rotation: state.display_rotation,
+        }
+    }
+
+    /// map-mm -> widget-px.
+    fn to_px(&self, pos: Vec2<Millimeters>) -> (f64, f64) {
+        let surface_pos = self.transform.map_to_surface(pos);
+        let rotated = self.display_rotation.apply(surface_pos, self.surface.width, self.surface.height);
+        (self.offset_x + rotated.x * self.px_per_mm, self.offset_y + rotated.y * self.px_per_mm)
+    }
+
+    /// widget-px -> map-mm (exact inverse of `to_px`).
+    fn to_map(&self, px: f64, py: f64) -> Vec2<Millimeters> {
+        let rotated = Vec2::new((px - self.offset_x) / self.px_per_mm, (py - self.offset_y) / self.px_per_mm);
+        let surface_pos = inverse_rotation(self.display_rotation, rotated, self.surface.width, self.surface.height);
+        self.transform.surface_to_map(surface_pos)
+    }
+}
+
+/// Undoes a [`DisplayRotation`] quarter-turn on a surface-mm position.
+fn inverse_rotation(rotation: DisplayRotation, pos: Vec2<Millimeters>, w: Millimeters, h: Millimeters) -> Vec2<Millimeters> {
+    match rotation {
+        DisplayRotation::Deg0 => pos,
+        DisplayRotation::Deg90 => Vec2::new(w.as_f64() - pos.y, pos.x),
+        DisplayRotation::Deg180 => Vec2::new(w.as_f64() - pos.x, h.as_f64() - pos.y),
+        DisplayRotation::Deg270 => Vec2::new(pos.y, h.as_f64() - pos.x),
+    }
 }
 
 /// Full scene render: background, backdrop, edges, stations, labels,
 /// anchor marker.
 fn render(ctx: &cairo::Context, state: &SceneState, width: f64, height: f64) {
     let map = state.map.as_ref();
-    let bounds = map.bounds();
-
-    // The transform maps map-mm -> surface-mm; the second stage maps
-    // surface-mm -> widget px (letterboxed to keep aspect).
-    let surface = state.surface.unwrap_or_else(|| SurfaceMm {
-        width: Millimeters::new(width.max(bounds.width().as_f64())),
-        height: Millimeters::new(height.max(bounds.height().as_f64())),
-    });
-    let px_per_mm = (width / surface.width.as_f64()).min(height / surface.height.as_f64());
-    let offset_x = (width - surface.width.as_f64() * px_per_mm) / 2.0;
-    let offset_y = (height - surface.height.as_f64() * px_per_mm) / 2.0;
-
-    let transform = MapTransform::new(state.anchor.pose(), &state.config, state.scale);
-    let to_px = |pos: Vec2<Millimeters>| {
-        let surface_pos = transform.map_to_surface(pos);
-        (offset_x + surface_pos.x * px_per_mm, offset_y + surface_pos.y * px_per_mm)
-    };
+    let stage = RenderStage::new(state, width, height);
+    let to_px = |pos| stage.to_px(pos);
+    let px_per_mm = stage.px_per_mm;
 
     // Paper.
     ctx.set_source_rgb(0.10, 0.09, 0.08);

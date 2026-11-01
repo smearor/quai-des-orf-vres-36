@@ -185,6 +185,7 @@ impl AppWindow {
             surface,
             scale,
             selected: None,
+            display_rotation: self.settings.display_rotation,
         }
     }
 }

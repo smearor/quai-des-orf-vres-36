@@ -17,6 +17,7 @@ use qdo36_map::City;
 use signal_hook::iterator::Signals;
 use std::net::SocketAddr;
 use std::rc::Rc;
+use tangible_objects_model::DisplayRotation;
 use tracing::warn;
 use tracing_subscriber::EnvFilter;
 use unic_langid::LanguageIdentifier;
@@ -38,6 +39,12 @@ struct Args {
     /// `127.0.0.1:8091` for LAN agents) - reserved for WP05.
     #[arg(long)]
     mcp_listen: Option<SocketAddr>,
+    /// Display rotation: quarter turns applied to surface-mm
+    /// positions before the mm-to-pixel scale - needed when the
+    /// desktop shows the panel rotated (e.g. GNOME portrait on a
+    /// landscape touchscreen).
+    #[arg(long, value_name = "0|90|180|270")]
+    display_rotation: Option<DisplayRotation>,
 }
 
 fn main() -> glib::ExitCode {
@@ -53,6 +60,9 @@ fn main() -> glib::ExitCode {
     }
     if let Some(city) = args.city {
         settings.city = city;
+    }
+    if let Some(rotation) = args.display_rotation {
+        settings.display_rotation = rotation;
     }
 
     let l10n = settings
