@@ -610,6 +610,240 @@ fills = [
 ]
 texts = [{ id = "station-label", content = "OPÉRA GARNIER" }]
 
+
+[[asset.variant]]
+name = "canal-saint-martin"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -44,-8 Q 0,-12 44,-8 Q 44,8 44,8 Q 0,12 -44,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -24,18 L -14,6 L 14,6 L 24,18 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<line x1="0" y1="-12" x2="0" y2="16" stroke="url(#goldAcc)" stroke-width="1.5" />
+<path d="M -18,12 Q 0,8 18,12" fill="none" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -24,20 Q 0,16 24,20" fill="none" stroke="url(#goldAcc)" stroke-width="1" />''' },
+]
+texts = [{ id = "station-label", content = "CANAL ST-MARTIN" }]
+
+[[asset.variant]]
+name = "chateau-de-versailles"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -40,-8 Q 0,-12 40,-8 Q 40,8 40,8 Q 0,12 -40,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -32,16 L -32,2 L -20,-8 L 20,-8 L 32,2 L 32,16 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="-34" y="16" width="68" height="4" fill="url(#goldAcc)" />
+<line x1="0" y1="-8" x2="0" y2="16" stroke="url(#goldAcc)" stroke-width="0.8" />''' },
+]
+texts = [{ id = "station-label", content = "VERSAILLES" }]
+
+[[asset.variant]]
+name = "galeries-lafayette"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -44,-8 Q 0,-12 44,-8 Q 44,8 44,8 Q 0,12 -44,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-28" y="4" width="56" height="20" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -16,4 C -16,-20 16,-20 16,4 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="0" cy="-8" r="4" fill="url(#goldAcc)" />
+<rect x="-30" y="22" width="60" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "GALERIES LAFAYETTE" }]
+
+[[asset.variant]]
+name = "gare-du-nord"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -42,-8 Q 0,-12 42,-8 Q 42,8 42,8 Q 0,12 -42,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="2" width="60" height="22" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<polygon points="-30,2 0,-18 30,2" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="0" cy="-6" r="3" fill="url(#goldAcc)" />
+<rect x="-32" y="22" width="64" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "GARE DU NORD" }]
+
+[[asset.variant]]
+name = "gare-montparnasse"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -46,-8 Q 0,-12 46,-8 Q 46,8 46,8 Q 0,12 -46,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6.2" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -28,18 L -28,2 C -28,-12 28,-12 28,2 L 28,18 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="-30" y="18" width="60" height="4" fill="url(#goldAcc)" />
+<line x1="-15" y1="-2" x2="15" y2="-2" stroke="url(#goldAcc)" stroke-width="0.8" />''' },
+]
+texts = [{ id = "station-label", content = "GARE MONTPARNASSE" }]
+
+[[asset.variant]]
+name = "gare-saint-lazare"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -44,-8 Q 0,-12 44,-8 Q 44,8 44,8 Q 0,12 -44,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="4" width="60" height="18" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -24,4 C -24,-16 24,-16 24,4 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="0" cy="-6" r="3" fill="url(#goldAcc)" />
+<rect x="-32" y="20" width="64" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "GARE SAINT-LAZARE" }]
+
+[[asset.variant]]
+name = "hotel-de-ville"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -40,-8 Q 0,-12 40,-8 Q 40,8 40,8 Q 0,12 -40,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="4" width="60" height="20" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -12,4 L -12,-16 L 12,-16 L 12,4 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<polygon points="-12,-16 0,-24 12,-16" fill="url(#goldAcc)" />
+<circle cx="0" cy="-6" r="3" fill="url(#goldAcc)" />
+<rect x="-32" y="22" width="64" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "HÔTEL DE VILLE" }]
+
+[[asset.variant]]
+name = "le-bataclan"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -36,-8 Q 0,-12 36,-8 Q 36,8 36,8 Q 0,12 -36,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-24" y="2" width="48" height="22" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -28,2 C -28,-6 28,-6 28,2 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -16,-6 C -16,-16 16,-16 16,-6 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<line x1="0" y1="-16" x2="0" y2="-22" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-26" y="22" width="52" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "LE BATACLAN" }]
+
+[[asset.variant]]
+name = "opera-bastille"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -44,-8 Q 0,-12 44,-8 Q 44,8 44,8 Q 0,12 -44,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.8" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -30,18 C -30,-4 -15,-16 0,-16 C 15,-16 30,-4 30,18 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="0" y1="-16" x2="0" y2="18" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-32" y="18" width="64" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "OPÉRA BASTILLE" }]
+
+[[asset.variant]]
+name = "palais-de-l-elysee"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -42,-8 Q 0,-12 42,-8 Q 42,8 42,8 Q 0,12 -42,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-28" y="2" width="56" height="20" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -28,2 L 0,-12 L 28,2 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-30" y="20" width="60" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "PALAIS DE L'ÉLYSÉE" }]
+
+[[asset.variant]]
+name = "pont-neuf"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -36,-8 Q 0,-12 36,-8 Q 36,8 36,8 Q 0,12 -36,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -30,16 C -18,8 -10,8 0,16 C 10,8 18,8 30,16 L 30,22 L -30,22 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -24,16 C -18,10 -12,10 -6,16 M -6,16 C 0,10 6,10 12,16 M 12,16 C 18,10 24,10 30,16" fill="none" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -32,22 Q 0,18 32,22" fill="none" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="-34" y="24" width="68" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "PONT NEUF" }]
+
+[[asset.variant]]
+name = "stade-de-france"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -42,-8 Q 0,-12 42,-8 Q 42,8 42,8 Q 0,12 -42,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<ellipse cx="0" cy="8" rx="32" ry="14" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<ellipse cx="0" cy="4" rx="36" ry="16" fill="none" stroke="url(#goldAcc)" stroke-width="1" />
+<ellipse cx="0" cy="0" rx="24" ry="9" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="0.8" />''' },
+]
+texts = [{ id = "station-label", content = "STADE DE FRANCE" }]
+
+[[asset.variant]]
+name = "stade-roland-garros"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -44,-8 Q 0,-12 44,-8 Q 44,8 44,8 Q 0,12 -44,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-28" y="-12" width="56" height="28" rx="3" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="0" y1="-12" x2="0" y2="16" stroke="url(#goldAcc)" stroke-width="1.5" />
+<line x1="-18" y1="2" x2="18" y2="2" stroke="url(#goldAcc)" stroke-width="0.8" stroke-dasharray="2,2" />''' },
+]
+texts = [{ id = "station-label", content = "ROLAND GARROS" }]
+
+[[asset.variant]]
+name = "tour-montparnasse"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -44,-8 Q 0,-12 44,-8 Q 44,8 44,8 Q 0,12 -44,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.8" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-12" y="-28" width="24" height="52" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="0" y1="-28" x2="0" y2="24" stroke="url(#goldAcc)" stroke-width="0.8" stroke-dasharray="2,2" />
+<rect x="-16" y="22" width="32" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "TOUR MONTPARNASSE" }]
+
 # Border pawn variant: same disc, star accent instead of the rank badge
 # (rank-badge group is replaced wholesale via fills).
 
