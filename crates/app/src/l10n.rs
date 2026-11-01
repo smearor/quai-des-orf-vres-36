@@ -41,12 +41,14 @@ impl L10n {
         {
             let _ = bundle.add_resource(resource);
         }
-        // English as compile-time fallback for missing keys.
+        // English as compile-time fallback for missing keys - added
+        // non-overriding so the locale's own translations win and
+        // English only fills the gaps.
         if locale_code != "en"
             && let Some((_, text)) = RESOURCES.iter().find(|(code, _)| *code == "en")
             && let Ok(resource) = FluentResource::try_new(text.to_string())
         {
-            bundle.add_resource_overriding(resource);
+            let _ = bundle.add_resource(resource);
         }
         Self { bundle }
     }
@@ -79,7 +81,30 @@ mod tests {
     use std::path::Path;
     use std::path::PathBuf;
 
+    use super::L10n;
     use super::RESOURCES;
+
+    /// A supported locale serves its own catalog.
+    #[test]
+    fn german_locale_serves_german() {
+        let l10n = L10n::for_locale("de".parse().unwrap_or_default());
+        assert_eq!(l10n.msg("daemon-ready"), "Daemon verbunden");
+    }
+
+    /// An unsupported locale resolves through the English fallback
+    /// resource.
+    #[test]
+    fn unsupported_locale_falls_back_to_english() {
+        let l10n = L10n::for_locale("fr".parse().unwrap_or_default());
+        assert_eq!(l10n.msg("daemon-ready"), "Daemon connected");
+    }
+
+    /// A missing id degrades to the id itself, never panics.
+    #[test]
+    fn missing_id_returns_the_id() {
+        let l10n = L10n::for_locale("en".parse().unwrap_or_default());
+        assert_eq!(l10n.msg("no-such-id"), "no-such-id");
+    }
 
     /// Every `l10n.msg`/`l10n.msg_args` literal id in the app sources
     /// resolves to a Fluent id in each embedded catalog. `msg` falls
