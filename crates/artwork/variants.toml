@@ -20,7 +20,7 @@ city = "paris"
 style = "belle-epoque"
 
 [[asset]]
-master = "pawn-disc.svg"
+master = "{city}/{style}/pawn-disc.svg"
 output = "pawn/{city}/{style}/disc-ring-rank-letter-{name}.svg"
 
 # Detective pawn palette (style-book colours as mid stop, derived light/dark).
@@ -74,7 +74,7 @@ texts = [{ id = "rank-letter", content = "I" }]
 # is too dark for the dark badge field.
 
 [[asset]]
-master = "ligne-metro.svg"
+master = "{city}/{style}/ligne-metro.svg"
 output = "ligne/{city}/{style}/metro-{name}-colored.svg"
 
 [[asset.variant]]
@@ -194,7 +194,7 @@ texts = [{ id = "line-name", content = "M14" }]
 # label typography (substitutions), label text (texts).
 
 [[asset]]
-master = "station-marker.svg"
+master = "{city}/{style}/station-marker.svg"
 output = "station/{city}/{style}/{name}.svg"
 
 [[asset.variant]]
@@ -305,7 +305,7 @@ texts = [{ id = "station-label", content = "ÉGOUTS" }]
 # Landmark anchors use the same pin badge with landmark silhouettes.
 
 [[asset]]
-master = "station-marker.svg"
+master = "{city}/{style}/station-marker.svg"
 output = "landmarks/{city}/{style}/{name}.svg"
 
 [[asset.variant]]
@@ -868,7 +868,7 @@ texts = [{ id = "station-label", content = "SEINE BOAT" }]
 
 # Corbeau reveal marker: same pin badge, violet-tinted noir palette.
 [[asset]]
-master = "station-marker.svg"
+master = "{city}/{style}/station-marker.svg"
 output = "corbeau/{city}/{style}/reveal-marker.svg"
 
 [[asset.variant]]
@@ -900,7 +900,7 @@ texts = [{ id = "station-label", content = "CORBEAU REVEAL" }]
 # (rank-badge group is replaced wholesale via fills).
 
 [[asset]]
-master = "pawn-disc.svg"
+master = "{city}/{style}/pawn-disc.svg"
 output = "pawn/{city}/{style}/disc-border-{name}.svg"
 
 [[asset.variant]]
@@ -921,7 +921,7 @@ fills = [
 # Neutral (uncoloured) line badge: gold ring + dashed inner ring, no accent.
 
 [[asset]]
-master = "ligne-metro.svg"
+master = "{city}/{style}/ligne-metro.svg"
 output = "ligne/{city}/{style}/metro-{name}.svg"
 
 [[asset.variant]]
@@ -943,7 +943,7 @@ texts = [{ id = "line-name", content = "M1" }]
 # icon markup and offset.
 
 [[asset]]
-master = "ticket.svg"
+master = "{city}/{style}/ticket.svg"
 output = "ticket/{city}/{style}/{name}.svg"
 
 [[asset.variant]]

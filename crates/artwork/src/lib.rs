@@ -49,7 +49,8 @@ pub fn generate(config_path: &Path, masters_dir: &Path, out_dir: &Path) -> Resul
     })?;
     let mut written = Vec::new();
     for asset in &spec.assets {
-        let master_path = masters_dir.join(&asset.master);
+        let master_name = asset.master.replace("{city}", city).replace("{style}", style);
+        let master_path = masters_dir.join(master_name);
         let master_source = fs::read_to_string(&master_path).map_err(|source| ArtworkError::Io {
             path: master_path.clone(),
             source,
