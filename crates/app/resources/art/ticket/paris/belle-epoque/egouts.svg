@@ -64,7 +64,7 @@
   </g>
 
   <!-- Header: Transport / Company (parametrized via #ticket-header) -->
-  <text id="ticket-header" x="200" y="44" font-family="&#39;Times New Roman&#39;, serif" font-size="12" font-weight="bold" fill="#76c799" text-anchor="middle" letter-spacing="3">RÉSEAU SOUTERRAIN · ÉGOUTS DE PARIS</text>
+  <text id="ticket-header" x="200" y="44" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="12" font-weight="bold" fill="#76c799" text-anchor="middle" letter-spacing="3">RÉSEAU SOUTERRAIN · ÉGOUTS DE PARIS</text>
   <line x1="60" y1="52" x2="340" y2="52" stroke="url(#ticketAcc)" stroke-width="1" />
 
   <!-- Central Icon (parametrized via #ticket-glyph) -->
@@ -78,18 +78,18 @@
 <circle cx="48" cy="20" r="3" fill="#76c799" /></g>
 
   <!-- Ticket Main Title (parametrized via #ticket-title) -->
-  <text id="ticket-title" x="220" y="92" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="28" font-weight="bold" fill="#e2e8f0" letter-spacing="2">ÉGOUTS</text>
+  <text id="ticket-title" x="220" y="92" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="28" font-weight="bold" fill="#e2e8f0" letter-spacing="2">ÉGOUTS</text>
 
   <!-- Subtitle / Route Description (parametrized via #ticket-subtitle) -->
-  <text id="ticket-subtitle" x="220" y="115" font-family="&#39;Courier New&#39;, monospace" font-size="11.5" font-weight="bold" fill="#76c799" text-anchor="middle" letter-spacing="1">GALERIES SECRÈTES · FUITE</text>
+  <text id="ticket-subtitle" x="220" y="115" font-family="&#39;Courier Prime&#39;, monospace" font-size="11.5" font-weight="bold" fill="#76c799" text-anchor="middle" letter-spacing="1">GALERIES SECRÈTES · FUITE</text>
 
   <!-- Divider Dashed Line (parametrized via #ticket-divider) -->
   <line id="ticket-divider" x1="50" y1="130" x2="350" y2="130" stroke="#3b7a57" stroke-width="1" stroke-dasharray="4,4" opacity="0.6" />
 
   <!-- Footer Info / Serial Number (parametrized via #ticket-serial) -->
-  <text id="ticket-serial" x="35" y="155" font-family="&#39;Courier New&#39;, monospace" font-size="10" fill="#64748b" letter-spacing="1">N° 03652-SECRET</text>
+  <text id="ticket-serial" x="35" y="155" font-family="&#39;Courier Prime&#39;, monospace" font-size="10" fill="#64748b" letter-spacing="1">N° 03652-SECRET</text>
 
-  <text id="ticket-brand" x="365" y="155" font-family="&#39;Times New Roman&#39;, serif" font-size="11" font-weight="bold" fill="url(#ticketAcc)" text-anchor="end" letter-spacing="2">
+  <text id="ticket-brand" x="365" y="155" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="11" font-weight="bold" fill="url(#ticketAcc)" text-anchor="end" letter-spacing="2">
     QUAI DES ORFÈVRES
   </text>
 </svg>

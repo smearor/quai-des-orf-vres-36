@@ -97,10 +97,10 @@
 
   <!-- Title plaque -->
   <path d="M 90,430 Q 240,420 390,430 Q 390,470 390,470 Q 240,480 90,470 Z" fill="none" stroke="url(#goldAcc)" stroke-width="1.5" />
-  <text x="240" y="462" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="27" font-weight="bold" fill="#542c15" text-anchor="middle" letter-spacing="7">
+  <text x="240" y="462" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="27" font-weight="bold" fill="#542c15" text-anchor="middle" letter-spacing="7">
     QUAI DES ORFÈVRES
   </text>
-  <text x="240" y="502" font-family="&#39;Times New Roman&#39;, serif" font-size="12" fill="#7a5230" text-anchor="middle" letter-spacing="8">
+  <text x="240" y="502" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="12" fill="#7a5230" text-anchor="middle" letter-spacing="8">
     36 · PARIS · MM
   </text>
   <!-- Small flourishes beside the subtitle -->
@@ -113,6 +113,6 @@
     <path d="M 0,-24 L 4,-4 L 24,0 L 4,4 L 0,24 L -4,4 L -24,0 L -4,-4 Z" stroke-width="1" />
     <line x1="0" y1="-24" x2="0" y2="24" stroke-width="0.5" /><line x1="-24" y1="0" x2="24" y2="0" stroke-width="0.5" />
     <circle r="3" stroke-width="0.8" />
-    <text x="0" y="-29" font-family="&#39;Times New Roman&#39;, serif" font-size="10" fill="#542c15" text-anchor="middle" stroke="none">N</text>
+    <text x="0" y="-29" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="10" fill="#542c15" text-anchor="middle" stroke="none">N</text>
   </g>
 </svg>

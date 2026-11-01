@@ -81,7 +81,7 @@
     <!-- 6. Bottom Banner / Label Plate on Ring (parametrized via #station-plate + #station-label) -->
     <g transform="translate(100, 155)">
       <path id="M -44,-8 Q 0,-12 44,-8 Q 44,8 44,8 Q 0,12 -44,8 Z" d="M -35,-8 Q 0,-12 35,-8 Q 35,8 35,8 Q 0,12 -35,8 Z" fill="#0f0b14" stroke="url(#goldAcc)" stroke-width="1" />
-      <text id="station-label" x="0" y="3" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="7" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="1">CORBEAU REVEAL</text>
+      <text id="station-label" x="0" y="3" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="7" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="1">CORBEAU REVEAL</text>
     </g>
   </g>
 </svg>

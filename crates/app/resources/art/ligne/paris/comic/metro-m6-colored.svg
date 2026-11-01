@@ -45,6 +45,6 @@
     </g>
 
     <!-- Line Name with Hard Ink Halo (parametrized via #line-name) -->
-    <text id="line-name" x="0" y="9" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, &#39;Arial Rounded MT Bold&#39;, sans-serif" font-size="26" font-weight="bold" fill="#1C1917" stroke="#F7EFE0" stroke-width="3" stroke-linejoin="round" paint-order="stroke" text-anchor="middle" letter-spacing="1">M6</text>
+    <text id="line-name" x="0" y="9" font-family="&#39;Patrick Hand&#39;, &#39;Comic Neue&#39;, sans-serif" font-size="26" font-weight="bold" fill="#1C1917" stroke="#F7EFE0" stroke-width="3" stroke-linejoin="round" paint-order="stroke" text-anchor="middle" letter-spacing="1">M6</text>
   </g>
 </svg>

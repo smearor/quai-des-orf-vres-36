@@ -88,7 +88,7 @@
   </g>
 
   <!-- Cardinal Letter Labels (N, E, S, W) -->
-  <g font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="24" font-weight="bold" fill="#1c120a" text-anchor="middle">
+  <g font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="24" font-weight="bold" fill="#1c120a" text-anchor="middle">
     <!-- N is omitted or shifted slightly because of the Fleur-de-Lys, or placed proudly above -->
     <text x="200" y="32" font-size="18" fill="#542c15" letter-spacing="2">N</text>
     <text x="350" y="208">E</text>

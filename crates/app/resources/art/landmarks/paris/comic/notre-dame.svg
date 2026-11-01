@@ -65,7 +65,7 @@
     <!-- 6. Bottom Label / Name Plate Plaque (parametrized via #station-plate/-label) -->
     <g transform="translate(100, 154)">
       <path id="M -40,-10 Q 0,-14 40,-10 Q 40,10 40,10 Q 0,14 -40,10 Z" d="M -38,-10 Q 0,-14 38,-10 Q 38,10 38,10 Q 0,14 -38,10 Z" fill="#F7EFE0" stroke="#1C1917" stroke-width="2.2" stroke-linejoin="round" />
-      <text id="station-label" x="0" y="3.5" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, &#39;Arial Rounded MT Bold&#39;, sans-serif" font-size="7.5" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="1">NOTRE-DAME</text>
+      <text id="station-label" x="0" y="3.5" font-family="&#39;Patrick Hand&#39;, &#39;Comic Neue&#39;, sans-serif" font-size="7.5" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="1">NOTRE-DAME</text>
     </g>
   </g>
 </svg>

@@ -59,14 +59,14 @@
 <path d="M -22,12 C -24,-6 -14,-26 0,-30 C 14,-26 24,-6 22,12" fill="none" stroke="#1C1917" stroke-width="2" stroke-linecap="round" />
 <path d="M -16,10 C -18,-4 -10,-18 0,-22 C 10,-18 18,-4 16,10" fill="none" stroke="#1C1917" stroke-width="1.2" opacity="0.8" />
 <rect x="-18" y="-12" width="36" height="12" rx="2" fill="#1C1917" stroke="#1C1917" stroke-width="1.2" />
-<text x="0" y="-4" font-family="'Times New Roman', 'Georgia', serif" font-size="7" font-weight="bold" fill="#F7EFE0" text-anchor="middle" letter-spacing="1">
+<text x="0" y="-4" font-family="'Cormorant Garamond', 'EB Garamond', serif" font-size="7" font-weight="bold" fill="#F7EFE0" text-anchor="middle" letter-spacing="1">
   MÉTRO
 </text></g>
 
     <!-- 6. Bottom Label / Name Plate Plaque (parametrized via #station-plate/-label) -->
     <g transform="translate(100, 154)">
       <path id="M -35,-10 Q 0,-14 35,-10 Q 35,10 35,10 Q 0,14 -35,10 Z" d="M -38,-10 Q 0,-14 38,-10 Q 38,10 38,10 Q 0,14 -38,10 Z" fill="#F7EFE0" stroke="#1C1917" stroke-width="2.2" stroke-linejoin="round" />
-      <text id="station-label" x="0" y="3.5" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, &#39;Arial Rounded MT Bold&#39;, sans-serif" font-size="7.5" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="1.2">MÉTRO</text>
+      <text id="station-label" x="0" y="3.5" font-family="&#39;Patrick Hand&#39;, &#39;Comic Neue&#39;, sans-serif" font-size="7.5" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="1.2">MÉTRO</text>
     </g>
   </g>
 </svg>

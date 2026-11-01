@@ -63,7 +63,7 @@
   <!-- Top Private Zone Header Banner -->
   <g transform="translate(250, 50)">
     <path d="M -160,-14 Q 0,-18 160,-14 Q 160,14 160,14 Q 0,18 -160,14 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.5" />
-    <text x="0" y="4" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="11" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="3">
+    <text x="0" y="4" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="11" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="3">
       DOSSIER SECRET · RÔLE PRINCIPAL
     </text>
   </g>
@@ -100,12 +100,12 @@
   </g>
 
   <!-- Role Title Banner (CORBEAU) -->
-  <text x="250" y="235" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="28" font-weight="bold" fill="#fef0cd" text-anchor="middle" letter-spacing="6">
+  <text x="250" y="235" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="28" font-weight="bold" fill="#fef0cd" text-anchor="middle" letter-spacing="6">
     CORBEAU
   </text>
 
   <!-- Subtitle / Fugitive Description -->
-  <text x="250" y="255" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="2">
+  <text x="250" y="255" font-family="&#39;Courier Prime&#39;, monospace" font-size="10.5" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="2">
     LE FUGITIF · MAÎTRE DE L'ÉVASION
   </text>
 </svg>

@@ -72,13 +72,13 @@
   <!-- 5. Top Secret / Confidential Banner Header -->
   <g transform="translate(300, 52)">
     <path d="M -150,-14 Q 0,-20 150,-14 Q 150,14 150,14 Q 0,20 -150,14 Z" fill="#141c2b" stroke="url(#goldGrad)" stroke-width="1.5" />
-    <text x="0" y="4" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="11" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="3">
+    <text x="0" y="4" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="11" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="3">
       ZONE PRIVÉE · CONFIDENTIEL
     </text>
   </g>
 
   <!-- 6. Footer Secure Indicator -->
-  <text x="300" y="305" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#7a92a8" text-anchor="middle" letter-spacing="2">
+  <text x="300" y="305" font-family="&#39;Courier Prime&#39;, monospace" font-size="10" font-weight="bold" fill="#7a92a8" text-anchor="middle" letter-spacing="2">
     [ ENTRÉE SECRÈTE DE L'INSPECTEUR — YEUX FERMÉS ]
   </text>
 </svg>

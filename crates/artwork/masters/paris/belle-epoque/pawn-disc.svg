@@ -67,7 +67,7 @@
             the whole badge is replaceable via fills on #rank-badge) -->
     <g id="rank-badge">
       <circle cx="100" cy="100" r="32" fill="#0d111a" stroke="url(#goldRing)" stroke-width="2" filter="url(#innerGlow)" />
-      <text id="rank-letter" x="100" y="112" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="36" font-weight="bold" fill="url(#goldRing)" text-anchor="middle">
+      <text id="rank-letter" x="100" y="112" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="36" font-weight="bold" fill="url(#goldRing)" text-anchor="middle">
         I
       </text>
     </g>

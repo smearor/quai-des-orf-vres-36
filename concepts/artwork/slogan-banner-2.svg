@@ -55,17 +55,17 @@
   <!-- Left Side: Title & Slogan Section -->
   <g transform="translate(240, 100)">
     <!-- Project Name Plate -->
-    <text x="0" y="-48" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="10" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="3">
+    <text x="0" y="-48" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="10" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="3">
       QUAI DES ORFÈVRES 36 · PARIS
     </text>
 
     <!-- Main Title (PARIS) -->
-    <text x="0" y="-8" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="32" font-weight="bold" fill="#fef0cd" text-anchor="middle" letter-spacing="8" filter="url(#subtleGlow)">
+    <text x="0" y="-8" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="32" font-weight="bold" fill="#fef0cd" text-anchor="middle" letter-spacing="8" filter="url(#subtleGlow)">
       PARIS
     </text>
 
     <!-- Slogan -->
-    <text x="0" y="24" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-style="italic" font-size="14" fill="#dfbe6f" text-anchor="middle" letter-spacing="1">
+    <text x="0" y="24" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-style="italic" font-size="14" fill="#dfbe6f" text-anchor="middle" letter-spacing="1">
       “The city of light holds its breath.”
     </text>
   </g>
@@ -75,28 +75,28 @@
 
   <!-- Right Side: Story & Narrative Block -->
   <g transform="translate(635, 100)">
-    <text x="0" y="-38" font-family="&#39;Courier New&#39;, monospace" font-size="10" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.3">
+    <text x="0" y="-38" font-family="&#39;Courier Prime&#39;, monospace" font-size="10" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.3">
       Monsieur Corbeau vanished at dawn
     </text>
-    <text x="0" y="-22" font-family="&#39;Courier New&#39;, monospace" font-size="10" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.3">
+    <text x="0" y="-22" font-family="&#39;Courier Prime&#39;, monospace" font-size="10" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.3">
       beneath the Eiffel Tower. The detectives
     </text>
-    <text x="0" y="-6" font-family="&#39;Courier New&#39;, monospace" font-size="10" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.3">
+    <text x="0" y="-6" font-family="&#39;Courier Prime&#39;, monospace" font-size="10" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.3">
       of Quai des Orfèvres 36 fan out —
     </text>
-    <text x="0" y="10" font-family="&#39;Courier New&#39;, monospace" font-size="10" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.3">
+    <text x="0" y="10" font-family="&#39;Courier Prime&#39;, monospace" font-size="10" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.3">
       every métro gate, every pier is watched.
     </text>
-    <text x="0" y="32" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="0.8">
+    <text x="0" y="32" font-family="&#39;Courier Prime&#39;, monospace" font-size="10.5" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="0.8">
       Catch him before the last round ends.
     </text>
   </g>
 
   <!-- Footer Registry Mark -->
-  <text x="45" y="166" font-family="&#39;Courier New&#39;, monospace" font-size="8.5" fill="#64748b" letter-spacing="1">
+  <text x="45" y="166" font-family="&#39;Courier Prime&#39;, monospace" font-size="8.5" fill="#64748b" letter-spacing="1">
     DOSSIER 36-P
   </text>
-  <text x="755" y="166" font-family="&#39;Times New Roman&#39;, serif" font-size="8.5" font-weight="bold" fill="url(#goldAcc)" text-anchor="end" letter-spacing="1.5">
+  <text x="755" y="166" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="8.5" font-weight="bold" fill="url(#goldAcc)" text-anchor="end" letter-spacing="1.5">
     CONFIDENTIEL
   </text>
 </svg>

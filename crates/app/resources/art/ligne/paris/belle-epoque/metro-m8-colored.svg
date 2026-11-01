@@ -68,6 +68,6 @@
     </g>
 
     <!-- Line Name (parametrized via #line-name; fill = line colour) -->
-    <text id="line-name" x="0" y="8" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="24" font-weight="bold" fill="#E19BDF" stroke="#fef0cd" stroke-width="0.6" text-anchor="middle" letter-spacing="1" filter="url(#glowFilter)">M8</text>
+    <text id="line-name" x="0" y="8" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="24" font-weight="bold" fill="#E19BDF" stroke="#fef0cd" stroke-width="0.6" text-anchor="middle" letter-spacing="1" filter="url(#glowFilter)">M8</text>
   </g>
 </svg>

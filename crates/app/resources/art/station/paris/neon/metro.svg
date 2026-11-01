@@ -57,7 +57,7 @@
 <path d="M -22,12 C -24,-6 -14,-26 0,-30 C 14,-26 24,-6 22,12" fill="none" stroke="#C9D4FF" stroke-width="2" stroke-linecap="round" />
 <path d="M -16,10 C -18,-4 -10,-18 0,-22 C 10,-18 18,-4 16,10" fill="none" stroke="#C9D4FF" stroke-width="1.2" opacity="0.8" />
 <rect x="-18" y="-12" width="36" height="12" rx="2" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
-<text x="0" y="-4" font-family="'Times New Roman', 'Georgia', serif" font-size="7" font-weight="bold" fill="#C9D4FF" text-anchor="middle" letter-spacing="1">
+<text x="0" y="-4" font-family="'Cormorant Garamond', 'EB Garamond', serif" font-size="7" font-weight="bold" fill="#C9D4FF" text-anchor="middle" letter-spacing="1">
   MÉTRO
 </text></g>
 

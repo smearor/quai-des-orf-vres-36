@@ -67,10 +67,10 @@
   </g>
 
   <!-- Title -->
-  <text x="240" y="470" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, &#39;Arial Rounded MT Bold&#39;, sans-serif" font-size="34" font-weight="bold" fill="#F5C518" stroke="#F7EFE0" stroke-width="6" stroke-linejoin="round" paint-order="stroke" text-anchor="middle" letter-spacing="3">
+  <text x="240" y="470" font-family="&#39;Patrick Hand&#39;, &#39;Comic Neue&#39;, sans-serif" font-size="34" font-weight="bold" fill="#F5C518" stroke="#F7EFE0" stroke-width="6" stroke-linejoin="round" paint-order="stroke" text-anchor="middle" letter-spacing="3">
     QUAI DES ORFÈVRES
   </text>
-  <text x="240" y="496" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, sans-serif" font-size="15" font-weight="bold" fill="#F7EFE0" text-anchor="middle" letter-spacing="6">
+  <text x="240" y="496" font-family="&#39;Patrick Hand&#39;, &#39;Comic Neue&#39;, sans-serif" font-size="15" font-weight="bold" fill="#F7EFE0" text-anchor="middle" letter-spacing="6">
     36 · PARIS · MM
   </text>
 

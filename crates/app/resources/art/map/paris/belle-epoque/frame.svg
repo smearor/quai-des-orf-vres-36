@@ -84,7 +84,7 @@
   <g transform="translate(400, 535)" filter="url(#frameShadow)">
     <!-- Ornate Banner Plate -->
     <path d="M -160,-16 Q 0,-24 160,-16 Q 160,16 160,16 Q 0,24 -160,16 Z" fill="#1c120a" stroke="url(#goldGrad)" stroke-width="2" />
-    <text x="0" y="5" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="13" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="4">
+    <text x="0" y="5" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="13" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="4">
       CARTE DE PARIS · QUARTIER GÉNÉRAL
     </text>
   </g>

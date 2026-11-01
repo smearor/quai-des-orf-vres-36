@@ -28,7 +28,7 @@
 
     <!-- Obere Kopf-Box / Titel -->
     <rect x="140" y="45" width="220" height="35" rx="4" ry="4" fill="#F7EFE0" stroke="#1C1917" stroke-width="2.2" />
-    <text x="250" y="68" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, sans-serif" font-size="14" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="2">
+    <text x="250" y="68" font-family="&#39;Patrick Hand&#39;, &#39;Comic Neue&#39;, sans-serif" font-size="14" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="2">
       SHIELD ZONE
     </text>
 

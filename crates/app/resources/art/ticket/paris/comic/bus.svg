@@ -68,16 +68,16 @@
 <circle cx="72" cy="45" r="7" fill="#111" />
 <circle cx="72" cy="45" r="3" fill="#F5C518" />
 <rect x="36" y="6" width="24" height="6" rx="1" fill="#F5C518" stroke="#1C1917" stroke-width="0.8" />
-<text x="48" y="11" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#111" text-anchor="middle">LIGNE A</text>
+<text x="48" y="11" font-family="'EB Garamond', serif" font-size="4.5" font-weight="bold" fill="#111" text-anchor="middle">LIGNE A</text>
 </g></g>
 
     <!-- Ticket Title (parametrized via #ticket-title) -->
-    <text id="ticket-title" x="255" y="90" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, &#39;Arial Rounded MT Bold&#39;, sans-serif" font-size="22" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="2">BUS</text>
+    <text id="ticket-title" x="255" y="90" font-family="&#39;Patrick Hand&#39;, &#39;Comic Neue&#39;, sans-serif" font-size="22" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="2">BUS</text>
 
     <!-- Horizontal Perforation / Write Line -->
     <line x1="140" y1="115" x2="350" y2="115" stroke="#1C1917" stroke-width="1.8" stroke-dasharray="5,4" stroke-linecap="round" />
 
     <!-- Serial Number (parametrized via #ticket-serial) -->
-    <text id="ticket-serial" x="140" y="155" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, sans-serif" font-size="10" font-weight="bold" fill="#1C1917" letter-spacing="1">N° 03649</text>
+    <text id="ticket-serial" x="140" y="155" font-family="&#39;Patrick Hand&#39;, &#39;Comic Neue&#39;, sans-serif" font-size="10" font-weight="bold" fill="#1C1917" letter-spacing="1">N° 03649</text>
   </g>
 </svg>

@@ -55,17 +55,17 @@
 <path d="M 14,40 L 14,24 Q 18,18 22,24 L 22,40 Z" fill="#1C1917" />
 <path d="M 74,40 L 74,24 Q 78,18 82,24 L 82,40 Z" fill="#1C1917" />
 <rect x="26" y="15" width="44" height="13" rx="1.5" fill="#1C1917" stroke="#F5C518" stroke-width="1" />
-<text x="48" y="24" font-family="'Times New Roman', serif" font-size="6" font-weight="bold" fill="#F5C518" text-anchor="middle" letter-spacing="1">MÉTROPOLITAIN</text>
+<text x="48" y="24" font-family="'Cormorant Garamond', 'EB Garamond', serif" font-size="6" font-weight="bold" fill="#F5C518" text-anchor="middle" letter-spacing="1">MÉTROPOLITAIN</text>
 <rect x="6" y="40" width="84" height="4" rx="1" fill="#1C1917" />
 </g></g>
 
     <!-- Ticket Title (parametrized via #ticket-title) -->
-    <text id="ticket-title" x="255" y="90" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, &#39;Arial Rounded MT Bold&#39;, sans-serif" font-size="22" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="2">MÉTRO</text>
+    <text id="ticket-title" x="255" y="90" font-family="&#39;Patrick Hand&#39;, &#39;Comic Neue&#39;, sans-serif" font-size="22" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="2">MÉTRO</text>
 
     <!-- Horizontal Perforation / Write Line -->
     <line x1="140" y1="115" x2="350" y2="115" stroke="#1C1917" stroke-width="1.8" stroke-dasharray="5,4" stroke-linecap="round" />
 
     <!-- Serial Number (parametrized via #ticket-serial) -->
-    <text id="ticket-serial" x="140" y="155" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, sans-serif" font-size="10" font-weight="bold" fill="#1C1917" letter-spacing="1">N° 03650</text>
+    <text id="ticket-serial" x="140" y="155" font-family="&#39;Patrick Hand&#39;, &#39;Comic Neue&#39;, sans-serif" font-size="10" font-weight="bold" fill="#1C1917" letter-spacing="1">N° 03650</text>
   </g>
 </svg>

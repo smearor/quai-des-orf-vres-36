@@ -123,7 +123,7 @@
     <circle cx="0" cy="0" r="10" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.8" />
     <circle cx="0" cy="0" r="14" fill="none" stroke="url(#goldAcc)" stroke-width="0.8" stroke-dasharray="3,2" />
     <path d="M -3,6 L 0,-6 L 3,6 M -2,2 L 2,2" fill="none" stroke="#fef0cd" stroke-width="1.2" />
-    <text x="0" y="-17" font-family="&#39;Times New Roman&#39;, serif" font-size="6.5" font-weight="bold" fill="#fef0cd" text-anchor="middle" letter-spacing="0.5">
+    <text x="0" y="-17" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="6.5" font-weight="bold" fill="#fef0cd" text-anchor="middle" letter-spacing="0.5">
       TOUR EIFFEL (STATION 1)
     </text>
   </g>
@@ -131,32 +131,32 @@
   <!-- Arc de Triomphe -->
   <g transform="translate(105, 115)">
     <circle cx="0" cy="0" r="3.5" fill="url(#goldAcc)" />
-    <text x="0" y="-6" font-family="&#39;Georgia&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Arc de Triomphe</text>
+    <text x="0" y="-6" font-family="&#39;EB Garamond&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Arc de Triomphe</text>
   </g>
 
   <!-- Sacré-Cœur & Butte Montmartre -->
   <g transform="translate(193, 63)">
     <path d="M -8,8 L 0,-2 L 8,8 Z" fill="none" stroke="url(#goldAcc)" stroke-width="0.8" stroke-dasharray="2,2" />
     <circle cx="2" cy="-5" r="3" fill="url(#goldAcc)" />
-    <text x="2" y="-10" font-family="&#39;Georgia&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Sacré-Cœur</text>
+    <text x="2" y="-10" font-family="&#39;EB Garamond&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Sacré-Cœur</text>
   </g>
 
   <!-- Louvre -->
   <g transform="translate(208, 195)">
     <polygon points="0,-4 -5,4 5,4" fill="none" stroke="url(#goldAcc)" stroke-width="1" />
-    <text x="0" y="10" font-family="&#39;Georgia&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Louvre</text>
+    <text x="0" y="10" font-family="&#39;EB Garamond&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Louvre</text>
   </g>
 
   <!-- Notre-Dame -->
   <g transform="translate(262, 225)">
     <rect x="-3" y="-3" width="6" height="6" fill="url(#goldAcc)" />
-    <text x="0" y="10" font-family="&#39;Georgia&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Notre-Dame</text>
+    <text x="0" y="10" font-family="&#39;EB Garamond&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Notre-Dame</text>
   </g>
 
   <!-- Panthéon -->
   <g transform="translate(242, 258)">
     <circle cx="0" cy="0" r="3" fill="url(#goldAcc)" />
-    <text x="0" y="8" font-family="&#39;Georgia&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Panthéon</text>
+    <text x="0" y="8" font-family="&#39;EB Garamond&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Panthéon</text>
   </g>
 
   <!-- Railway Termini (Gares) -->

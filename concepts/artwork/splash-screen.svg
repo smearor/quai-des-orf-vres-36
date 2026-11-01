@@ -72,7 +72,7 @@
     <circle r="67" fill="none" stroke="url(#copperGrad)" stroke-width="2" />
 
     <!-- The Number 36 in Classic Serif -->
-    <text x="0" y="22" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="74" font-weight="bold" fill="url(#nouveauGold)" text-anchor="middle" letter-spacing="4">36</text>
+    <text x="0" y="22" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="74" font-weight="bold" fill="url(#nouveauGold)" text-anchor="middle" letter-spacing="4">36</text>
   </g>
 
   <!-- 4. Vignette Shadow Overlay -->
@@ -95,13 +95,13 @@
   </g>
 
   <!-- Subtitle -->
-  <text x="600" y="485" font-family="&#39;Courier New&#39;, monospace" font-size="15" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="10">
+  <text x="600" y="485" font-family="&#39;Courier Prime&#39;, monospace" font-size="15" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="10">
     PARIS · 1900
   </text>
 
   <!-- 6. Loading / Footer Status -->
   <g transform="translate(600, 565)">
-    <text x="0" y="0" font-family="&#39;Times New Roman&#39;, serif" font-size="13" font-style="italic" fill="#a89a80" text-anchor="middle" letter-spacing="3">
+    <text x="0" y="0" font-family="&#39;Cormorant Garamond&#39;, &#39;EB Garamond&#39;, serif" font-size="13" font-style="italic" fill="#a89a80" text-anchor="middle" letter-spacing="3">
     — Chargement des dossiers de police —
     </text>
   </g>
