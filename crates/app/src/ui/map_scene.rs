@@ -39,6 +39,9 @@ pub struct SceneState {
     /// Display rotation applied to surface-mm positions before the
     /// px scale (rotated desktop panels).
     pub display_rotation: DisplayRotation,
+    /// Overlay hint shown while the anchor is virtual (tower lifted
+    /// / not yet placed).
+    pub anchor_hint: Option<String>,
 }
 
 mod imp {
@@ -126,10 +129,6 @@ const SNAP_RADIUS_MM: f64 = 12.0;
 /// The shared transform/pixel plumbing for one render frame (or one
 /// inverse query): surface dims, letterbox, `MapTransform`.
 struct RenderStage {
-    /// Effective surface width after display rotation.
-    effective_w: Millimeters,
-    /// Effective surface height after display rotation.
-    effective_h: Millimeters,
     /// Pixels per surface millimeter.
     px_per_mm: f64,
     /// Letterbox offset x.
@@ -161,8 +160,6 @@ impl RenderStage {
         };
         let px_per_mm = (width / effective_w.as_f64()).min(height / effective_h.as_f64());
         Self {
-            effective_w,
-            effective_h,
             px_per_mm,
             offset_x: (width - effective_w.as_f64() * px_per_mm) / 2.0,
             offset_y: (height - effective_h.as_f64() * px_per_mm) / 2.0,
@@ -213,6 +210,30 @@ fn render(ctx: &cairo::Context, state: &SceneState, width: f64, height: f64) {
     draw_edges(ctx, map, &to_px, px_per_mm);
     draw_stations(ctx, map, &to_px, px_per_mm, state.selected);
     draw_anchor(ctx, state.anchor, &to_px, px_per_mm, &state.config);
+    draw_overlay(ctx, state, width, height);
+}
+
+/// The "tower not detected" hint badge, drawn while the anchor is
+/// virtual. The map keeps rendering underneath.
+fn draw_overlay(ctx: &cairo::Context, state: &SceneState, width: f64, height: f64) {
+    let Some(hint) = &state.anchor_hint else { return };
+    let AnchorState::Virtual(_) = state.anchor else { return };
+
+    ctx.select_font_face("sans-serif", cairo::FontSlant::Normal, cairo::FontWeight::Bold);
+    ctx.set_font_size(18.0);
+    let Ok(extents) = ctx.text_extents(hint) else { return };
+    let padding_x = 14.0;
+    let padding_y = 10.0;
+    let box_w = extents.width() + 2.0 * padding_x;
+    let box_h = extents.height() + 2.0 * padding_y;
+    let x = (width - box_w) / 2.0;
+    let y = height - box_h - 24.0;
+    ctx.set_source_rgba(0.0, 0.0, 0.0, 0.72);
+    ctx.rectangle(x, y, box_w, box_h);
+    ctx.fill().ok();
+    ctx.set_source_rgb(0.95, 0.85, 0.55);
+    ctx.move_to(x + padding_x - extents.x_bearing(), y + padding_y - extents.y_bearing());
+    ctx.show_text(hint).ok();
 }
 
 /// River polylines + landmark dots - gameplay-inert dressing.

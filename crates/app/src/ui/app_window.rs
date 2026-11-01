@@ -142,6 +142,22 @@ impl AppWindow {
         };
         let state = Rc::new(RefCell::new(self.scene_state(&map, surface, scale)));
 
+        // Tap hit-testing: widget-px -> map-mm -> nearest station
+        // within the snap radius; the selection rings it.
+        let gesture = gtk4::GestureClick::new();
+        {
+            let state = state.clone();
+            let scene = self.scene.clone();
+            gesture.connect_released(move |_, _, px, py| {
+                let station = scene.station_at(&state.borrow(), px, py);
+                if let Some(station) = station {
+                    state.borrow_mut().selected = Some(station);
+                    scene.update(Rc::new(state.borrow().clone()));
+                }
+            });
+            self.scene.add_controller(gesture);
+        }
+
         // Event pump: tangible events arrive on the glib loop; every
         // pose updates the scene; the first tracked anchor advances
         // to the map screen.
@@ -186,6 +202,7 @@ impl AppWindow {
             scale,
             selected: None,
             display_rotation: self.settings.display_rotation,
+            anchor_hint: Some(self.l10n.msg("tower-missing")),
         }
     }
 }
