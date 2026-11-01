@@ -15,11 +15,6 @@
       <stop offset="100%" stop-color="#542c15" />
     </linearGradient>
 
-    <linearGradient id="darkBronze" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#542c15" />
-      <stop offset="100%" stop-color="#1c120a" />
-    </linearGradient>
-
     <!-- Heavy Occlusion Shadow for Card Depth -->
     <filter id="shieldShadow" x="-15%" y="-15%" width="130%" height="130%">
       <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.85" />

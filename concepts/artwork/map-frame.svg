@@ -15,11 +15,6 @@
       <stop offset="100%" stop-color="#542c15" />
     </linearGradient>
 
-    <linearGradient id="darkBronze" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#542c15" />
-      <stop offset="100%" stop-color="#1c120a" />
-    </linearGradient>
-
     <!-- Drop Shadow for Frame Depth -->
     <filter id="frameShadow" x="-10%" y="-10%" width="120%" height="120%">
       <feDropShadow dx="2" dy="5" stdDeviation="8" flood-color="#000" flood-opacity="0.6" />
