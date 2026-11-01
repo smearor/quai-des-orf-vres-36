@@ -15,7 +15,8 @@ Built on top of:
 ## Requirements
 
 - Rust latest stable − 1 (currently **1.98.0**), edition 2024
-- GTK4 + libadwaita development libraries (`libgtk-4-dev libadwaita-1-dev`)
+- GTK4 + libadwaita + gtk4-layer-shell development libraries
+  (`libgtk-4-dev libadwaita-1-dev libgtk4-layer-shell-dev`)
 - For tangible play: the `tangible-objects` daemon running with
   `--filter --device /dev/input/eventX --graphql-listen 127.0.0.1:8080`
 
