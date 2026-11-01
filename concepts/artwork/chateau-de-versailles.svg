@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="100%" height="100%">
+  <defs>
+    <radialGradient id="markerBg" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#1c2436" />
+      <stop offset="70%" stop-color="#0d131d" />
+      <stop offset="100%" stop-color="#05070a" />
+    </radialGradient>
+    <linearGradient id="goldAcc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef0cd" />
+      <stop offset="30%" stop-color="#dfbe6f" />
+      <stop offset="70%" stop-color="#b8860b" />
+      <stop offset="100%" stop-color="#542c15" />
+    </linearGradient>
+    <filter id="anchorShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.8" />
+    </filter>
+    <filter id="glowFilter">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#anchorShadow)">
+    <polygon points="100,230 85,170 115,170" fill="url(#goldAcc)" stroke="#1c120a" stroke-width="2" />
+    <polygon points="100,222 90,172 110,172" fill="#0d131d" />
+    <circle cx="100" cy="100" r="85" fill="url(#goldAcc)" stroke="#1c120a" stroke-width="2.5" />
+    <circle cx="100" cy="100" r="78" fill="url(#markerBg)" />
+    <circle cx="100" cy="100" r="70" fill="none" stroke="url(#goldAcc)" stroke-width="1.5" />
+    <circle cx="100" cy="100" r="64" fill="none" stroke="#2c3848" stroke-width="1" stroke-dasharray="4,3" opacity="0.8" />
+    <g fill="url(#goldAcc)" opacity="0.9" stroke="#1c120a" stroke-width="0.5">
+      <path d="M 100,12 L 103,20 L 100,24 L 97,20 Z" />
+      <path d="M 100,188 L 103,180 L 100,176 L 97,180 Z" />
+      <path d="M 12,100 L 20,103 L 24,100 L 20,97 Z" />
+      <path d="M 188,100 L 180,103 L 176,100 L 180,97 Z" />
+    </g>
+    <!-- Silhouette: Château de Versailles (Grand Palace Wing & Mansard Roofs) -->
+    <g transform="translate(100, 103)" filter="url(#glowFilter)">
+      <path d="M -32,16 L -32,2 L -20,-8 L 20,-8 L 32,2 L 32,16 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+      <rect x="-34" y="16" width="68" height="4" fill="url(#goldAcc)" />
+      <line x1="0" y1="-8" x2="0" y2="16" stroke="url(#goldAcc)" stroke-width="0.8" />
+    </g>
+    <g transform="translate(100, 155)">
+      <path d="M -40,-8 Q 0,-12 40,-8 Q 40,8 40,8 Q 0,12 -40,8 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+      <text x="0" y="3" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="7.5" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="1">
+        VERSAILLES
+      </text>
+    </g>
+  </g>
+</svg>
