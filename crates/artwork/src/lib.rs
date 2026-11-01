@@ -41,6 +41,8 @@ pub fn generate(config_path: &Path, masters_dir: &Path, out_dir: &Path) -> Resul
         source,
     })?;
     let spec: Spec = toml::from_str(&config_source)?;
+    let city = spec.city.as_deref().unwrap_or("paris");
+    let style = spec.style.as_deref().unwrap_or("belle-epoque");
     fs::create_dir_all(out_dir).map_err(|source| ArtworkError::Io {
         path: out_dir.to_owned(),
         source,
@@ -64,7 +66,7 @@ pub fn generate(config_path: &Path, masters_dir: &Path, out_dir: &Path) -> Resul
             for text_fill in &variant.texts {
                 svg = engine::set_text(&svg, &asset.master, &text_fill.id, &text_fill.content)?;
             }
-            let file_name = asset.output.replace("{name}", &variant.name);
+            let file_name = asset.output.replace("{name}", &variant.name).replace("{city}", city).replace("{style}", style);
             let out_path = out_dir.join(&file_name);
             if let Some(parent) = out_path.parent() {
                 fs::create_dir_all(parent).map_err(|source| ArtworkError::Io {

@@ -15,9 +15,13 @@
 #   id                - id of the parametrized <text> element
 #   content           - character data written into the element
 
+# Namespace segments substituted into output templates as {city}/{style}.
+city = "paris"
+style = "belle-epoque"
+
 [[asset]]
 master = "pawn-disc.svg"
-output = "pawn/pawn-disc-ring-rank-letter-{name}.svg"
+output = "pawn/{city}/{style}/disc-ring-rank-letter-{name}.svg"
 
 # Detective pawn palette (style-book colours as mid stop, derived light/dark).
 [[asset.variant]]
@@ -68,9 +72,10 @@ texts = [{ id = "rank-letter", content = "I" }]
 # Paris métro line badges (official RATP line colours). The accent ring keeps
 # the official colour; the line name fill is brightened when the line colour
 # is too dark for the dark badge field.
+
 [[asset]]
 master = "ligne-metro.svg"
-output = "ligne/ligne-metro-{name}-colored.svg"
+output = "ligne/{city}/{style}/metro-{name}-colored.svg"
 
 [[asset.variant]]
 name = "m1"
@@ -187,9 +192,10 @@ texts = [{ id = "line-name", content = "M14" }]
 # Map pin badge shared by all transport station markers and landmark
 # anchors. Per variant: glyph markup (fills), glyph offset + plate width +
 # label typography (substitutions), label text (texts).
+
 [[asset]]
 master = "station-marker.svg"
-output = "station/station-{name}.svg"
+output = "station/{city}/{style}/{name}.svg"
 
 [[asset.variant]]
 name = "taxi"
@@ -297,9 +303,10 @@ fills = [
 texts = [{ id = "station-label", content = "ÉGOUTS" }]
 
 # Landmark anchors use the same pin badge with landmark silhouettes.
+
 [[asset]]
 master = "station-marker.svg"
-output = "landmarks/anchor-{name}.svg"
+output = "landmarks/{city}/{style}/{name}.svg"
 
 [[asset.variant]]
 name = "eiffel-tour"
@@ -605,9 +612,10 @@ texts = [{ id = "station-label", content = "OPÉRA GARNIER" }]
 
 # Border pawn variant: same disc, star accent instead of the rank badge
 # (rank-badge group is replaced wholesale via fills).
+
 [[asset]]
 master = "pawn-disc.svg"
-output = "pawn/pawn-disc-border-{name}.svg"
+output = "pawn/{city}/{style}/disc-border-{name}.svg"
 
 [[asset.variant]]
 name = "blue"
@@ -625,9 +633,10 @@ fills = [
 ]
 
 # Neutral (uncoloured) line badge: gold ring + dashed inner ring, no accent.
+
 [[asset]]
 master = "ligne-metro.svg"
-output = "ligne/ligne-metro-{name}.svg"
+output = "ligne/{city}/{style}/metro-{name}.svg"
 
 [[asset.variant]]
 name = "m1"
@@ -646,9 +655,10 @@ texts = [{ id = "line-name", content = "M1" }]
 # Belle-Époque ticket stubs. Per variant: paper/accent palette + frame/
 # notches/shadow/divider colours + header/title/subtitle/serial texts +
 # icon markup and offset.
+
 [[asset]]
 master = "ticket.svg"
-output = "ticket/ticket-{name}.svg"
+output = "ticket/{city}/{style}/{name}.svg"
 
 [[asset.variant]]
 name = "taxi"
