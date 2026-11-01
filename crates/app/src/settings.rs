@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use crate::ui::style::MapStyle;
 use qdo36_map::City;
 use qdo36_tangibles::MapScale;
 use serde::Deserialize;
@@ -23,6 +24,9 @@ pub struct AppSettings {
     /// before the px scale (rotated desktop panels).
     #[serde(default)]
     pub display_rotation: DisplayRotation,
+    /// The map render style.
+    #[serde(default)]
+    pub map_style: MapStyle,
 }
 
 impl Default for AppSettings {
@@ -33,6 +37,7 @@ impl Default for AppSettings {
             city: City::default(),
             map_scale: MapScale::default(),
             display_rotation: DisplayRotation::default(),
+            map_style: MapStyle::default(),
         }
     }
 }

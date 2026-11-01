@@ -149,7 +149,7 @@ impl AppWindow {
             let state = state.clone();
             let scene = self.scene.clone();
             gesture.connect_released(move |_, _, px, py| {
-                let station = scene.station_at(&state.borrow(), px, py);
+                let station = scene.station_at(&state.borrow(), Vec2::new(px, py));
                 if let Some(station) = station {
                     state.borrow_mut().selected = Some(station);
                     scene.update(Rc::new(state.borrow().clone()));
@@ -202,6 +202,7 @@ impl AppWindow {
             scale,
             selected: None,
             display_rotation: self.settings.display_rotation,
+            style: self.settings.map_style,
             anchor_hint: Some(self.l10n.msg("tower-missing")),
         }
     }
