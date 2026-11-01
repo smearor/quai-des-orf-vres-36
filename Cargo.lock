@@ -2044,6 +2044,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "qdo36-artwork"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "miette",
+ "serde",
+ "thiserror 2.0.21",
+ "toml 1.1.8+spec-1.1.0",
+]
+
+[[package]]
 name = "qdo36-icons"
 version = "0.1.0"
 dependencies = [

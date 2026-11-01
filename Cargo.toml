@@ -13,6 +13,7 @@ homepage = "https://github.com/smearor/quai-des-orf-vres-36"
 
 [workspace.dependencies]
 # workspace crates
+qdo36-artwork = { path = "crates/artwork" }
 qdo36-map = { path = "crates/map" }
 qdo36-material = { path = "crates/material" }
 qdo36-moves = { path = "crates/moves" }

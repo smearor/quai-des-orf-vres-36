@@ -1,0 +1,388 @@
+# Artwork variant table for qdo36-artwork.
+#
+# Each [[asset]] names a parametrized master SVG in masters/ plus an output
+# file name template ({name} is replaced by the variant name). Each
+# [[asset.variant]] supplies the attribute substitutions and text fills.
+#
+# Substitution fields:
+#   id                - element id in the master (e.g. "tint-mid")
+#   attribute         - attribute to replace (e.g. "stop-color", "fill")
+#   value             - #rrggbb colour literal
+#   lighten_if_below  - optional luminance threshold; darker values are
+#                       blended toward white by lighten_factor (default 0.45)
+#
+# Text fill fields:
+#   id                - id of the parametrized <text> element
+#   content           - character data written into the element
+
+[[asset]]
+master = "pawn-disc.svg"
+output = "pawn-disc-ring-rank-letter-{name}.svg"
+
+# Detective pawn palette (style-book colours as mid stop, derived light/dark).
+[[asset.variant]]
+name = "blue"
+substitutions = [
+  { id = "tint-light", attribute = "stop-color", value = "#6EA8F0" },
+  { id = "tint-mid", attribute = "stop-color", value = "#2563EB" },
+  { id = "tint-dark", attribute = "stop-color", value = "#122F6E" },
+]
+texts = [{ id = "rank-letter", content = "I" }]
+
+[[asset.variant]]
+name = "red"
+substitutions = [
+  { id = "tint-light", attribute = "stop-color", value = "#F06A6A" },
+  { id = "tint-mid", attribute = "stop-color", value = "#DC2626" },
+  { id = "tint-dark", attribute = "stop-color", value = "#6E1212" },
+]
+texts = [{ id = "rank-letter", content = "I" }]
+
+[[asset.variant]]
+name = "green"
+substitutions = [
+  { id = "tint-light", attribute = "stop-color", value = "#57D273" },
+  { id = "tint-mid", attribute = "stop-color", value = "#16A34A" },
+  { id = "tint-dark", attribute = "stop-color", value = "#0B4D24" },
+]
+texts = [{ id = "rank-letter", content = "I" }]
+
+[[asset.variant]]
+name = "yellow"
+substitutions = [
+  { id = "tint-light", attribute = "stop-color", value = "#F6D94E" },
+  { id = "tint-mid", attribute = "stop-color", value = "#EAB308" },
+  { id = "tint-dark", attribute = "stop-color", value = "#7A5C00" },
+]
+texts = [{ id = "rank-letter", content = "I" }]
+
+[[asset.variant]]
+name = "purple"
+substitutions = [
+  { id = "tint-light", attribute = "stop-color", value = "#B07BE8" },
+  { id = "tint-mid", attribute = "stop-color", value = "#9333EA" },
+  { id = "tint-dark", attribute = "stop-color", value = "#4C1478" },
+]
+texts = [{ id = "rank-letter", content = "I" }]
+
+# Paris métro line badges (official RATP line colours). The accent ring keeps
+# the official colour; the line name fill is brightened when the line colour
+# is too dark for the dark badge field.
+[[asset]]
+master = "ligne-metro.svg"
+output = "ligne-metro-{name}-colored.svg"
+
+[[asset.variant]]
+name = "m1"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#FFCD00" },
+  { id = "line-name", attribute = "fill", value = "#FFCD00", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M1" }]
+
+[[asset.variant]]
+name = "m2"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#003CA6" },
+  { id = "line-name", attribute = "fill", value = "#003CA6", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M2" }]
+
+[[asset.variant]]
+name = "m3"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#837902" },
+  { id = "line-name", attribute = "fill", value = "#837902", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M3" }]
+
+[[asset.variant]]
+name = "m4"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#BE418D" },
+  { id = "line-name", attribute = "fill", value = "#BE418D", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M4" }]
+
+[[asset.variant]]
+name = "m5"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#FF7E2E" },
+  { id = "line-name", attribute = "fill", value = "#FF7E2E", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M5" }]
+
+[[asset.variant]]
+name = "m6"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#6ECA97" },
+  { id = "line-name", attribute = "fill", value = "#6ECA97", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M6" }]
+
+[[asset.variant]]
+name = "m7"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#FA9ABA" },
+  { id = "line-name", attribute = "fill", value = "#FA9ABA", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M7" }]
+
+[[asset.variant]]
+name = "m8"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#E19BDF" },
+  { id = "line-name", attribute = "fill", value = "#E19BDF", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M8" }]
+
+[[asset.variant]]
+name = "m9"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#B6BD00" },
+  { id = "line-name", attribute = "fill", value = "#B6BD00", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M9" }]
+
+[[asset.variant]]
+name = "m10"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#C9910D" },
+  { id = "line-name", attribute = "fill", value = "#C9910D", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M10" }]
+
+[[asset.variant]]
+name = "m11"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#704B1C" },
+  { id = "line-name", attribute = "fill", value = "#704B1C", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M11" }]
+
+[[asset.variant]]
+name = "m12"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#007852" },
+  { id = "line-name", attribute = "fill", value = "#007852", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M12" }]
+
+[[asset.variant]]
+name = "m13"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#6EC4E8" },
+  { id = "line-name", attribute = "fill", value = "#6EC4E8", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M13" }]
+
+[[asset.variant]]
+name = "m14"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#62259D" },
+  { id = "line-name", attribute = "fill", value = "#62259D", lighten_if_below = 115.0 },
+]
+texts = [{ id = "line-name", content = "M14" }]
+
+# Map pin badge shared by all transport station markers and landmark
+# anchors. Per variant: glyph markup (fills), glyph offset + plate width +
+# label typography (substitutions), label text (texts).
+[[asset]]
+master = "station-marker.svg"
+output = "station-{name}.svg"
+
+[[asset.variant]]
+name = "taxi"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -35,-8 Q 0,-12 35,-8 Q 35,8 35,8 Q 0,12 -35,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "8" },
+  { id = "station-label", attribute = "letter-spacing", value = "1.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -32,12 L -28,-4 L -18,-14 L 14,-14 L 26,-4 L 32,12 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -14,-14 L -8,-24 L 10,-24 L 14,-14 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<circle cx="-20" cy="14" r="8" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.5" />
+<circle cx="-20" cy="14" r="3" fill="url(#goldAcc)" />
+<circle cx="20" cy="14" r="8" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.5" />
+<circle cx="20" cy="14" r="3" fill="url(#goldAcc)" />
+<rect x="-35" y="10" width="70" height="4" rx="1" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "TAXI" }]
+
+[[asset.variant]]
+name = "bus"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -35,-8 Q 0,-12 35,-8 Q 35,8 35,8 Q 0,12 -35,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "8" },
+  { id = "station-label", attribute = "letter-spacing", value = "1.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="-16" width="60" height="30" rx="3" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="-24" y="-12" width="12" height="10" rx="1" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="0.8" />
+<rect x="-8" y="-12" width="12" height="10" rx="1" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="0.8" />
+<rect x="8" y="-12" width="12" height="10" rx="1" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="0.8" />
+<rect x="-24" y="2" width="14" height="8" rx="1" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="0.8" />
+<rect x="-6" y="2" width="14" height="8" rx="1" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="0.8" />
+<rect x="12" y="2" width="12" height="8" rx="1" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="0.8" />
+<circle cx="-18" cy="18" r="6" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="18" cy="18" r="6" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="-26" y1="-16" x2="26" y2="-16" stroke="url(#goldAcc)" stroke-width="1.5" />
+<line x1="-20" y1="-21" x2="20" y2="-21" stroke="url(#goldAcc)" stroke-width="1" />
+<line x1="-12" y1="-16" x2="-12" y2="-21" stroke="url(#goldAcc)" stroke-width="0.8" />
+<line x1="12" y1="-16" x2="12" y2="-21" stroke="url(#goldAcc)" stroke-width="0.8" />''' },
+]
+texts = [{ id = "station-label", content = "BUS" }]
+
+[[asset.variant]]
+name = "metro"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -35,-8 Q 0,-12 35,-8 Q 35,8 35,8 Q 0,12 -35,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1.2" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -26,26 L -22,12 L 22,12 L 26,26 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-28" y="24" width="56" height="4" fill="url(#goldAcc)" />
+<path d="M -22,12 C -24,-6 -14,-26 0,-30 C 14,-26 24,-6 22,12" fill="none" stroke="url(#goldAcc)" stroke-width="2" stroke-linecap="round" />
+<path d="M -16,10 C -18,-4 -10,-18 0,-22 C 10,-18 18,-4 16,10" fill="none" stroke="url(#goldAcc)" stroke-width="1.2" opacity="0.8" />
+<rect x="-18" y="-12" width="36" height="12" rx="2" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<text x="0" y="-4" font-family="'Times New Roman', 'Georgia', serif" font-size="7" font-weight="bold" fill="#fef0cd" text-anchor="middle" letter-spacing="1">
+  MÉTRO
+</text>''' },
+]
+texts = [{ id = "station-label", content = "MÉTRO" }]
+
+[[asset.variant]]
+name = "batobus"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -38,-8 Q 0,-12 38,-8 Q 38,8 38,8 Q 0,12 -38,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -34,10 Q 0,18 34,10 L 28,-4 L 20,-12 L -20,-12 L -28,-4 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -16,-12 L -12,-22 L 12,-22 L 16,-12 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<line x1="0" y1="-22" x2="0" y2="-28" stroke="url(#goldAcc)" stroke-width="1.5" />
+<circle cx="0" cy="-28" r="2" fill="#ffffff" />
+<path d="M -30,20 Q -20,15 -10,20 Q 0,25 10,20 Q 20,15 30,20" fill="none" stroke="url(#goldAcc)" stroke-width="1.2" stroke-linecap="round" />
+<path d="M -24,26 Q -14,21 -4,26 Q 6,31 16,26" fill="none" stroke="url(#goldAcc)" stroke-width="0.8" opacity="0.7" stroke-linecap="round" />''' },
+]
+texts = [{ id = "station-label", content = "BATOBUS" }]
+
+[[asset.variant]]
+name = "egouts"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -38,-8 Q 0,-12 38,-8 Q 38,8 38,8 Q 0,12 -38,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -32,22 L -32,2 C -32,-18 32,-18 32,2 L 32,22 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -24,20 L -24,4 C -24,-10 24,-10 24,4 L 24,20 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -8,20 Q 0,14 8,20 Z" fill="#1c2436" stroke="url(#goldAcc)" stroke-width="0.8" />
+<path d="M -5,18 Q 0,15 5,18" fill="none" stroke="url(#goldAcc)" stroke-width="0.8" opacity="0.8" />
+<line x1="-24" y1="12" x2="-8" y2="12" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="8" y1="12" x2="24" y2="12" stroke="url(#goldAcc)" stroke-width="1.2" />''' },
+]
+texts = [{ id = "station-label", content = "ÉGOUTS" }]
+
+# Landmark anchors use the same pin badge with landmark silhouettes.
+[[asset]]
+master = "station-marker.svg"
+output = "anchor-{name}.svg"
+
+[[asset.variant]]
+name = "eiffel-tour"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 105)" },
+  { id = "station-plate", attribute = "d", value = "M -35,-8 Q 0,-12 35,-8 Q 35,8 35,8 Q 0,12 -35,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "8.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -30,42 L -22,12 L -12,12 L -16,42 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M 30,42 L 22,12 L 12,12 L 16,42 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-26" y="12" width="52" height="4" rx="1" fill="url(#goldAcc)" />
+<path d="M -16,12 Q 0,22 16,12 Z" fill="none" stroke="url(#goldAcc)" stroke-width="1.5" />
+<path d="M -12,12 L -7,-24 L 7,-24 L 12,12 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="-10" y="-24" width="20" height="3" rx="0.5" fill="url(#goldAcc)" />
+<path d="M -5,-24 L -2,-62 L 2,-62 L 5,-24 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<line x1="0" y1="-62" x2="0" y2="-75" stroke="url(#goldAcc)" stroke-width="1.5" />
+<circle cx="0" cy="-75" r="2" fill="#ffffff" />''' },
+]
+texts = [{ id = "station-label", content = "EIFFEL" }]
+
+[[asset.variant]]
+name = "arc-de-triomphe"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 105)" },
+  { id = "station-plate", attribute = "d", value = "M -42,-8 Q 0,-12 42,-8 Q 42,8 42,8 Q 0,12 -42,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -32,32 L -32,24 L 32,24 L 32,32 Z" fill="url(#goldAcc)" />
+<rect x="-30" y="-12" width="60" height="36" rx="2" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -12,24 L -12,4 C -12,-6 12,-6 12,4 L 12,24 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-34" y="-22" width="68" height="10" rx="1" fill="url(#goldAcc)" stroke="#1c120a" stroke-width="0.5" />
+<rect x="-32" y="-28" width="64" height="6" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />''' },
+]
+texts = [{ id = "station-label", content = "ARC DE TRIOMPHE" }]
+
+[[asset.variant]]
+name = "louvre"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 102)" },
+  { id = "station-plate", attribute = "d", value = "M -35,-8 Q 0,-12 35,-8 Q 35,8 35,8 Q 0,12 -35,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "8" },
+  { id = "station-label", attribute = "letter-spacing", value = "1.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -42,28 L -42,5 L -35,5 L -35,0 L -25,0 L -25,5 L -8,5 L -8,2 L 8,2 L 8,5 L 25,5 L 25,0 L 35,0 L 35,5 L 42,5 L 42,28 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -10,2 L 0,-6 L 10,2 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-42" y="24" width="84" height="4" fill="url(#goldAcc)" />
+<polygon points="0,-12 -26,28 26,28" fill="#141c2b" opacity="0.85" />
+<polygon points="0,-12 -26,28 26,28" fill="none" stroke="url(#goldAcc)" stroke-width="1.8" />
+<line x1="0" y1="-12" x2="-13" y2="28" stroke="url(#goldAcc)" stroke-width="0.8" opacity="0.7" />
+<line x1="0" y1="-12" x2="13" y2="28" stroke="url(#goldAcc)" stroke-width="0.8" opacity="0.7" />
+<line x1="-7" y1="0" x2="7" y2="0" stroke="url(#goldAcc)" stroke-width="0.8" opacity="0.7" />
+<line x1="-14" y1="10" x2="14" y2="10" stroke="url(#goldAcc)" stroke-width="0.8" opacity="0.7" />
+<line x1="-20" y1="19" x2="20" y2="19" stroke="url(#goldAcc)" stroke-width="0.8" opacity="0.7" />''' },
+]
+texts = [{ id = "station-label", content = "LOUVRE" }]
+
+[[asset.variant]]
+name = "moulin-rouge"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -44,-8 Q 0,-12 44,-8 Q 44,8 44,8 Q 0,12 -44,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -30,30 L -30,6 L -20,6 L -20,2 L 20,2 L 20,6 L 30,6 L 30,30 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-32" y="26" width="64" height="4" fill="url(#goldAcc)" />
+<path d="M -16,2 L -10,-12 L 10,-12 L 16,2 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<g stroke="url(#goldAcc)" stroke-width="1.5" stroke-linecap="round" fill="none">
+  <line x1="0" y1="-5" x2="-28" y2="-28" />
+  <line x1="0" y1="-5" x2="28" y2="18" />
+  <line x1="0" y1="-5" x2="28" y2="-28" />
+  <line x1="0" y1="-5" x2="-28" y2="18" />
+</g>
+<circle cx="0" cy="-5" r="3" fill="url(#goldAcc)" stroke="#1c120a" stroke-width="0.8" />''' },
+]
+texts = [{ id = "station-label", content = "MOULIN ROUGE" }]
