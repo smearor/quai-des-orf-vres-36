@@ -1,5 +1,6 @@
 //! `MapStyle` - which look the scene renders in (`ARTWORK.md` §2).
 
+use crate::ui::style::BelleEpoqueStyle;
 use crate::ui::style::ComicStyle;
 use crate::ui::style::NeonStyle;
 use crate::ui::style::StyleRenderer;
@@ -25,7 +26,7 @@ impl MapStyle {
     pub fn renderer(&self) -> Box<dyn StyleRenderer> {
         match self {
             Self::Comic => Box::new(ComicStyle),
-            Self::BelleEpoque => Box::new(NeonStyle), // placeholder until BelleEpoque lands
+            Self::BelleEpoque => Box::new(BelleEpoqueStyle),
             Self::Neon => Box::new(NeonStyle),
         }
     }

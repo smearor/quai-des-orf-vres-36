@@ -5,6 +5,7 @@
 //! palette, stroke treatment, decorations, label font.
 
 pub mod alpha;
+pub mod belle_epoque;
 pub mod color;
 pub mod comic;
 pub mod edge_spec;
@@ -13,6 +14,7 @@ pub mod neon;
 pub mod renderer;
 
 pub use alpha::Alpha;
+pub use belle_epoque::BelleEpoqueStyle;
 pub use color::RgbColor;
 pub use comic::ComicStyle;
 pub use edge_spec::EdgeSpec;
