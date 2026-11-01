@@ -16,6 +16,7 @@ use tangible_objects_model::Vec2;
 use tracing::info;
 use tracing::warn;
 
+use crate::anchor_tracker;
 use crate::controller;
 use crate::controller::Controller;
 use crate::l10n::L10n;
@@ -184,7 +185,7 @@ impl AppWindow {
                         let state = state.clone();
                         let scene = this.scene.clone();
                         MainContext::default().spawn_local(async move {
-                            glib::timeout_future(controller::ANCHOR_LOSS_GRACE).await;
+                            glib::timeout_future(anchor_tracker::ANCHOR_LOSS_GRACE).await;
                             controller::with_controller(|controller| {
                                 let mut controller = controller.borrow_mut();
                                 if controller.settle_anchor_loss() {

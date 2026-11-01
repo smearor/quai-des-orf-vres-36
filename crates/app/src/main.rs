@@ -1,5 +1,6 @@
 //! Quai des Orfèvres 36 - Scotland Yard tabletop game for the smart desk.
 
+mod anchor_tracker;
 mod controller;
 mod l10n;
 mod settings;
