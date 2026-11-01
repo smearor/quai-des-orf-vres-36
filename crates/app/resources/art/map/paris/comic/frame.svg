@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <filter id="comicShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#1C1917" flood-opacity="1" />
+    </filter>
+  </defs>
+
+  <g filter="url(#comicShadow)">
+    <!-- Äußerer Rahmen-Körper -->
+    <rect x="20" y="20" width="760" height="560" rx="12" ry="12" fill="#F7EFE0" stroke="#1C1917" stroke-width="4" />
+    <rect x="32" y="32" width="736" height="536" rx="8" ry="8" fill="#FBF6E9" stroke="#1C1917" stroke-width="2" />
+
+    <!-- Innere gestrichelte Tinte-Linie -->
+    <rect x="42" y="42" width="716" height="516" rx="6" ry="6" fill="none" stroke="#1C1917" stroke-width="1.5" stroke-dasharray="8,6" />
+
+    <!-- Eck-Ornamente (Art-Nouveau/Comic-Stil) -->
+    <!-- Oben Links -->
+    <path d="M 42,90 C 42,50 50,42 90,42 M 42,110 C 42,65 65,42 110,42" fill="none" stroke="#1C1917" stroke-width="2" />
+    <circle cx="55" cy="55" r="3" fill="#1C1917" />
+    <!-- Oben Rechts -->
+    <path d="M 758,90 C 758,50 750,42 710,42 M 758,110 C 758,65 735,42 690,42" fill="none" stroke="#1C1917" stroke-width="2" />
+    <circle cx="745" cy="55" r="3" fill="#1C1917" />
+    <!-- Unten Links -->
+    <path d="M 42,510 C 42,550 50,558 90,558 M 42,490 C 42,535 65,558 110,558" fill="none" stroke="#1C1917" stroke-width="2" />
+    <circle cx="55" cy="545" r="3" fill="#1C1917" />
+    <!-- Unten Rechts -->
+    <path d="M 758,510 C 758,550 750,558 710,558 M 758,490 C 758,535 735,558 690,558" fill="none" stroke="#1C1917" stroke-width="2" />
+    <circle cx="745" cy="545" r="3" fill="#1C1917" />
+
+    <!-- Mittlere Rand-Ornamente (Oben und Unten) -->
+    <path d="M 370,42 Q 400,32 430,42" fill="none" stroke="#1C1917" stroke-width="2" />
+    <circle cx="400" cy="38" r="2.5" fill="#1C1917" />
+    <path d="M 370,558 Q 400,568 430,558" fill="none" stroke="#1C1917" stroke-width="2" />
+    <circle cx="400" cy="562" r="2.5" fill="#1C1917" />
+
+    <!-- Unteres Namensschild / Plakette -->
+    <path d="M 240,505 Q 400,490 560,505 L 550,535 Q 400,525 250,535 Z" fill="#1C1917" stroke="#1C1917" stroke-width="2" />
+    <path d="M 245,510 Q 400,495 555,510" fill="none" stroke="#F5C518" stroke-width="1.5" />
+  </g>
+</svg>

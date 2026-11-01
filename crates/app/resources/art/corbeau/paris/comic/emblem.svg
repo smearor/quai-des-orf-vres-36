@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" width="100%" height="100%">
+  <defs>
+    <!-- Comic Drop Shadow Offset -->
+    <filter id="comicShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="3.5" dy="3.5" stdDeviation="0" flood-color="#1C1917" flood-opacity="1" />
+    </filter>
+
+    <filter id="glowFilter">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g filter="url(#comicShadow)">
+    <!-- Plaque Outer Frame -->
+    <rect x="15" y="15" width="470" height="270" rx="10" ry="10" fill="#F7EFE0" stroke="#1C1917" stroke-width="3.5" />
+    <rect x="23" y="23" width="454" height="254" rx="6" ry="6" fill="#FBF6E9" stroke="#1C1917" stroke-width="1.8" />
+
+    <!-- Inner Dashed Border -->
+    <rect x="29" y="29" width="442" height="242" rx="4" ry="4" fill="none" stroke="#1C1917" stroke-width="1.2" stroke-dasharray="6,4" />
+
+    <!-- Corner Ornaments -->
+    <path d="M 35,45 C 35,35 45,35 55,35 M 35,53 C 35,41 41,35 53,35" fill="none" stroke="#1C1917" stroke-width="1.8" />
+    <circle cx="40" cy="40" r="2.5" fill="#1C1917" />
+
+    <path d="M 465,45 C 465,35 455,35 445,35 M 465,53 C 465,41 459,35 447,35" fill="none" stroke="#1C1917" stroke-width="1.8" />
+    <circle cx="460" cy="40" r="2.5" fill="#1C1917" />
+
+    <path d="M 35,255 C 35,265 45,265 55,265 M 35,247 C 35,259 41,265 53,265" fill="none" stroke="#1C1917" stroke-width="1.8" />
+    <circle cx="40" cy="260" r="2.5" fill="#1C1917" />
+
+    <path d="M 465,255 C 465,265 455,265 445,265 M 465,247 C 465,259 459,265 447,265" fill="none" stroke="#1C1917" stroke-width="1.8" />
+    <circle cx="460" cy="260" r="2.5" fill="#1C1917" />
+
+    <!-- Top Label / Header Box -->
+    <rect x="80" y="45" width="340" height="40" rx="4" ry="4" fill="#F7EFE0" stroke="#1C1917" stroke-width="2.2" />
+    <text x="250" y="71" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, sans-serif" font-size="16" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="3">
+      CORBEAU EMBLEM
+    </text>
+
+    <!-- Central Emblem: Sunburst / Compass Rays & Crow Profile -->
+    <g transform="translate(250, 165)">
+      <!-- Radial Rays -->
+      <g fill="#F5C518" stroke="#1C1917" stroke-width="1.5">
+        <polygon points="0,-65 4,-45 -4,-45" />
+        <polygon points="0,65 4,45 -4,45" />
+        <polygon points="-65,0 -45,4 -45,-4" />
+        <polygon points="65,0 45,4 45,-4" />
+        <polygon points="-46,-46 -32,-32 -26,-38" />
+        <polygon points="46,46 32,32 38,26" />
+        <polygon points="-46,46 -32,32 -38,26" />
+        <polygon points="46,-46 32,-32 26,-38" />
+      </g>
+
+      <!-- Inner Dashed Ring -->
+      <circle cx="0" cy="0" r="38" fill="#F7EFE0" stroke="#1C1917" stroke-width="2" />
+      <circle cx="0" cy="0" r="32" fill="none" stroke="#1C1917" stroke-width="1" stroke-dasharray="3,3" />
+
+      <!-- Corbeau Profile Silhouette -->
+      <path d="M -16,-14 C -16,-26 12,-26 18,-14 C 22,-4 32,0 40,2 C 32,4 20,8 14,16 C 6,20 -16,16 -16,-14 Z" fill="#1C1917" stroke="#1C1917" stroke-width="1.2" />
+      
+      <!-- Eye Dot -->
+      <circle cx="-2" cy="-6" r="3.5" fill="#F7EFE0" stroke="#1C1917" stroke-width="1.2" />
+      <circle cx="-2" cy="-6" r="1.2" fill="#1C1917" />
+    </g>
+  </g>
+</svg>

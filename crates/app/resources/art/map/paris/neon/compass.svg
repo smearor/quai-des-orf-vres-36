@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur1" />
+      <feGaussianBlur stdDeviation="6" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g transform="translate(100, 100)" filter="url(#neonGlow)">
+    <!-- Hintergrund-Rasterlinien -->
+    <path d="M -90,0 L 90,0 M 0,-90 L 0,90" fill="none" stroke="#16224A" stroke-width="0.8" />
+
+    <!-- Äußerer Neon-Kompass-Ring -->
+    <circle cx="0" cy="0" r="90" fill="#0B1020" stroke="#A78BFA" stroke-width="2.5" />
+    <circle cx="0" cy="0" r="82" fill="#0F1730" stroke="#16224A" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="74" fill="none" stroke="#4D7CFE" stroke-width="1" stroke-dasharray="5,4" />
+
+    <!-- Kardinal-Markierungen -->
+    <g stroke="#FFE066" stroke-width="2" stroke-linecap="round">
+      <line x1="0" y1="-82" x2="0" y2="-74" />
+      <line x1="0" y1="82" x2="0" y2="74" />
+      <line x1="-82" y1="0" x2="-74" y2="0" />
+      <line x1="82" y1="0" x2="74" y2="0" />
+    </g>
+
+    <!-- Neon-Kompassnadeln (Sternform) -->
+    <polygon points="0,0 12,-12 0,-72" fill="#0B1020" stroke="#FFE066" stroke-width="1.8" />
+    <polygon points="0,0 -12,-12 0,-72" fill="#22D3EE" stroke="#FFE066" stroke-width="1.8" />
+
+    <polygon points="0,0 12,12 0,72" fill="#0F1730" stroke="#4D7CFE" stroke-width="1.8" />
+    <polygon points="0,0 -12,12 0,72" fill="#0B1020" stroke="#4D7CFE" stroke-width="1.8" />
+
+    <polygon points="0,0 -12,12 -72,0" fill="#0B1020" stroke="#FFE066" stroke-width="1.8" />
+    <polygon points="0,0 -12,-12 -72,0" fill="#F0ABFC" stroke="#FFE066" stroke-width="1.8" />
+
+    <polygon points="0,0 12,-12 72,0" fill="#0F1730" stroke="#22D3EE" stroke-width="1.8" />
+    <polygon points="0,0 12,12 72,0" fill="#0B1020" stroke="#22D3EE" stroke-width="1.8" />
+
+    <!-- Futuristischer Nord-Marker -->
+    <path d="M 0,-72 C -5,-82 5,-82 0,-90 C -5,-82 5,-82 0,-72 Z" fill="#FFE066" stroke="#C9D4FF" stroke-width="1" />
+    <circle cx="0" cy="-80" r="2" fill="#0B1020" />
+
+    <!-- Zentrum / Energie-Nabe -->
+    <circle cx="0" cy="0" r="10" fill="#0B1020" stroke="#F0ABFC" stroke-width="2" />
+    <circle cx="0" cy="0" r="4" fill="#FFE066" />
+  </g>
+</svg>

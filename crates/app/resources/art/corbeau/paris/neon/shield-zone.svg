@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" width="100%" height="100%">
+  <defs>
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur1" />
+      <feGaussianBlur stdDeviation="6" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g>
+    <!-- Hintergrund-Rasterlinien -->
+    <path d="M 0,150 L 500,150 M 250,0 L 250,300" fill="none" stroke="#16224A" stroke-width="0.8" />
+
+    <!-- Äußerer Rahmen -->
+    <rect x="15" y="15" width="470" height="270" rx="8" ry="8" fill="#0B1020" stroke="#A78BFA" stroke-width="2.5" filter="url(#neonGlow)" />
+    <rect x="23" y="23" width="454" height="254" rx="4" ry="4" fill="#0F1730" stroke="#16224A" stroke-width="1.5" />
+
+    <!-- Innere gestrichelte Neon-Linie -->
+    <rect x="29" y="29" width="442" height="242" rx="2" ry="2" fill="none" stroke="#FFE066" stroke-width="1" stroke-dasharray="6,4" opacity="0.8" filter="url(#neonGlow)" />
+
+    <!-- Eck-Terminals -->
+    <circle cx="40" cy="40" r="3" fill="#FFE066" filter="url(#neonGlow)" />
+    <circle cx="460" cy="40" r="3" fill="#FFE066" filter="url(#neonGlow)" />
+    <circle cx="40" cy="260" r="3" fill="#FFE066" filter="url(#neonGlow)" />
+    <circle cx="460" cy="260" r="3" fill="#FFE066" filter="url(#neonGlow)" />
+
+    <!-- Obere Kopf-Box / Titel -->
+    <rect x="140" y="45" width="220" height="35" rx="4" ry="4" fill="#0B1020" stroke="#4D7CFE" stroke-width="1.5" filter="url(#neonGlow)" />
+    <text x="250" y="68" font-family="&#39;Orbitron&#39;, &#39;Share Tech Mono&#39;, monospace" font-size="12" font-weight="bold" fill="#C9D4FF" text-anchor="middle" letter-spacing="2" filter="url(#neonGlow)">
+      SHIELD_ZONE
+    </text>
+
+    <!-- Zentrales Schild mit Auge und Neon-Sperrlinie -->
+    <g transform="translate(250, 160)" filter="url(#neonGlow)">
+      <!-- Schild-Umriss -->
+      <path d="M 0,-35 C 35,-35 45,-20 45,5 C 45,30 20,45 0,50 C -20,45 -45,30 -45,5 C -45,-20 -35,-35 0,-35 Z" fill="#0B1020" stroke="#22D3EE" stroke-width="2.5" />
+      
+      <!-- Auge -->
+      <path d="M -30,0 C -15,-18 15,-18 30,0 C 15,18 -15,18 -30,0 Z" fill="#0F1730" stroke="#A78BFA" stroke-width="1.5" />
+      <circle cx="0" cy="0" r="7" fill="#0B1020" stroke="#FFE066" stroke-width="1.5" />
+      <circle cx="0" cy="0" r="2" fill="#FFE066" />
+
+      <!-- Diagonale Neon-Sperrlinie -->
+      <line x1="-36" y1="20" x2="36" y2="-20" stroke="#FB7185" stroke-width="3" stroke-linecap="round" />
+    </g>
+  </g>
+</svg>

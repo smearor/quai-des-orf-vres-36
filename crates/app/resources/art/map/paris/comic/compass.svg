@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <filter id="comicShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#1C1917" flood-opacity="1" />
+    </filter>
+  </defs>
+
+  <g filter="url(#comicShadow)" transform="translate(100, 100)">
+    <!-- Äußerer Kompass-Ring -->
+    <circle cx="0" cy="0" r="90" fill="#F7EFE0" stroke="#1C1917" stroke-width="3.5" />
+    <circle cx="0" cy="0" r="82" fill="#FBF6E9" stroke="#1C1917" stroke-width="1.8" />
+    <circle cx="0" cy="0" r="74" fill="none" stroke="#1C1917" stroke-width="1.2" stroke-dasharray="5,4" />
+
+    <!-- Kardinal-Markierungen am Ring -->
+    <g stroke="#1C1917" stroke-width="2" stroke-linecap="round">
+      <line x1="0" y1="-82" x2="0" y2="-74" />
+      <line x1="0" y1="82" x2="0" y2="74" />
+      <line x1="-82" y1="0" x2="-74" y2="0" />
+      <line x1="82" y1="0" x2="74" y2="0" />
+    </g>
+
+    <!-- Kompass-Nadeln (Sternform) -->
+    <!-- Kleinere diagonale Spitzen -->
+    <polygon points="0,0 35,-35 0,-60" fill="#E8590C" stroke="#1C1917" stroke-width="1.2" />
+    <polygon points="0,0 -35,35 -60,0" fill="#1C1917" stroke="#1C1917" stroke-width="1.2" />
+    <polygon points="0,0 35,35 60,0" fill="#FBF6E9" stroke="#1C1917" stroke-width="1.2" />
+    <polygon points="0,0 -35,-35 0,-60" fill="#F5C518" stroke="#1C1917" stroke-width="1.2" />
+
+    <!-- Haupt-Kompassnadeln (Nord-Süd / Ost-West) -->
+    <polygon points="0,0 12,-12 0,-72" fill="#F7EFE0" stroke="#1C1917" stroke-width="1.8" />
+    <polygon points="0,0 -12,-12 0,-72" fill="#F5C518" stroke="#1C1917" stroke-width="1.8" />
+
+    <polygon points="0,0 12,12 0,72" fill="#1C1917" stroke="#1C1917" stroke-width="1.8" />
+    <polygon points="0,0 -12,12 0,72" fill="#E8590C" stroke="#1C1917" stroke-width="1.8" />
+
+    <polygon points="0,0 -12,12 -72,0" fill="#F7EFE0" stroke="#1C1917" stroke-width="1.8" />
+    <polygon points="0,0 -12,-12 -72,0" fill="#1C1917" stroke="#1C1917" stroke-width="1.8" />
+
+    <polygon points="0,0 12,-12 72,0" fill="#F5C518" stroke="#1C1917" stroke-width="1.8" />
+    <polygon points="0,0 12,12 72,0" fill="#E8590C" stroke="#1C1917" stroke-width="1.8" />
+
+    <!-- Fleur-de-Lys am Nordpunkt -->
+    <path d="M 0,-72 C -6,-82 6,-82 0,-92 C -6,-82 6,-82 0,-72 Z" fill="#F5C518" stroke="#1C1917" stroke-width="1.5" />
+    <circle cx="0" cy="-80" r="2.5" fill="#1C1917" />
+
+    <!-- Zentrum / Nabe -->
+    <circle cx="0" cy="0" r="10" fill="#F7EFE0" stroke="#1C1917" stroke-width="2" />
+    <circle cx="0" cy="0" r="4" fill="#1C1917" />
+  </g>
+</svg>

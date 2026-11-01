@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" width="100%" height="100%">
+  <defs>
+    <filter id="comicShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="3.5" dy="3.5" stdDeviation="0" flood-color="#1C1917" flood-opacity="1" />
+    </filter>
+  </defs>
+
+  <g filter="url(#comicShadow)">
+    <!-- Äußerer Plaketten-Rahmen -->
+    <rect x="15" y="15" width="470" height="270" rx="10" ry="10" fill="#F7EFE0" stroke="#1C1917" stroke-width="3.5" />
+    <rect x="23" y="23" width="454" height="254" rx="6" ry="6" fill="#FBF6E9" stroke="#1C1917" stroke-width="1.8" />
+
+    <!-- Innere gestrichelte Linie -->
+    <rect x="29" y="29" width="442" height="242" rx="4" ry="4" fill="none" stroke="#1C1917" stroke-width="1.2" stroke-dasharray="6,4" />
+
+    <!-- Eck-Ornamente -->
+    <path d="M 35,45 C 35,35 45,35 55,35 M 35,53 C 35,41 41,35 53,35" fill="none" stroke="#1C1917" stroke-width="1.8" />
+    <circle cx="40" cy="40" r="2.5" fill="#1C1917" />
+
+    <path d="M 465,45 C 465,35 455,35 445,35 M 465,53 C 465,41 459,35 447,35" fill="none" stroke="#1C1917" stroke-width="1.8" />
+    <circle cx="460" cy="40" r="2.5" fill="#1C1917" />
+
+    <path d="M 35,255 C 35,265 45,265 55,265 M 35,247 C 35,259 41,265 53,265" fill="none" stroke="#1C1917" stroke-width="1.8" />
+    <circle cx="40" cy="260" r="2.5" fill="#1C1917" />
+
+    <path d="M 465,255 C 465,265 455,265 445,265 M 465,247 C 465,259 459,265 447,265" fill="none" stroke="#1C1917" stroke-width="1.8" />
+    <circle cx="460" cy="260" r="2.5" fill="#1C1917" />
+
+    <!-- Obere Kopf-Box / Titel -->
+    <rect x="140" y="45" width="220" height="35" rx="4" ry="4" fill="#F7EFE0" stroke="#1C1917" stroke-width="2.2" />
+    <text x="250" y="68" font-family="&#39;Comic Neue&#39;, &#39;Patrick Hand&#39;, sans-serif" font-size="14" font-weight="bold" fill="#1C1917" text-anchor="middle" letter-spacing="2">
+      SHIELD ZONE
+    </text>
+
+    <!-- Zentrales Schild mit Auge und Sperr-Linie -->
+    <g transform="translate(250, 160)">
+      <!-- Schild-Umriss -->
+      <path d="M 0,-35 C 35,-35 45,-20 45,5 C 45,30 20,45 0,50 C -20,45 -45,30 -45,5 C -45,-20 -35,-35 0,-35 Z" fill="#F7EFE0" stroke="#1C1917" stroke-width="3" />
+      
+      <!-- Auge (geschützt) -->
+      <path d="M -30,0 C -15,-18 15,-18 30,0 C 15,18 -15,18 -30,0 Z" fill="#FBF6E9" stroke="#1C1917" stroke-width="2" />
+      <circle cx="0" cy="0" r="7" fill="#F7EFE0" stroke="#1C1917" stroke-width="2" />
+      <circle cx="0" cy="0" r="2.5" fill="#1C1917" />
+
+      <!-- Diagonale Sperr-Linie (Shield/Block) -->
+      <line x1="-36" y1="20" x2="36" y2="-20" stroke="#DC2626" stroke-width="4" stroke-linecap="round" />
+      <line x1="-36" y1="20" x2="36" y2="-20" stroke="#1C1917" stroke-width="1.5" stroke-linecap="round" />
+    </g>
+  </g>
+</svg>

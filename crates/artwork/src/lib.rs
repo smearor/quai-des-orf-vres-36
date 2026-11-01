@@ -25,9 +25,12 @@ use std::path::PathBuf;
 
 /// Generates all configured variants and returns the written file paths.
 ///
-/// `config_path` points at the `variants.toml` table, `masters_dir` at the
-/// directory holding the parametrized master SVGs and `out_dir` at the
-/// directory the generated variants are written to (created if absent).
+/// `config_path` points at a `variants.toml` table. Master SVG references
+/// inside the table are resolved relative to the directory containing the
+/// configuration file, so each `masters/{city}/{style}/` directory forms a
+/// self-contained style pack of masters plus its own `variants.toml`.
+/// `out_dir` is the directory the generated variants are written to
+/// (created if absent).
 ///
 /// # Errors
 ///
@@ -35,7 +38,7 @@ use std::path::PathBuf;
 /// when a master file is missing, when a parametrized element id or
 /// attribute is absent from a master, or when an output file cannot be
 /// written.
-pub fn generate(config_path: &Path, masters_dir: &Path, out_dir: &Path) -> Result<Vec<PathBuf>, ArtworkError> {
+pub fn generate(config_path: &Path, out_dir: &Path) -> Result<Vec<PathBuf>, ArtworkError> {
     let config_source = fs::read_to_string(config_path).map_err(|source| ArtworkError::Io {
         path: config_path.to_owned(),
         source,
@@ -43,14 +46,14 @@ pub fn generate(config_path: &Path, masters_dir: &Path, out_dir: &Path) -> Resul
     let spec: Spec = toml::from_str(&config_source)?;
     let city = spec.city.as_deref().unwrap_or("paris");
     let style = spec.style.as_deref().unwrap_or("belle-epoque");
+    let masters_dir = config_path.parent().unwrap_or(Path::new("."));
     fs::create_dir_all(out_dir).map_err(|source| ArtworkError::Io {
         path: out_dir.to_owned(),
         source,
     })?;
     let mut written = Vec::new();
     for asset in &spec.assets {
-        let master_name = asset.master.replace("{city}", city).replace("{style}", style);
-        let master_path = masters_dir.join(master_name);
+        let master_path = masters_dir.join(&asset.master);
         let master_source = fs::read_to_string(&master_path).map_err(|source| ArtworkError::Io {
             path: master_path.clone(),
             source,

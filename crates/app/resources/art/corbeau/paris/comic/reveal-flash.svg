@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <defs>
+    <filter id="comicShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#1C1917" flood-opacity="1" />
+    </filter>
+  </defs>
+
+  <g filter="url(#comicShadow)" transform="translate(150, 150)">
+    <!-- Äußere Speed-Lines / Strahlenburst -->
+    <g fill="#F5C518" stroke="#1C1917" stroke-width="2">
+      <polygon points="0,-130 6,-70 -6,-70" />
+      <polygon points="0,130 6,70 -6,70" />
+      <polygon points="-130,0 -70,6 -70,-6" />
+      <polygon points="130,0 70,6 70,-6" />
+      <polygon points="-92,-92 -50,-50 -60,-40" />
+      <polygon points="92,92 50,50 40,60" />
+      <polygon points="-92,92 -50,50 -40,60" />
+      <polygon points="92,-92 50,-50 60,-40" />
+    </g>
+
+    <!-- Konzentrische Kreise / Zielringe -->
+    <circle cx="0" cy="0" r="80" fill="none" stroke="#1C1917" stroke-width="2.5" />
+    <circle cx="0" cy="0" r="60" fill="none" stroke="#1C1917" stroke-width="1.8" stroke-dasharray="5,4" />
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#1C1917" stroke-width="2" />
+
+    <!-- Zentraler Blitz-Kern -->
+    <circle cx="0" cy="0" r="25" fill="#F7EFE0" stroke="#1C1917" stroke-width="3" />
+    <circle cx="0" cy="0" r="12" fill="#F5C518" stroke="#1C1917" stroke-width="2" />
+  </g>
+</svg>

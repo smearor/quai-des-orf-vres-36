@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <defs>
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur1" />
+      <feGaussianBlur stdDeviation="8" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g transform="translate(150, 150)" filter="url(#neonGlow)">
+    <!-- Hintergrund-Rasterlinien -->
+    <path d="M -130,0 L 130,0 M 0,-130 L 0,130" fill="none" stroke="#16224A" stroke-width="0.8" />
+
+    <!-- Neon-Strahlenburst -->
+    <g fill="#22D3EE" stroke="#A78BFA" stroke-width="1.2">
+      <polygon points="0,-135 4,-70 -4,-70" />
+      <polygon points="0,135 4,70 -4,70" />
+      <polygon points="-135,0 -70,4 -70,-4" />
+      <polygon points="135,0 70,4 70,-4" />
+      <polygon points="-95,-95 -50,-50 -58,-42" />
+      <polygon points="95,95 50,50 42,58" />
+      <polygon points="-95,95 -50,50 -42,58" />
+      <polygon points="95,-95 50,-50 58,-42" />
+    </g>
+
+    <!-- Leuchtende Ziel- und Scanringe -->
+    <circle cx="0" cy="0" r="80" fill="none" stroke="#FFE066" stroke-width="2" />
+    <circle cx="0" cy="0" r="60" fill="none" stroke="#4D7CFE" stroke-width="1.5" stroke-dasharray="4,4" />
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#F0ABFC" stroke-width="2" />
+
+    <!-- Zentraler Energie-Kern -->
+    <circle cx="0" cy="0" r="25" fill="#0B1020" stroke="#22D3EE" stroke-width="2.5" />
+    <circle cx="0" cy="0" r="12" fill="#FFE066" />
+  </g>
+</svg>

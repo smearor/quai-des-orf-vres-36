@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" width="100%" height="100%">
+  <defs>
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur1" />
+      <feGaussianBlur stdDeviation="7" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24,0 L 0,0 0,24" fill="none" stroke="#16224A" stroke-width="0.5" />
+    </pattern>
+  </defs>
+
+  <!-- Deep night field + circuit grid -->
+  <rect width="480" height="600" fill="#0B1020" />
+  <rect width="480" height="600" fill="url(#grid)" />
+
+  <!-- Circuit frame with corner notches -->
+  <g fill="none" stroke="#4D7CFE" stroke-width="1.5" filter="url(#neonGlow)">
+    <path d="M 40,14 L 440,14 L 440,34 L 460,34 L 460,566 L 440,566 L 440,586 L 40,586 L 40,566 L 20,566 L 20,34 L 40,34 Z" />
+    <path d="M 52,26 L 428,26 L 428,44 L 448,44 L 448,556 L 428,556 L 428,574 L 52,574 L 52,556 L 32,556 L 32,44 L 52,44 Z" stroke-width="1" opacity="0.6" />
+  </g>
+  <!-- Terminal dots on frame -->
+  <g fill="#C9D4FF" filter="url(#neonGlow)">
+    <circle cx="40" cy="14" r="2" /><circle cx="440" cy="14" r="2" />
+    <circle cx="40" cy="586" r="2" /><circle cx="440" cy="586" r="2" />
+    <circle cx="20" cy="300" r="2" /><circle cx="460" cy="300" r="2" />
+  </g>
+
+  <!-- Dotted skyline (point-cloud buildings) -->
+  <g fill="#4D7CFE" opacity="0.85">
+    <g transform="translate(46, 0)">
+      <circle cx="6" cy="250" r="1.5" /><circle cx="14" cy="244" r="1.5" /><circle cx="22" cy="254" r="1.5" />
+      <circle cx="6" cy="270" r="1.5" /><circle cx="14" cy="262" r="1.5" /><circle cx="22" cy="274" r="1.5" />
+      <circle cx="6" cy="292" r="1.5" /><circle cx="14" cy="284" r="1.5" /><circle cx="22" cy="296" r="1.5" />
+      <rect x="4" y="300" width="20" height="3" fill="#16224A" stroke="none" />
+    </g>
+    <g transform="translate(84, 0)">
+      <circle cx="8" cy="234" r="1.5" /><circle cx="16" cy="242" r="1.5" />
+      <circle cx="8" cy="256" r="1.5" /><circle cx="16" cy="266" r="1.5" />
+      <circle cx="8" cy="280" r="1.5" /><circle cx="16" cy="290" r="1.5" />
+      <rect x="2" y="300" width="22" height="3" fill="#16224A" stroke="none" />
+    </g>
+    <g transform="translate(120, 0)">
+      <circle cx="8" cy="260" r="1.5" /><circle cx="18" cy="268" r="1.5" /><circle cx="28" cy="258" r="1.5" />
+      <circle cx="8" cy="282" r="1.5" /><circle cx="18" cy="290" r="1.5" /><circle cx="28" cy="280" r="1.5" />
+      <rect x="4" y="300" width="28" height="3" fill="#16224A" stroke="none" />
+    </g>
+    <g transform="translate(318, 0)">
+      <circle cx="6" cy="252" r="1.5" /><circle cx="16" cy="244" r="1.5" /><circle cx="26" cy="256" r="1.5" />
+      <circle cx="6" cy="276" r="1.5" /><circle cx="16" cy="284" r="1.5" /><circle cx="26" cy="272" r="1.5" />
+      <rect x="2" y="300" width="30" height="3" fill="#16224A" stroke="none" />
+    </g>
+    <g transform="translate(360, 0)">
+      <circle cx="8" cy="238" r="1.5" /><circle cx="16" cy="248" r="1.5" />
+      <circle cx="8" cy="264" r="1.5" /><circle cx="16" cy="274" r="1.5" />
+      <circle cx="8" cy="288" r="1.5" /><circle cx="16" cy="294" r="1.5" />
+      <rect x="2" y="300" width="22" height="3" fill="#16224A" stroke="none" />
+    </g>
+    <g transform="translate(396, 0)">
+      <circle cx="8" cy="258" r="1.5" /><circle cx="18" cy="266" r="1.5" /><circle cx="28" cy="254" r="1.5" />
+      <circle cx="8" cy="280" r="1.5" /><circle cx="18" cy="290" r="1.5" /><circle cx="28" cy="278" r="1.5" />
+      <rect x="4" y="300" width="30" height="3" fill="#16224A" stroke="none" />
+    </g>
+  </g>
+
+  <!-- Wireframe Eiffel tower -->
+  <g fill="none" stroke="#4D7CFE" stroke-width="2" filter="url(#neonGlow)" stroke-linejoin="round">
+    <path d="M 240,78
+             C 243,112 246,150 248,182 C 249,205 250,224 251,238
+             C 252,260 254,280 262,298 C 274,316 294,330 314,340
+             M 290,340 C 276,332 265,318 260,306 C 255,294 250,288 240,288
+             C 230,288 225,294 220,306 C 215,318 204,332 190,340
+             M 166,340 C 186,330 206,316 218,298 C 226,280 228,260 229,238
+             C 230,224 231,205 232,182 C 234,150 237,112 240,78 Z" />
+    <line x1="216" y1="236" x2="264" y2="236" stroke-width="1.2" />
+    <line x1="204" y1="294" x2="276" y2="294" stroke-width="1.2" />
+    <line x1="240" y1="78" x2="240" y2="64" stroke="#C9D4FF" stroke-width="1.5" />
+  </g>
+  <circle cx="240" cy="62" r="3" fill="#C9D4FF" filter="url(#neonGlow)" />
+  <!-- Beam nodes on the tower -->
+  <g fill="#C9D4FF" filter="url(#neonGlow)">
+    <circle cx="240" cy="236" r="2" /><circle cx="240" cy="294" r="2" />
+    <circle cx="226" cy="316" r="1.5" /><circle cx="254" cy="316" r="1.5" />
+  </g>
+
+  <!-- Scanline Seine / ground shimmer -->
+  <g stroke="#22D3EE" stroke-width="1" opacity="0.6">
+    <line x1="60" y1="352" x2="420" y2="352" />
+    <line x1="90" y1="362" x2="390" y2="362" opacity="0.7" />
+    <line x1="120" y1="372" x2="360" y2="372" opacity="0.5" />
+    <line x1="150" y1="382" x2="330" y2="382" opacity="0.35" />
+  </g>
+  <!-- Perspective guide lines from tower base -->
+  <g stroke="#16224A" stroke-width="1">
+    <line x1="240" y1="342" x2="70" y2="400" /><line x1="240" y1="342" x2="410" y2="400" />
+  </g>
+  <!-- Ground nodes -->
+  <g fill="#C9D4FF" filter="url(#neonGlow)">
+    <circle cx="70" cy="400" r="2" /><circle cx="410" cy="400" r="2" />
+  </g>
+
+  <!-- Title -->
+  <text x="240" y="472" font-family="&#39;Orbitron&#39;, &#39;Share Tech Mono&#39;, monospace" font-size="24" font-weight="bold" fill="#C9D4FF" text-anchor="middle" letter-spacing="8" filter="url(#neonGlow)">
+    QUAI DES ORFÈVRES
+  </text>
+  <text x="240" y="502" font-family="&#39;Share Tech Mono&#39;, monospace" font-size="12" fill="#4D7CFE" text-anchor="middle" letter-spacing="6">
+    36 · PARIS · MM
+  </text>
+  <!-- Data ticks beside title -->
+  <line x1="80" y1="466" x2="120" y2="466" stroke="#4D7CFE" stroke-width="1" />
+  <line x1="360" y1="466" x2="400" y2="466" stroke="#4D7CFE" stroke-width="1" />
+  <circle cx="76" cy="466" r="2" fill="#4D7CFE" /><circle cx="404" cy="466" r="2" fill="#4D7CFE" />
+
+  <!-- Wireframe compass -->
+  <g transform="translate(196, 548)" fill="none" stroke="#4D7CFE" filter="url(#neonGlow)">
+    <circle r="22" stroke-width="1.2" />
+    <path d="M 0,-22 L 4,-4 L 22,0 L 4,4 L 0,22 L -4,4 L -22,0 L -4,-4 Z" stroke-width="1.2" />
+    <circle r="3" stroke-width="1" fill="#0B1020" />
+    <text x="0" y="-27" font-family="&#39;Share Tech Mono&#39;, monospace" font-size="9" fill="#C9D4FF" text-anchor="middle" stroke="none" filter="none">N</text>
+  </g>
+
+  <!-- Corbeau silhouette, bottom right -->
+  <g transform="translate(392, 548)" fill="#0F1730" stroke="#4D7CFE" stroke-width="1.2" filter="url(#neonGlow)">
+    <path d="M -14,14 C -16,6 -12,-2 -4,-6 C -8,-10 -6,-14 -2,-15 C -1,-18 3,-18 5,-16 C 10,-15 12,-10 11,-6 C 14,-4 15,0 14,4 L 14,14 Z" />
+    <line x1="-8" y1="14" x2="-8" y2="20" /><line x1="4" y1="14" x2="4" y2="20" />
+    <path d="M -10,-2 C -4,-8 4,-8 9,-3" fill="none" />
+  </g>
+</svg>

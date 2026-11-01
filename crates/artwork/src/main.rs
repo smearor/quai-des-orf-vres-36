@@ -9,12 +9,9 @@ use std::path::PathBuf;
 #[derive(Debug, Parser)]
 #[command(name = "qdo36-artwork", about = "Generate SVG artwork variants from parametrized masters")]
 struct Cli {
-    /// Path to the variants.toml configuration.
-    #[arg(long, default_value = concat!(env!("CARGO_MANIFEST_DIR"), "/variants.toml"))]
+    /// Path to a style pack's variants.toml (masters resolve next to it).
+    #[arg(long, default_value = concat!(env!("CARGO_MANIFEST_DIR"), "/masters/paris/belle-epoque/variants.toml"))]
     config: PathBuf,
-    /// Directory containing the parametrized master SVGs.
-    #[arg(long, default_value = concat!(env!("CARGO_MANIFEST_DIR"), "/masters"))]
-    masters_dir: PathBuf,
     /// Directory the generated SVG variants are written to.
     #[arg(long, default_value = concat!(env!("CARGO_MANIFEST_DIR"), "/../app/resources/art"))]
     out_dir: PathBuf,
@@ -22,7 +19,7 @@ struct Cli {
 
 fn main() -> miette::Result<()> {
     let cli = Cli::parse();
-    let written = generate(&cli.config, &cli.masters_dir, &cli.out_dir).into_diagnostic()?;
+    let written = generate(&cli.config, &cli.out_dir).into_diagnostic()?;
     for path in &written {
         println!("wrote {}", path.display());
     }

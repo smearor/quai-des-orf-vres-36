@@ -1,0 +1,1037 @@
+# Artwork variant table for qdo36-artwork — NEON style.
+# Generated alongside variants.toml (same schema); masters resolve via
+# {city}/{style} to masters/paris/neon/.
+
+city = "paris"
+style = "neon"
+
+# Detective pawn discs (neon).
+[[asset]]
+master = "pawn-disc.svg"
+output = "pawn/{city}/{style}/disc-{name}.svg"
+
+[[asset.variant]]
+name = "blue"
+substitutions = [{ id = "tint-mid", attribute = "stroke", value = "#2563EB" }]
+
+[[asset.variant]]
+name = "red"
+substitutions = [{ id = "tint-mid", attribute = "stroke", value = "#DC2626" }]
+
+[[asset.variant]]
+name = "green"
+substitutions = [{ id = "tint-mid", attribute = "stroke", value = "#16A34A" }]
+
+[[asset.variant]]
+name = "yellow"
+substitutions = [{ id = "tint-mid", attribute = "stroke", value = "#EAB308" }]
+
+[[asset.variant]]
+name = "purple"
+substitutions = [{ id = "tint-mid", attribute = "stroke", value = "#9333EA" }]
+
+
+# Metro line badges (neon; official RATP colours).
+[[asset]]
+master = "ligne-metro.svg"
+output = "ligne/{city}/{style}/metro-{name}-colored.svg"
+
+[[asset.variant]]
+name = "m1"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#FFCD00" }, { id = "line-accent-bloom", attribute = "stroke", value = "#FFCD00" }]
+texts = [{ id = "line-name", content = "M1" }]
+
+[[asset.variant]]
+name = "m2"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#003CA6" }, { id = "line-accent-bloom", attribute = "stroke", value = "#003CA6" }]
+texts = [{ id = "line-name", content = "M2" }]
+
+[[asset.variant]]
+name = "m3"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#837902" }, { id = "line-accent-bloom", attribute = "stroke", value = "#837902" }]
+texts = [{ id = "line-name", content = "M3" }]
+
+[[asset.variant]]
+name = "m4"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#BE418D" }, { id = "line-accent-bloom", attribute = "stroke", value = "#BE418D" }]
+texts = [{ id = "line-name", content = "M4" }]
+
+[[asset.variant]]
+name = "m5"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#FF7E2E" }, { id = "line-accent-bloom", attribute = "stroke", value = "#FF7E2E" }]
+texts = [{ id = "line-name", content = "M5" }]
+
+[[asset.variant]]
+name = "m6"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#6ECA97" }, { id = "line-accent-bloom", attribute = "stroke", value = "#6ECA97" }]
+texts = [{ id = "line-name", content = "M6" }]
+
+[[asset.variant]]
+name = "m7"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#FA9ABA" }, { id = "line-accent-bloom", attribute = "stroke", value = "#FA9ABA" }]
+texts = [{ id = "line-name", content = "M7" }]
+
+[[asset.variant]]
+name = "m8"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#E19BDF" }, { id = "line-accent-bloom", attribute = "stroke", value = "#E19BDF" }]
+texts = [{ id = "line-name", content = "M8" }]
+
+[[asset.variant]]
+name = "m9"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#B6BD00" }, { id = "line-accent-bloom", attribute = "stroke", value = "#B6BD00" }]
+texts = [{ id = "line-name", content = "M9" }]
+
+[[asset.variant]]
+name = "m10"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#C9910D" }, { id = "line-accent-bloom", attribute = "stroke", value = "#C9910D" }]
+texts = [{ id = "line-name", content = "M10" }]
+
+[[asset.variant]]
+name = "m11"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#704B1C" }, { id = "line-accent-bloom", attribute = "stroke", value = "#704B1C" }]
+texts = [{ id = "line-name", content = "M11" }]
+
+[[asset.variant]]
+name = "m12"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#007852" }, { id = "line-accent-bloom", attribute = "stroke", value = "#007852" }]
+texts = [{ id = "line-name", content = "M12" }]
+
+[[asset.variant]]
+name = "m13"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#6EC4E8" }, { id = "line-accent-bloom", attribute = "stroke", value = "#6EC4E8" }]
+texts = [{ id = "line-name", content = "M13" }]
+
+[[asset.variant]]
+name = "m14"
+substitutions = [{ id = "line-accent", attribute = "stroke", value = "#62259D" }, { id = "line-accent-bloom", attribute = "stroke", value = "#62259D" }]
+texts = [{ id = "line-name", content = "M14" }]
+
+
+# Transport station pins (neon).
+[[asset]]
+master = "station-marker.svg"
+output = "station/{city}/{style}/{name}.svg"
+
+[[asset.variant]]
+name = "taxi"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#FFE066" },
+  { id = "station-plate", attribute = "x", value = "-39" },
+  { id = "station-plate", attribute = "width", value = "78" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#FFE066" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "8" },
+  { id = "station-label", attribute = "letter-spacing", value = "1.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -32,12 L -28,-4 L -18,-14 L 14,-14 L 26,-4 L 32,12 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -14,-14 L -8,-24 L 10,-24 L 14,-14 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<circle cx="-20" cy="14" r="8" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.5" />
+<circle cx="-20" cy="14" r="3" fill="#C9D4FF" />
+<circle cx="20" cy="14" r="8" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.5" />
+<circle cx="20" cy="14" r="3" fill="#C9D4FF" />
+<rect x="-35" y="10" width="70" height="4" rx="1" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "TAXI" }]
+
+[[asset.variant]]
+name = "bus"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#FF7A3D" },
+  { id = "station-plate", attribute = "x", value = "-39" },
+  { id = "station-plate", attribute = "width", value = "78" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#FF7A3D" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "8" },
+  { id = "station-label", attribute = "letter-spacing", value = "1.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="-16" width="60" height="30" rx="3" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="-24" y="-12" width="12" height="10" rx="1" fill="#0B1020" stroke="#C9D4FF" stroke-width="0.8" />
+<rect x="-8" y="-12" width="12" height="10" rx="1" fill="#0B1020" stroke="#C9D4FF" stroke-width="0.8" />
+<rect x="8" y="-12" width="12" height="10" rx="1" fill="#0B1020" stroke="#C9D4FF" stroke-width="0.8" />
+<rect x="-24" y="2" width="14" height="8" rx="1" fill="#0B1020" stroke="#C9D4FF" stroke-width="0.8" />
+<rect x="-6" y="2" width="14" height="8" rx="1" fill="#0B1020" stroke="#C9D4FF" stroke-width="0.8" />
+<rect x="12" y="2" width="12" height="8" rx="1" fill="#0B1020" stroke="#C9D4FF" stroke-width="0.8" />
+<circle cx="-18" cy="18" r="6" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<circle cx="18" cy="18" r="6" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="-26" y1="-16" x2="26" y2="-16" stroke="#C9D4FF" stroke-width="1.5" />
+<line x1="-20" y1="-21" x2="20" y2="-21" stroke="#C9D4FF" stroke-width="1" />
+<line x1="-12" y1="-16" x2="-12" y2="-21" stroke="#C9D4FF" stroke-width="0.8" />
+<line x1="12" y1="-16" x2="12" y2="-21" stroke="#C9D4FF" stroke-width="0.8" />''' },
+]
+texts = [{ id = "station-label", content = "BUS" }]
+
+[[asset.variant]]
+name = "metro"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#4D7CFE" },
+  { id = "station-plate", attribute = "x", value = "-39" },
+  { id = "station-plate", attribute = "width", value = "78" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#4D7CFE" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1.2" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -26,26 L -22,12 L 22,12 L 26,26 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-28" y="24" width="56" height="4" fill="#C9D4FF" />
+<path d="M -22,12 C -24,-6 -14,-26 0,-30 C 14,-26 24,-6 22,12" fill="none" stroke="#C9D4FF" stroke-width="2" stroke-linecap="round" />
+<path d="M -16,10 C -18,-4 -10,-18 0,-22 C 10,-18 18,-4 16,10" fill="none" stroke="#C9D4FF" stroke-width="1.2" opacity="0.8" />
+<rect x="-18" y="-12" width="36" height="12" rx="2" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<text x="0" y="-4" font-family="'Times New Roman', 'Georgia', serif" font-size="7" font-weight="bold" fill="#C9D4FF" text-anchor="middle" letter-spacing="1">
+  MÉTRO
+</text>''' },
+]
+texts = [{ id = "station-label", content = "MÉTRO" }]
+
+[[asset.variant]]
+name = "batobus"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#22D3EE" },
+  { id = "station-plate", attribute = "x", value = "-42" },
+  { id = "station-plate", attribute = "width", value = "84" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#22D3EE" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -34,10 Q 0,18 34,10 L 28,-4 L 20,-12 L -20,-12 L -28,-4 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -16,-12 L -12,-22 L 12,-22 L 16,-12 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<line x1="0" y1="-22" x2="0" y2="-28" stroke="#C9D4FF" stroke-width="1.5" />
+<circle cx="0" cy="-28" r="2" fill="#C9D4FF" />
+<path d="M -30,20 Q -20,15 -10,20 Q 0,25 10,20 Q 20,15 30,20" fill="none" stroke="#C9D4FF" stroke-width="1.2" stroke-linecap="round" />
+<path d="M -24,26 Q -14,21 -4,26 Q 6,31 16,26" fill="none" stroke="#C9D4FF" stroke-width="0.8" opacity="0.7" stroke-linecap="round" />''' },
+]
+texts = [{ id = "station-label", content = "BATOBUS" }]
+
+[[asset.variant]]
+name = "egouts"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#FB7185" },
+  { id = "station-plate", attribute = "x", value = "-42" },
+  { id = "station-plate", attribute = "width", value = "84" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#FB7185" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -32,22 L -32,2 C -32,-18 32,-18 32,2 L 32,22 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -24,20 L -24,4 C -24,-10 24,-10 24,4 L 24,20 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -8,20 Q 0,14 8,20 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="0.8" />
+<path d="M -5,18 Q 0,15 5,18" fill="none" stroke="#C9D4FF" stroke-width="0.8" opacity="0.8" />
+<line x1="-24" y1="12" x2="-8" y2="12" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="8" y1="12" x2="24" y2="12" stroke="#C9D4FF" stroke-width="1.2" />''' },
+]
+texts = [{ id = "station-label", content = "ÉGOUTS" }]
+
+
+# Landmark anchor pins (neon); recoloured from the Belle-Époque glyph
+# library — ink pictograms for comic, pale neon outlines for neon.
+[[asset]]
+master = "station-marker.svg"
+output = "landmarks/{city}/{style}/{name}.svg"
+
+[[asset.variant]]
+name = "eiffel-tour"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-39" },
+  { id = "station-plate", attribute = "width", value = "78" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "8.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -30,42 L -22,12 L -12,12 L -16,42 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<path d="M 30,42 L 22,12 L 12,12 L 16,42 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-26" y="12" width="52" height="4" rx="1" fill="#C9D4FF" />
+<path d="M -16,12 Q 0,22 16,12 Z" fill="none" stroke="#C9D4FF" stroke-width="1.5" />
+<path d="M -12,12 L -7,-24 L 7,-24 L 12,12 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="-10" y="-24" width="20" height="3" rx="0.5" fill="#C9D4FF" />
+<path d="M -5,-24 L -2,-62 L 2,-62 L 5,-24 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<line x1="0" y1="-62" x2="0" y2="-75" stroke="#C9D4FF" stroke-width="1.5" />
+<circle cx="0" cy="-75" r="2" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "EIFFEL" }]
+
+[[asset.variant]]
+name = "arc-de-triomphe"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-46" },
+  { id = "station-plate", attribute = "width", value = "92" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -32,32 L -32,24 L 32,24 L 32,32 Z" fill="#C9D4FF" />
+<rect x="-30" y="-12" width="60" height="36" rx="2" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -12,24 L -12,4 C -12,-6 12,-6 12,4 L 12,24 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-34" y="-22" width="68" height="10" rx="1" fill="#C9D4FF" stroke="#0B1020" stroke-width="0.5" />
+<rect x="-32" y="-28" width="64" height="6" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />''' },
+]
+texts = [{ id = "station-label", content = "ARC DE TRIOMPHE" }]
+
+[[asset.variant]]
+name = "louvre"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-39" },
+  { id = "station-plate", attribute = "width", value = "78" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "8" },
+  { id = "station-label", attribute = "letter-spacing", value = "1.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -42,28 L -42,5 L -35,5 L -35,0 L -25,0 L -25,5 L -8,5 L -8,2 L 8,2 L 8,5 L 25,5 L 25,0 L 35,0 L 35,5 L 42,5 L 42,28 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -10,2 L 0,-6 L 10,2 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-42" y="24" width="84" height="4" fill="#C9D4FF" />
+<polygon points="0,-12 -26,28 26,28" fill="#0F1730" opacity="0.85" />
+<polygon points="0,-12 -26,28 26,28" fill="none" stroke="#C9D4FF" stroke-width="1.8" />
+<line x1="0" y1="-12" x2="-13" y2="28" stroke="#C9D4FF" stroke-width="0.8" opacity="0.7" />
+<line x1="0" y1="-12" x2="13" y2="28" stroke="#C9D4FF" stroke-width="0.8" opacity="0.7" />
+<line x1="-7" y1="0" x2="7" y2="0" stroke="#C9D4FF" stroke-width="0.8" opacity="0.7" />
+<line x1="-14" y1="10" x2="14" y2="10" stroke="#C9D4FF" stroke-width="0.8" opacity="0.7" />
+<line x1="-20" y1="19" x2="20" y2="19" stroke="#C9D4FF" stroke-width="0.8" opacity="0.7" />''' },
+]
+texts = [{ id = "station-label", content = "LOUVRE" }]
+
+[[asset.variant]]
+name = "moulin-rouge"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-48" },
+  { id = "station-plate", attribute = "width", value = "96" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -30,30 L -30,6 L -20,6 L -20,2 L 20,2 L 20,6 L 30,6 L 30,30 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-32" y="26" width="64" height="4" fill="#C9D4FF" />
+<path d="M -16,2 L -10,-12 L 10,-12 L 16,2 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<g stroke="#C9D4FF" stroke-width="1.5" stroke-linecap="round" fill="none">
+  <line x1="0" y1="-5" x2="-28" y2="-28" />
+  <line x1="0" y1="-5" x2="28" y2="18" />
+  <line x1="0" y1="-5" x2="28" y2="-28" />
+  <line x1="0" y1="-5" x2="-28" y2="18" />
+</g>
+<circle cx="0" cy="-5" r="3" fill="#C9D4FF" stroke="#0B1020" stroke-width="0.8" />''' },
+]
+texts = [{ id = "station-label", content = "MOULIN ROUGE" }]
+
+[[asset.variant]]
+name = "colonne-de-juillet"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-48" },
+  { id = "station-plate", attribute = "width", value = "96" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.8" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -18,28 L -14,14 L 14,14 L 18,28 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-22" y="26" width="44" height="3" fill="#C9D4FF" />
+<rect x="-6" y="-20" width="12" height="34" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="-9" y="-23" width="18" height="3" fill="#C9D4FF" />
+<circle cx="0" cy="-26" r="3" fill="#C9D4FF" />
+<path d="M 0,-29 L 2,-35 M -1,-33 L 3,-33" stroke="#C9D4FF" stroke-width="1" stroke-linecap="round" />''' },
+]
+texts = [{ id = "station-label", content = "COLONNE DE JUILLET" }]
+
+[[asset.variant]]
+name = "gare-de-l-est"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-46" },
+  { id = "station-plate", attribute = "width", value = "92" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="2" width="60" height="24" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -24,2 C -24,-20 24,-20 24,2 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="0" y1="-8" x2="0" y2="-18" stroke="#C9D4FF" stroke-width="0.8" />
+<line x1="0" y1="-8" x2="-12" y2="-15" stroke="#C9D4FF" stroke-width="0.8" />
+<line x1="0" y1="-8" x2="12" y2="-15" stroke="#C9D4FF" stroke-width="0.8" />
+<circle cx="0" cy="-21" r="2" fill="#C9D4FF" />
+<rect x="-32" y="24" width="64" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "GARE DE L'EST" }]
+
+[[asset.variant]]
+name = "gare-de-lyon"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-46" },
+  { id = "station-plate", attribute = "width", value = "92" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-28" y="10" width="56" height="16" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-30" y="24" width="60" height="4" fill="#C9D4FF" />
+<rect x="6" y="-24" width="14" height="34" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<circle cx="13" cy="-14" r="4.5" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<circle cx="13" cy="-14" r="1" fill="#C9D4FF" />
+<polygon points="6,-24 13,-32 20,-24" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "GARE DE LYON" }]
+
+[[asset.variant]]
+name = "musee-d-orsay"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-46" },
+  { id = "station-plate", attribute = "width", value = "92" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="0" width="60" height="26" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -30,0 C -30,-18 30,-18 30,0 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<circle cx="0" cy="-2" r="9" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<circle cx="0" cy="-2" r="2" fill="#C9D4FF" />
+<line x1="0" y1="-2" x2="0" y2="-7" stroke="#C9D4FF" stroke-width="1" />
+<line x1="0" y1="-2" x2="4" y2="-2" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-34" y="24" width="68" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "MUSÉE D'ORSAY" }]
+
+[[asset.variant]]
+name = "notre-dame"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-44" },
+  { id = "station-plate", attribute = "width", value = "88" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-24" y="0" width="48" height="26" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-24" y="-24" width="14" height="24" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="10" y="-24" width="14" height="24" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<circle cx="0" cy="8" r="7" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<circle cx="0" cy="8" r="2" fill="#C9D4FF" />
+<line x1="0" y1="0" x2="0" y2="-28" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="-26" y="24" width="52" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "NOTRE-DAME" }]
+
+[[asset.variant]]
+name = "pantheon"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-42" },
+  { id = "station-plate", attribute = "width", value = "84" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<polygon points="0,-2 -26,10 26,10" fill="#C9D4FF" />
+<rect x="-24" y="10" width="48" height="18" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<line x1="-18" y1="10" x2="-18" y2="28" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="-9" y1="10" x2="-9" y2="28" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="0" y1="10" x2="0" y2="28" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="9" y1="10" x2="9" y2="28" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="18" y1="10" x2="18" y2="28" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="-14" y="-14" width="28" height="12" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -12,-14 C -12,-30 12,-30 12,-14 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="0" y1="-30" x2="0" y2="-34" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-28" y="26" width="56" height="3" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "PANTHÉON" }]
+
+[[asset.variant]]
+name = "place-bastille"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-46" },
+  { id = "station-plate", attribute = "width", value = "92" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6.8" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.8" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -28,28 L -28,12 L -20,12 L -20,16 L -16,16 L -16,28 M 16,28 L 16,16 L 20,16 L 20,12 L 28,12 L 28,28" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-30" y="26" width="60" height="3" fill="#C9D4FF" />
+<rect x="-5" y="-18" width="10" height="34" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<circle cx="0" cy="-22" r="3" fill="#C9D4FF" />
+<line x1="0" y1="-25" x2="0" y2="-29" stroke="#C9D4FF" stroke-width="1" />''' },
+]
+texts = [{ id = "station-label", content = "PLACE BASTILLE" }]
+
+[[asset.variant]]
+name = "place-concorde"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-50" },
+  { id = "station-plate", attribute = "width", value = "100" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.8" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<polygon points="-12,28 -8,18 8,18 12,28" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-16" y="26" width="32" height="3" fill="#C9D4FF" />
+<polygon points="-5,18 -2,-22 2,-22 5,18" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<polygon points="-2,-22 0,-28 2,-22" fill="#C9D4FF" />
+<path d="M -24,24 Q -16,18 -10,24" stroke="#C9D4FF" stroke-width="1" fill="none" />
+<path d="M 10,24 Q 16,18 24,24" stroke="#C9D4FF" stroke-width="1" fill="none" />''' },
+]
+texts = [{ id = "station-label", content = "PLACE CONCORDE" }]
+
+[[asset.variant]]
+name = "place-republique"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-50" },
+  { id = "station-plate", attribute = "width", value = "100" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6.2" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<polygon points="-20,28 -14,8 14,8 20,28" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-24" y="26" width="48" height="3" fill="#C9D4FF" />
+<path d="M -6,8 L -5,-16 L -1,-24 L 2,-24 L 5,-16 L 6,8 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -1,-24 C -2,-28 4,-28 3,-24 Z" fill="#C9D4FF" />
+<line x1="4" y1="-12" x2="12" y2="-18" stroke="#C9D4FF" stroke-width="1" stroke-linecap="round" />''' },
+]
+texts = [{ id = "station-label", content = "PLACE RÉPUBLIQUE" }]
+
+[[asset.variant]]
+name = "sacre-coeur"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-44" },
+  { id = "station-plate", attribute = "width", value = "88" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-26" y="8" width="52" height="18" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -24,8 C -24,-4 -12,-4 -12,8 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<path d="M 12,8 C 12,-4 24,-4 24,8 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -14,8 C -14,-22 14,-22 14,8 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="-4" y="-26" width="8" height="5" fill="#C9D4FF" />
+<line x1="0" y1="-26" x2="0" y2="-32" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="-3" y1="-30" x2="3" y2="-30" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="-28" y="24" width="56" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "SACRÉ-CŒUR" }]
+
+[[asset.variant]]
+name = "opera-garnier"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-48" },
+  { id = "station-plate", attribute = "width", value = "96" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="8" width="60" height="20" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -24,28 L -24,18 C -24,14 -16,14 -16,18 L -16,28 M -8,28 L -8,18 C -8,14 0,14 0,18 L 0,28 M 8,28 L 8,18 C 8,14 16,14 16,18 L 16,28" stroke="#C9D4FF" stroke-width="0.8" fill="none" />
+<path d="M -28,8 L -28,-4 L 28,-4 L 28,8 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -18,-4 C -18,-22 18,-22 18,-4 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M 0,-22 L 0,-28 M -3,-26 L 3,-26" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-32" y="24" width="64" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "OPÉRA GARNIER" }]
+
+[[asset.variant]]
+name = "canal-saint-martin"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-48" },
+  { id = "station-plate", attribute = "width", value = "96" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -24,18 L -14,6 L 14,6 L 24,18 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<line x1="0" y1="-12" x2="0" y2="16" stroke="#C9D4FF" stroke-width="1.5" />
+<path d="M -18,12 Q 0,8 18,12" fill="none" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -24,20 Q 0,16 24,20" fill="none" stroke="#C9D4FF" stroke-width="1" />''' },
+]
+texts = [{ id = "station-label", content = "CANAL ST-MARTIN" }]
+
+[[asset.variant]]
+name = "chateau-de-versailles"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-44" },
+  { id = "station-plate", attribute = "width", value = "88" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -32,16 L -32,2 L -20,-8 L 20,-8 L 32,2 L 32,16 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="-34" y="16" width="68" height="4" fill="#C9D4FF" />
+<line x1="0" y1="-8" x2="0" y2="16" stroke="#C9D4FF" stroke-width="0.8" />''' },
+]
+texts = [{ id = "station-label", content = "VERSAILLES" }]
+
+[[asset.variant]]
+name = "galeries-lafayette"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-48" },
+  { id = "station-plate", attribute = "width", value = "96" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-28" y="4" width="56" height="20" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -16,4 C -16,-20 16,-20 16,4 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<circle cx="0" cy="-8" r="4" fill="#C9D4FF" />
+<rect x="-30" y="22" width="60" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "GALERIES LAFAYETTE" }]
+
+[[asset.variant]]
+name = "gare-du-nord"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-46" },
+  { id = "station-plate", attribute = "width", value = "92" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="2" width="60" height="22" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<polygon points="-30,2 0,-18 30,2" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<circle cx="0" cy="-6" r="3" fill="#C9D4FF" />
+<rect x="-32" y="22" width="64" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "GARE DU NORD" }]
+
+[[asset.variant]]
+name = "gare-montparnasse"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-50" },
+  { id = "station-plate", attribute = "width", value = "100" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6.2" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -28,18 L -28,2 C -28,-12 28,-12 28,2 L 28,18 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="-30" y="18" width="60" height="4" fill="#C9D4FF" />
+<line x1="-15" y1="-2" x2="15" y2="-2" stroke="#C9D4FF" stroke-width="0.8" />''' },
+]
+texts = [{ id = "station-label", content = "GARE MONTPARNASSE" }]
+
+[[asset.variant]]
+name = "gare-saint-lazare"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-48" },
+  { id = "station-plate", attribute = "width", value = "96" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="4" width="60" height="18" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -24,4 C -24,-16 24,-16 24,4 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<circle cx="0" cy="-6" r="3" fill="#C9D4FF" />
+<rect x="-32" y="20" width="64" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "GARE SAINT-LAZARE" }]
+
+[[asset.variant]]
+name = "hotel-de-ville"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-44" },
+  { id = "station-plate", attribute = "width", value = "88" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="4" width="60" height="20" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -12,4 L -12,-16 L 12,-16 L 12,4 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<polygon points="-12,-16 0,-24 12,-16" fill="#C9D4FF" />
+<circle cx="0" cy="-6" r="3" fill="#C9D4FF" />
+<rect x="-32" y="22" width="64" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "HÔTEL DE VILLE" }]
+
+[[asset.variant]]
+name = "le-bataclan"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-40" },
+  { id = "station-plate", attribute = "width", value = "80" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-24" y="2" width="48" height="22" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -28,2 C -28,-6 28,-6 28,2 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -16,-6 C -16,-16 16,-16 16,-6 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<line x1="0" y1="-16" x2="0" y2="-22" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-26" y="22" width="52" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "LE BATACLAN" }]
+
+[[asset.variant]]
+name = "opera-bastille"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-48" },
+  { id = "station-plate", attribute = "width", value = "96" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.8" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -30,18 C -30,-4 -15,-16 0,-16 C 15,-16 30,-4 30,18 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="0" y1="-16" x2="0" y2="18" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-32" y="18" width="64" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "OPÉRA BASTILLE" }]
+
+[[asset.variant]]
+name = "palais-de-l-elysee"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-46" },
+  { id = "station-plate", attribute = "width", value = "92" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-28" y="2" width="56" height="20" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -28,2 L 0,-12 L 28,2 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<rect x="-30" y="20" width="60" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "PALAIS DE L'ÉLYSÉE" }]
+
+[[asset.variant]]
+name = "pont-neuf"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-40" },
+  { id = "station-plate", attribute = "width", value = "80" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -30,16 C -18,8 -10,8 0,16 C 10,8 18,8 30,16 L 30,22 L -30,22 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -24,16 C -18,10 -12,10 -6,16 M -6,16 C 0,10 6,10 12,16 M 12,16 C 18,10 24,10 30,16" fill="none" stroke="#C9D4FF" stroke-width="1" />
+<path d="M -32,22 Q 0,18 32,22" fill="none" stroke="#C9D4FF" stroke-width="1.2" />
+<rect x="-34" y="24" width="68" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "PONT NEUF" }]
+
+[[asset.variant]]
+name = "stade-de-france"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-46" },
+  { id = "station-plate", attribute = "width", value = "92" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<ellipse cx="0" cy="8" rx="32" ry="14" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<ellipse cx="0" cy="4" rx="36" ry="16" fill="none" stroke="#C9D4FF" stroke-width="1" />
+<ellipse cx="0" cy="0" rx="24" ry="9" fill="#0B1020" stroke="#C9D4FF" stroke-width="0.8" />''' },
+]
+texts = [{ id = "station-label", content = "STADE DE FRANCE" }]
+
+[[asset.variant]]
+name = "stade-roland-garros"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-48" },
+  { id = "station-plate", attribute = "width", value = "96" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-28" y="-12" width="56" height="28" rx="3" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="0" y1="-12" x2="0" y2="16" stroke="#C9D4FF" stroke-width="1.5" />
+<line x1="-18" y1="2" x2="18" y2="2" stroke="#C9D4FF" stroke-width="0.8" stroke-dasharray="2,2" />''' },
+]
+texts = [{ id = "station-label", content = "ROLAND GARROS" }]
+
+[[asset.variant]]
+name = "tour-montparnasse"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-48" },
+  { id = "station-plate", attribute = "width", value = "96" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.8" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-12" y="-28" width="24" height="52" fill="#0B1020" stroke="#C9D4FF" stroke-width="1.2" />
+<line x1="0" y1="-28" x2="0" y2="24" stroke="#C9D4FF" stroke-width="0.8" stroke-dasharray="2,2" />
+<rect x="-16" y="22" width="32" height="4" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "TOUR MONTPARNASSE" }]
+
+[[asset.variant]]
+name = "seine-boat"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-46" },
+  { id = "station-plate", attribute = "width", value = "92" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -36,12 Q 0,20 36,12 L 30,-2 L 20,-12 L -20,-12 L -30,-2 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<path d="M -18,-12 L -12,-24 L 12,-24 L 18,-12 Z" fill="#0B1020" stroke="#C9D4FF" stroke-width="1" />
+<line x1="0" y1="-24" x2="0" y2="-30" stroke="#C9D4FF" stroke-width="1.5" />
+<circle cx="0" cy="-30" r="2" fill="#C9D4FF" />
+<line x1="-8" y1="-18" x2="-8" y2="-12" stroke="#C9D4FF" stroke-width="0.8" />
+<line x1="8" y1="-18" x2="8" y2="-12" stroke="#C9D4FF" stroke-width="0.8" />
+<path d="M -32,18 Q -16,13 0,18 Q 16,23 32,18" fill="none" stroke="#C9D4FF" stroke-width="1.2" stroke-linecap="round" />
+<path d="M -24,24 Q -12,19 0,24 Q 12,29 24,24" fill="none" stroke="#C9D4FF" stroke-width="0.8" opacity="0.7" stroke-linecap="round" />''' },
+]
+texts = [{ id = "station-label", content = "SEINE BOAT" }]
+
+
+# Corbeau reveal marker (neon).
+[[asset]]
+master = "station-marker.svg"
+output = "corbeau/{city}/{style}/reveal-marker.svg"
+
+[[asset.variant]]
+name = "reveal"
+substitutions = [
+  { id = "station-accent", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-plate", attribute = "x", value = "-48" },
+  { id = "station-plate", attribute = "width", value = "96" },
+  { id = "station-accent-bloom", attribute = "stroke", value = "#A78BFA" },
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 92)" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<circle cx="0" cy="0" r="32" fill="none" stroke="#C9D4FF" stroke-width="1" stroke-dasharray="2,3" opacity="0.7" />
+<path d="M -20,-6 C -20,-18 20,-18 20,-6 C 20,12 10,18 0,22 C -10,18 -20,12 -20,-6 Z" fill="#0F1730" stroke="#C9D4FF" stroke-width="1.2" />
+<polygon points="-10,-4 -5,-10 0,-4 -5,-2" fill="#0B1020" stroke="#C9D4FF" stroke-width="0.6" />
+<polygon points="10,-4 5,-10 0,-4 5,-2" fill="#0B1020" stroke="#C9D4FF" stroke-width="0.6" />
+<path d="M 0,-14 L 0,-26 M -4,-22 L 0,-26 L 4,-22" fill="none" stroke="#C9D4FF" stroke-width="1.2" stroke-linecap="round" />
+<circle cx="0" cy="3" r="2" fill="#C9D4FF" />''' },
+]
+texts = [{ id = "station-label", content = "CORBEAU REVEAL" }]
+
+
+# Transport ticket stubs (neon); glyphs reused from the Belle-Époque
+# ticket library, scaled + recoloured.
+[[asset]]
+master = "ticket.svg"
+output = "ticket/{city}/{style}/{name}.svg"
+
+[[asset.variant]]
+name = "taxi"
+substitutions = [
+  { id = "ticket-accents", attribute = "stroke", value = "#FFE066" },
+  { id = "ticket-corners", attribute = "fill", value = "#FFE066" },
+]
+texts = [
+  { id = "ticket-title", content = "ACCESS_TAXI" },
+]
+
+[[asset.variant]]
+name = "bus"
+substitutions = [
+  { id = "ticket-accents", attribute = "stroke", value = "#FF7A3D" },
+  { id = "ticket-corners", attribute = "fill", value = "#FF7A3D" },
+]
+fills = [
+  { id = "ticket-glyph", markup = '''
+<rect x="-28" y="-16" width="56" height="24" rx="2" fill="#0B1020" stroke="#FF7A3D" stroke-width="2" />
+<line x1="-18" y1="-16" x2="-18" y2="8" stroke="#FF7A3D" stroke-width="1.2" />
+<line x1="-6" y1="-16" x2="-6" y2="8" stroke="#FF7A3D" stroke-width="1.2" />
+<line x1="6" y1="-16" x2="6" y2="8" stroke="#FF7A3D" stroke-width="1.2" />
+<line x1="18" y1="-16" x2="18" y2="8" stroke="#FF7A3D" stroke-width="1.2" />
+<line x1="-32" y1="10" x2="32" y2="10" stroke="#FF7A3D" stroke-width="2" stroke-linecap="round" />
+<circle cx="-16" cy="14" r="5" fill="#0B1020" stroke="#FF7A3D" stroke-width="2" />
+<circle cx="16" cy="14" r="5" fill="#0B1020" stroke="#FF7A3D" stroke-width="2" />''' },
+]
+texts = [
+  { id = "ticket-title", content = "ACCESS_BUS" },
+]
+
+[[asset.variant]]
+name = "metro"
+substitutions = [
+  { id = "ticket-accents", attribute = "stroke", value = "#4D7CFE" },
+  { id = "ticket-corners", attribute = "fill", value = "#4D7CFE" },
+]
+fills = [
+  { id = "ticket-glyph", markup = '''
+<path d="M -26,12 Q -26,-14 0,-14 Q 26,-14 26,12 Z" fill="#0B1020" stroke="#4D7CFE" stroke-width="2" />
+<path d="M -18,12 Q -18,-6 0,-6 Q 18,-6 18,12" fill="none" stroke="#4D7CFE" stroke-width="1.5" />
+<rect x="-12" y="-20" width="24" height="7" rx="1" fill="#0B1020" stroke="#4D7CFE" stroke-width="1.5" />
+<line x1="-22" y1="16" x2="22" y2="16" stroke="#4D7CFE" stroke-width="2" stroke-linecap="round" />''' },
+]
+texts = [
+  { id = "ticket-title", content = "ACCESS_METRO" },
+]
+
+[[asset.variant]]
+name = "batobus"
+substitutions = [
+  { id = "ticket-accents", attribute = "stroke", value = "#22D3EE" },
+  { id = "ticket-corners", attribute = "fill", value = "#22D3EE" },
+]
+fills = [
+  { id = "ticket-glyph", markup = '''
+<path d="M -30,6 L -22,-6 L 22,-6 L 30,6 Q 26,12 0,12 Q -26,12 -30,6 Z" fill="#0B1020" stroke="#22D3EE" stroke-width="2" />
+<rect x="-14" y="-16" width="28" height="10" rx="1" fill="#0B1020" stroke="#22D3EE" stroke-width="1.5" />
+<line x1="-7" y1="-16" x2="-7" y2="-6" stroke="#22D3EE" stroke-width="1" />
+<line x1="7" y1="-16" x2="7" y2="-6" stroke="#22D3EE" stroke-width="1" />
+<line x1="0" y1="-16" x2="0" y2="-24" stroke="#22D3EE" stroke-width="1.5" />
+<path d="M -30,18 Q -15,14 0,18 Q 15,22 30,18" fill="none" stroke="#22D3EE" stroke-width="1.5" stroke-linecap="round" />''' },
+]
+texts = [
+  { id = "ticket-title", content = "ACCESS_BATOBUS" },
+]
+
+[[asset.variant]]
+name = "egouts"
+substitutions = [
+  { id = "ticket-accents", attribute = "stroke", value = "#FB7185" },
+  { id = "ticket-corners", attribute = "fill", value = "#FB7185" },
+]
+fills = [
+  { id = "ticket-glyph", markup = '''
+<path d="M -22,18 L -22,-2 Q -22,-16 0,-16 Q 22,-16 22,-2 L 22,18 Z" fill="#0B1020" stroke="#FB7185" stroke-width="2" />
+<path d="M -14,18 L -14,0 Q -14,-8 0,-8 Q 14,-8 14,0 L 14,18" fill="#0B1020" stroke="#FB7185" stroke-width="1.5" />
+<line x1="-22" y1="6" x2="-14" y2="6" stroke="#FB7185" stroke-width="1" />
+<line x1="14" y1="6" x2="22" y2="6" stroke="#FB7185" stroke-width="1" />
+<circle cx="0" cy="-4" r="2.5" fill="#FB7185" />
+<path d="M -10,20 Q 0,17 10,20" fill="none" stroke="#FB7185" stroke-width="1.2" stroke-linecap="round" />''' },
+]
+texts = [
+  { id = "ticket-title", content = "ACCESS_EGOUTS" },
+]
+
+[[asset.variant]]
+name = "black"
+substitutions = [
+  { id = "ticket-accents", attribute = "stroke", value = "#F9FAFB" },
+  { id = "ticket-corners", attribute = "fill", value = "#F9FAFB" },
+]
+fills = [
+  { id = "ticket-glyph", markup = '''
+<path d="M -20,-6 C -20,-18 20,-18 20,-6 C 20,12 10,18 0,22 C -10,18 -20,12 -20,-6 Z" fill="#0B1020" stroke="#F9FAFB" stroke-width="1.5" />
+<polygon points="-10,-4 -5,-10 0,-4 -5,-2" fill="#0B1020" stroke="#F9FAFB" stroke-width="0.6" />
+<polygon points="10,-4 5,-10 0,-4 5,-2" fill="#0B1020" stroke="#F9FAFB" stroke-width="0.6" />
+<path d="M 0,-12 Q 6,-18 10,-12 Q 12,-6 4,0 L 0,4" fill="none" stroke="#F9FAFB" stroke-width="1.2" stroke-linecap="round" />
+<circle cx="0" cy="9" r="1.2" fill="#F9FAFB" />''' },
+]
+texts = [
+  { id = "ticket-title", content = "ACCESS_BLACK" },
+]
+
+# Neutral (uncoloured) line badge (neon).
+[[asset]]
+master = "ligne-metro.svg"
+output = "ligne/{city}/{style}/metro-{name}.svg"
+
+[[asset.variant]]
+name = "m1"
+substitutions = [
+  { id = "line-accent", attribute = "stroke", value = "#16224A" },
+  { id = "line-accent-bloom", attribute = "stroke", value = "#16224A" },
+]
+texts = [{ id = "line-name", content = "M1" }]
