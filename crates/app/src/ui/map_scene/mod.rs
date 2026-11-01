@@ -1,14 +1,17 @@
 //! The map scene widget: renders the GameMap under `MapTransform`
 //! (map-mm -> surface-mm -> widget-px) on every snapshot.
 
+pub mod pose_animator;
 pub mod render_stage;
 pub mod scene_state;
 pub mod widget;
 
+pub use pose_animator::PoseAnimator;
 pub use render_stage::RenderStage;
 pub use scene_state::SceneState;
 pub use widget::MapScene;
 
+use qdo36_tangibles::AnchorPose;
 use qdo36_tangibles::AnchorState;
 use tangible_objects_model::Pixels;
 
@@ -16,9 +19,11 @@ use crate::ui::style::EdgeSpec;
 
 /// Full scene render: paper, backdrop, edges, stations, anchor,
 /// overlay - each element delegated to the active `StyleRenderer`.
-pub fn render(ctx: &cairo::Context, state: &SceneState, width: f64, height: f64) {
+/// `pose` is the interpolated anchor pose for this frame; `width`x
+/// `height` is the widget size in px.
+pub fn render(ctx: &cairo::Context, state: &SceneState, pose: AnchorPose, width: Pixels, height: Pixels) {
     let map = state.map.as_ref();
-    let stage = RenderStage::new(state, width, height);
+    let stage = RenderStage::new(state, pose, width, height);
     let to_px = |pos| stage.to_px(pos);
     let px_per_mm = stage.fit.scale;
     let renderer = state.style.renderer();
@@ -67,6 +72,6 @@ pub fn render(ctx: &cairo::Context, state: &SceneState, width: f64, height: f64)
 
     // "Tower missing" hint - only while virtual.
     if let (Some(hint), AnchorState::Virtual(_)) = (&state.anchor_hint, state.anchor) {
-        renderer.draw_hint(ctx, hint, Pixels::new(width), Pixels::new(height));
+        renderer.draw_hint(ctx, hint, width, height);
     }
 }

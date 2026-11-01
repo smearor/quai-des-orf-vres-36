@@ -1,5 +1,6 @@
 //! `RenderStage` - the transform/pixel plumbing for one render frame.
 
+use qdo36_tangibles::AnchorPose;
 use qdo36_tangibles::MapTransform;
 use qdo36_tangibles::SurfaceMm;
 use tangible_objects_model::Millimeters;
@@ -22,16 +23,18 @@ pub struct RenderStage {
 }
 
 impl RenderStage {
-    /// Builds the stage for `state` at widget size `w`x`h` (px).
-    pub fn new(state: &SceneState, width: f64, height: f64) -> Self {
+    /// Builds the stage for `state` at widget size `width`x`height`
+    /// (widget px), anchoring at `pose` (the interpolated pose for
+    /// this frame).
+    pub fn new(state: &SceneState, pose: AnchorPose, width: Pixels, height: Pixels) -> Self {
         let bounds = state.map.bounds();
         let surface = state.surface.unwrap_or_else(|| SurfaceMm {
-            width: Millimeters::new(width.max(bounds.width().as_f64())),
-            height: Millimeters::new(height.max(bounds.height().as_f64())),
+            width: Millimeters::new(width.as_f64().max(bounds.width().as_f64())),
+            height: Millimeters::new(height.as_f64().max(bounds.height().as_f64())),
         });
         Self {
-            fit: SurfaceFit::new(surface.width, surface.height, Pixels::new(width), Pixels::new(height), state.display_rotation),
-            transform: MapTransform::new(state.anchor.pose(), &state.config, state.scale),
+            fit: SurfaceFit::new(surface.width, surface.height, width, height, state.display_rotation),
+            transform: MapTransform::new(pose, &state.config, state.scale),
         }
     }
 
