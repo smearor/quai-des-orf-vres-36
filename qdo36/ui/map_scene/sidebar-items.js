@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["render"],"mod":["pose_animator","render_stage","scene_state","widget"]};

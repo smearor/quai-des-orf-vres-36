@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["transport_color"],"struct":["ComicStyle"]};

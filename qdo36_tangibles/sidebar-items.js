@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["anchor","map","source"],"struct":["PatternId"]};

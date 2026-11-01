@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["SNAP_RADIUS_MM"],"mod":["imp"],"struct":["MapScene"]};

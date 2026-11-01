@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["log","outcome","phase","public_entry","reveal_schedule"]};

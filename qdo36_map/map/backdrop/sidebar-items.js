@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["kind","landmark","name","polyline"],"struct":["Backdrop"]};

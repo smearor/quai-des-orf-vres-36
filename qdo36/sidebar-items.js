@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["install_css","install_shutdown_handlers","main"],"mod":["controller","l10n","settings","tangible_host","ui"],"struct":["Args"]};

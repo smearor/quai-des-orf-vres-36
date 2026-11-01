@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["RESOURCES"],"struct":["L10n"]};
