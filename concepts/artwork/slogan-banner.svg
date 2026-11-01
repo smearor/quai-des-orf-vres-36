@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 380" width="100%" height="100%">
+  <defs>
+    <!-- Deep Noir / Midnight Cardboard Gradient -->
+    <linearGradient id="bannerBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141824" />
+      <stop offset="50%" stop-color="#0a0d14" />
+      <stop offset="100%" stop-color="#040608" />
+    </linearGradient>
+
+    <!-- Ornate Gold/Bronze Gradients -->
+    <linearGradient id="goldAcc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef0cd" />
+      <stop offset="30%" stop-color="#dfbe6f" />
+      <stop offset="70%" stop-color="#b8860b" />
+      <stop offset="100%" stop-color="#542c15" />
+    </linearGradient>
+
+    <!-- Drop Shadow for Poster Depth -->
+    <filter id="bannerShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="3" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.85" />
+    </filter>
+
+    <filter id="subtleGlow">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Banner Background Card -->
+  <rect x="15" y="15" width="670" height="350" rx="10" ry="10" fill="url(#bannerBg)" stroke="url(#goldAcc)" stroke-width="3" filter="url(#bannerShadow)" />
+
+  <!-- Inner Double Border Lines -->
+  <rect x="25" y="25" width="650" height="330" rx="6" ry="6" fill="none" stroke="#2c3848" stroke-width="1.5" />
+  <rect x="29" y="29" width="642" height="322" rx="4" ry="4" fill="none" stroke="url(#goldAcc)" stroke-width="1.2" stroke-dasharray="6,4" opacity="0.8" />
+
+  <!-- Corner Flourishes (Art Nouveau / Belle-Époque) -->
+  <g fill="none" stroke="url(#goldAcc)" stroke-width="1.5">
+    <!-- Top-Left -->
+    <path d="M 32,55 C 32,35 35,32 55,32 M 32,65 C 32,40 40,32 65,32" />
+    <circle cx="38" cy="38" r="3" fill="url(#goldAcc)" />
+    <!-- Top-Right -->
+    <path d="M 668,55 C 668,35 665,32 645,32 M 668,65 C 668,40 660,32 635,32" />
+    <circle cx="662" cy="38" r="3" fill="url(#goldAcc)" />
+    <!-- Bottom-Left -->
+    <path d="M 32,325 C 32,345 35,348 55,348 M 32,315 C 32,340 40,348 65,348" />
+    <circle cx="38" cy="342" r="3" fill="url(#goldAcc)" />
+    <!-- Bottom-Right -->
+    <path d="M 668,325 C 668,345 665,348 645,348 M 668,315 C 668,340 660,348 635,348" />
+    <circle cx="662" cy="342" r="3" fill="url(#goldAcc)" />
+  </g>
+
+  <!-- Header Banner Plate: PROJECT NAME -->
+  <g transform="translate(350, 56)">
+    <path d="M -180,-16 Q 0,-22 180,-16 Q 180,16 180,16 Q 0,22 -180,16 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.8" />
+    <text x="0" y="5" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="14" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="4">
+      QUAI DES ORFÈVRES 36 · PARIS
+    </text>
+  </g>
+
+  <!-- Main Title (PARIS) -->
+  <text x="350" y="125" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="42" font-weight="bold" fill="#fef0cd" text-anchor="middle" letter-spacing="10" filter="url(#subtleGlow)">
+    PARIS
+  </text>
+  <line x1="200" y1="138" x2="500" y2="138" stroke="url(#goldAcc)" stroke-width="1.5" opacity="0.8" />
+
+  <!-- Slogan -->
+  <text x="350" y="172" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-style="italic" font-size="18" fill="#dfbe6f" text-anchor="middle" letter-spacing="1.5">
+    “The city of light holds its breath.”
+  </text>
+
+  <!-- Divider Dashed Ornament -->
+  <line x1="150" y1="195" x2="550" y2="195" stroke="#324454" stroke-width="1" stroke-dasharray="4,4" />
+
+  <!-- Story Text (Multi-line centered block) -->
+  <text x="350" y="222" font-family="&#39;Courier New&#39;, monospace" font-size="11.5" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.5">
+    Monsieur Corbeau vanished at dawn beneath the Eiffel Tower.
+  </text>
+  <text x="350" y="242" font-family="&#39;Courier New&#39;, monospace" font-size="11.5" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.5">
+    The detectives of Quai des Orfèvres 36 fan out through the boulevards —
+  </text>
+  <text x="350" y="262" font-family="&#39;Courier New&#39;, monospace" font-size="11.5" fill="#c5d1e0" text-anchor="middle" letter-spacing="0.5">
+    every métro gate, every Batobus pier is watched.
+  </text>
+  <text x="350" y="282" font-family="&#39;Courier New&#39;, monospace" font-size="12" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="1">
+    Catch him before the last round ends.
+  </text>
+
+  <!-- Footer Seal / Registry Mark -->
+  <text x="50" y="335" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" fill="#64748b" letter-spacing="1">
+    DOSSIER N° 36-P
+  </text>
+  <text x="650" y="335" font-family="&#39;Times New Roman&#39;, serif" font-size="10" font-weight="bold" fill="url(#goldAcc)" text-anchor="end" letter-spacing="2">
+    CONFIDENTIEL
+  </text>
+</svg>

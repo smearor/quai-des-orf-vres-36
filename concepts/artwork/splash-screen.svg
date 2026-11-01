@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <!-- Warm Belle-Époque Background Gradient -->
+    <radialGradient id="belleBg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#2a241b" />
+      <stop offset="65%" stop-color="#14110d" />
+      <stop offset="100%" stop-color="#080705" />
+    </radialGradient>
+
+    <!-- Art Nouveau Gold Gradient -->
+    <linearGradient id="nouveauGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef0cd" />
+      <stop offset="25%" stop-color="#dfbe6f" />
+      <stop offset="50%" stop-color="#b8860b" />
+      <stop offset="75%" stop-color="#dfbe6f" />
+      <stop offset="100%" stop-color="#8c6200" />
+    </linearGradient>
+
+    <!-- Deep Copper Accent Gradient -->
+    <linearGradient id="copperGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c47c48" />
+      <stop offset="100%" stop-color="#542c15" />
+    </linearGradient>
+
+    <!-- Vignette -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="55%">
+      <stop offset="60%" stop-color="#000" stop-opacity="0" />
+      <stop offset="100%" stop-color="#000" stop-opacity="0.85" />
+    </radialGradient>
+
+    <!-- Drop Shadow -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.9" />
+    </filter>
+  </defs>
+
+  <!-- 1. Background -->
+  <rect width="1200" height="675" fill="url(#belleBg)" />
+
+  <!-- 2. Art Nouveau Border Frame (Jugendstil-Rahmen) -->
+  <g fill="none" stroke="url(#nouveauGold)" stroke-width="2" filter="url(#shadow)">
+    <!-- Outer ornate border -->
+    <rect x="35" y="35" width="1130" height="605" rx="4" stroke-width="1.5" opacity="0.6" />
+    <rect x="45" y="45" width="1110" height="585" rx="2" stroke-width="3" opacity="0.9" />
+    <rect x="53" y="53" width="1094" height="569" rx="1" stroke-width="1" opacity="0.4" />
+
+    <!-- Corner Flourishes (Art Nouveau Whiplash Curves) -->
+    <!-- Top-Left Corner -->
+    <path d="M 45,120 C 45,75 75,45 120,45 M 45,160 C 45,95 95,45 160,45 M 65,65 Q 110,110 165,65 Q 110,110 65,165" stroke-width="2" />
+    <!-- Top-Right Corner -->
+    <path d="M 1155,120 C 1155,75 1125,45 1080,45 M 1155,160 C 1155,95 1105,45 1040,45 M 1135,65 Q 1090,110 1035,65 Q 1090,110 1135,165" stroke-width="2" />
+    <!-- Bottom-Left Corner -->
+    <path d="M 45,555 C 45,600 75,630 120,630 M 45,515 C 45,580 95,630 160,630 M 65,610 Q 110,565 165,610 Q 110,565 65,510" stroke-width="2" />
+    <!-- Bottom-Right Corner -->
+    <path d="M 1155,555 C 1155,600 1125,630 1080,630 M 1155,515 C 1155,580 1105,630 1040,630 M 1135,610 Q 1090,565 1035,610 Q 1090,565 1135,510" stroke-width="2" />
+  </g>
+
+  <!-- 3. Central Art Nouveau Medallion & Motifs -->
+  <g transform="translate(600, 230)" filter="url(#shadow)">
+    <!-- Organic background rays / floral burst -->
+    <g stroke="url(#nouveauGold)" stroke-width="1" opacity="0.2" fill="none">
+      <circle r="110" />
+      <circle r="95" stroke-dasharray="4,6" />
+      <path d="M 0,-130 Q 15,-95 0,-60 Q -15,-95 0,-130 Z" fill="url(#nouveauGold)" opacity="0.4" />
+      <path d="M 0,130 Q 15,95 0,60 Q -15,95 0,130 Z" fill="url(#nouveauGold)" opacity="0.4" />
+      <path d="M -130,0 Q -95,15 -60,0 Q -95,-15 -130,0 Z" fill="url(#nouveauGold)" opacity="0.4" />
+      <path d="M 130,0 Q 95,15 60,0 Q 95,-15 130,0 Z" fill="url(#nouveauGold)" opacity="0.4" />
+    </g>
+
+    <!-- Central Shield / Badge -->
+    <circle r="75" fill="#120f0a" stroke="url(#nouveauGold)" stroke-width="4" />
+    <circle r="67" fill="none" stroke="url(#copperGrad)" stroke-width="2" />
+
+    <!-- The Number 36 in Classic Serif -->
+    <text x="0" y="22" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="74" font-weight="bold" fill="url(#nouveauGold)" text-anchor="middle" letter-spacing="4">36</text>
+  </g>
+
+  <!-- 4. Vignette Shadow Overlay -->
+  <rect width="1200" height="675" fill="url(#vignette)" />
+
+  <!-- 5. Typography: Belle-Époque / Art Nouveau Style -->
+  <!-- Main Title -->
+  <text x="600" y="420" font-family="&#39;Times New Roman&#39;, &#39;Baskerville&#39;, serif" font-size="48" font-weight="bold" font-style="italic" fill="#fdf6e2" text-anchor="middle" letter-spacing="8" filter="url(#shadow)">
+    QUAI DES ORFÈVRES
+  </text>
+
+  <!-- Ornate Divider Ribbon / Flourish under Title -->
+  <g transform="translate(600, 445)" stroke="url(#nouveauGold)" stroke-width="1.5" fill="none">
+    <path d="M -180,0 Q -90,-12 0,0 Q 90,-12 180,0" />
+    <path d="M -140,8 Q -70,2 0,8 Q 70,2 140,8" opacity="0.6" />
+    <!-- Tiny diamond center jewel -->
+    <polygon points="0,-4 4,0 0,4 -4,0" fill="url(#nouveauGold)" />
+    <circle cx="-180" cy="0" r="3" fill="url(#nouveauGold)" />
+    <circle cx="180" cy="0" r="3" fill="url(#nouveauGold)" />
+  </g>
+
+  <!-- Subtitle -->
+  <text x="600" y="485" font-family="&#39;Courier New&#39;, monospace" font-size="15" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="10">
+    PARIS · 1900
+  </text>
+
+  <!-- 6. Loading / Footer Status -->
+  <g transform="translate(600, 565)">
+    <text x="0" y="0" font-family="&#39;Times New Roman&#39;, serif" font-size="13" font-style="italic" fill="#a89a80" text-anchor="middle" letter-spacing="3">
+    — Chargement des dossiers de police —
+    </text>
+  </g>
+</svg>

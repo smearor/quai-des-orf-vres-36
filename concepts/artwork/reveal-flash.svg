@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Radial Golden Glow Burst Gradient -->
+    <radialGradient id="revealGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="20%" stop-color="#fef0cd" stop-opacity="0.95" />
+      <stop offset="45%" stop-color="#dfbe6f" stop-opacity="0.7" />
+      <stop offset="70%" stop-color="#b8860b" stop-opacity="0.35" />
+      <stop offset="90%" stop-color="#542c15" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#1c120a" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Inner Core Intense Light -->
+    <radialGradient id="coreLight" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="40%" stop-color="#fff5d1" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#dfbe6f" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Metallic Gold Gradient for Rays & Ring -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef0cd" />
+      <stop offset="30%" stop-color="#dfbe6f" />
+      <stop offset="70%" stop-color="#b8860b" />
+      <stop offset="100%" stop-color="#542c15" />
+    </linearGradient>
+
+    <!-- Glow Filter for Soft Radial Flare -->
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 1. Background Radial Aura / Glow -->
+  <circle cx="250" cy="250" r="230" fill="url(#revealGlow)" />
+
+  <!-- 2. Primary Sunburst / Radial Rays (Longer Sharp Spikes) -->
+  <g transform="translate(250, 250)" fill="url(#goldGrad)" opacity="0.85" filter="url(#softGlow)">
+    <!-- 8 Main Cardinal & Intercardinal Rays -->
+    <path d="M 0,0 L -8,-210 L 0,-240 L 8,-210 Z" />
+    <path d="M 0,0 L -8,-210 L 0,-240 L 8,-210 Z" transform="rotate(45)" />
+    <path d="M 0,0 L -8,-210 L 0,-240 L 8,-210 Z" transform="rotate(90)" />
+    <path d="M 0,0 L -8,-210 L 0,-240 L 8,-210 Z" transform="rotate(135)" />
+    <path d="M 0,0 L -8,-210 L 0,-240 L 8,-210 Z" transform="rotate(180)" />
+    <path d="M 0,0 L -8,-210 L 0,-240 L 8,-210 Z" transform="rotate(225)" />
+    <path d="M 0,0 L -8,-210 L 0,-240 L 8,-210 Z" transform="rotate(270)" />
+    <path d="M 0,0 L -8,-210 L 0,-240 L 8,-210 Z" transform="rotate(315)" />
+
+    <!-- 16 Secondary Fine Rays -->
+    <g fill="#fef0cd" opacity="0.6">
+      <path d="M 0,0 L -4,-160 L 0,-185 L 4,-160 Z" transform="rotate(22.5)" />
+      <path d="M 0,0 L -4,-160 L 0,-185 L 4,-160 Z" transform="rotate(67.5)" />
+      <path d="M 0,0 L -4,-160 L 0,-185 L 4,-160 Z" transform="rotate(112.5)" />
+      <path d="M 0,0 L -4,-160 L 0,-185 L 4,-160 Z" transform="rotate(157.5)" />
+      <path d="M 0,0 L -4,-160 L 0,-185 L 4,-160 Z" transform="rotate(202.5)" />
+      <path d="M 0,0 L -4,-160 L 0,-185 L 4,-160 Z" transform="rotate(247.5)" />
+      <path d="M 0,0 L -4,-160 L 0,-185 L 4,-160 Z" transform="rotate(292.5)" />
+      <path d="M 0,0 L -4,-160 L 0,-185 L 4,-160 Z" transform="rotate(337.5)" />
+    </g>
+  </g>
+
+  <!-- 3. Belle-Époque Filigree / Art Nouveau Concentric Halo Rings -->
+  <g transform="translate(250, 250)" fill="none" stroke="url(#goldGrad)">
+    <circle r="140" stroke-width="1.5" stroke-dasharray="8,6" opacity="0.7" />
+    <circle r="100" stroke-width="2.5" opacity="0.9" />
+    <circle r="92" stroke-width="1" stroke-dasharray="4,4" opacity="0.5" />
+    <circle r="60" stroke-width="2" opacity="0.8" />
+
+    <!-- Small Ornate Halo Dots -->
+    <g fill="url(#goldGrad)" stroke="none" opacity="0.8">
+      <circle cx="0" cy="-100" r="4" />
+      <circle cx="100" cy="0" r="4" />
+      <circle cx="0" cy="100" r="4" />
+      <circle cx="-100" cy="0" r="4" />
+      <circle cx="70.7" cy="70.7" r="3" />
+      <circle cx="-70.7" cy="70.7" r="3" />
+      <circle cx="70.7" cy="-70.7" r="3" />
+      <circle cx="-70.7" cy="-70.7" r="3" />
+    </g>
+  </g>
+
+  <!-- 4. Bright Center Core Highlight (Placement point for the Corbeau marker) -->
+  <circle cx="250" cy="250" r="75" fill="url(#coreLight)" />
+  <circle cx="250" cy="250" r="35" fill="#ffffff" opacity="0.9" filter="url(#softGlow)" />
+</svg>

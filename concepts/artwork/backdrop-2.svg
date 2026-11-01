@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" width="100%" height="100%">
+  <defs>
+    <!-- Map Background Gradient (Midnight Noir Parchment) -->
+    <radialGradient id="mapBg" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#121722" />
+      <stop offset="60%" stop-color="#0a0d14" />
+      <stop offset="100%" stop-color="#030508" />
+    </radialGradient>
+
+    <!-- Water Surface Gradient (Seine River Dark Bronze-Blue) -->
+    <linearGradient id="seineWater" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#182c3d" />
+      <stop offset="50%" stop-color="#0f1d2a" />
+      <stop offset="100%" stop-color="#09121a" />
+    </linearGradient>
+
+    <!-- Ornate Gold/Bronze Gradients for Accents -->
+    <linearGradient id="goldAcc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef0cd" />
+      <stop offset="30%" stop-color="#dfbe6f" />
+      <stop offset="70%" stop-color="#b8860b" />
+      <stop offset="100%" stop-color="#542c15" />
+    </linearGradient>
+
+    <!-- Park / Garden Tint Gradient -->
+    <radialGradient id="parkTint" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e3428" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#0d1812" stop-opacity="0.1" />
+    </radialGradient>
+
+    <!-- Subtle Glow Filter for Landmarks -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 1. FULL MAP BASEBOARD -->
+  <rect x="0" y="0" width="600" height="420" fill="url(#mapBg)" />
+
+  <!-- Expanded Cartography Grid Pattern -->
+  <g stroke="#1a2433" stroke-width="0.3" stroke-dasharray="2,8" opacity="0.5">
+    <line x1="50" y1="0" x2="50" y2="420" />
+    <line x1="150" y1="0" x2="150" y2="420" />
+    <line x1="250" y1="0" x2="250" y2="420" />
+    <line x1="350" y1="0" x2="350" y2="420" />
+    <line x1="450" y1="0" x2="450" y2="420" />
+    <line x1="550" y1="0" x2="550" y2="420" />
+    <line x1="0" y1="50" x2="600" y2="50" />
+    <line x1="0" y1="100" x2="600" y2="100" />
+    <line x1="0" y1="150" x2="600" y2="150" />
+    <line x1="0" y1="200" x2="600" y2="200" />
+    <line x1="0" y1="250" x2="600" y2="250" />
+    <line x1="0" y1="300" x2="600" y2="300" />
+    <line x1="0" y1="350" x2="600" y2="350" />
+    <line x1="0" y1="400" x2="600" y2="400" />
+  </g>
+
+  <!-- 2. PARKS & GREEN ZONES (Full Coverage) -->
+  <g fill="url(#parkTint)" stroke="#2d4a38" stroke-width="0.5" opacity="0.8">
+    <!-- Champ de Mars -->
+    <ellipse cx="95" cy="265" rx="14" ry="22" transform="rotate(-25 95 265)" />
+    <!-- Jardin des Tuileries -->
+    <rect x="185" y="185" width="24" height="14" rx="3" transform="rotate(-10 197 192)" />
+    <!-- Jardin du Luxembourg -->
+    <rect x="195" y="240" width="20" height="20" rx="4" />
+    <!-- Jardin des Plantes -->
+    <ellipse cx="312" cy="255" rx="16" ry="10" transform="rotate(15 312 255)" />
+    <!-- Parc des Buttes-Chaumont -->
+    <circle cx="292" cy="75" r="12" />
+    <!-- Parc Monceau -->
+    <circle cx="140" cy="100" r="10" />
+    <!-- Cimetière du Père Lachaise -->
+    <rect x="322" y="148" width="20" height="20" rx="3" transform="rotate(12 332 158)" />
+    <!-- Bois de Boulogne (West Edge) -->
+    <ellipse cx="15" cy="190" rx="12" ry="25" />
+    <!-- Bois de Vincennes (East Edge) -->
+    <ellipse cx="450" cy="245" rx="20" ry="15" />
+  </g>
+
+  <!-- 3. WATERWAYS (La Seine & Canals across the board) -->
+  <!-- Canal Saint-Martin & Bassin de la Villette -->
+  <path d="M 330,80 L 300,140 L 292,220" fill="none" stroke="#182c3d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.8" />
+  <path d="M 330,80 L 300,140 L 292,220" fill="none" stroke="url(#goldAcc)" stroke-width="0.8" stroke-dasharray="2,3" opacity="0.5" />
+
+  <!-- Main Seine River Flow Path -->
+  <path d="M 0.0,225.0 
+           C 30.0,222.0 50.0,220.0 80.0,215.0 
+           C 100.0,220.0 115.0,225.0 160.0,235.0 
+           C 185.0,232.0 200.0,230.0 228.0,222.0 
+           C 245.0,219.0 262.0,220.0 300.0,225.0 
+           C 325.0,230.0 340.0,235.0 400.0,250.0 
+           C 440.0,257.0 470.0,260.0 600.0,255.0" fill="none" stroke="url(#seineWater)" stroke-width="22" stroke-linecap="butt" stroke-linejoin="round" />
+
+  <!-- Seine River Golden Bank Outlines -->
+  <path d="M 0.0,225.0 C 30.0,222.0 50.0,220.0 80.0,215.0 C 100.0,220.0 115.0,225.0 160.0,235.0 C 185.0,232.0 200.0,230.0 228.0,222.0 C 245.0,219.0 262.0,220.0 300.0,225.0 C 325.0,230.0 340.0,235.0 400.0,250.0 C 440.0,257.0 470.0,260.0 600.0,255.0" fill="none" stroke="url(#goldAcc)" stroke-width="1.2" opacity="0.75" />
+
+  <!-- Seine Islands (Île de la Cité & Île Saint-Louis) -->
+  <g fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1">
+    <!-- Île de la Cité -->
+    <path d="M 244,217 C 250,215 258,216 260,220 C 258,223 248,222 244,217 Z" />
+    <!-- Île Saint-Louis -->
+    <path d="M 266,225 C 272,224 278,226 276,230 C 270,231 265,228 266,225 Z" />
+  </g>
+
+  <!-- Historic Bridges Crossing the Seine -->
+  <g stroke="url(#goldAcc)" stroke-width="1.8" stroke-linecap="round">
+    <!-- Pont Alexandre III -->
+    <line x1="158" y1="188" x2="162" y2="196" />
+    <!-- Pont Neuf -->
+    <line x1="220" y1="202" x2="224" y2="208" />
+    <!-- Pont des Arts -->
+    <line x1="233" y1="207" x2="237" y2="213" />
+  </g>
+
+  <!-- 4. ALL LANDMARK POSITIONS & ICONS (Distributed across full extent) -->
+  
+  <!-- Anchor Highlight: Tour Eiffel & Station 1 -->
+  <g transform="translate(80, 220)" filter="url(#glow)">
+    <circle cx="0" cy="0" r="10" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.8" />
+    <circle cx="0" cy="0" r="14" fill="none" stroke="url(#goldAcc)" stroke-width="0.8" stroke-dasharray="3,2" />
+    <path d="M -3,6 L 0,-6 L 3,6 M -2,2 L 2,2" fill="none" stroke="#fef0cd" stroke-width="1.2" />
+    <text x="0" y="-17" font-family="&#39;Times New Roman&#39;, serif" font-size="6.5" font-weight="bold" fill="#fef0cd" text-anchor="middle" letter-spacing="0.5">
+      TOUR EIFFEL (STATION 1)
+    </text>
+  </g>
+
+  <!-- Arc de Triomphe -->
+  <g transform="translate(105, 115)">
+    <circle cx="0" cy="0" r="3.5" fill="url(#goldAcc)" />
+    <text x="0" y="-6" font-family="&#39;Georgia&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Arc de Triomphe</text>
+  </g>
+
+  <!-- Sacré-Cœur & Butte Montmartre -->
+  <g transform="translate(193, 63)">
+    <path d="M -8,8 L 0,-2 L 8,8 Z" fill="none" stroke="url(#goldAcc)" stroke-width="0.8" stroke-dasharray="2,2" />
+    <circle cx="2" cy="-5" r="3" fill="url(#goldAcc)" />
+    <text x="2" y="-10" font-family="&#39;Georgia&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Sacré-Cœur</text>
+  </g>
+
+  <!-- Louvre -->
+  <g transform="translate(208, 195)">
+    <polygon points="0,-4 -5,4 5,4" fill="none" stroke="url(#goldAcc)" stroke-width="1" />
+    <text x="0" y="10" font-family="&#39;Georgia&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Louvre</text>
+  </g>
+
+  <!-- Notre-Dame -->
+  <g transform="translate(262, 225)">
+    <rect x="-3" y="-3" width="6" height="6" fill="url(#goldAcc)" />
+    <text x="0" y="10" font-family="&#39;Georgia&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Notre-Dame</text>
+  </g>
+
+  <!-- Panthéon -->
+  <g transform="translate(242, 258)">
+    <circle cx="0" cy="0" r="3" fill="url(#goldAcc)" />
+    <text x="0" y="8" font-family="&#39;Georgia&#39;, serif" font-size="4.5" fill="#dfbe6f" text-anchor="middle">Panthéon</text>
+  </g>
+
+  <!-- Railway Termini (Gares) -->
+  <g fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1">
+    <rect x="254" y="104" width="8" height="8" rx="1" /> <!-- Gare du Nord -->
+    <rect x="274" y="116" width="8" height="8" rx="1" /> <!-- Gare de l'Est -->
+    <rect x="318" y="231" width="8" height="8" rx="1" /> <!-- Gare de Lyon -->
+    <rect x="158" y="266" width="8" height="8" rx="1" /> <!-- Gare Montparnasse -->
+    <rect x="156" y="108" width="8" height="8" rx="1" /> <!-- Gare Saint-Lazare -->
+  </g>
+
+  <!-- Secondary Landmarks & Infrastructure Points Across the Board -->
+  <g fill="url(#goldAcc)" opacity="0.75">
+    <circle cx="185" cy="140" r="1.8" /> <!-- Opéra Garnier -->
+    <circle cx="172" cy="72" r="1.8" />  <!-- Moulin Rouge -->
+    <circle cx="292" cy="220" r="1.8" /> <!-- Place de la Bastille -->
+    <circle cx="185" cy="190" r="1.8" /> <!-- Place de la Concorde -->
+    <circle cx="268" cy="150" r="1.8" /> <!-- Place de la République -->
+    <circle cx="8" cy="108" r="1.8" />   <!-- La Défense -->
+    <circle cx="8" cy="185" r="1.8" />   <!-- Versailles -->
+    <circle cx="355" cy="35" r="2.2" />  <!-- CDG Airport (Edge Marker) -->
+    <circle cx="255" cy="395" r="2.2" /> <!-- Orly Airport (Edge Marker) -->
+    <circle cx="15" cy="15" r="2.2" />   <!-- Beauvais Airport (Edge Marker) -->
+    <circle cx="290" cy="12" r="2.0" />  <!-- Stade de France -->
+    <circle cx="12" cy="298" r="2.0" />  <!-- Parc des Princes -->
+    <circle cx="372" cy="268" r="2.0" /> <!-- Accor Arena -->
+    <circle cx="450" cy="240" r="2.0" /> <!-- Château de Vincennes -->
+    <circle cx="300" cy="405" r="2.0" /> <!-- Fontainebleau -->
+  </g>
+</svg>

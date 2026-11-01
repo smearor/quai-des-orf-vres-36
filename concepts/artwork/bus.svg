@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="100%">
+  <defs>
+    <!-- Ticket Paper Gradient (Vintage Parchment) -->
+    <linearGradient id="parchment" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf6e2" />
+      <stop offset="50%" stop-color="#f4ebcf" />
+      <stop offset="100%" stop-color="#e6dab4" />
+    </linearGradient>
+
+    <!-- Ornate Gold/Bronze Accents -->
+    <linearGradient id="ticketGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b8860b" />
+      <stop offset="50%" stop-color="#dfbe6f" />
+      <stop offset="100%" stop-color="#b8860b" />
+    </linearGradient>
+
+    <!-- Drop Shadow for Ticket Depth -->
+    <filter id="ticketShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <!-- Ticket Body with Rounded Corners & Shadow -->
+  <rect x="10" y="10" width="380" height="180" rx="8" ry="8" fill="url(#parchment)" stroke="url(#ticketGold)" stroke-width="2.5" filter="url(#ticketShadow)" />
+
+  <!-- Perforation Cutouts / Notches on Sides -->
+  <circle cx="10" cy="100" r="10" fill="#0d111a" />
+  <circle cx="390" cy="100" r="10" fill="#0d111a" />
+
+  <!-- Inner Ornate Border Frame -->
+  <rect x="18" y="18" width="364" height="164" rx="4" ry="4" fill="none" stroke="#542c15" stroke-width="1" opacity="0.4" />
+  <rect x="21" y="21" width="358" height="158" rx="3" ry="3" fill="none" stroke="url(#ticketGold)" stroke-width="1.5" opacity="0.8" />
+
+  <!-- Corner Flourishes -->
+  <g fill="url(#ticketGold)" opacity="0.8">
+    <circle cx="26" cy="26" r="3" />
+    <circle cx="374" cy="26" r="3" />
+    <circle cx="26" cy="174" r="3" />
+    <circle cx="374" cy="174" r="3" />
+  </g>
+
+  <!-- Header: Transport / Company -->
+  <text x="200" y="44" font-family="&#39;Times New Roman&#39;, serif" font-size="12" font-weight="bold" fill="#542c15" text-anchor="middle" letter-spacing="4">
+    COMPAGNIE GENERALE DES OMNIBUS
+  </text>
+  <line x1="60" y1="52" x2="340" y2="52" stroke="url(#ticketGold)" stroke-width="1" />
+
+  <!-- Central Icon: Vintage Paris Imperial Omnibus (Double-Decker Bus from 1900) -->
+  <g transform="translate(38, 56)">
+    <!-- Lower Deck -->
+    <rect x="10" y="24" width="76" height="18" rx="1" fill="#1c120a" />
+    <!-- Windows Lower Deck -->
+    <rect x="16" y="27" width="12" height="11" rx="1" fill="#f4ebcf" />
+    <rect x="32" y="27" width="12" height="11" rx="1" fill="#f4ebcf" />
+    <rect x="48" y="27" width="12" height="11" rx="1" fill="#f4ebcf" />
+    <rect x="64" y="27" width="16" height="11" rx="1" fill="#f4ebcf" />
+
+    <!-- Upper Deck (Impériale) with Canopy/Roof and Railing -->
+    <path d="M 14,24 L 18,12 L 82,12 L 86,24 Z" fill="#2a1810" />
+    <line x1="18" y1="12" x2="82" y2="12" stroke="#dfbe6f" stroke-width="1.5" />
+    <!-- Upper Deck Passengers / Bench partitions silhouette -->
+    <rect x="24" y="15" width="8" height="9" fill="#f4ebcf" />
+    <rect x="38" y="15" width="8" height="9" fill="#f4ebcf" />
+    <rect x="52" y="15" width="8" height="9" fill="#f4ebcf" />
+    <rect x="66" y="15" width="8" height="9" fill="#f4ebcf" />
+
+    <!-- Chassis & Wheels -->
+    <rect x="8" y="40" width="80" height="3" fill="#542c15" />
+    <circle cx="24" cy="45" r="7" fill="#111" />
+    <circle cx="24" cy="45" r="3" fill="#dfbe6f" />
+    <circle cx="72" cy="45" r="7" fill="#111" />
+    <circle cx="72" cy="45" r="3" fill="#dfbe6f" />
+
+    <!-- Destination / Line board on roof -->
+    <rect x="36" y="6" width="24" height="6" rx="1" fill="#dfbe6f" stroke="#1c120a" stroke-width="0.8" />
+    <text x="48" y="11" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#111" text-anchor="middle">LIGNE A</text>
+  </g>
+
+  <!-- Ticket Main Title -->
+  <text x="220" y="92" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="28" font-weight="bold" fill="#1c120a" letter-spacing="2">
+    BUS
+  </text>
+
+  <!-- Subtitle / Route description -->
+  <text x="220" y="115" font-family="&#39;Courier New&#39;, monospace" font-size="11.5" font-weight="bold" fill="#7a5230" text-anchor="middle" letter-spacing="1">
+    OMNIBUS · LIGNE IMPÉRIALE
+  </text>
+
+  <!-- Divider Dashed Line -->
+  <line x1="50" y1="130" x2="350" y2="130" stroke="#8c6200" stroke-width="1" stroke-dasharray="4,4" opacity="0.6" />
+
+  <!-- Footer Info / Serial Number -->
+  <text x="35" y="155" font-family="&#39;Courier New&#39;, monospace" font-size="10" fill="#542c15" letter-spacing="1">
+    N° 03649
+  </text>
+
+  <text x="365" y="155" font-family="&#39;Times New Roman&#39;, serif" font-size="11" font-weight="bold" fill="#b8860b" text-anchor="end" letter-spacing="2">
+    QUAI DES ORFÈVRES
+  </text>
+</svg>

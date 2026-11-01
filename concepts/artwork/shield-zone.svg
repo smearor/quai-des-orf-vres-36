@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="100%" height="100%">
+  <defs>
+    <!-- Deep Secret Zone Dark Gradient (Privacy Shield) -->
+    <radialGradient id="shieldGlow" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#182232" />
+      <stop offset="60%" stop-color="#0a0e14" />
+      <stop offset="100%" stop-color="#040608" />
+    </radialGradient>
+
+    <!-- Ornate Belle-Époque Gold / Bronze Gradients -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef0cd" />
+      <stop offset="30%" stop-color="#dfbe6f" />
+      <stop offset="70%" stop-color="#b8860b" />
+      <stop offset="100%" stop-color="#542c15" />
+    </linearGradient>
+
+    <linearGradient id="darkBronze" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#542c15" />
+      <stop offset="100%" stop-color="#1c120a" />
+    </linearGradient>
+
+    <!-- Heavy Occlusion Shadow for Card Depth -->
+    <filter id="shieldShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.85" />
+    </filter>
+
+    <filter id="subtleGlow">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 1. Backdrop of the Private Input Zone (Occluding Card Frame) -->
+  <rect x="15" y="15" width="570" height="320" rx="10" ry="10" fill="url(#shieldGlow)" stroke="url(#goldGrad)" stroke-width="3" filter="url(#shieldShadow)" />
+
+  <!-- 2. Inner Fine Filigree & Secure Border Lines -->
+  <rect x="25" y="25" width="550" height="300" rx="6" ry="6" fill="none" stroke="#2a3848" stroke-width="1.5" />
+  <rect x="30" y="30" width="540" height="290" rx="4" ry="4" fill="none" stroke="url(#goldGrad)" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.8" />
+
+  <!-- 3. Corner Ornaments (Art Nouveau Flourishes) -->
+  <g fill="none" stroke="url(#goldGrad)" stroke-width="1.5">
+    <!-- Top-Left -->
+    <path d="M 30,55 C 30,35 35,30 55,30 M 30,65 C 30,40 40,30 65,30" />
+    <circle cx="38" cy="38" r="3" fill="url(#goldGrad)" />
+    <!-- Top-Right -->
+    <path d="M 570,55 C 570,35 565,30 545,30 M 570,65 C 570,40 560,30 535,30" />
+    <circle cx="562" cy="38" r="3" fill="url(#goldGrad)" />
+    <!-- Bottom-Left -->
+    <path d="M 30,295 C 30,315 35,320 55,320 M 30,285 C 30,310 40,320 65,320" />
+    <circle cx="38" cy="312" r="3" fill="url(#goldGrad)" />
+    <!-- Bottom-Right -->
+    <path d="M 570,295 C 570,315 565,320 545,320 M 570,285 C 570,310 560,320 535,320" />
+    <circle cx="562" cy="312" r="3" fill="url(#goldGrad)" />
+  </g>
+
+  <!-- 4. Central "Eyes Off" Motif (Encrypted / Shielded / Confidential Eye Symbol) -->
+  <g transform="translate(300, 160)" filter="url(#subtleGlow)">
+    <!-- Outer Shield / Mask Shape -->
+    <path d="M -70,-25 Q 0,-50 70,-25 Q 85,25 0,55 Q -85,25 -70,-25 Z" fill="#0d131d" stroke="url(#goldGrad)" stroke-width="2" />
+    
+    <!-- Stylized Eye Outline -->
+    <path d="M -50,0 Q 0,-30 50,0 Q 0,30 -50,0 Z" fill="#141c2b" stroke="url(#goldGrad)" stroke-width="1.5" />
+    
+    <!-- Closed / Blocked Pupil (Eye with diagonal strike / "Eyes Off" blindfold line) -->
+    <circle cx="0" cy="0" r="14" fill="url(#goldGrad)" opacity="0.85" />
+    <circle cx="0" cy="0" r="6" fill="#0d131d" />
+    
+    <!-- Privacy Bar / Blindfold Slash across the eye -->
+    <line x1="-55" y1="-25" x2="55" y2="25" stroke="#dfbe6f" stroke-width="4" stroke-linecap="round" />
+    <line x1="-55" y1="-25" x2="55" y2="25" stroke="#0d131d" stroke-width="1.5" stroke-linecap="round" />
+  </g>
+
+  <!-- 5. Top Secret / Confidential Banner Header -->
+  <g transform="translate(300, 52)">
+    <path d="M -150,-14 Q 0,-20 150,-14 Q 150,14 150,14 Q 0,20 -150,14 Z" fill="#141c2b" stroke="url(#goldGrad)" stroke-width="1.5" />
+    <text x="0" y="4" font-family="&#39;Times New Roman&#39;, &#39;Georgia&#39;, serif" font-size="11" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="3">
+      ZONE PRIVÉE · CONFIDENTIEL
+    </text>
+  </g>
+
+  <!-- 6. Footer Secure Indicator -->
+  <text x="300" y="305" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#7a92a8" text-anchor="middle" letter-spacing="2">
+    [ ENTRÉE SECRÈTE DE L'INSPECTEUR — YEUX FERMÉS ]
+  </text>
+</svg>
