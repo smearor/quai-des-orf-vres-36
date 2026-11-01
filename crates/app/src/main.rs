@@ -54,18 +54,7 @@ fn main() -> glib::ExitCode {
 
     let args = <Args as clap::Parser>::parse();
     let mut settings = AppSettings::load();
-    if let Some(daemon_url) = args.daemon_url {
-        settings.daemon_url = daemon_url;
-    }
-    if let Some(locale) = args.locale.clone() {
-        settings.locale = Some(locale);
-    }
-    if let Some(city) = args.city {
-        settings.city = city;
-    }
-    if let Some(rotation) = args.display_rotation {
-        settings.display_rotation = rotation;
-    }
+    settings.apply_overrides(&args);
     // CLI flags are sticky overrides: they land in the persisted
     // settings and stay effective until changed again.
     settings.save();
