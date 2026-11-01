@@ -133,7 +133,8 @@ impl AppWindow {
             };
             (status, surface)
         };
-        self.setup.set_description(Some(&status));
+        let prompt = self.l10n.msg("place-tower");
+        self.setup.set_description(Some(&format!("{status}\n\n{prompt}")));
         info!("daemon handshake complete");
 
         let Some(map) = map else {
@@ -166,14 +167,32 @@ impl AppWindow {
             while let Ok(event) = events.recv().await {
                 controller::with_controller(|controller| {
                     let tracked = matches!(event, TangibleEvent::Added(_) | TangibleEvent::Moved(_));
-                    {
+                    let loss_started = {
                         let mut controller = controller.borrow_mut();
-                        controller.apply_event(&event);
+                        let loss_started = controller.apply_event(&event);
                         state.borrow_mut().anchor = controller.anchor();
-                    }
+                        loss_started
+                    };
                     this.scene.update(Rc::new(state.borrow().clone()));
                     if tracked && this.stack.visible_child_name().is_some_and(|name| name == "setup") {
                         this.stack.set_visible_child_name("map");
+                    }
+                    if loss_started {
+                        // The anchor was lost: re-check once the grace
+                        // period elapsed; a re-tracked tower meanwhile
+                        // cancels the downgrade.
+                        let state = state.clone();
+                        let scene = this.scene.clone();
+                        MainContext::default().spawn_local(async move {
+                            glib::timeout_future(controller::ANCHOR_LOSS_GRACE).await;
+                            controller::with_controller(|controller| {
+                                let mut controller = controller.borrow_mut();
+                                if controller.settle_anchor_loss() {
+                                    state.borrow_mut().anchor = controller.anchor();
+                                    scene.update(Rc::new(state.borrow().clone()));
+                                }
+                            });
+                        });
                     }
                 });
             }

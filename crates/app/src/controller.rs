@@ -3,6 +3,8 @@
 
 use std::cell::RefCell;
 use std::rc::Rc;
+use std::time::Duration;
+use std::time::Instant;
 
 use qdo36_tangibles::AnchorPose;
 use qdo36_tangibles::AnchorState;
@@ -11,6 +13,10 @@ use qdo36_tangibles::TangibleEvent;
 use tracing::warn;
 
 use crate::tangible_host::TangibleHost;
+
+/// Grace period before a lost anchor falls back to the virtual pose -
+/// the flicker-safe hysteresis for detection dropouts.
+pub const ANCHOR_LOSS_GRACE: Duration = Duration::from_secs(1);
 
 // The active controller (single-window app).
 thread_local! {
@@ -41,6 +47,9 @@ pub struct Controller {
     source: Option<GraphQlSource>,
     /// The tracked anchor pose, or the virtual fallback.
     anchor: AnchorState,
+    /// When the tracked anchor's signal was lost; `None` while a pose
+    /// is tracked or no loss window is open.
+    lost_since: Option<Instant>,
 }
 
 impl Controller {
@@ -50,6 +59,7 @@ impl Controller {
             host: TangibleHost::new()?,
             source: None,
             anchor: AnchorState::default_virtual(),
+            lost_since: None,
         })))
     }
 
@@ -71,20 +81,43 @@ impl Controller {
 
     /// Updates the anchor state from a tangible event.
     ///
-    /// `Added`/`Moved` track the pose; `Removed`/`Lagged` fall back to
-    /// the virtual anchor (the map keeps rendering while the tower is
-    /// away).
-    pub fn apply_event(&mut self, event: &TangibleEvent) {
+    /// `Added`/`Moved` track the pose and close any open loss window.
+    /// `Removed`/`Lagged` while tracked open a loss window but keep
+    /// the tracked pose - [`Self::settle_anchor_loss`] downgrades to
+    /// the virtual fallback once [`ANCHOR_LOSS_GRACE`] elapsed (the
+    /// map keeps rendering while the tower is away).
+    ///
+    /// Returns `true` when a new loss window opened and the caller
+    /// should schedule a settle after [`ANCHOR_LOSS_GRACE`].
+    pub fn apply_event(&mut self, event: &TangibleEvent) -> bool {
         match event {
             TangibleEvent::Added(tangible) | TangibleEvent::Moved(tangible) => {
                 self.anchor = AnchorState::Tracked(AnchorPose::from(tangible));
+                self.lost_since = None;
             }
             TangibleEvent::Removed(_) | TangibleEvent::Lagged(_) => {
-                if let AnchorState::Tracked(pose) = self.anchor {
-                    self.anchor = AnchorState::Virtual(pose);
+                if matches!(self.anchor, AnchorState::Tracked(_)) && self.lost_since.is_none() {
+                    self.lost_since = Some(Instant::now());
+                    return true;
                 }
             }
         }
+        false
+    }
+
+    /// Downgrades a still-lost tracked anchor to the virtual pose once
+    /// [`ANCHOR_LOSS_GRACE`] elapsed. Returns `true` when the anchor
+    /// state changed (the scene needs a redraw).
+    pub fn settle_anchor_loss(&mut self) -> bool {
+        match self.lost_since {
+            Some(since) if since.elapsed() >= ANCHOR_LOSS_GRACE => self.lost_since = None,
+            _ => return false,
+        }
+        if let AnchorState::Tracked(pose) = self.anchor {
+            self.anchor = AnchorState::Virtual(pose);
+            return true;
+        }
+        false
     }
 
     /// Releases all daemon registrations (`unregister_owner`).
