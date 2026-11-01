@@ -66,6 +66,12 @@ pub fn generate(config_path: &Path, masters_dir: &Path, out_dir: &Path) -> Resul
             }
             let file_name = asset.output.replace("{name}", &variant.name);
             let out_path = out_dir.join(&file_name);
+            if let Some(parent) = out_path.parent() {
+                fs::create_dir_all(parent).map_err(|source| ArtworkError::Io {
+                    path: parent.to_owned(),
+                    source,
+                })?;
+            }
             fs::write(&out_path, &svg).map_err(|source| ArtworkError::Io {
                 path: out_path.clone(),
                 source,

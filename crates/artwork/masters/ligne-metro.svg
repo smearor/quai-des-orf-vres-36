@@ -39,7 +39,7 @@
     </filter>
 
     <filter id="glowFilter">
-      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feGaussianBlur id="line-glow" stdDeviation="1.5" result="blur" />
       <feMerge>
         <feMergeNode in="blur" />
         <feMergeNode in="SourceGraphic" />
@@ -52,9 +52,12 @@
     <circle cx="0" cy="0" r="44" fill="url(#goldAcc)" stroke="#1c120a" stroke-width="2" />
     <circle cx="0" cy="0" r="39" fill="url(#badgeBg)" />
 
-    <!-- Line Colour Accent Ring (parametrized via #line-accent) -->
-    <circle id="line-accent" cx="0" cy="0" r="34" fill="none" stroke="#FFCD00" stroke-width="2.5" opacity="0.95" />
-    <circle cx="0" cy="0" r="30" fill="none" stroke="#05070a" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.9" />
+    <!-- Line Colour Accent Rings (parametrized via #line-accent;
+            the whole ring group is replaceable via fills on #line-rings) -->
+    <g id="line-rings">
+      <circle id="line-accent" cx="0" cy="0" r="34" fill="none" stroke="#FFCD00" stroke-width="2.5" opacity="0.95" />
+      <circle cx="0" cy="0" r="30" fill="none" stroke="#05070a" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.9" />
+    </g>
 
     <!-- Four Fleur-de-Lys / Ornate Corner Accents -->
     <g fill="url(#goldAcc)" opacity="0.9" stroke="#1c120a" stroke-width="0.5">

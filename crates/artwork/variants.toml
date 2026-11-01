@@ -17,7 +17,7 @@
 
 [[asset]]
 master = "pawn-disc.svg"
-output = "pawn-disc-ring-rank-letter-{name}.svg"
+output = "pawn/pawn-disc-ring-rank-letter-{name}.svg"
 
 # Detective pawn palette (style-book colours as mid stop, derived light/dark).
 [[asset.variant]]
@@ -70,7 +70,7 @@ texts = [{ id = "rank-letter", content = "I" }]
 # is too dark for the dark badge field.
 [[asset]]
 master = "ligne-metro.svg"
-output = "ligne-metro-{name}-colored.svg"
+output = "ligne/ligne-metro-{name}-colored.svg"
 
 [[asset.variant]]
 name = "m1"
@@ -189,7 +189,7 @@ texts = [{ id = "line-name", content = "M14" }]
 # label typography (substitutions), label text (texts).
 [[asset]]
 master = "station-marker.svg"
-output = "station-{name}.svg"
+output = "station/station-{name}.svg"
 
 [[asset.variant]]
 name = "taxi"
@@ -299,7 +299,7 @@ texts = [{ id = "station-label", content = "ÉGOUTS" }]
 # Landmark anchors use the same pin badge with landmark silhouettes.
 [[asset]]
 master = "station-marker.svg"
-output = "anchor-{name}.svg"
+output = "landmarks/anchor-{name}.svg"
 
 [[asset.variant]]
 name = "eiffel-tour"
@@ -386,3 +386,440 @@ fills = [
 <circle cx="0" cy="-5" r="3" fill="url(#goldAcc)" stroke="#1c120a" stroke-width="0.8" />''' },
 ]
 texts = [{ id = "station-label", content = "MOULIN ROUGE" }]
+[[asset.variant]]
+name = "colonne-de-juillet"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -44,-8 Q 0,-12 44,-8 Q 44,8 44,8 Q 0,12 -44,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.8" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -18,28 L -14,14 L 14,14 L 18,28 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-22" y="26" width="44" height="3" fill="url(#goldAcc)" />
+<rect x="-6" y="-20" width="12" height="34" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="-9" y="-23" width="18" height="3" fill="url(#goldAcc)" />
+<circle cx="0" cy="-26" r="3" fill="url(#goldAcc)" />
+<path d="M 0,-29 L 2,-35 M -1,-33 L 3,-33" stroke="url(#goldAcc)" stroke-width="1" stroke-linecap="round" />''' },
+]
+texts = [{ id = "station-label", content = "COLONNE DE JUILLET" }]
+
+[[asset.variant]]
+name = "gare-de-l-est"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -42,-8 Q 0,-12 42,-8 Q 42,8 42,8 Q 0,12 -42,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="2" width="60" height="24" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -24,2 C -24,-20 24,-20 24,2 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="0" y1="-8" x2="0" y2="-18" stroke="url(#goldAcc)" stroke-width="0.8" />
+<line x1="0" y1="-8" x2="-12" y2="-15" stroke="url(#goldAcc)" stroke-width="0.8" />
+<line x1="0" y1="-8" x2="12" y2="-15" stroke="url(#goldAcc)" stroke-width="0.8" />
+<circle cx="0" cy="-21" r="2" fill="url(#goldAcc)" />
+<rect x="-32" y="24" width="64" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "GARE DE L'EST" }]
+
+[[asset.variant]]
+name = "gare-de-lyon"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -42,-8 Q 0,-12 42,-8 Q 42,8 42,8 Q 0,12 -42,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-28" y="10" width="56" height="16" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-30" y="24" width="60" height="4" fill="url(#goldAcc)" />
+<rect x="6" y="-24" width="14" height="34" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="13" cy="-14" r="4.5" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<circle cx="13" cy="-14" r="1" fill="url(#goldAcc)" />
+<polygon points="6,-24 13,-32 20,-24" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "GARE DE LYON" }]
+
+[[asset.variant]]
+name = "musee-d-orsay"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -42,-8 Q 0,-12 42,-8 Q 42,8 42,8 Q 0,12 -42,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="0" width="60" height="26" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -30,0 C -30,-18 30,-18 30,0 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="0" cy="-2" r="9" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="0" cy="-2" r="2" fill="url(#goldAcc)" />
+<line x1="0" y1="-2" x2="0" y2="-7" stroke="url(#goldAcc)" stroke-width="1" />
+<line x1="0" y1="-2" x2="4" y2="-2" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-34" y="24" width="68" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "MUSÉE D'ORSAY" }]
+
+[[asset.variant]]
+name = "notre-dame"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -40,-8 Q 0,-12 40,-8 Q 40,8 40,8 Q 0,12 -40,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-24" y="0" width="48" height="26" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-24" y="-24" width="14" height="24" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="10" y="-24" width="14" height="24" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="0" cy="8" r="7" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="0" cy="8" r="2" fill="url(#goldAcc)" />
+<line x1="0" y1="0" x2="0" y2="-28" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="-26" y="24" width="52" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "NOTRE-DAME" }]
+
+[[asset.variant]]
+name = "pantheon"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -38,-8 Q 0,-12 38,-8 Q 38,8 38,8 Q 0,12 -38,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<polygon points="0,-2 -26,10 26,10" fill="url(#goldAcc)" />
+<rect x="-24" y="10" width="48" height="18" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<line x1="-18" y1="10" x2="-18" y2="28" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="-9" y1="10" x2="-9" y2="28" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="0" y1="10" x2="0" y2="28" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="9" y1="10" x2="9" y2="28" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="18" y1="10" x2="18" y2="28" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="-14" y="-14" width="28" height="12" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -12,-14 C -12,-30 12,-30 12,-14 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="0" y1="-30" x2="0" y2="-34" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-28" y="26" width="56" height="3" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "PANTHÉON" }]
+
+[[asset.variant]]
+name = "place-bastille"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -42,-8 Q 0,-12 42,-8 Q 42,8 42,8 Q 0,12 -42,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6.8" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.8" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<path d="M -28,28 L -28,12 L -20,12 L -20,16 L -16,16 L -16,28 M 16,28 L 16,16 L 20,16 L 20,12 L 28,12 L 28,28" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-30" y="26" width="60" height="3" fill="url(#goldAcc)" />
+<rect x="-5" y="-18" width="10" height="34" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="0" cy="-22" r="3" fill="url(#goldAcc)" />
+<line x1="0" y1="-25" x2="0" y2="-29" stroke="url(#goldAcc)" stroke-width="1" />''' },
+]
+texts = [{ id = "station-label", content = "PLACE BASTILLE" }]
+
+[[asset.variant]]
+name = "place-concorde"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -46,-8 Q 0,-12 46,-8 Q 46,8 46,8 Q 0,12 -46,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.8" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<polygon points="-12,28 -8,18 8,18 12,28" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-16" y="26" width="32" height="3" fill="url(#goldAcc)" />
+<polygon points="-5,18 -2,-22 2,-22 5,18" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<polygon points="-2,-22 0,-28 2,-22" fill="url(#goldAcc)" />
+<path d="M -24,24 Q -16,18 -10,24" stroke="url(#goldAcc)" stroke-width="1" fill="none" />
+<path d="M 10,24 Q 16,18 24,24" stroke="url(#goldAcc)" stroke-width="1" fill="none" />''' },
+]
+texts = [{ id = "station-label", content = "PLACE CONCORDE" }]
+
+[[asset.variant]]
+name = "place-republique"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -46,-8 Q 0,-12 46,-8 Q 46,8 46,8 Q 0,12 -46,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "6.2" },
+  { id = "station-label", attribute = "letter-spacing", value = "0.5" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<polygon points="-20,28 -14,8 14,8 20,28" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-24" y="26" width="48" height="3" fill="url(#goldAcc)" />
+<path d="M -6,8 L -5,-16 L -1,-24 L 2,-24 L 5,-16 L 6,8 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M -1,-24 C -2,-28 4,-28 3,-24 Z" fill="url(#goldAcc)" />
+<line x1="4" y1="-12" x2="12" y2="-18" stroke="url(#goldAcc)" stroke-width="1" stroke-linecap="round" />''' },
+]
+texts = [{ id = "station-label", content = "PLACE RÉPUBLIQUE" }]
+
+[[asset.variant]]
+name = "sacre-coeur"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -40,-8 Q 0,-12 40,-8 Q 40,8 40,8 Q 0,12 -40,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7.5" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-26" y="8" width="52" height="18" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -24,8 C -24,-4 -12,-4 -12,8 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M 12,8 C 12,-4 24,-4 24,8 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -14,8 C -14,-22 14,-22 14,8 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="-4" y="-26" width="8" height="5" fill="url(#goldAcc)" />
+<line x1="0" y1="-26" x2="0" y2="-32" stroke="url(#goldAcc)" stroke-width="1.2" />
+<line x1="-3" y1="-30" x2="3" y2="-30" stroke="url(#goldAcc)" stroke-width="1.2" />
+<rect x="-28" y="24" width="56" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "SACRÉ-CŒUR" }]
+
+[[asset.variant]]
+name = "opera-garnier"
+substitutions = [
+  { id = "station-glyph", attribute = "transform", value = "translate(100, 103)" },
+  { id = "station-plate", attribute = "d", value = "M -44,-8 Q 0,-12 44,-8 Q 44,8 44,8 Q 0,12 -44,8 Z" },
+  { id = "station-label", attribute = "font-size", value = "7" },
+  { id = "station-label", attribute = "letter-spacing", value = "1" },
+]
+fills = [
+  { id = "station-glyph", markup = '''
+<rect x="-30" y="8" width="60" height="20" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -24,28 L -24,18 C -24,14 -16,14 -16,18 L -16,28 M -8,28 L -8,18 C -8,14 0,14 0,18 L 0,28 M 8,28 L 8,18 C 8,14 16,14 16,18 L 16,28" stroke="url(#goldAcc)" stroke-width="0.8" fill="none" />
+<path d="M -28,8 L -28,-4 L 28,-4 L 28,8 Z" fill="#0d131d" stroke="url(#goldAcc)" stroke-width="1" />
+<path d="M -18,-4 C -18,-22 18,-22 18,-4 Z" fill="#141c2b" stroke="url(#goldAcc)" stroke-width="1.2" />
+<path d="M 0,-22 L 0,-28 M -3,-26 L 3,-26" stroke="url(#goldAcc)" stroke-width="1" />
+<rect x="-32" y="24" width="64" height="4" fill="url(#goldAcc)" />''' },
+]
+texts = [{ id = "station-label", content = "OPÉRA GARNIER" }]
+
+# Border pawn variant: same disc, star accent instead of the rank badge
+# (rank-badge group is replaced wholesale via fills).
+[[asset]]
+master = "pawn-disc.svg"
+output = "pawn/pawn-disc-border-{name}.svg"
+
+[[asset.variant]]
+name = "blue"
+substitutions = [
+  { id = "tint-light", attribute = "stop-color", value = "#6EA8F0" },
+  { id = "tint-mid", attribute = "stop-color", value = "#2563EB" },
+  { id = "tint-dark", attribute = "stop-color", value = "#122F6E" },
+]
+fills = [
+  { id = "rank-badge", markup = '''
+<g fill="url(#goldRing)" opacity="0.85" transform="translate(100, 100) scale(1.4)">
+  <polygon points="0,-25 3,-8 20,0 3,8 0,25 -3,8 -20,0 -3,-8" />
+  <circle r="6" fill="#0d111a" stroke="url(#goldRing)" stroke-width="1.5" />
+</g>''' },
+]
+
+# Neutral (uncoloured) line badge: gold ring + dashed inner ring, no accent.
+[[asset]]
+master = "ligne-metro.svg"
+output = "ligne/ligne-metro-{name}.svg"
+
+[[asset.variant]]
+name = "m1"
+substitutions = [
+  { id = "line-name", attribute = "fill", value = "#fef0cd" },
+  { id = "line-name", attribute = "stroke", value = "none" },
+  { id = "line-glow", attribute = "stdDeviation", value = "2" },
+]
+fills = [
+  { id = "line-rings", markup = '''
+<circle cx="0" cy="0" r="34" fill="none" stroke="url(#goldAcc)" stroke-width="1.2" />
+<circle cx="0" cy="0" r="30" fill="none" stroke="#2c3848" stroke-width="1" stroke-dasharray="4,3" opacity="0.8" />''' },
+]
+texts = [{ id = "line-name", content = "M1" }]
+
+# Belle-Époque ticket stubs. Per variant: paper/accent palette + frame/
+# notches/shadow/divider colours + header/title/subtitle/serial texts +
+# icon markup and offset.
+[[asset]]
+master = "ticket.svg"
+output = "ticket/ticket-{name}.svg"
+
+[[asset.variant]]
+name = "taxi"
+substitutions = [{ id = "ticket-glyph", attribute = "transform", value = "translate(42, 60)" }]
+texts = [
+  { id = "ticket-header", content = "COMPAGNIE DES TAXIS PARISIENS" },
+  { id = "ticket-title", content = "TAXI" },
+  { id = "ticket-subtitle", content = "COURSE URBAINE · TARIF 1" },
+  { id = "ticket-serial", content = "N° 03648" },
+]
+
+[[asset.variant]]
+name = "bus"
+substitutions = [{ id = "ticket-glyph", attribute = "transform", value = "translate(38, 56)" }]
+fills = [
+  { id = "ticket-glyph", markup = '''
+<rect x="10" y="24" width="76" height="18" rx="1" fill="#1c120a" />
+<rect x="16" y="27" width="12" height="11" rx="1" fill="#f4ebcf" />
+<rect x="32" y="27" width="12" height="11" rx="1" fill="#f4ebcf" />
+<rect x="48" y="27" width="12" height="11" rx="1" fill="#f4ebcf" />
+<rect x="64" y="27" width="16" height="11" rx="1" fill="#f4ebcf" />
+<path d="M 14,24 L 18,12 L 82,12 L 86,24 Z" fill="#2a1810" />
+<line x1="18" y1="12" x2="82" y2="12" stroke="#dfbe6f" stroke-width="1.5" />
+<rect x="24" y="15" width="8" height="9" fill="#f4ebcf" />
+<rect x="38" y="15" width="8" height="9" fill="#f4ebcf" />
+<rect x="52" y="15" width="8" height="9" fill="#f4ebcf" />
+<rect x="66" y="15" width="8" height="9" fill="#f4ebcf" />
+<rect x="8" y="40" width="80" height="3" fill="#542c15" />
+<circle cx="24" cy="45" r="7" fill="#111" />
+<circle cx="24" cy="45" r="3" fill="#dfbe6f" />
+<circle cx="72" cy="45" r="7" fill="#111" />
+<circle cx="72" cy="45" r="3" fill="#dfbe6f" />
+<rect x="36" y="6" width="24" height="6" rx="1" fill="#dfbe6f" stroke="#1c120a" stroke-width="0.8" />
+<text x="48" y="11" font-family="sans-serif" font-size="4.5" font-weight="bold" fill="#111" text-anchor="middle">LIGNE A</text>''' },
+]
+texts = [
+  { id = "ticket-header", content = "COMPAGNIE GENERALE DES OMNIBUS" },
+  { id = "ticket-title", content = "BUS" },
+  { id = "ticket-subtitle", content = "OMNIBUS · LIGNE IMPÉRIALE" },
+  { id = "ticket-serial", content = "N° 03649" },
+]
+
+[[asset.variant]]
+name = "metro"
+substitutions = [
+  { id = "ticket-paper-hi", attribute = "stop-color", value = "#fff5d1" },
+  { id = "ticket-paper-mid", attribute = "stop-color", value = "#f4e3b1" },
+  { id = "ticket-paper-lo", attribute = "stop-color", value = "#dec991" },
+  { id = "ticket-header", attribute = "letter-spacing", value = "3" },
+  { id = "ticket-glyph", attribute = "transform", value = "translate(42, 57)" },
+]
+fills = [
+  { id = "ticket-glyph", markup = '''
+<path d="M 10,32 Q 48,12 86,32 L 86,40 L 10,40 Z" fill="#2a1810" />
+<path d="M 14,40 L 14,24 Q 18,18 22,24 L 22,40 Z" fill="#542c15" />
+<path d="M 74,40 L 74,24 Q 78,18 82,24 L 82,40 Z" fill="#542c15" />
+<rect x="26" y="15" width="44" height="13" rx="1.5" fill="#1c120a" stroke="#dfbe6f" stroke-width="1" />
+<text x="48" y="24" font-family="'Times New Roman', serif" font-size="6" font-weight="bold" fill="#dfbe6f" text-anchor="middle" letter-spacing="1">MÉTROPOLITAIN</text>
+<rect x="6" y="40" width="84" height="4" rx="1" fill="#542c15" />''' },
+]
+texts = [
+  { id = "ticket-header", content = "CHEMIN DE FER METROPOLITAIN" },
+  { id = "ticket-title", content = "MÉTRO" },
+  { id = "ticket-subtitle", content = "ACCÈS SOUTERRAIN · 1ère CLASSE" },
+  { id = "ticket-serial", content = "N° 03650" },
+]
+
+[[asset.variant]]
+name = "batobus"
+substitutions = [
+  { id = "ticket-paper-hi", attribute = "stop-color", value = "#e8f4f8" },
+  { id = "ticket-paper-mid", attribute = "stop-color", value = "#d4e6ed" },
+  { id = "ticket-paper-lo", attribute = "stop-color", value = "#b8d2dc" },
+  { id = "ticket-frame", attribute = "stroke", value = "#1c3b48" },
+  { id = "ticket-header", attribute = "fill", value = "#1c3b48" },
+  { id = "ticket-header", attribute = "letter-spacing", value = "3" },
+  { id = "ticket-title", attribute = "fill", value = "#1c2d37" },
+  { id = "ticket-subtitle", attribute = "fill", value = "#234e5b" },
+  { id = "ticket-serial", attribute = "fill", value = "#1c3b48" },
+  { id = "ticket-glyph", attribute = "transform", value = "translate(38, 56)" },
+]
+fills = [
+  { id = "ticket-glyph", markup = '''
+<path d="M 6,42 Q 18,38 30,42 Q 42,46 54,42 Q 66,38 78,42 Q 90,46 94,42" fill="none" stroke="#234e5b" stroke-width="1.5" opacity="0.7" />
+<path d="M 12,34 L 22,26 L 74,26 L 84,34 Q 84,38 48,38 Q 12,38 12,34 Z" fill="#1c2d37" />
+<rect x="26" y="16" width="44" height="12" rx="1" fill="#2a4452" />
+<rect x="30" y="18" width="8" height="8" fill="#f4ebcf" opacity="0.9" />
+<rect x="42" y="18" width="8" height="8" fill="#f4ebcf" opacity="0.9" />
+<rect x="54" y="18" width="8" height="8" fill="#f4ebcf" opacity="0.9" />
+<line x1="48" y1="16" x2="48" y2="10" stroke="#1c2d37" stroke-width="1" />
+<rect x="22" y="14" width="52" height="3" rx="1" fill="#dfbe6f" />''' },
+]
+texts = [
+  { id = "ticket-header", content = "NAVIGATION FLUVIALE DE LA SEINE" },
+  { id = "ticket-title", content = "BATOBUS" },
+  { id = "ticket-subtitle", content = "NAVETTE FLUVIALE · LA SEINE" },
+  { id = "ticket-serial", content = "N° 03651" },
+]
+
+[[asset.variant]]
+name = "batobus-nuit"
+substitutions = [
+  { id = "ticket-paper-hi", attribute = "stop-color", value = "#141923" },
+  { id = "ticket-paper-mid", attribute = "stop-color", value = "#0b0e14" },
+  { id = "ticket-paper-lo", attribute = "stop-color", value = "#05070a" },
+  { id = "ticket-shadow", attribute = "flood-opacity", value = "0.7" },
+  { id = "ticket-notches", attribute = "fill", value = "#05070a" },
+  { id = "ticket-frame", attribute = "stroke", value = "#324454" },
+  { id = "ticket-header", attribute = "fill", value = "#dfbe6f" },
+  { id = "ticket-header", attribute = "letter-spacing", value = "3" },
+  { id = "ticket-title", attribute = "fill", value = "#fef0cd" },
+  { id = "ticket-subtitle", attribute = "fill", value = "#dfbe6f" },
+  { id = "ticket-serial", attribute = "fill", value = "#94a3b8" },
+  { id = "ticket-brand", attribute = "fill", value = "url(#ticketAcc)" },
+  { id = "ticket-glyph", attribute = "transform", value = "translate(38, 56)" },
+]
+fills = [
+  { id = "ticket-glyph", markup = '''
+<path d="M 6,42 Q 18,38 30,42 Q 42,46 54,42 Q 66,38 78,42 Q 90,46 94,42" fill="none" stroke="#dfbe6f" stroke-width="1.5" opacity="0.6" />
+<path d="M 12,34 L 22,26 L 74,26 L 84,34 Q 84,38 48,38 Q 12,38 12,34 Z" fill="#1c2d37" stroke="url(#ticketAcc)" stroke-width="1" />
+<rect x="26" y="16" width="44" height="12" rx="1" fill="#141c2b" stroke="url(#ticketAcc)" stroke-width="0.8" />
+<rect x="30" y="18" width="8" height="8" fill="#fef0cd" opacity="0.9" />
+<rect x="42" y="18" width="8" height="8" fill="#fef0cd" opacity="0.9" />
+<rect x="54" y="18" width="8" height="8" fill="#fef0cd" opacity="0.9" />
+<line x1="48" y1="16" x2="48" y2="10" stroke="url(#ticketAcc)" stroke-width="1" />
+<rect x="22" y="14" width="52" height="3" rx="1" fill="url(#ticketAcc)" />''' },
+]
+texts = [
+  { id = "ticket-header", content = "NAVIGATION FLUVIALE DE LA SEINE" },
+  { id = "ticket-title", content = "BATOBUS" },
+  { id = "ticket-subtitle", content = "NAVETTE FLUVIALE · NUIT" },
+  { id = "ticket-serial", content = "N° 03651-B" },
+]
+
+[[asset.variant]]
+name = "egouts"
+substitutions = [
+  { id = "ticket-paper-hi", attribute = "stop-color", value = "#1c2421" },
+  { id = "ticket-paper-mid", attribute = "stop-color", value = "#101513" },
+  { id = "ticket-paper-lo", attribute = "stop-color", value = "#070a09" },
+  { id = "ticket-acc-hi", attribute = "stop-color", value = "#8c7853" },
+  { id = "ticket-acc-mid", attribute = "stop-color", value = "#c2aa7a" },
+  { id = "ticket-acc-lo", attribute = "stop-color", value = "#8c7853" },
+  { id = "ticket-shadow", attribute = "flood-opacity", value = "0.8" },
+  { id = "ticket-notches", attribute = "fill", value = "#070a09" },
+  { id = "ticket-frame", attribute = "stroke", value = "#2c3a35" },
+  { id = "ticket-frame", attribute = "opacity", value = "0.5" },
+  { id = "ticket-header", attribute = "fill", value = "#76c799" },
+  { id = "ticket-header", attribute = "letter-spacing", value = "3" },
+  { id = "ticket-divider", attribute = "stroke", value = "#3b7a57" },
+  { id = "ticket-title", attribute = "fill", value = "#e2e8f0" },
+  { id = "ticket-subtitle", attribute = "fill", value = "#76c799" },
+  { id = "ticket-serial", attribute = "fill", value = "#64748b" },
+  { id = "ticket-brand", attribute = "fill", value = "url(#ticketAcc)" },
+  { id = "ticket-glyph", attribute = "transform", value = "translate(42, 55)" },
+]
+fills = [
+  { id = "ticket-glyph", markup = '''
+<path d="M 12,42 L 12,22 Q 12,10 48,10 Q 84,10 84,22 L 84,42 Z" fill="#141a18" stroke="url(#ticketAcc)" stroke-width="1.2" />
+<path d="M 18,42 L 18,24 Q 18,16 48,16 Q 78,16 78,24 L 78,42 Z" fill="#0b0e0d" />
+<path d="M 36,42 Q 48,38 60,42 Z" fill="#3b7a57" opacity="0.8" />
+<line x1="12" y1="28" x2="18" y2="28" stroke="#2c3a35" stroke-width="1" />
+<line x1="78" y1="28" x2="84" y2="28" stroke="#2c3a35" stroke-width="1" />
+<line x1="12" y1="36" x2="18" y2="36" stroke="#2c3a35" stroke-width="1" />
+<line x1="78" y1="36" x2="84" y2="36" stroke="#2c3a35" stroke-width="1" />
+<circle cx="48" cy="20" r="3" fill="#76c799" />''' },
+]
+texts = [
+  { id = "ticket-header", content = "RÉSEAU SOUTERRAIN · ÉGOUTS DE PARIS" },
+  { id = "ticket-title", content = "ÉGOUTS" },
+  { id = "ticket-subtitle", content = "GALERIES SECRÈTES · FUITE" },
+  { id = "ticket-serial", content = "N° 03652-SECRET" },
+]
+
