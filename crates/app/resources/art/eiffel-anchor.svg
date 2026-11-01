@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 156" width="140" height="156">
+  <!-- Eiffel anchor badge - in-world marker at Champ de Mars.
+       Self-authored (MIT). Comic palette: ring `anchor` #7C3AED,
+       silhouette `ink` #1C1917. Recolor the ring's stroke and the
+       group's fill for Belle Epoque / Neon variants. -->
+  <circle cx="70" cy="78" r="60" fill="none" stroke="#7C3AED" stroke-width="7"/>
+  <g fill="#1C1917">
+    <!-- Legs with the signature arch cutout (even-odd). -->
+    <path fill-rule="evenodd" d="
+      M 38 130
+      C 39 117 44 103 50 96
+      L 90 96
+      C 96 103 101 117 102 130
+      Z
+      M 54 130
+      C 57 120 63 114 70 114
+      C 77 114 83 120 86 130
+      Z"/>
+    <!-- First platform. -->
+    <rect x="46" y="88" width="48" height="8" rx="1"/>
+    <!-- Mid section tapering to the second platform. -->
+    <path d="M 54 88 C 58 79 61 70 61 62 L 79 62 C 79 70 82 79 86 88 Z"/>
+    <!-- Second platform. -->
+    <rect x="58" y="55" width="24" height="7" rx="1"/>
+    <!-- Spire. -->
+    <path d="M 62 55 C 64 46 66 39 66 33 L 74 33 C 74 39 76 46 78 55 Z"/>
+    <!-- Observation deck and antenna. -->
+    <rect x="64" y="27" width="12" height="6" rx="0.5"/>
+    <rect x="68.5" y="16" width="3" height="11"/>
+  </g>
+</svg>
