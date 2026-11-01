@@ -27,8 +27,8 @@ use unic_langid::LanguageIdentifier;
 #[command(name = "qdo36", about = "Quai des Orfèvres 36 - Scotland Yard for the smart desk")]
 struct Args {
     /// tangible-objects daemon GraphQL endpoint.
-    #[arg(long, default_value = "http://127.0.0.1:8080")]
-    daemon_url: String,
+    #[arg(long)]
+    daemon_url: Option<String>,
     /// Locale override (e.g. `de`, `en`).
     #[arg(long)]
     locale: Option<String>,
@@ -54,7 +54,9 @@ fn main() -> glib::ExitCode {
 
     let args = <Args as clap::Parser>::parse();
     let mut settings = AppSettings::load();
-    settings.daemon_url = args.daemon_url;
+    if let Some(daemon_url) = args.daemon_url {
+        settings.daemon_url = daemon_url;
+    }
     if let Some(locale) = args.locale.clone() {
         settings.locale = Some(locale);
     }
@@ -64,6 +66,9 @@ fn main() -> glib::ExitCode {
     if let Some(rotation) = args.display_rotation {
         settings.display_rotation = rotation;
     }
+    // CLI flags are sticky overrides: they land in the persisted
+    // settings and stay effective until changed again.
+    settings.save();
 
     let l10n = settings
         .locale

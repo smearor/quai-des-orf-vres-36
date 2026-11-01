@@ -58,7 +58,6 @@ impl AppSettings {
     }
 
     /// Persists settings, creating the directory when needed.
-    #[allow(dead_code)] // called once settings are mutated in a later phase
     pub fn save(&self) {
         let path = Self::path();
         if let Some(parent) = path.parent() {
