@@ -43,3 +43,4 @@ tracing-subscriber.workspace = true
 unic-langid.workspace = true
 async-channel.workspace = true
 futures-lite.workspace = true
+yeslogic-fontconfig-sys.workspace = true

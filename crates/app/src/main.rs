@@ -2,6 +2,7 @@
 
 mod anchor_tracker;
 mod controller;
+mod fonts;
 mod l10n;
 mod settings;
 mod tangible_host;
@@ -68,6 +69,10 @@ fn main() -> glib::ExitCode {
     let l10n = Rc::new(l10n);
 
     let application = adw::Application::builder().application_id("io.github.smearor.qdo36").build();
+
+    // Bundled OFL fonts must be registered before the first text layout,
+    // so they land here instead of inside `connect_activate`.
+    fonts::install();
 
     application.connect_activate(move |app| {
         if let Err(err) = Qdo36Icons::install() {

@@ -31,6 +31,7 @@ miette = "7.6"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 fontdb = "0.23"
+yeslogic-fontconfig-sys = "6"
 rustybuzz = "0.20"
 signal-hook = "0.4"
 # gtk
