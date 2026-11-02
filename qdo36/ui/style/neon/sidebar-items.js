@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["DIM","GLOW","SELECT"],"fn":["transport_color"],"struct":["NeonStyle"]};
+window.SIDEBAR_ITEMS = {"mod":["palette","style_renderer"]};

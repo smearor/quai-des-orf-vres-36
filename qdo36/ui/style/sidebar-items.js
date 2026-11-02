@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["polyline_path"],"mod":["alpha","color","comic","edge_spec","map_style","neon","renderer"]};
+window.SIDEBAR_ITEMS = {"mod":["alpha","belle_epoque","color","comic","edge_spec","map_style","neon","palette","path","renderer"]};

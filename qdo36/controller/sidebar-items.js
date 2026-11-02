@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["ACTIVE_CONTROLLER","ANCHOR_LOSS_GRACE"],"fn":["init_controller","set_active_controller","with_controller"],"struct":["Controller"]};
+window.SIDEBAR_ITEMS = {"constant":["ACTIVE_CONTROLLER"],"fn":["init_controller","set_active_controller","with_controller"],"struct":["Controller"]};

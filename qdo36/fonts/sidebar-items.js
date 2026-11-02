@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["bundled_fonts_dir","install"]};

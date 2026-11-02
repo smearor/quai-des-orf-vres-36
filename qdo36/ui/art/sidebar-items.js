@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["anchor","art_assets","asset_stem","doc_size","family","spec"]};

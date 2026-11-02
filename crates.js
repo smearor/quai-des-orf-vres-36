@@ -1,2 +1,2 @@
-window.ALL_CRATES = ["qdo36","qdo36_icons","qdo36_map","qdo36_mapgen","qdo36_material","qdo36_mcp","qdo36_moves","qdo36_session","qdo36_tangibles","qdo36_undo"];
-//{"start":21,"fragment_lengths":[7,14,12,15,17,12,14,16,18,13]}
+window.ALL_CRATES = ["qdo36","qdo36_artwork","qdo36_icons","qdo36_map","qdo36_mapgen","qdo36_material","qdo36_mcp","qdo36_moves","qdo36_session","qdo36_tangibles","qdo36_undo"];
+//{"start":21,"fragment_lengths":[7,16,14,12,15,17,12,14,16,18,13]}

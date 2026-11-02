@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ArtworkError"],"fn":["generate"],"struct":["Asset","InnerFill","Spec","StaticAsset","Substitution","TextFill","Variant"]};

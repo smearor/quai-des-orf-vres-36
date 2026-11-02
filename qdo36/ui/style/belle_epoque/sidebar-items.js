@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["palette","style_renderer"]};

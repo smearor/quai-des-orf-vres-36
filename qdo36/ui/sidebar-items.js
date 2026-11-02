@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["app_window","map_scene","style"]};
+window.SIDEBAR_ITEMS = {"mod":["app_window","art","map_scene","style"]};

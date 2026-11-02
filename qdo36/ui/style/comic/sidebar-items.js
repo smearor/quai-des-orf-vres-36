@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["transport_color"],"struct":["ComicStyle"]};
+window.SIDEBAR_ITEMS = {"mod":["palette","style_renderer"]};
