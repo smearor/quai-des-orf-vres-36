@@ -4,15 +4,17 @@
 use tangible_objects_model::Millimeters;
 
 use crate::ui::art::AnchorFrac;
+use crate::ui::art::ArtFamily;
+use crate::ui::art::AssetStem;
 use crate::ui::style::Alpha;
 use crate::ui::style::PxPos;
 
 /// One artwork instance to draw.
-pub struct ArtSpec<'a> {
-    /// The artwork family directory (`landmarks`, `map`, ...).
-    pub family: &'a str,
-    /// The asset filename without extension.
-    pub stem: &'a str,
+pub struct ArtSpec {
+    /// The artwork family.
+    pub family: ArtFamily,
+    /// The asset filename stem.
+    pub stem: AssetStem,
     /// Where the document anchor lands, in widget px.
     pub pos: PxPos,
     /// Rendered document height.

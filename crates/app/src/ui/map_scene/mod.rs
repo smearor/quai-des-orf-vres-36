@@ -6,6 +6,7 @@ pub mod render_stage;
 pub mod scene_state;
 pub mod widget;
 
+use cairo::Context;
 pub use pose_animator::PoseAnimator;
 pub use render_stage::RenderStage;
 pub use scene_state::SceneState;
@@ -18,7 +19,9 @@ use tangible_objects_model::Pixels;
 use tangible_objects_model::Vec2;
 
 use crate::ui::art::AnchorFrac;
+use crate::ui::art::ArtFamily;
 use crate::ui::art::ArtSpec;
+use crate::ui::art::AssetStem;
 use crate::ui::style::Alpha;
 use crate::ui::style::EdgeSpec;
 
@@ -26,7 +29,7 @@ use crate::ui::style::EdgeSpec;
 /// overlay - each element delegated to the active `StyleRenderer`.
 /// `pose` is the interpolated anchor pose for this frame; `width`x
 /// `height` is the widget size in px.
-pub fn render(ctx: &cairo::Context, state: &SceneState, pose: AnchorPose, width: Pixels, height: Pixels) {
+pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels, height: Pixels) {
     let map = state.map.as_ref();
     let stage = RenderStage::new(state, pose, width, height);
     let to_px = |pos| stage.to_px(pos);
@@ -44,10 +47,9 @@ pub fn render(ctx: &cairo::Context, state: &SceneState, pose: AnchorPose, width:
     }
     for landmark in &backdrop.landmarks {
         let pos = to_px(landmark.pos);
-        let stem = crate::ui::art::landmark_stem(landmark.name.as_str());
         let spec = ArtSpec {
-            family: "landmarks",
-            stem: &stem,
+            family: ArtFamily::Landmarks,
+            stem: AssetStem::for_landmark(landmark.name.as_str()),
             pos,
             height: Millimeters::new(14.0),
             anchor: AnchorFrac::PIN_TIP,
@@ -89,8 +91,8 @@ pub fn render(ctx: &cairo::Context, state: &SceneState, pose: AnchorPose, width:
     let tracked = matches!(state.anchor, AnchorState::Tracked(_));
     let anchor_pos = to_px(state.config.anchor_map_pos);
     let anchor_spec = ArtSpec {
-        family: "landmarks",
-        stem: "eiffel-anchor",
+        family: ArtFamily::Landmarks,
+        stem: AssetStem::new("eiffel-anchor"),
         pos: anchor_pos,
         height: Millimeters::new(16.0),
         anchor: AnchorFrac::PIN_TIP,
@@ -104,8 +106,8 @@ pub fn render(ctx: &cairo::Context, state: &SceneState, pose: AnchorPose, width:
     let bounds = state.map.bounds();
     let compass_pos = to_px(Vec2::new(bounds.x_max.as_f64() + 16.0, bounds.y_min.as_f64() - 16.0));
     let compass_spec = ArtSpec {
-        family: "map",
-        stem: "compass",
+        family: ArtFamily::Map,
+        stem: AssetStem::new("compass"),
         pos: compass_pos,
         height: Millimeters::new(26.0),
         anchor: AnchorFrac::CENTER,

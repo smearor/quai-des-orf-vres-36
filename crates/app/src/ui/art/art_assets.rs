@@ -6,15 +6,18 @@
 //! per path; missing files resolve to `None` so callers fall back to
 //! the `StyleRenderer` primitives.
 
+use cairo::{Context, Rectangle};
+use rsvg::{CairoRenderer, SvgHandle};
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
 use std::rc::Rc;
-
 use tangible_objects_model::PixelsPerMm;
 use tracing::warn;
 
+use crate::ui::art::ArtFamily;
 use crate::ui::art::ArtSpec;
+use crate::ui::art::DocumentSize;
 use crate::ui::style::MapStyle;
 
 /// The city the artwork namespace resolves under.
@@ -25,9 +28,9 @@ pub struct ArtAssets {
     /// The `resources/art` root.
     root: PathBuf,
     /// Loaded handles by file path.
-    handles: RefCell<HashMap<PathBuf, Rc<rsvg::SvgHandle>>>,
+    handles: RefCell<HashMap<PathBuf, Rc<SvgHandle>>>,
     /// Paths that failed to load - do not retry every frame.
-    misses: RefCell<std::collections::HashSet<PathBuf>>,
+    misses: RefCell<HashSet<PathBuf>>,
 }
 
 impl ArtAssets {
@@ -38,7 +41,7 @@ impl ArtAssets {
         Rc::new(Self {
             root,
             handles: RefCell::new(HashMap::new()),
-            misses: RefCell::new(std::collections::HashSet::new()),
+            misses: RefCell::new(HashSet::new()),
         })
     }
 
@@ -59,22 +62,21 @@ impl ArtAssets {
     /// fraction (document coordinates 0..1) sitting on `pos`.
     /// Returns `false` when the asset does not exist - the caller
     /// then paints its primitive fallback.
-    pub fn draw(&self, ctx: &cairo::Context, style: MapStyle, spec: &ArtSpec<'_>, px_per_mm: PixelsPerMm) -> bool {
-        let Some(handle) = self.handle(spec.family, style, spec.stem) else {
+    pub fn draw(&self, ctx: &Context, style: MapStyle, spec: &ArtSpec, px_per_mm: PixelsPerMm) -> bool {
+        let Some(handle) = self.handle(spec.family, style, spec.stem.as_str()) else {
             return false;
         };
         let height = px_per_mm.scale(spec.height.as_f64());
-        let (intrinsic_w, intrinsic_h) = self.intrinsic_size(&handle);
-        if intrinsic_h <= 0.0 || intrinsic_w <= 0.0 {
+        let Some(aspect) = self.intrinsic_size(&handle).and_then(|size| size.aspect()) else {
             return false;
-        }
-        let width = height * intrinsic_w / intrinsic_h;
-        let rect = cairo::Rectangle::new(spec.pos.x - spec.anchor.x * width, spec.pos.y - spec.anchor.y * height, width, height);
+        };
+        let width = height * aspect;
+        let rect = Rectangle::new(spec.pos.x - spec.anchor.x * width, spec.pos.y - spec.anchor.y * height, width, height);
         if spec.alpha.as_f64() >= 0.999 {
-            rsvg::CairoRenderer::new(&handle).render_document(ctx, &rect).is_ok()
+            CairoRenderer::new(&handle).render_document(ctx, &rect).is_ok()
         } else {
             ctx.push_group();
-            let drawn = rsvg::CairoRenderer::new(&handle).render_document(ctx, &rect).is_ok();
+            let drawn = CairoRenderer::new(&handle).render_document(ctx, &rect).is_ok();
             if drawn {
                 ctx.pop_group_to_source().ok();
                 ctx.paint_with_alpha(spec.alpha.as_f64()).ok();
@@ -86,8 +88,8 @@ impl ArtAssets {
     }
 
     /// The cached handle for `art/{family}/{city}/{style}/{stem}.svg`.
-    fn handle(&self, family: &str, style: MapStyle, stem: &str) -> Option<Rc<rsvg::SvgHandle>> {
-        let path = self.root.join(family).join(CITY).join(style.namespace()).join(format!("{stem}.svg"));
+    fn handle(&self, family: ArtFamily, style: MapStyle, stem: &str) -> Option<Rc<SvgHandle>> {
+        let path = self.root.join(family.dir_name()).join(CITY).join(style.namespace()).join(format!("{stem}.svg"));
         if let Some(handle) = self.handles.borrow().get(&path) {
             return Some(handle.clone());
         }
@@ -108,18 +110,13 @@ impl ArtAssets {
         }
     }
 
-    /// The SVG's natural document size (viewBox / width x height).
-    /// The SVG's aspect: the `viewBox` where pixels are not absolute
-    /// (our generated assets use `width="100%"`).
-    fn intrinsic_size(&self, handle: &rsvg::SvgHandle) -> (f64, f64) {
-        let renderer = rsvg::CairoRenderer::new(handle);
-        if let Some(size) = renderer.intrinsic_size_in_pixels() {
-            return size;
+    /// The SVG's intrinsic size: the `viewBox` where pixels are not
+    /// absolute (our generated assets use `width="100%"`).
+    fn intrinsic_size(&self, handle: &SvgHandle) -> Option<DocumentSize> {
+        let renderer = CairoRenderer::new(handle);
+        if let Some((width, height)) = renderer.intrinsic_size_in_pixels() {
+            return Some(DocumentSize::new(width, height));
         }
-        renderer
-            .intrinsic_dimensions()
-            .vbox
-            .map(|vbox| (vbox.width(), vbox.height()))
-            .unwrap_or((0.0, 0.0))
+        renderer.intrinsic_dimensions().vbox.map(|vbox| DocumentSize::new(vbox.width(), vbox.height()))
     }
 }
