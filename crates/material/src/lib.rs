@@ -10,6 +10,7 @@ pub mod pawn_color;
 pub mod pawn_id;
 pub mod role;
 pub mod round_number;
+pub mod seat_count;
 pub mod ticket_counts;
 pub mod ticket_kind;
 
@@ -19,5 +20,6 @@ pub use pawn_color::PawnColor;
 pub use pawn_id::PawnId;
 pub use role::Role;
 pub use round_number::RoundNumber;
+pub use seat_count::SeatCount;
 pub use ticket_counts::TicketCounts;
 pub use ticket_kind::TicketKind;
