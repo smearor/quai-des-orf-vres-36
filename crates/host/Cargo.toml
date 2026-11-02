@@ -1,0 +1,17 @@
+[package]
+name = "qdo36-host"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Session host for Quai des Orfèvres 36: owns the GameSession behind the MCP command channel"
+
+[dependencies]
+qdo36-map.workspace = true
+qdo36-material.workspace = true
+qdo36-mcp.workspace = true
+qdo36-moves.workspace = true
+qdo36-session.workspace = true
+rand.workspace = true

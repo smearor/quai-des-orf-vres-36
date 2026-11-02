@@ -24,3 +24,7 @@ serde_json.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 tracing.workspace = true
+
+[dev-dependencies]
+qdo36-host = { path = "../host" }
+rand.workspace = true

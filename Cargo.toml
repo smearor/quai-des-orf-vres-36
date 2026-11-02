@@ -18,6 +18,7 @@ qdo36-map = { path = "crates/map" }
 qdo36-material = { path = "crates/material" }
 qdo36-moves = { path = "crates/moves" }
 qdo36-session = { path = "crates/session" }
+qdo36-host = { path = "crates/host" }
 qdo36-undo = { path = "crates/undo" }
 qdo36-tangibles = { path = "crates/tangibles" }
 qdo36-icons = { path = "crates/icons" }

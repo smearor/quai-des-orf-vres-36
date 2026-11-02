@@ -3,7 +3,6 @@
 mod anchor_tracker;
 mod controller;
 mod fonts;
-mod game_host;
 mod heading_offset_deg;
 mod l10n;
 mod mcp_bridge;

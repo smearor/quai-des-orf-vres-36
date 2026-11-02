@@ -1,9 +1,10 @@
-//! `GameHost` - the app-side owner of the live [`GameSession`].
+//! `GameHost` - the owner of the live [`GameSession`].
 //!
-//! MCP commands arrive over an `async_channel`, get executed here on
-//! the GTK main loop and replied via oneshot - the session stays
-//! app-owned, physical and agent inputs share `request_move` (WP05
-//! R3/R5). The host is deliberately GTK-free and headless-testable.
+//! MCP commands arrive over an `async_channel`, get executed here
+//! (on the app's glib main loop, or a headless runner's thread) and
+//! replied via oneshot - physical and agent inputs share
+//! `request_move` (WP05 R3/R5). The host is deliberately GTK-free
+//! and `Send`-compatible: the map is held behind `Arc`.
 
 use qdo36_map::GameMap;
 use qdo36_material::Role;
@@ -21,8 +22,9 @@ use qdo36_session::GameSession;
 use qdo36_session::PlayerToken;
 use qdo36_session::RevealPreset;
 use rand::Rng;
+use rand::rngs::StdRng;
 use std::collections::BTreeMap;
-use std::rc::Rc;
+use std::sync::Arc;
 
 /// Owns the running session, the seat↔token registry and the map the
 /// rules engine validates against.
@@ -30,17 +32,17 @@ pub struct GameHost {
     /// The dealt game, if any.
     session: Option<GameSession>,
     /// The loaded city map (set at scene load).
-    map: Option<Rc<GameMap>>,
+    map: Option<Arc<GameMap>>,
     /// Issued agent credentials → claimed seat.
     players: BTreeMap<PlayerToken, Role>,
     /// Deal/token draw source.
-    rng: rand::rngs::StdRng,
+    rng: StdRng,
 }
 
 impl GameHost {
     /// A host with the given draw source (`StdRng::seed_from_u64` in
     /// tests, `from_rng` in the app).
-    pub fn with_rng(rng: rand::rngs::StdRng) -> Self {
+    pub fn with_rng(rng: StdRng) -> Self {
         Self {
             session: None,
             map: None,
@@ -49,8 +51,9 @@ impl GameHost {
         }
     }
 
-    /// The map moves are validated against.
-    pub fn set_map(&mut self, map: Rc<GameMap>) {
+    /// The map moves are validated against (`Arc` keeps the host
+    /// `Send` for headless drains).
+    pub fn set_map(&mut self, map: Arc<GameMap>) {
         self.map = Some(map);
     }
 
@@ -76,7 +79,7 @@ impl GameHost {
     /// Deals a fresh game; `None` takes the map's defaults (city
     /// stocks, reveal rounds, max rounds). Resets the token registry.
     fn new_game(&mut self, config: Option<GameConfig>) -> CommandReply {
-        let map = self.map.clone().ok_or(McpError::StateUnavailable)?;
+        let map = Arc::clone(self.map.as_ref().ok_or(McpError::StateUnavailable)?);
         let config = config.unwrap_or_else(|| GameConfig::for_map(map.meta()));
         config.validate()?;
         let session = GameSession::deal(config, &map, &mut self.rng)?;
@@ -161,7 +164,7 @@ impl GameHost {
     /// role so agents cannot impersonate other seats.
     fn play(&mut self, token: PlayerToken, mut request: MoveRequest) -> CommandReply {
         let role = self.seat_of(token)?;
-        let map = self.map.clone().ok_or(McpError::StateUnavailable)?;
+        let map = Arc::clone(self.map.as_ref().ok_or(McpError::StateUnavailable)?);
         request.actor = role;
         let outcome = self.session_mut()?.request_move(&map, &request)?;
         Ok(CommandResult::Moved(outcome))
@@ -176,14 +179,15 @@ impl GameHost {
 mod tests {
     use super::*;
     use qdo36_material::PawnId;
+    use qdo36_material::TicketKind;
     use qdo36_mcp::RoleClaim;
     use qdo36_moves::MoveKind;
     use rand::SeedableRng;
 
     fn host() -> GameHost {
         let map = GameMap::bundled().unwrap_or_else(|_| panic!("map"));
-        let mut host = GameHost::with_rng(rand::rngs::StdRng::seed_from_u64(36));
-        host.set_map(Rc::new(map));
+        let mut host = GameHost::with_rng(StdRng::seed_from_u64(36));
+        host.set_map(Arc::new(map));
         host
     }
 
@@ -245,7 +249,7 @@ mod tests {
             token: detective,
             request: MoveRequest {
                 actor: Role::Fugitive,
-                ticket: qdo36_material::TicketKind::Taxi,
+                ticket: TicketKind::Taxi,
                 kind: MoveKind::Single(hop),
             },
         });
@@ -257,7 +261,7 @@ mod tests {
         let mut host = dealt_host();
         host.handle(&CommandKind::SetConfig {
             reveal: None,
-            max_rounds: Some(qdo36_material::RoundNumber::new(30)),
+            max_rounds: Some(RoundNumber::new(30)),
         })
         .unwrap_or_else(|_| panic!("set_config"));
         assert_eq!(host.session.as_ref().unwrap_or_else(|| panic!()).config.max_rounds.number(), 30);
@@ -265,7 +269,7 @@ mod tests {
         let err = host
             .handle(&CommandKind::SetConfig {
                 reveal: None,
-                max_rounds: Some(qdo36_material::RoundNumber::new(30)),
+                max_rounds: Some(RoundNumber::new(30)),
             })
             .err()
             .unwrap_or_else(|| panic!());

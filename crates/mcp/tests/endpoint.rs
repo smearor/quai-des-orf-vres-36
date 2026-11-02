@@ -1,10 +1,15 @@
-//! Endpoint smoke test: spawn, handshake, and a `tools/call` over
-//! real HTTP - no GTK involved (the state arrives via `watch`).
+//! Endpoint smoke test: spawn, handshake, and `tools/call`s over
+//! real HTTP - no GTK involved (the state arrives via `watch`,
+//! commands travel the request channel).
 
+use qdo36_host::GameHost;
+use qdo36_map::GameMap;
 use qdo36_mcp::CommandResult;
 use qdo36_mcp::GameRequest;
 use qdo36_mcp::StateSnapshot;
 use qdo36_mcp::spawn_http;
+use rand::SeedableRng;
+use rand::rngs::StdRng;
 use std::net::SocketAddr;
 use std::time::Duration;
 use tokio::io::AsyncReadExt;
@@ -56,6 +61,28 @@ async fn post(addr: SocketAddr, session: Option<&str>, body: &str) -> String {
 }
 
 /// The `mcp-session-id` header value out of a raw response.
+/// The tool reply's JSON payload: HTTP body → `data:`/`{` line →
+/// `content[0].text` → the serialized `CommandResult` JSON.
+fn tool_payload(response: &str) -> serde_json::Value {
+    let body = response.split("\r\n\r\n").nth(1).unwrap_or_default();
+    let payload_line = body
+        .lines()
+        .filter_map(|line| line.strip_prefix("data: ").or_else(|| line.starts_with('{').then_some(line)))
+        .find(|line| !line.trim().is_empty())
+        .unwrap_or_default();
+    let json: serde_json::Value = serde_json::from_str(payload_line).unwrap_or_else(|_| serde_json::json!({}));
+    let text = json["result"]["content"][0]["text"].as_str().unwrap_or_default();
+    serde_json::from_str(text).unwrap_or_else(|_| serde_json::json!({}))
+}
+
+/// Fires a `tools/call` and returns the parsed reply payload.
+async fn call(addr: SocketAddr, session: &str, id: u32, name: &str, args: serde_json::Value) -> serde_json::Value {
+    let body = serde_json::json!({"jsonrpc":"2.0","id":id,"method":"tools/call","params":{"name":name,"arguments":args}}).to_string();
+    let response = post(addr, Some(session), &body).await;
+    assert!(!response.contains("\"isError\":true"), "{name} failed:\n{response}");
+    tool_payload(&response)
+}
+
 fn session_id(response: &str) -> String {
     response
         .lines()
@@ -121,4 +148,59 @@ async fn serves_tools_over_streamable_http() {
         response.contains("game_began") || response.contains("GameBegan"),
         "command channel did not answer:\n{response}"
     );
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn plays_a_move_end_to_end() {
+    let addr: SocketAddr = "127.0.0.1:19878".parse().unwrap_or_else(|_| unreachable!());
+    let (_state_tx, state_rx) = tokio::sync::watch::channel(StateSnapshot::default());
+    let (command_tx, command_rx) = async_channel::unbounded::<GameRequest>();
+    spawn_http(command_tx, state_rx, addr);
+
+    let map = GameMap::bundled().unwrap_or_else(|_| panic!("bundled map"));
+    tokio::spawn(async move {
+        let mut host = GameHost::with_rng(StdRng::seed_from_u64(36));
+        host.set_map(std::sync::Arc::new(map));
+        while let Ok(request) = command_rx.recv().await {
+            let _ = request.reply.send(host.handle(&request.command));
+        }
+    });
+
+    sleep(Duration::from_millis(300)).await;
+    let response = post(
+        addr,
+        None,
+        r#"{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"e2e","version":"0"}}}"#,
+    )
+    .await;
+    let session = session_id(&response);
+    let _ = post(addr, Some(&session), r#"{"jsonrpc":"2.0","method":"notifications/initialized"}"#).await;
+
+    // Deal → begin → join as the fugitive.
+    call(addr, &session, 2, "new_game", serde_json::json!({})).await;
+    call(addr, &session, 3, "begin_game", serde_json::json!({})).await;
+    let joined = call(addr, &session, 4, "join_game", serde_json::json!({"claim": "fugitive"})).await;
+    let token = joined["joined"]["token"].as_str().unwrap_or_default().to_string();
+    assert!(token.len() == 16, "join_game should return a hex token:\n{joined}");
+
+    // The fugitive token sees his position; a legal hop is his
+    // neighbour via an affordable transport (taxi covers most edges;
+    // pick the first legal hop outright).
+    let view = call(addr, &session, 5, "game_state", serde_json::json!({"token": token})).await;
+    assert!(view["state"]["fugitive_pos"].is_u64(), "fugitive token should see the position:\n{view}");
+    let legal = call(addr, &session, 6, "legal_moves", serde_json::json!({"token": token})).await;
+    let hop = &legal["legal"][0];
+    assert!(hop.is_object(), "legal_moves should list hops:\n{legal}");
+
+    // Play the hop through request_move; the black ticket covers any
+    // transport (the first legal hop could be a batobus edge).
+    let args = serde_json::json!({
+        "token": token,
+        "ticket": "black",
+        "from": view["state"]["fugitive_pos"],
+        "transport": hop["transport"],
+        "to": hop["to"],
+    });
+    let moved = call(addr, &session, 7, "request_move", args).await;
+    assert!(moved.get("moved").is_some(), "request_move should apply:\n{moved}");
 }

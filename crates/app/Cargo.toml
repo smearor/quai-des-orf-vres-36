@@ -17,6 +17,7 @@ qdo36-map.workspace = true
 qdo36-material.workspace = true
 qdo36-moves.workspace = true
 qdo36-session.workspace = true
+qdo36-host.workspace = true
 qdo36-undo.workspace = true
 qdo36-tangibles.workspace = true
 qdo36-icons.workspace = true

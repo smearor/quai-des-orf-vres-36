@@ -7,8 +7,8 @@
 //! the document and forwards commands - no GTK access from the
 //! server, ever (WP05 R5).
 
-use crate::game_host::GameHost;
 use glib::MainContext;
+use qdo36_host::GameHost;
 use qdo36_map::GameMap;
 use qdo36_mcp::AnchorStateSnapshot;
 use qdo36_mcp::GameRequest;
@@ -64,9 +64,10 @@ pub fn attach(addr: SocketAddr) {
 }
 
 /// Hands the loaded map to the game host so `request_move` can
-/// validate against it. Called once at scene load.
+/// validate against it. Called once at scene load; the `Rc` is
+/// cloned into an `Arc` so the host stays `Send`.
 pub fn set_game_map(map: Rc<GameMap>) {
-    with_game_host(|host| host.set_map(map));
+    with_game_host(|host| host.set_map(std::sync::Arc::new(map.as_ref().clone())));
 }
 
 /// Publishes the current session snapshot (`move_log`, `game_config`,

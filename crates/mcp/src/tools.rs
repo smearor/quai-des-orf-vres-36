@@ -109,9 +109,10 @@ impl QdoMcp {
 
 impl QdoMcp {
     /// Forwards a command to the app-side game host and serializes
-    /// the typed reply.
+    /// the `CommandResult` - a domain failure becomes a tool-level
+    /// `isError` reply instead of an `{"Err": ...}` payload.
     async fn forward(&self, kind: CommandKind) -> Result<CallToolResult, ErrorData> {
-        let result = self.command(kind).await?;
+        let result = self.command(kind).await??;
         self.reply(&result)
     }
 
