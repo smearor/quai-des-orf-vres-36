@@ -171,7 +171,9 @@ impl AppWindow {
                     let loss_started = {
                         let mut controller = controller.borrow_mut();
                         let loss_started = controller.apply_event(&event);
-                        state.borrow_mut().anchor = controller.anchor();
+                        let anchor = controller.anchor();
+                        state.borrow_mut().anchor = anchor;
+                        crate::mcp_bridge::publish_state(&anchor, surface.as_ref());
                         loss_started
                     };
                     this.scene.update(Rc::new(state.borrow().clone()));

@@ -5,6 +5,7 @@ mod controller;
 mod fonts;
 mod heading_offset_deg;
 mod l10n;
+mod mcp_bridge;
 mod settings;
 mod tangible_host;
 mod ui;
@@ -80,7 +81,14 @@ fn main() -> glib::ExitCode {
     // so they land here instead of inside `connect_activate`.
     fonts::install();
 
+    // The MCP endpoint shares state through a watch snapshot; without
+    // the flag the app runs unchanged.
+    let mcp_listen = args.mcp_listen;
+
     application.connect_activate(move |app| {
+        if let Some(addr) = mcp_listen {
+            mcp_bridge::attach(addr);
+        }
         if let Err(err) = Qdo36Icons::install() {
             warn!("icon set install failed: {err}");
         }

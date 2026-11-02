@@ -1,10 +1,12 @@
+use serde::Deserialize;
+use serde::Serialize;
 use tangible_objects_model::Millimeters;
 
 /// The touch surface's size in millimeters (from `deviceInfo`).
 ///
 /// The bounds every field set is built against and clipped into, and
 /// the scale basis for surface-mm ↔ pixel conversion.
-#[derive(Debug, Clone, Copy, Default, PartialEq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub struct SurfaceMm {
     /// Surface width in screen mm.
     pub width: Millimeters,
