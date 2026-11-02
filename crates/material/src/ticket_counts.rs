@@ -18,6 +18,38 @@ pub struct TicketCounts {
 }
 
 impl TicketCounts {
+    /// `u8::MAX` stands for an effectively unlimited stock
+    /// (Fugitive's travel tickets).
+    pub const UNLIMITED: u8 = u8::MAX;
+    /// The starting inventory of a detective (classic Scotland Yard:
+    /// 10 taxi, 8 bus, 4 metro).
+    pub const DETECTIVE_START: Self = Self {
+        taxi: 10,
+        bus: 8,
+        metro: 4,
+        black: 0,
+        double: 0,
+    };
+    /// Fugitive's starting pool: unlimited travel plus 5 black and
+    /// 2 double tickets.
+    pub const FUGITIVE_START: Self = Self {
+        taxi: Self::UNLIMITED,
+        bus: Self::UNLIMITED,
+        metro: Self::UNLIMITED,
+        black: 5,
+        double: 2,
+    };
+
+    /// The default detective stock - for serde `default` attributes.
+    pub const fn detective_start() -> Self {
+        Self::DETECTIVE_START
+    }
+
+    /// The default fugitive stock - for serde `default` attributes.
+    pub const fn fugitive_start() -> Self {
+        Self::FUGITIVE_START
+    }
+
     /// The remaining count of a ticket kind.
     pub fn get(&self, kind: TicketKind) -> u8 {
         match kind {
