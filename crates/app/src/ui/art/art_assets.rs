@@ -16,6 +16,7 @@ use std::collections::HashSet;
 use std::path::PathBuf;
 use std::rc::Rc;
 use tangible_objects_model::PixelsPerMm;
+use tracing::debug;
 use tracing::warn;
 
 use crate::ui::art::ArtFamily;
@@ -99,6 +100,9 @@ impl ArtAssets {
         if self.misses.borrow().contains(&path) {
             return None;
         }
+        // A missing file is the expected fallback path (not every
+        // backdrop landmark ships artwork); only real load/parse
+        // failures deserve a warning.
         match rsvg::Loader::new().read_path(&path) {
             Ok(handle) => {
                 let handle = Rc::new(handle);
@@ -106,7 +110,11 @@ impl ArtAssets {
                 Some(handle)
             }
             Err(err) => {
-                warn!(path = %path.display(), "artwork asset failed to load: {err}");
+                if path.exists() {
+                    warn!(path = %path.display(), "artwork asset failed to load: {err}");
+                } else {
+                    debug!(path = %path.display(), "no artwork asset, primitive fallback");
+                }
                 self.misses.borrow_mut().insert(path);
                 None
             }
