@@ -27,6 +27,15 @@ impl MoveKind {
         }
     }
 
+    /// The hops of this move in order (one for `Single`, two for
+    /// `Double`).
+    pub fn hops(&self) -> Vec<Hop> {
+        match self {
+            Self::Single(hop) => vec![*hop],
+            Self::Double { first, second } => vec![*first, *second],
+        }
+    }
+
     /// The station the move ends on.
     pub fn destination(&self) -> qdo36_map::StationId {
         match self {
