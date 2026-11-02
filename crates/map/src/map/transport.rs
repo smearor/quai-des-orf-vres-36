@@ -1,7 +1,7 @@
+use qdo36_material::TicketKind;
 use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
-use qdo36_material::TicketKind;
 
 /// Transport mode of an edge (a travel route between two stations).
 ///
