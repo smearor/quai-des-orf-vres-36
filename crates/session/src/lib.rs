@@ -8,6 +8,8 @@ pub mod config;
 pub mod error;
 pub mod game;
 pub mod player;
+mod restoration_plan;
+mod restore_step;
 
 pub use config::GameConfig;
 pub use config::RevealPreset;
@@ -16,3 +18,5 @@ pub use error::SessionError;
 pub use game::GameSession;
 pub use game::GameState;
 pub use player::PlayerToken;
+pub use restoration_plan::RestorationPlan;
+pub use restore_step::RestoreStep;
