@@ -1,19 +1,22 @@
 //! Undo/redo: chess-style memento over the `past`/`future` stacks,
 //! returning a physical [`RestorationPlan`] per step.
 
+use qdo36_moves::GamePhase;
+
 use crate::RestorationPlan;
 use crate::game::session::GameSession;
 
 impl GameSession {
-    /// Whether undo is possible right now (also gated by
-    /// `config.allow_undo`).
+    /// Whether undo is possible right now - gated by
+    /// `config.allow_undo` and the `InProgress` phase (no undoing a
+    /// finished game).
     pub fn can_undo(&self) -> bool {
-        self.config.allow_undo && !self.past.is_empty()
+        self.config.allow_undo && self.state.phase == GamePhase::InProgress && !self.past.is_empty()
     }
 
     /// Whether redo is possible right now.
     pub fn can_redo(&self) -> bool {
-        self.config.allow_undo && !self.future.is_empty()
+        self.config.allow_undo && self.state.phase == GamePhase::InProgress && !self.future.is_empty()
     }
 
     /// Reverts the last move; the returned plan lists the physical
