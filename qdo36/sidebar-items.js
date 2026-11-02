@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["install_css","install_shutdown_handlers","main"],"mod":["anchor_tracker","controller","fonts","heading_offset_deg","l10n","settings","tangible_host","ui"],"struct":["Args"]};
+window.SIDEBAR_ITEMS = {"fn":["install_css","install_shutdown_handlers","main"],"mod":["anchor_tracker","controller","fonts","heading_offset_deg","l10n","mcp_bridge","settings","tangible_host","ui"],"struct":["Args"]};

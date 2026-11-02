@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["MCP_STATE_WATCH"],"fn":["attach","publish_map","publish_state"]};

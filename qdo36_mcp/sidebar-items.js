@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {};
+window.SIDEBAR_ITEMS = {"constant":["STATE_URI"],"enum":["McpError"],"fn":["spawn_http"],"struct":["AnchorStateSnapshot","MapInfo","RotationDeg","StateSnapshot"]};
