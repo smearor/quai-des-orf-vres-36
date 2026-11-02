@@ -1,6 +1,7 @@
 use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
+use qdo36_material::TicketKind;
 
 /// Transport mode of an edge (a travel route between two stations).
 ///
@@ -26,6 +27,17 @@ pub enum Transport {
 impl Transport {
     /// Every transport kind.
     pub const ALL: [Self; 5] = [Self::Taxi, Self::Bus, Self::Metro, Self::Batobus, Self::Underground];
+
+    /// The transport a ticket pays for; `Black` and `Double` accept
+    /// any edge, so they have no fixed transport (`None`).
+    pub const fn for_ticket(ticket: TicketKind) -> Option<Self> {
+        match ticket {
+            TicketKind::Taxi => Some(Self::Taxi),
+            TicketKind::Bus => Some(Self::Bus),
+            TicketKind::Metro => Some(Self::Metro),
+            TicketKind::Black | TicketKind::Double => None,
+        }
+    }
 }
 
 impl fmt::Display for Transport {

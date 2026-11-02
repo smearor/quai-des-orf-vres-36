@@ -177,17 +177,6 @@ impl GameSession {
         Some(plan)
     }
 
-    /// The transport a ticket pays for; `Black` and `Double` accept
-    /// any regular edge (batobus is checked separately).
-    fn required_transport(ticket: TicketKind) -> Option<Transport> {
-        match ticket {
-            TicketKind::Taxi => Some(Transport::Taxi),
-            TicketKind::Bus => Some(Transport::Bus),
-            TicketKind::Metro => Some(Transport::Metro),
-            TicketKind::Black | TicketKind::Double => None,
-        }
-    }
-
     /// The actor's current station.
     fn position_of(&self, role: Role) -> Option<StationId> {
         match role {
@@ -260,7 +249,7 @@ impl GameSession {
     /// Every hop must start/end on real stations, ride an edge of a
     /// ticket-compatible transport, and land on an unoccupied station.
     fn validate_hops(&self, map: &GameMap, request: &MoveRequest) -> Result<(), MoveError> {
-        let required = Self::required_transport(request.ticket);
+        let required = Transport::for_ticket(request.ticket);
         let mut passed = self.position_of(request.actor);
         for hop in request.kind.hops() {
             if map.station(hop.to).is_none() {
