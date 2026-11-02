@@ -12,6 +12,7 @@ description = "Game session for Quai des Orfèvres 36: lifecycle, config, undo s
 qdo36-map.workspace = true
 qdo36-material.workspace = true
 qdo36-moves.workspace = true
+rand.workspace = true
 serde.workspace = true
 thiserror.workspace = true
 toml.workspace = true

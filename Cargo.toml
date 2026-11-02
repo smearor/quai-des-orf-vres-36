@@ -35,6 +35,7 @@ yeslogic-fontconfig-sys = "6"
 librsvg = "2.63"
 rustybuzz = "0.20"
 signal-hook = "0.4"
+rand = "0.10"
 # gtk
 gtk4 = { version = "0.11", features = ["v4_20"] }
 libadwaita = { version = "0.9", features = ["v1_5"] }

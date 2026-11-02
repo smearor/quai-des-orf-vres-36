@@ -2807,6 +2807,7 @@ dependencies = [
  "qdo36-map",
  "qdo36-material",
  "qdo36-moves",
+ "rand 0.10.3",
  "serde",
  "thiserror 2.0.21",
  "toml 1.1.8+spec-1.1.0",
