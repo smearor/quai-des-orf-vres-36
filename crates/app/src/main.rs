@@ -3,11 +3,13 @@
 mod anchor_tracker;
 mod controller;
 mod fonts;
+mod heading_offset_deg;
 mod l10n;
 mod settings;
 mod tangible_host;
 mod ui;
 
+use crate::heading_offset_deg::HeadingOffsetDeg;
 use crate::l10n::L10n;
 use crate::settings::AppSettings;
 use crate::ui::app_window::AppWindow;
@@ -47,6 +49,10 @@ struct Args {
     /// landscape touchscreen).
     #[arg(long, value_name = "0|90|180|270")]
     display_rotation: Option<DisplayRotation>,
+    /// Calibration offset between the Eiffel tower's pin frame and
+    /// map north, in degrees.
+    #[arg(long, value_name = "DEG")]
+    heading_offset: Option<HeadingOffsetDeg>,
 }
 
 fn main() -> glib::ExitCode {

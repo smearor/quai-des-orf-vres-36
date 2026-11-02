@@ -211,7 +211,8 @@ impl AppWindow {
             .or_else(|| map.stations().next())
             .map(|station| station.pos)
             .unwrap_or_else(|| Vec2::new(0.0, 0.0));
-        let config = AnchorConfig::at_station(map.bounds(), anchor_pos);
+        let mut config = AnchorConfig::at_station(map.bounds(), anchor_pos);
+        config.heading_offset = self.settings.heading_offset_deg.to_rotation_rad();
         SceneState {
             map: map.clone(),
             config,

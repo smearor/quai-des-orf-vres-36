@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 use crate::Args;
+use crate::heading_offset_deg::HeadingOffsetDeg;
 use crate::ui::style::MapStyle;
 use qdo36_map::City;
 use qdo36_tangibles::MapScale;
@@ -28,6 +29,10 @@ pub struct AppSettings {
     /// The map render style.
     #[serde(default)]
     pub map_style: MapStyle,
+    /// Calibration offset between the Eiffel tower profile's pin
+    /// frame and map north, in degrees (WP04 data model).
+    #[serde(default)]
+    pub heading_offset_deg: HeadingOffsetDeg,
 }
 
 impl Default for AppSettings {
@@ -39,6 +44,7 @@ impl Default for AppSettings {
             map_scale: MapScale::default(),
             display_rotation: DisplayRotation::default(),
             map_style: MapStyle::default(),
+            heading_offset_deg: HeadingOffsetDeg::default(),
         }
     }
 }
@@ -72,6 +78,9 @@ impl AppSettings {
         }
         if let Some(rotation) = args.display_rotation {
             self.display_rotation = rotation;
+        }
+        if let Some(heading) = args.heading_offset {
+            self.heading_offset_deg = heading;
         }
     }
 
