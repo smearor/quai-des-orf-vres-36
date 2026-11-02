@@ -22,11 +22,13 @@ pub use spec::ArtSpec;
 
 #[cfg(test)]
 mod tests {
-    use cairo::{Context, Format, ImageSurface};
     use super::*;
     use crate::ui::style::Alpha;
     use crate::ui::style::MapStyle;
     use crate::ui::style::PxPos;
+    use cairo::Context;
+    use cairo::Format;
+    use cairo::ImageSurface;
     use tangible_objects_model::Millimeters;
     use tangible_objects_model::PixelsPerMm;
 

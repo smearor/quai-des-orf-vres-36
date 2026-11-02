@@ -6,10 +6,13 @@
 //! per path; missing files resolve to `None` so callers fall back to
 //! the `StyleRenderer` primitives.
 
-use cairo::{Context, Rectangle};
-use rsvg::{CairoRenderer, SvgHandle};
+use cairo::Context;
+use cairo::Rectangle;
+use rsvg::CairoRenderer;
+use rsvg::SvgHandle;
 use std::cell::RefCell;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
+use std::collections::HashSet;
 use std::path::PathBuf;
 use std::rc::Rc;
 use tangible_objects_model::PixelsPerMm;
