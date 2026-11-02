@@ -22,6 +22,13 @@ pub enum TicketKind {
     Double,
 }
 
+impl TicketKind {
+    /// Whether the ticket is Fugitive-only.
+    pub fn is_fugitive_only(self) -> bool {
+        matches!(self, Self::Black | Self::Double)
+    }
+}
+
 impl fmt::Display for TicketKind {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let name = match self {
