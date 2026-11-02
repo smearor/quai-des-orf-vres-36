@@ -5,6 +5,8 @@ use qdo36_map::GameMap;
 use qdo36_map::Transport;
 use qdo36_material::PawnId;
 use qdo36_material::Role;
+use qdo36_material::RoundNumber;
+use qdo36_material::TicketCounts;
 use qdo36_material::TicketKind;
 use qdo36_moves::GameOutcome;
 use qdo36_moves::GamePhase;
@@ -314,4 +316,82 @@ fn public_view_hides_fugitive_until_reveal() {
     let schedule = session.config.reveal_schedule();
     let view = session.state.log.fugitive_public_view(&schedule);
     assert_eq!(view[0].destination.is_none(), !schedule.is_reveal(session.state.round));
+}
+
+#[test]
+fn reveal_round_surfaces_the_position() {
+    let (mut session, map) = running();
+    // Scripted: the next move is logged in reveal round 3.
+    session.state.round = RoundNumber::new(3);
+    let hop = session.legal_destinations(&map, Role::Fugitive)[0];
+    session.request_move(&map, &request(&session, hop)).unwrap_or_else(|err| panic!("{err}"));
+    let view = session.state.log.fugitive_public_view(&session.config.reveal_schedule());
+    assert_eq!(view[0].destination, Some(hop.to), "a reveal-round entry is public");
+}
+
+#[test]
+fn double_move_spends_two_hops_in_one_turn() {
+    let (mut session, map) = running();
+    let first = session.legal_destinations(&map, Role::Fugitive)[0];
+    let second = map.neighbors(first.to).iter().find(|n| session.station_free(n.station)).map(|n| Hop {
+        from: first.to,
+        to: n.station,
+        transport: n.transport,
+    });
+    let Some(second) = second else { return };
+    let request = MoveRequest {
+        actor: Role::Fugitive,
+        ticket: TicketKind::Double,
+        kind: MoveKind::Double { first, second },
+    };
+    session.request_move(&map, &request).unwrap_or_else(|err| panic!("{err}"));
+    assert_eq!(session.state.fugitive_pos, second.to, "the second hop decides the position");
+    assert_eq!(session.state.log.entries.len(), 1, "a double move is one log entry");
+    assert_eq!(session.state.tickets[&Role::Fugitive].double, session.config.fugitive_stock.double - 1);
+}
+
+#[test]
+fn stuck_detectives_are_skipped_in_turn_order() {
+    let (mut session, map) = running();
+    session
+        .request_move(&map, &request(&session, session.legal_destinations(&map, Role::Fugitive)[0]))
+        .unwrap_or_else(|err| panic!("{err}"));
+    // Immobilize the detective who follows the active one.
+    let seats: Vec<PawnId> = session.state.positions.keys().copied().collect();
+    let current = match session.state.active {
+        Role::Detective(pawn) => pawn,
+        Role::Fugitive => panic!("a detective must be active"),
+    };
+    let next_seat = seats.iter().find(|seat| **seat > current).copied();
+    let Some(stuck_pawn) = next_seat else { return };
+    session.state.tickets.insert(Role::Detective(stuck_pawn), TicketCounts::default());
+    let hop = session.legal_destinations(&map, session.state.active)[0];
+    session.request_move(&map, &request(&session, hop)).unwrap_or_else(|err| panic!("{err}"));
+    assert_ne!(session.state.active, Role::Detective(stuck_pawn), "a stuck detective is skipped");
+}
+
+#[test]
+fn allow_undo_false_blocks_the_stacks() {
+    let map = GameMap::bundled().unwrap_or_else(|_| panic!());
+    let mut config = GameConfig::for_map(map.meta());
+    config.allow_undo = false;
+    let mut session = GameSession::deal(config, &map, &mut StdRng::seed_from_u64(36)).unwrap_or_else(|_| panic!("deal"));
+    session.begin().unwrap_or_else(|_| panic!("begin"));
+    let hop = session.legal_destinations(&map, Role::Fugitive)[0];
+    session.request_move(&map, &request(&session, hop)).unwrap_or_else(|err| panic!("{err}"));
+    assert!(!session.can_undo(), "the config gate wins over a non-empty stack");
+    assert!(session.undo().is_none());
+}
+
+#[test]
+fn a_new_move_clears_the_redo_stack() {
+    let (mut session, map) = running();
+    session
+        .request_move(&map, &request(&session, session.legal_destinations(&map, Role::Fugitive)[0]))
+        .unwrap_or_else(|err| panic!("{err}"));
+    session.undo().unwrap_or_else(|| panic!("undo"));
+    assert!(session.can_redo());
+    let hop = session.legal_destinations(&map, Role::Fugitive)[0];
+    session.request_move(&map, &request(&session, hop)).unwrap_or_else(|err| panic!("{err}"));
+    assert!(!session.can_redo(), "a fresh move discards the future");
 }

@@ -10,6 +10,7 @@ pub mod game;
 pub mod player;
 mod restoration_plan;
 mod restore_step;
+mod saved_game;
 
 pub use config::GameConfig;
 pub use config::RevealPreset;
@@ -20,3 +21,4 @@ pub use game::GameState;
 pub use player::PlayerToken;
 pub use restoration_plan::RestorationPlan;
 pub use restore_step::RestoreStep;
+pub use saved_game::SavedGame;

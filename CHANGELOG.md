@@ -43,3 +43,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `heading_offset_deg` calibration (settings + `--heading-offset`
   flag, `HeadingOffsetDeg` newtype) feeding the existing
   `AnchorConfig.heading_offset` map-north correspondence
+- `qdo36-mcp` server: Streamable HTTP endpoint (`/mcp`) on a dedicated
+  Tokio thread behind `--mcp-listen`, host allowlisting for concrete
+  binds, typed `StateSnapshot` over a `watch` channel, and the
+  `anchor_state`/`map_info` introspection tools
+- WP06 rules engine (`qdo36-session`): `GameSession::deal` samples
+  curated start stations via injected RNG (deterministic deals for
+  tests and the balancing simulator); `begin` opens the turn cycle.
+  `request_move` runs the ordered pipeline phase → turn → ticket →
+  route → occupancy → apply with per-reason `MoveError`s (incl.
+  `TicketShapeMismatch`, `BatobusRequiresBlack`); side effects:
+  position/stock updates, spent detective tickets feeding Fugitive's
+  pool, `GameLog` records, stuck-detective turn skips, and the three
+  win conditions (capture, round cap, all-stuck). `legal_destinations`
+  powers UI hints and simulations; chess-style `undo`/`redo`
+  (`allow_undo` + `InProgress` gated) returns a `RestorationPlan` that
+  keeps Fugitive moves physically invisible; `SavedGame` snapshots the
+  full session to TOML (`ordered_map` serde keeps typed map keys) and
+  re-validates on restore. Configurable `detective_stock`/
+  `fugitive_stock` on `GameConfig`/`MapMeta` for city balancing.
+  Engine split `session/{mod,validate,apply,undo,tests}.rs`;
+  `SeatCount`/`MoveShape`/`TicketCounts::{UNLIMITED,DETECTIVE_START,
+  FUGITIVE_START,gain}`/`Transport::for_ticket`/`DetectiveCount::pawns`
