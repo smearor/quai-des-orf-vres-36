@@ -47,7 +47,10 @@ impl fmt::Display for AssetStem {
 
 /// Lowercase, de-accent, and fold punctuation into dashes.
 fn slugify(name: &str) -> String {
+    // Ligatures expand first (`Cœur` -> `coeur`), then 1:1 de-accent.
     name.to_lowercase()
+        .replace('œ', "oe")
+        .replace('æ', "ae")
         .chars()
         .map(|ch| match ch {
             'à' | 'â' | 'ä' => 'a',
