@@ -4,6 +4,7 @@
 pub mod error;
 pub mod hop;
 pub mod kind;
+pub mod outcome;
 pub mod record;
 pub mod request;
 pub mod shape;
@@ -11,6 +12,7 @@ pub mod shape;
 pub use error::MoveError;
 pub use hop::Hop;
 pub use kind::MoveKind;
+pub use outcome::MoveOutcome;
 pub use record::MoveRecord;
 pub use request::MoveRequest;
 pub use shape::MoveShape;

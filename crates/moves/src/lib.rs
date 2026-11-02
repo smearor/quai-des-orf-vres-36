@@ -16,6 +16,7 @@ pub use game::RevealSchedule;
 pub use moves::Hop;
 pub use moves::MoveError;
 pub use moves::MoveKind;
+pub use moves::MoveOutcome;
 pub use moves::MoveRecord;
 pub use moves::MoveRequest;
 pub use moves::MoveShape;
