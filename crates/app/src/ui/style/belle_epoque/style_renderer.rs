@@ -2,8 +2,6 @@ use cairo::Context;
 use cairo::FontSlant;
 use cairo::FontWeight;
 use cairo::LineCap;
-use qdo36_map::GameMap;
-use qdo36_map::LineName;
 use qdo36_map::Transport;
 use std::f64::consts::TAU;
 use tangible_objects_model::Millimeters;
@@ -11,6 +9,7 @@ use tangible_objects_model::Pixels;
 use tangible_objects_model::PixelsPerMm;
 use tangible_objects_model::Vec2;
 
+use super::palette::PALETTE;
 use crate::ui::style::Alpha;
 use crate::ui::style::EdgeSpec;
 use crate::ui::style::PxPos;
@@ -24,18 +23,9 @@ use crate::ui::style::polyline_path;
 #[derive(Debug, Clone, Copy)]
 pub struct BelleEpoqueStyle;
 
-/// Warm parchment paper.
-const PAPER: RgbColor = RgbColor::new(0.97, 0.92, 0.81);
-/// Sepia engraving ink.
-const INK: RgbColor = RgbColor::new(0.33, 0.17, 0.08);
-/// Muted gold accent.
-const GOLD: RgbColor = RgbColor::new(0.72, 0.53, 0.11);
-/// Pale engraved water wash.
-const WATER: RgbColor = RgbColor::new(0.62, 0.72, 0.78);
-
 impl StyleRenderer for BelleEpoqueStyle {
     fn paper(&self) -> RgbColor {
-        PAPER
+        PALETTE.paper
     }
 
     fn draw_water(&self, ctx: &Context, points: &[Vec2<Millimeters>], px_per_mm: PixelsPerMm, to_px: &dyn Fn(Vec2<Millimeters>) -> PxPos) {
@@ -44,10 +34,10 @@ impl StyleRenderer for BelleEpoqueStyle {
         // down the middle, like the bank lines on period maps.
         polyline_path(ctx, points, to_px);
         ctx.set_line_width(px_per_mm.scale(6.0));
-        WATER.apply(ctx);
+        PALETTE.water.apply(ctx);
         ctx.stroke_preserve().ok();
         ctx.set_line_width(px_per_mm.scale(0.6).max(0.3));
-        INK.apply_alpha(ctx, Alpha::new(0.55));
+        PALETTE.ink.apply_alpha(ctx, Alpha::new(0.55));
         ctx.stroke().ok();
     }
 
@@ -59,7 +49,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         if edge.transport == Transport::Underground {
             ctx.set_dash(&[px.scale(3.2), px.scale(2.4)], 0.0);
             ctx.set_line_width(px.scale(1.2).max(0.4));
-            INK.apply_alpha(ctx, Alpha::new(0.6));
+            PALETTE.underground.apply_alpha(ctx, Alpha::new(0.6));
             ctx.stroke().ok();
             ctx.set_dash(&[], 0.0);
             return;
@@ -67,20 +57,20 @@ impl StyleRenderer for BelleEpoqueStyle {
         // Engraving frame: a fine sepia hairline under the route color,
         // so every line reads like a plated double-rule.
         ctx.set_line_width(px.scale(2.6).max(0.6));
-        INK.apply_alpha(ctx, Alpha::new(0.45));
+        PALETTE.ink.apply_alpha(ctx, Alpha::new(0.45));
         ctx.stroke_preserve().ok();
         ctx.set_line_width(px.scale(1.6).max(0.4));
-        transport_color(edge.transport, edge.line, edge.map).apply(ctx);
+        PALETTE.transport_color(edge.transport, edge.line, edge.map).apply(ctx);
         ctx.stroke().ok();
     }
 
     fn draw_landmark(&self, ctx: &Context, pos: PxPos, px_per_mm: PixelsPerMm) {
         let radius = px_per_mm.scale(2.2).max(0.5);
-        INK.apply_alpha(ctx, Alpha::new(0.75));
+        PALETTE.ink.apply_alpha(ctx, Alpha::new(0.75));
         ctx.set_line_width(1.0);
         ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
         ctx.stroke().ok();
-        GOLD.apply_alpha(ctx, Alpha::new(0.6));
+        PALETTE.accent.apply_alpha(ctx, Alpha::new(0.6));
         ctx.arc(pos.x, pos.y, radius * 0.6, 0.0, TAU);
         ctx.stroke().ok();
     }
@@ -88,22 +78,22 @@ impl StyleRenderer for BelleEpoqueStyle {
     fn draw_station(&self, ctx: &Context, pos: PxPos, selected: bool, px_per_mm: PixelsPerMm) {
         let radius = px_per_mm.scale(2.6).max(0.4);
         ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
-        PAPER.apply(ctx);
+        PALETTE.station.apply(ctx);
         ctx.fill_preserve().ok();
         ctx.set_line_width(1.1);
-        INK.apply(ctx);
+        PALETTE.ink.apply(ctx);
         ctx.stroke().ok();
         // Ornamental inner ring, like the plated station badges.
         ctx.arc(pos.x, pos.y, radius * 0.68, 0.0, TAU);
-        GOLD.apply_alpha(ctx, Alpha::new(0.8));
+        PALETTE.accent.apply_alpha(ctx, Alpha::new(0.8));
         ctx.set_line_width(0.6);
         ctx.stroke().ok();
         if selected {
             ctx.arc(pos.x, pos.y, radius + px_per_mm.scale(2.4).max(0.4), 0.0, TAU);
-            GOLD.apply(ctx);
+            PALETTE.select.apply(ctx);
             ctx.set_line_width(1.6);
             ctx.stroke_preserve().ok();
-            INK.apply_alpha(ctx, Alpha::new(0.4));
+            PALETTE.ink.apply_alpha(ctx, Alpha::new(0.4));
             ctx.set_line_width(0.7);
             ctx.stroke().ok();
         }
@@ -114,7 +104,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         ctx.set_font_size(px_per_mm.scale(3.6).max(8.0));
         let Ok(extents) = ctx.text_extents(name) else { return };
         ctx.move_to(pos.x - extents.width() / 2.0, pos.y + radius.as_f64() + px_per_mm.scale(5.2).max(9.5));
-        INK.apply(ctx);
+        PALETTE.label.apply(ctx);
         ctx.show_text(name).ok();
     }
 
@@ -122,11 +112,11 @@ impl StyleRenderer for BelleEpoqueStyle {
         let radius = px_per_mm.scale(5.5).max(0.5);
         ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
         if tracked {
-            INK.apply(ctx);
+            PALETTE.ink.apply(ctx);
             ctx.fill_preserve().ok();
-            GOLD.apply(ctx);
+            PALETTE.accent.apply(ctx);
         } else {
-            GOLD.apply_alpha(ctx, Alpha::new(0.7));
+            PALETTE.dim.apply_alpha(ctx, Alpha::new(0.7));
         }
         ctx.set_line_width(1.6);
         ctx.stroke().ok();
@@ -139,36 +129,18 @@ impl StyleRenderer for BelleEpoqueStyle {
         let (pad_x, pad_y) = (16.0, 11.0);
         let (box_w, box_h) = (extents.width() + 2.0 * pad_x, extents.height() + 2.0 * pad_y);
         let (x, y) = ((width.as_f64() - box_w) / 2.0, height.as_f64() - box_h - 24.0);
-        PAPER.apply_alpha(ctx, Alpha::new(0.94));
+        PALETTE.panel.apply_alpha(ctx, Alpha::new(0.94));
         ctx.rectangle(x, y, box_w, box_h);
         ctx.fill().ok();
-        GOLD.apply(ctx);
+        PALETTE.accent.apply(ctx);
         ctx.rectangle(x, y, box_w, box_h);
         ctx.set_line_width(1.5);
         ctx.stroke().ok();
         ctx.rectangle(x + 2.5, y + 2.5, box_w - 5.0, box_h - 5.0);
         ctx.set_line_width(0.7);
         ctx.stroke().ok();
-        INK.apply(ctx);
+        PALETTE.label.apply(ctx);
         ctx.move_to(x + pad_x - extents.x_bearing(), y + pad_y - extents.y_bearing());
         ctx.show_text(text).ok();
-    }
-}
-
-/// Edge color per transport; metro edges carry their declared RATP
-/// line color, the rest use muted period tones.
-fn transport_color(transport: Transport, line: Option<&LineName>, map: &GameMap) -> RgbColor {
-    match transport {
-        Transport::Taxi => RgbColor::new(0.78, 0.60, 0.08),
-        Transport::Bus => RgbColor::new(0.22, 0.42, 0.28),
-        Transport::Batobus => RgbColor::new(0.18, 0.45, 0.52),
-        Transport::Underground => INK,
-        Transport::Metro => line
-            .and_then(|name| map.meta().lines.get(name))
-            .map(|color| {
-                let [r, g, b] = color.rgb_u8();
-                RgbColor::from_u8(r, g, b)
-            })
-            .unwrap_or(INK),
     }
 }
