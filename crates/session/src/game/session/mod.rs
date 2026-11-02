@@ -67,32 +67,34 @@ impl GameSession {
     /// balancing simulator seed it deterministically.
     pub fn deal(config: GameConfig, map: &GameMap, rng: &mut impl Rng) -> Result<Self, SessionError> {
         config.validate()?;
-        let detectives = config.detectives.count() as usize;
         let seats = SeatCount::for_game(config.detectives);
         let starts: Vec<StationId> = map.start_stations().map(|station| station.id).collect();
-        let dealt: Vec<StationId> = starts.sample(rng, seats.count() as usize).copied().collect();
-        if dealt.len() < seats.count() as usize {
+        let dealt: Vec<StationId> = starts.sample(rng, seats.as_usize()).copied().collect();
+        if dealt.len() < seats.as_usize() {
             return Err(SessionError::TooFewStartStations {
                 needed: seats,
-                available: SeatCount::new(starts.len() as u8),
+                available: SeatCount::of_len(starts.len()),
             });
         }
-        let positions: BTreeMap<PawnId, StationId> = dealt
-            .iter()
-            .take(detectives)
-            .enumerate()
-            .map(|(seat, station)| (PawnId::new(seat as u8), *station))
-            .collect();
+        // Deal layout: one station per detective, the last one hides
+        // Fugitive.
+        let positions: BTreeMap<PawnId, StationId> = config.detectives.pawns().zip(dealt.iter().copied()).collect();
+        let Some(&fugitive_pos) = dealt.last() else {
+            return Err(SessionError::TooFewStartStations {
+                needed: seats,
+                available: SeatCount::of_len(0),
+            });
+        };
         let mut tickets = BTreeMap::new();
-        for seat in 0..detectives {
-            tickets.insert(Role::Detective(PawnId::new(seat as u8)), config.detective_stock);
+        for pawn in config.detectives.pawns() {
+            tickets.insert(Role::Detective(pawn), config.detective_stock);
         }
         tickets.insert(Role::Fugitive, config.fugitive_stock);
         Ok(Self {
             config,
             state: GameState {
                 positions,
-                fugitive_pos: dealt[detectives],
+                fugitive_pos,
                 tickets,
                 round: RoundNumber::new(1),
                 active: Role::Fugitive,

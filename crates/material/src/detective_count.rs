@@ -1,3 +1,4 @@
+use crate::PawnId;
 use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
@@ -20,6 +21,11 @@ impl DetectiveCount {
     /// The numeric count.
     pub const fn count(self) -> u8 {
         self.0
+    }
+
+    /// The pawn ids of the detective seats, in seat order.
+    pub fn pawns(self) -> impl Iterator<Item = PawnId> {
+        (0..self.0).map(PawnId::new)
     }
 }
 

@@ -19,6 +19,17 @@ impl SeatCount {
         Self(count)
     }
 
+    /// A seat count measured off a collection; saturates at `u8::MAX`
+    /// (only used for error reporting).
+    pub fn of_len(len: usize) -> Self {
+        Self(u8::try_from(len).unwrap_or(u8::MAX))
+    }
+
+    /// The count as `usize`, for collection APIs.
+    pub const fn as_usize(self) -> usize {
+        self.0 as usize
+    }
+
     /// The seats a game needs: one per detective plus Fugitive's
     /// hidden start.
     pub fn for_game(detectives: DetectiveCount) -> Self {
