@@ -18,6 +18,7 @@ pub use config::TangibleMode;
 pub use error::SessionError;
 pub use game::GameSession;
 pub use game::GameState;
+pub use player::BadTokenFormat;
 pub use player::PlayerToken;
 pub use restoration_plan::RestorationPlan;
 pub use restore_step::RestoreStep;

@@ -2,4 +2,5 @@
 
 pub mod token;
 
+pub use token::BadTokenFormat;
 pub use token::PlayerToken;

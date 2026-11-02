@@ -53,6 +53,26 @@ impl fmt::Display for Transport {
     }
 }
 
+impl std::str::FromStr for Transport {
+    type Err = UnknownTransport;
+
+    fn from_str(name: &str) -> Result<Self, Self::Err> {
+        match name {
+            "taxi" => Ok(Self::Taxi),
+            "bus" => Ok(Self::Bus),
+            "metro" => Ok(Self::Metro),
+            "batobus" => Ok(Self::Batobus),
+            "underground" => Ok(Self::Underground),
+            other => Err(UnknownTransport(other.to_string())),
+        }
+    }
+}
+
+/// Error for an unrecognized transport name.
+#[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
+#[error("unknown transport {0:?}")]
+pub struct UnknownTransport(pub String);
+
 #[cfg(test)]
 mod tests {
     use super::*;

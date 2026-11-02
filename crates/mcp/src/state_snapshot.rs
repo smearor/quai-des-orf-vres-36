@@ -1,6 +1,7 @@
 //! `StateSnapshot` - the shared watch document the app publishes and
 //! the MCP tools serve.
 
+use qdo36_session::GameSession;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -15,4 +16,8 @@ pub struct StateSnapshot {
     pub anchor: AnchorStateSnapshot,
     /// Static map facts, `Some` once a city map is loaded.
     pub map: Option<MapInfo>,
+    /// The live session the app hosts; `None` until a game is dealt.
+    /// Carries Fugitive's hidden position - the tools, never the
+    /// transport, enforce the secrecy split (WP05 R4).
+    pub game: Option<GameSession>,
 }

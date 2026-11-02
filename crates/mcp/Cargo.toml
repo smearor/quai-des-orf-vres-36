@@ -10,9 +10,12 @@ description = "Game-domain MCP server for Quai des Orfèvres 36 (introspection a
 
 [dependencies]
 qdo36-map.workspace = true
+qdo36-material.workspace = true
+qdo36-moves.workspace = true
 qdo36-session.workspace = true
 qdo36-tangibles.workspace = true
 tangible-objects-model.workspace = true
+async-channel.workspace = true
 axum.workspace = true
 rmcp.workspace = true
 schemars.workspace = true

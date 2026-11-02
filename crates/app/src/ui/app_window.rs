@@ -6,6 +6,7 @@ use crate::controller;
 use crate::controller::Controller;
 use crate::l10n::L10n;
 use crate::mcp_bridge::publish_map;
+use crate::mcp_bridge::set_game_map;
 use crate::settings::AppSettings;
 use crate::tangible_host::TangibleHost;
 use crate::ui::map_scene::MapScene;
@@ -217,6 +218,7 @@ impl AppWindow {
             .map(|station| station.pos)
             .unwrap_or_else(|| Vec2::new(0.0, 0.0));
         publish_map(MapInfo::from_map(map, Some(anchor_pos)));
+        set_game_map(map.clone());
         let mut config = AnchorConfig::at_station(map.bounds(), anchor_pos);
         config.heading_offset = self.settings.heading_offset_deg.to_rotation_rad();
         SceneState {

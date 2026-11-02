@@ -47,6 +47,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Tokio thread behind `--mcp-listen`, host allowlisting for concrete
   binds, typed `StateSnapshot` over a `watch` channel, and the
   `anchor_state`/`map_info` introspection tools
+- Agent play API (WP05): the app hosts the `GameSession` via a
+  GTK-free `GameHost` (session + seat↔token registry + map);
+  `GameRequest{command, oneshot}` commands travel an
+  `async_channel` drained on the glib main loop, replies flow back
+  typed (`CommandResult`). Tools: `move_log` (public projection -
+  HUD parity), `game_config`, `set_config` (Deal-phase gated),
+  `new_game`, `begin_game`, `join_game` (issues `PlayerToken` per
+  `RoleClaim`), `game_state` (role-scoped `GameStateView` - the
+  Fugitive token alone sees the hidden position), `legal_moves`,
+  `request_move` (host binds `actor` to the token's seat - no seat
+  impersonation). Flat primitive wire args (`u16`/`u8`/name strings)
+  keep the schema additive; `FromStr` on `TicketKind`/`Transport`/
+  `PlayerToken`
 - WP06 rules engine (`qdo36-session`): `GameSession::deal` samples
   curated start stations via injected RNG (deterministic deals for
   tests and the balancing simulator); `begin` opens the turn cycle.

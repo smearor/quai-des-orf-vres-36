@@ -1,6 +1,9 @@
 //! Endpoint smoke test: spawn, handshake, and a `tools/call` over
 //! real HTTP - no GTK involved (the state arrives via `watch`).
 
+use qdo36_mcp::CommandResult;
+use qdo36_mcp::GameRequest;
+use qdo36_mcp::StateSnapshot;
 use qdo36_mcp::spawn_http;
 use std::net::SocketAddr;
 use std::time::Duration;
@@ -64,8 +67,16 @@ fn session_id(response: &str) -> String {
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn serves_tools_over_streamable_http() {
     let addr: SocketAddr = "127.0.0.1:19877".parse().unwrap_or_else(|_| unreachable!());
-    let (tx, rx) = tokio::sync::watch::channel(qdo36_mcp::StateSnapshot::default());
-    spawn_http(rx, addr);
+    let (tx, rx) = tokio::sync::watch::channel(StateSnapshot::default());
+    let (command_tx, command_rx) = async_channel::unbounded::<GameRequest>();
+    spawn_http(command_tx, rx, addr);
+    // Stand-in for the app-side game host: reply `GameBegan` to the
+    // first command so the tools/call round-trip is exercised.
+    tokio::spawn(async move {
+        while let Ok(request) = command_rx.recv().await {
+            let _ = request.reply.send(Ok(CommandResult::GameBegan));
+        }
+    });
 
     // The endpoint runs on its own thread - give the bind a moment,
     // then publish state the tools will answer with.
@@ -97,4 +108,17 @@ async fn serves_tools_over_streamable_http() {
     .await;
     assert!(response.contains("detected"), "anchor_state missing payload:\n{response}");
     assert!(response.contains("true"), "anchor_state did not see the published flag:\n{response}");
+
+    // Command round-trip: `begin_game` travels the channel and gets
+    // the stand-in host's `GameBegan` reply.
+    let response = post(
+        addr,
+        Some(&session),
+        r#"{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"begin_game","arguments":{}}}"#,
+    )
+    .await;
+    assert!(
+        response.contains("game_began") || response.contains("GameBegan"),
+        "command channel did not answer:\n{response}"
+    );
 }

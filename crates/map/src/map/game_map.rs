@@ -1,8 +1,10 @@
 use crate::City;
 use crate::Edge;
+use crate::EdgeCount;
 use crate::MapError;
 use crate::Neighbor;
 use crate::Station;
+use crate::StationCount;
 use crate::StationId;
 use crate::Transport;
 use crate::map::MapMeta;
@@ -66,9 +68,19 @@ impl GameMap {
         self.stations.values()
     }
 
+    /// How many stations the map holds.
+    pub fn station_count(&self) -> StationCount {
+        StationCount::of_len(self.stations.len())
+    }
+
     /// All canonicalized edges.
     pub fn edges(&self) -> &[Edge] {
         &self.edges
+    }
+
+    /// How many edges the map holds.
+    pub fn edge_count(&self) -> EdgeCount {
+        EdgeCount::of_len(self.edges.len())
     }
 
     /// Map coordinate bounds.
@@ -279,8 +291,8 @@ bounds_mm = [0.0, 0.0, 100.0, 100.0]
     #[test]
     fn parses_and_validates() {
         let map = GameMap::from_str(mini_map()).unwrap_or_else(|e| panic!("{e}"));
-        assert_eq!(map.stations().count(), 3);
-        assert_eq!(map.edges().len(), 3);
+        assert_eq!(map.station_count(), StationCount::new(3));
+        assert_eq!(map.edge_count(), EdgeCount::new(3));
         assert_eq!(map.start_stations().count(), 3);
         let neighbors = map.neighbors(StationId::new(1));
         assert_eq!(neighbors.len(), 2);
@@ -298,7 +310,7 @@ bounds_mm = [0.0, 0.0, 100.0, 100.0]
     #[test]
     fn bundled_dataset_is_valid() {
         let map = GameMap::bundled().unwrap_or_else(|e| panic!("bundled paris.toml: {e}"));
-        assert!(map.stations().count() >= 30, "curated map should have >= 30 stations");
+        assert!(map.station_count() >= StationCount::new(30), "curated map should have >= 30 stations");
         assert!(map.edges().iter().any(|e| e.transport == Transport::Batobus));
         assert!(map.edges().iter().all(|e| e.from < e.to), "edges are canonicalized");
     }
@@ -308,7 +320,7 @@ bounds_mm = [0.0, 0.0, 100.0, 100.0]
         for city in City::ALL {
             let map = GameMap::for_city(city).unwrap_or_else(|e| panic!("{city}: {e}"));
             assert_eq!(map.meta().name.as_str(), city.name());
-            assert!(map.stations().count() > 0, "{city}");
+            assert!(map.station_count() > StationCount::new(0), "{city}");
             assert!(!map.meta().slogan.is_empty() && !map.meta().story.is_empty(), "{city} should carry flavor text");
             let fugitive = map.meta().fugitive.as_ref().unwrap_or_else(|| panic!("{city}: missing fugitive spec"));
             assert!(!fugitive.alias.is_empty(), "{city} should name its fugitive");

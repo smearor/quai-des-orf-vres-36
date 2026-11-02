@@ -63,11 +63,13 @@ impl SavedGame {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use qdo36_map::{GameMap, Transport};
+    use qdo36_map::GameMap;
+    use qdo36_map::Transport;
+    use qdo36_material::TicketKind;
+    use qdo36_moves::MoveKind;
+    use qdo36_moves::MoveRequest;
     use rand::SeedableRng;
     use rand::rngs::StdRng;
-    use qdo36_material::TicketKind;
-    use qdo36_moves::{MoveKind, MoveRequest};
 
     /// A session three moves into a game.
     fn played() -> GameSession {

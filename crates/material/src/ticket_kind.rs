@@ -41,3 +41,23 @@ impl fmt::Display for TicketKind {
         f.write_str(name)
     }
 }
+
+impl std::str::FromStr for TicketKind {
+    type Err = UnknownTicketKind;
+
+    fn from_str(name: &str) -> Result<Self, Self::Err> {
+        match name {
+            "taxi" => Ok(Self::Taxi),
+            "bus" => Ok(Self::Bus),
+            "metro" => Ok(Self::Metro),
+            "black" => Ok(Self::Black),
+            "double" => Ok(Self::Double),
+            other => Err(UnknownTicketKind(other.to_string())),
+        }
+    }
+}
+
+/// Error for an unrecognized ticket kind name.
+#[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
+#[error("unknown ticket kind {0:?}")]
+pub struct UnknownTicketKind(pub String);

@@ -1,5 +1,6 @@
 //! Spawning the Streamable-HTTP endpoint.
 
+use async_channel::Sender;
 use rmcp::RoleServer;
 use rmcp::model::ResourceUpdatedNotificationParam;
 use rmcp::service::Peer;
@@ -16,6 +17,7 @@ use tracing::error;
 use tracing::info;
 
 use super::qdo_mcp::QdoMcp;
+use crate::GameRequest;
 use crate::StateSnapshot;
 
 /// Spawns the MCP Streamable-HTTP endpoint on a dedicated tokio runtime
@@ -24,7 +26,7 @@ use crate::StateSnapshot;
 ///
 /// The default host allowlist is localhost-only - LAN deployments must
 /// allow their own bound address.
-pub fn spawn_http(state_watch: Receiver<StateSnapshot>, addr: SocketAddr) -> JoinHandle<()> {
+pub fn spawn_http(command_tx: Sender<GameRequest>, state_watch: Receiver<StateSnapshot>, addr: SocketAddr) -> JoinHandle<()> {
     std::thread::spawn(move || {
         let runtime = match Runtime::new() {
             Ok(runtime) => runtime,
@@ -69,6 +71,7 @@ pub fn spawn_http(state_watch: Receiver<StateSnapshot>, addr: SocketAddr) -> Joi
                 move || {
                     Ok(QdoMcp {
                         watch: state_watch.clone(),
+                        request_tx: command_tx.clone(),
                         subscribers: subscribers.clone(),
                     })
                 },

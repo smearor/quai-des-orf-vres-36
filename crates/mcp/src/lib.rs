@@ -6,21 +6,41 @@
 //! publishes; it never touches GTK (WP05 R5).
 
 mod anchor_state_snapshot;
+pub mod command;
+mod game_request;
+mod game_state_view;
+mod hop_args;
+mod join_game_args;
 mod map_info;
 mod mcp_error;
 mod qdo_mcp;
+mod request_move_args;
+mod role_claim;
 mod rotation_deg;
 mod server_handler;
+mod set_config_args;
 mod spawn;
 mod state_snapshot;
+mod token_args;
 mod tools;
 
 pub use anchor_state_snapshot::AnchorStateSnapshot;
+pub use command::CommandKind;
+pub use command::CommandReply;
+pub use command::CommandResult;
+pub use game_request::GameRequest;
+pub use game_state_view::GameStateView;
+pub use hop_args::HopArgs;
+pub use join_game_args::JoinGameArgs;
 pub use map_info::MapInfo;
 pub use mcp_error::McpError;
+pub use request_move_args::RequestMoveArgs;
+pub use role_claim::RoleClaim;
 pub use rotation_deg::RotationDeg;
+pub use set_config_args::SetConfigArgs;
 pub use spawn::spawn_http;
 pub use state_snapshot::StateSnapshot;
+pub use token_args::TokenArgs;
 
 /// URI of the live state resource (`resources/read` +
 /// `resources/subscribe` stream).

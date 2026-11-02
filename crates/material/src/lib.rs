@@ -23,3 +23,4 @@ pub use round_number::RoundNumber;
 pub use seat_count::SeatCount;
 pub use ticket_counts::TicketCounts;
 pub use ticket_kind::TicketKind;
+pub use ticket_kind::UnknownTicketKind;

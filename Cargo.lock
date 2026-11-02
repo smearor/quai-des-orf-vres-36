@@ -2702,6 +2702,7 @@ dependencies = [
  "qdo36-session",
  "qdo36-tangibles",
  "qdo36-undo",
+ "rand 0.10.3",
  "serde",
  "serde_json",
  "signal-hook",
@@ -2776,8 +2777,11 @@ dependencies = [
 name = "qdo36-mcp"
 version = "0.1.0"
 dependencies = [
+ "async-channel",
  "axum",
  "qdo36-map",
+ "qdo36-material",
+ "qdo36-moves",
  "qdo36-session",
  "qdo36-tangibles",
  "rmcp",
@@ -2809,6 +2813,7 @@ dependencies = [
  "qdo36-moves",
  "rand 0.10.3",
  "serde",
+ "serde_json",
  "thiserror 2.0.21",
  "toml 1.1.8+spec-1.1.0",
 ]

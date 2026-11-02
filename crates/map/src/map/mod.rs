@@ -4,6 +4,7 @@
 
 pub mod backdrop;
 pub mod edge;
+pub mod edge_count;
 pub mod error;
 pub mod fugitive;
 pub mod game_map;
@@ -22,6 +23,7 @@ pub use backdrop::LandmarkKind;
 pub use backdrop::LandmarkName;
 pub use backdrop::Polyline;
 pub use edge::Edge;
+pub use edge_count::EdgeCount;
 pub use error::MapError;
 pub use fugitive::FugitiveAlias;
 pub use fugitive::FugitiveSpec;
@@ -33,4 +35,5 @@ pub use slogan::MapSlogan;
 pub use story::MapStory;
 pub use toml::MapToml;
 pub use transport::Transport;
+pub use transport::UnknownTransport;
 pub use transport_name::TransportName;

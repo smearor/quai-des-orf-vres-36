@@ -1,11 +1,13 @@
 //! Station graph vocabulary: stations, their ids/kinds/names and
 //! adjacency entries.
 
+pub mod count;
 pub mod id;
 pub mod kind;
 pub mod name;
 pub mod neighbor;
 
+pub use count::StationCount;
 pub use id::StationId;
 pub use kind::StationKind;
 pub use name::StationName;

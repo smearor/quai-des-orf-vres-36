@@ -2,7 +2,9 @@
 //! data model).
 
 use qdo36_map::CityName;
+use qdo36_map::EdgeCount;
 use qdo36_map::GameMap;
+use qdo36_map::StationCount;
 use serde::Deserialize;
 use serde::Serialize;
 use tangible_objects_model::Millimeters;
@@ -15,9 +17,9 @@ pub struct MapInfo {
     /// The city this dataset describes.
     pub name: CityName,
     /// Station count.
-    pub stations: u32,
+    pub stations: StationCount,
     /// Edge count (undirected adjacencies).
-    pub edges: u32,
+    pub edges: EdgeCount,
     /// Map coordinate bounds `[x_min, y_min, x_max, y_max]`.
     pub bounds_mm: Region,
     /// The Eiffel tower's anchor station position.
@@ -30,8 +32,8 @@ impl MapInfo {
     pub fn from_map(map: &GameMap, anchor: Option<Vec2<Millimeters>>) -> Self {
         Self {
             name: map.meta().name.clone(),
-            stations: map.stations().count() as u32,
-            edges: map.edges().len() as u32,
+            stations: map.station_count(),
+            edges: map.edge_count(),
             bounds_mm: map.bounds(),
             anchor,
         }
