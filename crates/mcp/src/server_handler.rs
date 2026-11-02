@@ -16,11 +16,13 @@ use rmcp::model::ServerConfig;
 use rmcp::model::SubscribeRequestParams;
 use rmcp::model::UnsubscribeRequestParams;
 use rmcp::service::RequestContext;
+use rmcp::tool_handler;
 
 use crate::McpError;
 use crate::STATE_URI;
 use crate::qdo_mcp::QdoMcp;
 
+#[tool_handler]
 impl ServerHandler for QdoMcp {
     fn get_info(&self) -> ServerConfig {
         ServerConfig::new(ServerCapabilities::builder().enable_resources().enable_resources_subscribe().build()).with_instructions(

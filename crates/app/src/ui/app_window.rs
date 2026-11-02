@@ -1,12 +1,24 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
+use crate::anchor_tracker;
+use crate::controller;
+use crate::controller::Controller;
+use crate::l10n::L10n;
+use crate::mcp_bridge::publish_map;
+use crate::settings::AppSettings;
+use crate::tangible_host::TangibleHost;
+use crate::ui::map_scene::MapScene;
+use crate::ui::map_scene::SceneState;
 use glib::MainContext;
+use gtk4::GestureClick;
 use libadwaita as adw;
 use libadwaita::prelude::*;
 use qdo36_map::GameMap;
+use qdo36_mcp::MapInfo;
 use qdo36_tangibles::AnchorConfig;
 use qdo36_tangibles::AnchorPattern;
+use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::DaemonError;
 use qdo36_tangibles::GraphQlSource;
 use qdo36_tangibles::MapScale;
@@ -15,15 +27,6 @@ use qdo36_tangibles::TangibleEvent;
 use tangible_objects_model::Vec2;
 use tracing::info;
 use tracing::warn;
-
-use crate::anchor_tracker;
-use crate::controller;
-use crate::controller::Controller;
-use crate::l10n::L10n;
-use crate::settings::AppSettings;
-use crate::tangible_host::TangibleHost;
-use crate::ui::map_scene::MapScene;
-use crate::ui::map_scene::SceneState;
 
 /// The application window: a fullscreen stack switching between the
 /// daemon setup screen and the map scene.
@@ -146,7 +149,7 @@ impl AppWindow {
 
         // Tap hit-testing: widget-px -> map-mm -> nearest station
         // within the snap radius; the selection rings it.
-        let gesture = gtk4::GestureClick::new();
+        let gesture = GestureClick::new();
         {
             let state = state.clone();
             let scene = self.scene.clone();
@@ -213,6 +216,7 @@ impl AppWindow {
             .or_else(|| map.stations().next())
             .map(|station| station.pos)
             .unwrap_or_else(|| Vec2::new(0.0, 0.0));
+        publish_map(MapInfo::from_map(map, Some(anchor_pos)));
         let mut config = AnchorConfig::at_station(map.bounds(), anchor_pos);
         config.heading_offset = self.settings.heading_offset_deg.to_rotation_rad();
         SceneState {
@@ -220,7 +224,7 @@ impl AppWindow {
             config,
             // The event pump starts before any tangible event - the
             // virtual fallback pose.
-            anchor: qdo36_tangibles::AnchorState::default_virtual(),
+            anchor: AnchorState::default_virtual(),
             surface,
             scale,
             selected: None,

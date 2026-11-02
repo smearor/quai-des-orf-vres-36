@@ -6,7 +6,6 @@ use rmcp::service::Peer;
 use rmcp::transport::streamable_http_server::StreamableHttpServerConfig;
 use rmcp::transport::streamable_http_server::StreamableHttpService;
 use rmcp::transport::streamable_http_server::session::local::LocalSessionManager;
-use serde_json::Value;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::sync::Mutex;
@@ -17,6 +16,7 @@ use tracing::error;
 use tracing::info;
 
 use super::qdo_mcp::QdoMcp;
+use crate::StateSnapshot;
 
 /// Spawns the MCP Streamable-HTTP endpoint on a dedicated tokio runtime
 /// thread. Reads come from `state_watch` - the app's shared snapshot
@@ -24,7 +24,7 @@ use super::qdo_mcp::QdoMcp;
 ///
 /// The default host allowlist is localhost-only - LAN deployments must
 /// allow their own bound address.
-pub fn spawn_http(state_watch: Receiver<Value>, addr: SocketAddr) -> JoinHandle<()> {
+pub fn spawn_http(state_watch: Receiver<StateSnapshot>, addr: SocketAddr) -> JoinHandle<()> {
     std::thread::spawn(move || {
         let runtime = match Runtime::new() {
             Ok(runtime) => runtime,

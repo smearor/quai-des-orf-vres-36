@@ -12,7 +12,7 @@ use crate::rotation_deg::RotationDeg;
 
 /// The published anchor snapshot - `Option` fields are `None` while
 /// the tower is not detected.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AnchorStateSnapshot {
     /// Whether the Eiffel tower tangible is currently tracked.
     pub detected: bool,

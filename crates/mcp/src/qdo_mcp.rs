@@ -2,10 +2,11 @@
 
 use rmcp::RoleServer;
 use rmcp::service::Peer;
-use serde_json::Value;
 use std::sync::Arc;
 use std::sync::Mutex;
 use tokio::sync::watch::Receiver;
+
+use crate::StateSnapshot;
 
 /// `(uri, peer)` pairs that subscribed via `resources/subscribe` and
 /// receive `notifications/resources/updated` on each state change.
@@ -18,14 +19,14 @@ pub(super) type ResourceSubscribers = Arc<Mutex<Vec<(String, Peer<RoleServer>)>>
 #[derive(Clone)]
 pub(super) struct QdoMcp {
     /// Latest published state document.
-    pub(super) watch: Receiver<Value>,
+    pub(super) watch: Receiver<StateSnapshot>,
     /// Live resource subscriptions; see [`ResourceSubscribers`].
     pub(super) subscribers: ResourceSubscribers,
 }
 
 impl QdoMcp {
     /// The current state document.
-    pub(super) fn snapshot(&self) -> Value {
+    pub(super) fn snapshot(&self) -> StateSnapshot {
         self.watch.borrow().clone()
     }
 }

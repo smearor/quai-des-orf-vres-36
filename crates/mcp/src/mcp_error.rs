@@ -12,13 +12,16 @@ pub enum McpError {
     /// Reply serialization failed.
     #[error("serialization failed: {0}")]
     Serialize(#[from] serde_json::Error),
+    /// The requested state does not exist yet (e.g. no map loaded).
+    #[error("state unavailable")]
+    StateUnavailable,
 }
 
 impl From<McpError> for ErrorData {
     fn from(error: McpError) -> Self {
         match error {
             McpError::InvalidParams(_) => ErrorData::invalid_params(error.to_string(), None),
-            McpError::Serialize(_) => ErrorData::internal_error(error.to_string(), None),
+            McpError::Serialize(_) | McpError::StateUnavailable => ErrorData::internal_error(error.to_string(), None),
         }
     }
 }

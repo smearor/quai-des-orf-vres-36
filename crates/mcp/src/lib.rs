@@ -6,16 +6,21 @@
 //! publishes; it never touches GTK (WP05 R5).
 
 mod anchor_state_snapshot;
+mod map_info;
 mod mcp_error;
 mod qdo_mcp;
 mod rotation_deg;
 mod server_handler;
 mod spawn;
+mod state_snapshot;
+mod tools;
 
 pub use anchor_state_snapshot::AnchorStateSnapshot;
+pub use map_info::MapInfo;
 pub use mcp_error::McpError;
 pub use rotation_deg::RotationDeg;
 pub use spawn::spawn_http;
+pub use state_snapshot::StateSnapshot;
 
 /// URI of the live state resource (`resources/read` +
 /// `resources/subscribe` stream).
