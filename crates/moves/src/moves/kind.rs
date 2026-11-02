@@ -1,4 +1,5 @@
 use crate::Hop;
+use crate::MoveShape;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -18,6 +19,14 @@ pub enum MoveKind {
 }
 
 impl MoveKind {
+    /// The hop-count shape of this move.
+    pub fn shape(&self) -> MoveShape {
+        match self {
+            Self::Single(_) => MoveShape::Single,
+            Self::Double { .. } => MoveShape::Double,
+        }
+    }
+
     /// The station the move ends on.
     pub fn destination(&self) -> qdo36_map::StationId {
         match self {
