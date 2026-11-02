@@ -1,4 +1,5 @@
 use crate::GamePhase;
+use crate::MoveShape;
 use qdo36_map::StationId;
 use qdo36_map::Transport;
 use qdo36_material::PawnId;
@@ -55,4 +56,15 @@ pub enum MoveError {
     /// A batobus route needs Fugitive's black ticket.
     #[error("batobus routes require the black ticket")]
     BatobusRequiresBlack,
+    /// The move shape does not fit the ticket (e.g. a double ticket
+    /// needs a two-hop move and vice versa).
+    #[error("ticket {ticket} requires a {expected} move, got {actual}")]
+    TicketShapeMismatch {
+        /// The ticket presented with the wrong move shape.
+        ticket: TicketKind,
+        /// The shape the ticket requires.
+        expected: MoveShape,
+        /// The shape the request carries.
+        actual: MoveShape,
+    },
 }
