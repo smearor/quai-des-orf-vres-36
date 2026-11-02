@@ -6,6 +6,7 @@ use crate::controller;
 use crate::controller::Controller;
 use crate::l10n::L10n;
 use crate::mcp_bridge::publish_map;
+use crate::mcp_bridge::register_window;
 use crate::mcp_bridge::set_game_map;
 use crate::settings::AppSettings;
 use crate::tangible_host::TangibleHost;
@@ -63,6 +64,7 @@ impl AppWindow {
         stack.add_named(&scene, Some("map"));
 
         window.set_content(Some(&stack));
+        register_window(&window);
 
         let this = Rc::new(Self {
             window,

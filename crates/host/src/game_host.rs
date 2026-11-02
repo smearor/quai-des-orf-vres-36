@@ -73,6 +73,9 @@ impl GameHost {
             CommandKind::GameState { token } => self.view(*token),
             CommandKind::LegalMoves { token } => self.legal(*token),
             CommandKind::Move { token, request } => self.play(*token, *request),
+            // The app-side drain intercepts screenshots; a host never
+            // renders windows.
+            CommandKind::Screenshot => Err(McpError::InvalidParams("screenshot is an app command".to_string())),
         }
     }
 

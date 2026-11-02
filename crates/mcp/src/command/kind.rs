@@ -61,4 +61,7 @@ pub enum CommandKind {
         /// token's role.
         request: MoveRequest,
     },
+    /// A PNG screenshot of the app window. Handled by the app-side
+    /// drain, not the game host - the session knows no window.
+    Screenshot,
 }

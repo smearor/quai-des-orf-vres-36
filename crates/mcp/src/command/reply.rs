@@ -11,6 +11,7 @@ use serde::Serialize;
 
 use crate::GameStateView;
 use crate::McpError;
+use crate::ScreenshotReply;
 
 /// A successful command outcome.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -35,6 +36,8 @@ pub enum CommandResult {
     Legal(Vec<Hop>),
     /// `Move` outcome (applied or game-ending).
     Moved(MoveOutcome),
+    /// `Screenshot` PNG payload.
+    Screenshot(ScreenshotReply),
 }
 
 /// The reply channel payload: a result or a typed failure.

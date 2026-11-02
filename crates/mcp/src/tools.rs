@@ -4,6 +4,7 @@
 
 use super::qdo_mcp::QdoMcp;
 use crate::CommandKind;
+use crate::CommandResult;
 use crate::JoinGameArgs;
 use crate::McpError;
 use crate::NewGameArgs;
@@ -104,6 +105,19 @@ impl QdoMcp {
             request: args.request(),
         })
         .await
+    }
+
+    /// PNG screenshot of the app window.
+    #[tool(description = "Take a screenshot of the app window; returns a PNG image.")]
+    async fn screenshot(&self) -> Result<CallToolResult, ErrorData> {
+        let result = self.command(CommandKind::Screenshot).await??;
+        let CommandResult::Screenshot(reply) = result else {
+            return Err(McpError::InvalidParams("unexpected reply kind for screenshot".to_string()).into());
+        };
+        Ok(CallToolResult::success(vec![
+            ContentBlock::image(reply.png_base64, "image/png".to_string()),
+            ContentBlock::text(format!("screenshot ({:.0}x{:.0})", reply.width.as_f64(), reply.height.as_f64())),
+        ]))
     }
 }
 
