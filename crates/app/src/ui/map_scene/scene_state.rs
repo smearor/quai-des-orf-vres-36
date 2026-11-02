@@ -10,6 +10,7 @@ use qdo36_tangibles::MapScale;
 use qdo36_tangibles::SurfaceMm;
 use tangible_objects_model::DisplayRotation;
 
+use crate::ui::art::ArtAssets;
 use crate::ui::style::MapStyle;
 
 /// Everything the scene draws - the map, anchor, surface and view
@@ -33,6 +34,8 @@ pub struct SceneState {
     pub display_rotation: DisplayRotation,
     /// The map look (comic / neon / belle epoque).
     pub style: MapStyle,
+    /// The generated SVG artwork (landmark pins, anchor, compass).
+    pub assets: Rc<ArtAssets>,
     /// Overlay hint shown while the anchor is virtual (tower lifted
     /// / not yet placed).
     pub anchor_hint: Option<String>,

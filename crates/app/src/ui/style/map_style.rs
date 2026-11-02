@@ -22,6 +22,15 @@ pub enum MapStyle {
 }
 
 impl MapStyle {
+    /// The artwork namespace (`art/{family}/paris/{namespace}/`).
+    pub fn namespace(&self) -> &'static str {
+        match self {
+            Self::Comic => "comic",
+            Self::BelleEpoque => "belle-epoque",
+            Self::Neon => "neon",
+        }
+    }
+
     /// The renderer for this style.
     pub fn renderer(&self) -> Box<dyn StyleRenderer> {
         match self {

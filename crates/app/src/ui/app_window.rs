@@ -223,6 +223,7 @@ impl AppWindow {
             selected: None,
             display_rotation: self.settings.display_rotation,
             style: self.settings.map_style,
+            assets: crate::ui::art::ArtAssets::detect(),
             anchor_hint: Some(self.l10n.msg("tower-missing")),
         }
     }

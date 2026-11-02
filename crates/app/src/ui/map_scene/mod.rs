@@ -13,8 +13,13 @@ pub use widget::MapScene;
 
 use qdo36_tangibles::AnchorPose;
 use qdo36_tangibles::AnchorState;
+use tangible_objects_model::Millimeters;
 use tangible_objects_model::Pixels;
+use tangible_objects_model::Vec2;
 
+use crate::ui::art::AnchorFrac;
+use crate::ui::art::ArtSpec;
+use crate::ui::style::Alpha;
 use crate::ui::style::EdgeSpec;
 
 /// Full scene render: paper, backdrop, edges, stations, anchor,
@@ -38,7 +43,19 @@ pub fn render(ctx: &cairo::Context, state: &SceneState, pose: AnchorPose, width:
         renderer.draw_water(ctx, polyline.points(), px_per_mm, &to_px);
     }
     for landmark in &backdrop.landmarks {
-        renderer.draw_landmark(ctx, to_px(landmark.pos), px_per_mm);
+        let pos = to_px(landmark.pos);
+        let stem = crate::ui::art::landmark_stem(landmark.name.as_str());
+        let spec = ArtSpec {
+            family: "landmarks",
+            stem: &stem,
+            pos,
+            height: Millimeters::new(14.0),
+            anchor: AnchorFrac::PIN_TIP,
+            alpha: Alpha::OPAQUE,
+        };
+        if !state.assets.draw(ctx, state.style, &spec, px_per_mm) {
+            renderer.draw_landmark(ctx, pos, px_per_mm);
+        }
     }
 
     // Edges.
@@ -67,8 +84,34 @@ pub fn render(ctx: &cairo::Context, state: &SceneState, pose: AnchorPose, width:
         renderer.draw_label(ctx, station.name.as_str(), pos, radius, px_per_mm);
     }
 
-    // Anchor marker.
-    renderer.draw_anchor(ctx, to_px(state.config.anchor_map_pos), matches!(state.anchor, AnchorState::Tracked(_)), px_per_mm);
+    // Anchor marker: the Eiffel pin artwork where the style ships one,
+    // else the primitive ring.
+    let tracked = matches!(state.anchor, AnchorState::Tracked(_));
+    let anchor_pos = to_px(state.config.anchor_map_pos);
+    let anchor_spec = ArtSpec {
+        family: "landmarks",
+        stem: "eiffel-anchor",
+        pos: anchor_pos,
+        height: Millimeters::new(16.0),
+        anchor: AnchorFrac::PIN_TIP,
+        alpha: if tracked { Alpha::OPAQUE } else { Alpha::new(0.4) },
+    };
+    if !state.assets.draw(ctx, state.style, &anchor_spec, px_per_mm) {
+        renderer.draw_anchor(ctx, anchor_pos, tracked, px_per_mm);
+    }
+
+    // Compass rose: rotates with the map, so it always reads map-north.
+    let bounds = state.map.bounds();
+    let compass_pos = to_px(Vec2::new(bounds.x_max.as_f64() + 16.0, bounds.y_min.as_f64() - 16.0));
+    let compass_spec = ArtSpec {
+        family: "map",
+        stem: "compass",
+        pos: compass_pos,
+        height: Millimeters::new(26.0),
+        anchor: AnchorFrac::CENTER,
+        alpha: Alpha::new(0.9),
+    };
+    state.assets.draw(ctx, state.style, &compass_spec, px_per_mm);
 
     // "Tower missing" hint - only while virtual.
     if let (Some(hint), AnchorState::Virtual(_)) = (&state.anchor_hint, state.anchor) {
