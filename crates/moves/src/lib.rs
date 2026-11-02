@@ -18,3 +18,4 @@ pub use moves::MoveError;
 pub use moves::MoveKind;
 pub use moves::MoveRecord;
 pub use moves::MoveRequest;
+pub use moves::MoveShape;
