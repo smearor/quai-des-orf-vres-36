@@ -29,6 +29,19 @@ impl TicketCounts {
         }
     }
 
+    /// Adds one ticket of `kind` - spent detective tickets feed
+    /// Fugitive's pool (saturates at [`Self::UNLIMITED`]).
+    pub fn gain(&mut self, kind: TicketKind) {
+        let slot = match kind {
+            TicketKind::Taxi => &mut self.taxi,
+            TicketKind::Bus => &mut self.bus,
+            TicketKind::Metro => &mut self.metro,
+            TicketKind::Black => &mut self.black,
+            TicketKind::Double => &mut self.double,
+        };
+        *slot = slot.saturating_add(1);
+    }
+
     /// Decrements a ticket kind by one; returns `false` when none left.
     pub fn spend(&mut self, kind: TicketKind) -> bool {
         let slot = match kind {
