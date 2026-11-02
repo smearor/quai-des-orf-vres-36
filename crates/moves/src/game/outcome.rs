@@ -11,6 +11,9 @@ pub enum GameOutcome {
         /// Station where Fugitive was caught.
         caught_at: StationId,
     },
-    /// Fugitive survived all 24 rounds.
+    /// Fugitive survived all rounds.
     FugitiveEscapes,
+    /// Every detective is immobilized - no affordable legal move
+    /// remains, so Fugitive wins.
+    DetectivesStuck,
 }
