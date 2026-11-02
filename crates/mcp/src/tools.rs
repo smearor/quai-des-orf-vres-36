@@ -6,10 +6,10 @@ use super::qdo_mcp::QdoMcp;
 use crate::CommandKind;
 use crate::JoinGameArgs;
 use crate::McpError;
+use crate::NewGameArgs;
 use crate::RequestMoveArgs;
 use crate::SetConfigArgs;
 use crate::TokenArgs;
-use qdo36_session::GameConfig;
 use rmcp::ErrorData;
 use rmcp::handler::server::wrapper::Parameters;
 use rmcp::model::CallToolResult;
@@ -52,10 +52,11 @@ impl QdoMcp {
 
     /// Deals a fresh game (Deal phase; `set_config` stays legal until
     /// `begin_game` is called).
-    #[tool(description = "Deal a new game: samples start stations, seats the detectives and hides Corbeau. Call set_config to adjust, then begin_game.")]
-    async fn new_game(&self) -> Result<CallToolResult, ErrorData> {
-        let config = self.snapshot().map.map(|_| GameConfig::default()).ok_or(McpError::StateUnavailable)?;
-        self.forward(CommandKind::NewGame { config }).await
+    #[tool(
+        description = "Deal a new game: samples start stations, seats the detectives and hides Corbeau. Optional 'config' overrides the map defaults; call set_config for reveal/max_rounds, then begin_game."
+    )]
+    async fn new_game(&self, Parameters(args): Parameters<NewGameArgs>) -> Result<CallToolResult, ErrorData> {
+        self.forward(CommandKind::NewGame { config: args.config }).await
     }
 
     /// Adjusts reveal schedule and game length pre-game.

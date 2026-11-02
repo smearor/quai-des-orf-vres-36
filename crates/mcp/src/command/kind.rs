@@ -18,11 +18,15 @@ use crate::RoleClaim;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum CommandKind {
-    /// Deals a fresh game and begins it (`phase: Deal → InProgress`
-    /// once [`Self::Begin`] arrives).
+    /// Deals a fresh game (`phase: Deal → InProgress` once
+    /// [`Self::Begin`] arrives). `None` uses the loaded map's
+    /// defaults (`GameConfig::for_map`); `Some` deals with the given
+    /// setup - needed for deal-shaping fields like detective count,
+    /// ticket stocks or `allow_undo`, which `SetConfig` cannot change
+    /// post-deal.
     NewGame {
-        /// The setup choices to deal with.
-        config: GameConfig,
+        /// Optional explicit setup; `None` = map defaults.
+        config: Option<GameConfig>,
     },
     /// Adjusts reveal schedule and max rounds pre-game (Deal phase
     /// only).

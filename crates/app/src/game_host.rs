@@ -7,15 +7,19 @@
 
 use qdo36_map::GameMap;
 use qdo36_material::Role;
+use qdo36_material::RoundNumber;
 use qdo36_mcp::CommandKind;
 use qdo36_mcp::CommandReply;
 use qdo36_mcp::CommandResult;
 use qdo36_mcp::GameStateView;
 use qdo36_mcp::McpError;
+use qdo36_mcp::RoleClaim;
 use qdo36_moves::GamePhase;
 use qdo36_moves::MoveRequest;
+use qdo36_session::GameConfig;
 use qdo36_session::GameSession;
 use qdo36_session::PlayerToken;
+use qdo36_session::RevealPreset;
 use rand::Rng;
 use std::collections::BTreeMap;
 use std::rc::Rc;
@@ -69,9 +73,12 @@ impl GameHost {
         }
     }
 
-    /// Deals a fresh game; resets the token registry.
-    fn new_game(&mut self, config: qdo36_session::GameConfig) -> CommandReply {
+    /// Deals a fresh game; `None` takes the map's defaults (city
+    /// stocks, reveal rounds, max rounds). Resets the token registry.
+    fn new_game(&mut self, config: Option<GameConfig>) -> CommandReply {
         let map = self.map.clone().ok_or(McpError::StateUnavailable)?;
+        let config = config.unwrap_or_else(|| GameConfig::for_map(map.meta()));
+        config.validate()?;
         let session = GameSession::deal(config, &map, &mut self.rng)?;
         self.players.clear();
         self.session = Some(session);
@@ -85,7 +92,7 @@ impl GameHost {
     }
 
     /// Adjusts config fields while in the Deal phase.
-    fn set_config(&mut self, reveal: Option<qdo36_session::RevealPreset>, max_rounds: Option<qdo36_material::RoundNumber>) -> CommandReply {
+    fn set_config(&mut self, reveal: Option<RevealPreset>, max_rounds: Option<RoundNumber>) -> CommandReply {
         let session = self.session_mut()?;
         if session.state.phase != GamePhase::Deal {
             return Err(McpError::DealPhaseOnly);
@@ -101,10 +108,10 @@ impl GameHost {
     }
 
     /// Issues a token for a role claim; a seat is taken once.
-    fn join(&mut self, claim: qdo36_mcp::RoleClaim) -> CommandReply {
+    fn join(&mut self, claim: RoleClaim) -> CommandReply {
         let session = self.session.as_ref().ok_or(McpError::NoActiveGame)?;
         let role = claim.to_role();
-        if let qdo36_mcp::RoleClaim::Detective { seat } = claim
+        if let RoleClaim::Detective { seat } = claim
             && !session.state.positions.contains_key(&seat)
         {
             return Err(McpError::SeatUnavailable);
@@ -182,10 +189,7 @@ mod tests {
 
     fn dealt_host() -> GameHost {
         let mut host = host();
-        host.handle(&CommandKind::NewGame {
-            config: qdo36_session::GameConfig::default(),
-        })
-        .unwrap_or_else(|_| panic!("deal"));
+        host.handle(&CommandKind::NewGame { config: None }).unwrap_or_else(|_| panic!("deal"));
         host
     }
 
