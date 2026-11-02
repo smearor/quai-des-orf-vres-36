@@ -2,6 +2,7 @@ use qdo36_material::DetectiveCount;
 use qdo36_material::DetectiveCountError;
 use qdo36_material::PawnColor;
 use qdo36_material::RoundNumber;
+use qdo36_material::SeatCount;
 use thiserror::Error;
 
 /// Errors of session setup and persistence.
@@ -38,4 +39,12 @@ pub enum SessionError {
     /// The autosave file could not be loaded.
     #[error("could not load game: {0}")]
     Load(String),
+    /// The map cannot seat every role on a distinct start station.
+    #[error("map offers {available} start stations, but {needed} are required")]
+    TooFewStartStations {
+        /// Seats that must be dealt (detectives + fugitive).
+        needed: SeatCount,
+        /// Start stations the map offers.
+        available: SeatCount,
+    },
 }
