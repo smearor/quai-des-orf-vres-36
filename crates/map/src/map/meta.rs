@@ -8,6 +8,7 @@ use crate::MapStory;
 use crate::Transport;
 use crate::TransportName;
 use qdo36_material::RoundNumber;
+use qdo36_material::TicketCounts;
 use serde::Deserialize;
 use serde::Serialize;
 use std::collections::BTreeMap;
@@ -54,6 +55,15 @@ pub struct MapMeta {
     /// Default: the Scotland Yard classic, 24.
     #[serde(default = "default_max_rounds")]
     pub max_rounds: RoundNumber,
+    /// The city's detective starting stock (`[map]
+    /// detective_stock`); defaults to the classic 10 taxi / 8 bus /
+    /// 4 metro.
+    #[serde(default = "TicketCounts::detective_start")]
+    pub detective_stock: TicketCounts,
+    /// The city's fugitive starting pool (`[map] fugitive_stock`);
+    /// defaults to unlimited travel + 5 black + 2 double.
+    #[serde(default = "TicketCounts::fugitive_start")]
+    pub fugitive_stock: TicketCounts,
     /// Rounds at which the fugitive's position is revealed.
     ///
     /// Default: the classic schedule `[3, 8, 13, 18, 24]`.

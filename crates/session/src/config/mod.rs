@@ -11,6 +11,7 @@ use qdo36_map::MapMeta;
 use qdo36_material::DetectiveCount;
 use qdo36_material::PawnColor;
 use qdo36_material::RoundNumber;
+use qdo36_material::TicketCounts;
 use qdo36_moves::RevealSchedule;
 use serde::Deserialize;
 use serde::Serialize;
@@ -34,6 +35,16 @@ pub struct GameConfig {
     /// Defaults to the city's dataset value (Paris: 24); other cities
     /// may ship a different default in their `[map]` meta.
     pub max_rounds: RoundNumber,
+    /// Every detective's starting ticket stock (classic: 10/8/4).
+    ///
+    /// Configurable for city balancing: a dense map or a large
+    /// detective crew may justify a leaner stock.
+    #[serde(default = "TicketCounts::detective_start")]
+    pub detective_stock: TicketCounts,
+    /// Fugitive's starting pool (classic: unlimited travel, 5 black,
+    /// 2 double).
+    #[serde(default = "TicketCounts::fugitive_start")]
+    pub fugitive_stock: TicketCounts,
 }
 
 impl GameConfig {
@@ -42,6 +53,8 @@ impl GameConfig {
         Self {
             max_rounds: meta.max_rounds,
             reveal: RevealPreset::from_city(&meta.reveal_rounds),
+            detective_stock: meta.detective_stock,
+            fugitive_stock: meta.fugitive_stock,
             ..Self::default()
         }
     }
@@ -96,6 +109,8 @@ impl Default for GameConfig {
             allow_undo: true,
             reveal: RevealPreset::Classic,
             max_rounds: RoundNumber::DEFAULT_MAX,
+            detective_stock: TicketCounts::DETECTIVE_START,
+            fugitive_stock: TicketCounts::FUGITIVE_START,
         }
     }
 }
