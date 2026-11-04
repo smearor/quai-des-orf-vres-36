@@ -157,9 +157,14 @@ impl GameMap {
         Segment::new(self.pos(edge.from), self.pos(edge.to))
     }
 
-    /// Q2: each transport net must be one component.
+    /// Q2: each transport net must be one component. Underground
+    /// tunnels are exempt: separate Égouts systems are by design
+    /// (local shortcuts, not one connected net).
     fn check_components(&self, findings: &mut Vec<Finding>) {
         for transport in Transport::ALL {
+            if transport == Transport::Underground {
+                continue;
+            }
             let adj = self.edges_of(transport).adjacency();
             if adj.is_empty() {
                 continue;
@@ -500,33 +505,9 @@ M2 = "#0000FF"
     }
 
     #[test]
-    fn paris_currently_violates_the_criteria() {
+    fn paris_is_clean() {
         let map = GameMap::from_str(include_str!("../../data/paris.toml")).expect("paris parses");
         let report = map.lint();
-        assert!(!report.is_clean());
-        assert!(report.findings.iter().any(|f| matches!(
-            f,
-            Finding::Crossing {
-                transport: Transport::Underground,
-                ..
-            }
-        )));
-        // Q2 progress: the bus net is connected since the
-        // Hôtel de Ville - Châtelet and Père Lachaise -
-        // Ménilmontant bridge edges; metro + underground still
-        // report disconnected components.
-        assert!(report.findings.iter().any(|f| matches!(
-            f,
-            Finding::Disconnected {
-                transport: Transport::Metro | Transport::Underground,
-                ..
-            }
-        )));
-        assert!(
-            !report
-                .findings
-                .iter()
-                .any(|f| matches!(f, Finding::Disconnected { transport: Transport::Bus, .. }))
-        );
+        assert!(report.is_clean(), "{:?}", report.findings);
     }
 }

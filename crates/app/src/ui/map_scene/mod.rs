@@ -2,6 +2,7 @@
 //! (map-mm -> surface-mm -> widget-px) on every snapshot.
 
 pub mod controls;
+pub mod hop_share;
 pub mod label_mode;
 pub mod layer_name;
 pub mod layer_toggle;
@@ -16,6 +17,7 @@ pub mod widget;
 
 use cairo::Context;
 pub use controls::controls;
+pub use hop_share::HopShare;
 pub use label_mode::LabelMode;
 pub use layer_name::LayerName;
 pub use layer_toggle::LayerToggle;
@@ -25,7 +27,7 @@ pub use render_stage::RenderStage;
 pub use scene_layers::SceneLayers;
 pub use scene_state::SceneState;
 use std::collections::BTreeMap;
-use std::collections::BTreeSet;
+
 use std::collections::HashMap;
 pub use transport_layers::TransportLayers;
 pub use two_finger::TwoFingerGesture;
@@ -149,12 +151,15 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
     // by distinct lines draw parallel offsets in each line's color.
     let line_hidden = |edge: &Edge| edge.line.as_ref().is_some_and(|line| state.layers.hidden_lines.contains(line));
 
-    // Resolve every metro edge's station path once (via > street
-    // > chord) and collect the distinct lines sharing each hop.
-    let mut metro_paths: Vec<(usize, Vec<StationId>)> = Vec::new();
-    let mut sharing: HashMap<(StationId, StationId), BTreeSet<Option<LineName>>> = HashMap::new();
+    // Resolve every metro/underground edge's station path once
+    // (metro: via > street mesh > chord, tunnels: via > chord) and
+    // collect who shares each hop: metro by distinct line,
+    // underground by edge - shared hops draw as parallel offsets
+    // instead of piling identical strokes on top of each other.
+    let mut routed_paths: Vec<(usize, Vec<StationId>)> = Vec::new();
+    let mut sharing: HashMap<(StationId, StationId), Vec<HopShare>> = HashMap::new();
     for (edge_i, edge) in map.edges().iter().enumerate() {
-        if edge.transport != Transport::Metro || line_hidden(edge) || !state.layers.transports.visible(edge.transport) {
+        if !matches!(edge.transport, Transport::Metro | Transport::Underground) || line_hidden(edge) || !state.layers.transports.visible(edge.transport) {
             continue;
         }
         let path = if !edge.via.is_empty() {
@@ -162,16 +167,23 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
             path.extend_from_slice(&edge.via);
             path.push(edge.to);
             path
-        } else if edge.direct {
+        } else if edge.transport == Transport::Underground || edge.direct {
             vec![edge.from, edge.to]
         } else {
             map.route_on_surface(edge.from, edge.to).unwrap_or_else(|| vec![edge.from, edge.to])
         };
+        let share = match edge.transport {
+            Transport::Metro => edge.line.clone().map(HopShare::Metro).unwrap_or(HopShare::Edge(edge_i)),
+            _ => HopShare::Edge(edge_i),
+        };
         for w in path.windows(2) {
             let key = if w[0] < w[1] { (w[0], w[1]) } else { (w[1], w[0]) };
-            sharing.entry(key).or_default().insert(edge.line.clone());
+            let bucket = sharing.entry(key).or_default();
+            if !bucket.contains(&share) {
+                bucket.push(share.clone());
+            }
         }
-        metro_paths.push((edge_i, path));
+        routed_paths.push((edge_i, path));
     }
 
     for (edge_i, edge) in map.edges().iter().enumerate() {
@@ -182,13 +194,18 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
             continue;
         };
         // `via` waypoints draw any edge's route as a bent polyline
-        // (metro additionally offsets hops shared by other lines).
-        let (route, offsets) = if edge.transport == Transport::Metro {
-            let path = metro_paths
+        // (metro/tunnel hops shared with others draw parallel
+        // offsets).
+        let (route, offsets) = if matches!(edge.transport, Transport::Metro | Transport::Underground) {
+            let path = routed_paths
                 .iter()
                 .find(|(e_i, _)| *e_i == edge_i)
                 .map(|(_, path)| path.as_slice())
                 .unwrap_or(&[]);
+            let share = match edge.transport {
+                Transport::Metro => edge.line.clone().map(HopShare::Metro).unwrap_or(HopShare::Edge(edge_i)),
+                _ => HopShare::Edge(edge_i),
+            };
             let spacing = px_per_mm.scale(1.3);
             let offsets: Vec<f64> = path
                 .windows(2)
@@ -196,7 +213,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                     let key = if w[0] < w[1] { (w[0], w[1]) } else { (w[1], w[0]) };
                     let (count, rank) = sharing
                         .get(&key)
-                        .map(|lines| (lines.len(), lines.iter().position(|l| *l == edge.line).unwrap_or(0)))
+                        .and_then(|bucket| bucket.iter().position(|s| *s == share).map(|rank| (bucket.len(), rank)))
                         .unwrap_or((1, 0));
                     (rank as f64 - (count as f64 - 1.0) / 2.0) * spacing
                 })
@@ -252,7 +269,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
     // carrying the line's end stations plus every third segment.
     if metro_overlay {
         let mut lines: BTreeMap<LineName, Vec<Vec<StationId>>> = BTreeMap::new();
-        for (edge_i, path) in &metro_paths {
+        for (edge_i, path) in &routed_paths {
             if let Some(line) = map.edges().get(*edge_i).and_then(|e| e.line.clone()) {
                 lines.entry(line).or_default().push(path.clone());
             }
