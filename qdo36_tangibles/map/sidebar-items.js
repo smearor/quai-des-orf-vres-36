@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["scale","transform"]};
+window.SIDEBAR_ITEMS = {"mod":["scale","scale_factor","transform"]};

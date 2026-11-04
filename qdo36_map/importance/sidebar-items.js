@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["class","score","station_importance"]};

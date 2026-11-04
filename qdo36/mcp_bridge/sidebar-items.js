@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["MCP_STATE_WATCH"],"fn":["attach","publish_map","publish_state"]};
+window.SIDEBAR_ITEMS = {"constant":["APP_WINDOW","GAME_HOST","MCP_STATE_WATCH","SCENE"],"fn":["attach","current_layers","mcp_screenshot","mutate_layers","publish_game","publish_map","publish_state","register_scene","register_window","reload_map","reset_view","scene_layout","screenshot_texture","set_anchor","set_game_map","set_layers","set_params","set_view","toggle_label_mode","with_game_host","with_scene","zoom_by"],"type":["SceneHandle"]};

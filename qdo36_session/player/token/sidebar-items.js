@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["PlayerToken"]};
+window.SIDEBAR_ITEMS = {"struct":["BadTokenFormat","PlayerToken"]};

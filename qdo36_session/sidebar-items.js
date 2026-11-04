@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["config","error","game","player"]};
+window.SIDEBAR_ITEMS = {"mod":["config","error","game","player"],"struct":["RestorationPlan","RestoreStep","SavedGame"]};

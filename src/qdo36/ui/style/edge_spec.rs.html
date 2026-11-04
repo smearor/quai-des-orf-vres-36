@@ -20,7 +20,17 @@
 <a href=#20 id=20 data-nosnippet>20</a>    </span><span class="kw">pub </span>line: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span>LineName&gt;,
 <a href=#21 id=21 data-nosnippet>21</a>    <span class="doccomment">/// The map - line-color lookup.
 <a href=#22 id=22 data-nosnippet>22</a>    </span><span class="kw">pub </span>map: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>GameMap,
-<a href=#23 id=23 data-nosnippet>23</a>    <span class="doccomment">/// Pixels per surface millimeter.
-<a href=#24 id=24 data-nosnippet>24</a>    </span><span class="kw">pub </span>px_per_mm: PixelsPerMm,
-<a href=#25 id=25 data-nosnippet>25</a>}
+<a href=#23 id=23 data-nosnippet>23</a>    <span class="doccomment">/// The drawn polyline in px (routed through intermediate stations);
+<a href=#24 id=24 data-nosnippet>24</a>    /// empty means a straight `from` -&gt; `to` segment.
+<a href=#25 id=25 data-nosnippet>25</a>    </span><span class="kw">pub </span>route: Vec&lt;PxPos&gt;,
+<a href=#26 id=26 data-nosnippet>26</a>    <span class="doccomment">/// Perpendicular px offset per drawn segment - parallel metro
+<a href=#27 id=27 data-nosnippet>27</a>    /// lines shift sideways so every line keeps its own color; one
+<a href=#28 id=28 data-nosnippet>28</a>    /// entry per drawn segment, empty means centered.
+<a href=#29 id=29 data-nosnippet>29</a>    </span><span class="kw">pub </span>offsets: Vec&lt;f64&gt;,
+<a href=#30 id=30 data-nosnippet>30</a>    <span class="doccomment">/// Whether the edge draws in its transport/line color; `false`
+<a href=#31 id=31 data-nosnippet>31</a>    /// draws the neutral `edge` ink (standard view).
+<a href=#32 id=32 data-nosnippet>32</a>    </span><span class="kw">pub </span>highlight: bool,
+<a href=#33 id=33 data-nosnippet>33</a>    <span class="doccomment">/// Pixels per surface millimeter.
+<a href=#34 id=34 data-nosnippet>34</a>    </span><span class="kw">pub </span>px_per_mm: PixelsPerMm,
+<a href=#35 id=35 data-nosnippet>35</a>}
 </code></pre></div></section></main></body></html>

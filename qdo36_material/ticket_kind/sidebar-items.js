@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["TicketKind"]};
+window.SIDEBAR_ITEMS = {"enum":["TicketKind"],"struct":["UnknownTicketKind"]};

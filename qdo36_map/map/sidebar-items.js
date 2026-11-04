@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["backdrop","edge","error","fugitive","game_map","line_color","line_name","meta","slogan","story","toml","transport","transport_name"]};
+window.SIDEBAR_ITEMS = {"mod":["backdrop","cost","edge","edge_count","error","fugitive","game_map","line_color","line_name","meta","segment","slogan","story","toml","transport","transport_name"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["MIN_SPAN_PX","MOVE_LOCK_PX","ROTATE_LOCK_RAD","SPAN_LOCK_PX"],"fn":["line_angle","span_factor","wrap_half_pi"],"struct":["TwoFingerGesture"]};

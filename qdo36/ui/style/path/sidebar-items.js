@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["polyline_path"]};
+window.SIDEBAR_ITEMS = {"fn":["edge_path","polyline_path"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Transport"]};
+window.SIDEBAR_ITEMS = {"enum":["Transport"],"struct":["UnknownTransport"]};

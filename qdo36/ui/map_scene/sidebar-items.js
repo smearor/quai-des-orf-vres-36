@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["render"],"mod":["pose_animator","render_stage","scene_state","widget"]};
+window.SIDEBAR_ITEMS = {"fn":["render"],"mod":["controls","label_mode","layer_name","layer_toggle","pose_animator","render_params","render_stage","scene_layers","scene_state","transport_layers","two_finger","widget"]};

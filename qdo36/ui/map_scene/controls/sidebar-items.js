@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["controls","layer_menu","layer_toggles"]};

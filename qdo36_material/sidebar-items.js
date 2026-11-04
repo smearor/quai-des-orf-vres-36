@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["detective_count","pawn_color","pawn_id","role","round_number","ticket_counts","ticket_kind"]};
+window.SIDEBAR_ITEMS = {"mod":["detective_count","pawn_color","pawn_id","role","round_number","seat_count","ticket_counts","ticket_kind"]};

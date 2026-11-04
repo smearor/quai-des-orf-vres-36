@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["adjacency","component_count","density","edge_pair","edge_set","finding","linearity_cause","mean_degree","missing_service","report"]};

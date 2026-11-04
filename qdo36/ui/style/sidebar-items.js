@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["alpha","belle_epoque","color","comic","edge_spec","map_style","neon","palette","path","renderer"]};
+window.SIDEBAR_ITEMS = {"mod":["alpha","belle_epoque","color","comic","edge_spec","label_spec","map_style","neon","palette","path","renderer","station_spec"]};
