@@ -31,4 +31,8 @@ pub(super) const PALETTE: StylePalette = StylePalette {
     batobus: RgbColor::new(0.0, 0.85, 0.95),
     // #FF7326 - underground secret routes, orange glow.
     underground: RgbColor::new(1.0, 0.45, 0.15),
+    // #1A2B38 - dim neutral edge ink (standard view, no highlight).
+    edge: RgbColor::new(0.10, 0.17, 0.22),
+    // #F2F2F2 - generic metro ring mark (unbranded).
+    metro: RgbColor::new(0.95, 0.95, 0.95),
 };

@@ -2,6 +2,8 @@ use cairo::Context;
 use cairo::FontSlant;
 use cairo::FontWeight;
 use cairo::LineCap;
+use qdo36_map::ImportanceClass;
+use qdo36_map::Transport;
 use std::f64::consts::TAU;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Pixels;
@@ -11,10 +13,15 @@ use tangible_objects_model::Vec2;
 use super::palette::PALETTE;
 use crate::ui::style::Alpha;
 use crate::ui::style::EdgeSpec;
+use crate::ui::style::LabelOrientation;
+use crate::ui::style::LabelSpec;
 use crate::ui::style::PxPos;
 use crate::ui::style::RgbColor;
+use crate::ui::style::StationSpec;
 use crate::ui::style::StyleRenderer;
+use crate::ui::style::edge_path;
 use crate::ui::style::polyline_path;
+use qdo36_tangibles::ScaleFactor;
 
 /// The Neon look: near-black field, glowing double-stroked edges,
 /// cyan accents (ARTWORK §2 Neon).
@@ -37,37 +44,85 @@ impl StyleRenderer for NeonStyle {
         ctx.stroke().ok();
     }
 
+    fn draw_bridge(&self, ctx: &Context, from: PxPos, to: PxPos, px_per_mm: PixelsPerMm) {
+        ctx.set_line_cap(LineCap::Round);
+        ctx.move_to(from.x, from.y);
+        ctx.line_to(to.x, to.y);
+        ctx.set_line_width(px_per_mm.scale(5.0).max(0.5));
+        PALETTE.paper.apply(ctx);
+        ctx.stroke_preserve().ok();
+        ctx.set_line_width(px_per_mm.scale(2.2).max(0.4));
+        PALETTE.station.apply(ctx);
+        ctx.stroke().ok();
+    }
+
     fn draw_edge(&self, ctx: &Context, edge: &EdgeSpec<'_>) {
         let px = edge.px_per_mm;
-        let color = PALETTE.transport_color(edge.transport, edge.line, edge.map);
+        let color = if edge.highlight {
+            PALETTE.transport_color(edge.transport, edge.line, edge.map)
+        } else {
+            PALETTE.edge
+        };
         ctx.set_line_cap(LineCap::Round);
-        // Glow pass: wide translucent stroke, then the core line.
-        ctx.set_line_width(px.scale(3.6).max(0.5));
-        color.apply_alpha(ctx, Alpha::new(0.28));
-        ctx.move_to(edge.from.x, edge.from.y);
-        ctx.line_to(edge.to.x, edge.to.y);
+        ctx.set_line_width(px.scale(if edge.highlight { 3.6 } else { 1.6 }).max(0.5));
+        color.apply_alpha(ctx, Alpha::new(if edge.highlight { 0.28 } else { 0.9 }));
+        edge_path(ctx, edge);
         ctx.stroke_preserve().ok();
         ctx.set_line_width(px.scale(1.2).max(0.4));
         color.apply(ctx);
         ctx.stroke().ok();
     }
 
-    fn draw_landmark(&self, ctx: &Context, pos: PxPos, px_per_mm: PixelsPerMm) {
+    fn draw_landmark(&self, ctx: &Context, pos: PxPos, scale: ScaleFactor, px_per_mm: PixelsPerMm) {
+        ctx.new_path();
         PALETTE.accent.apply_alpha(ctx, Alpha::new(0.5));
         ctx.set_line_width(1.0);
-        ctx.arc(pos.x, pos.y, px_per_mm.scale(2.0).max(0.5), 0.0, TAU);
+        ctx.arc(pos.x, pos.y, px_per_mm.scale(2.0 * scale.get()).max(0.5), 0.0, TAU);
         ctx.stroke().ok();
     }
 
-    fn draw_station(&self, ctx: &Context, pos: PxPos, selected: bool, px_per_mm: PixelsPerMm) {
-        let radius = px_per_mm.scale(2.4).max(0.4);
-        ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
-        PALETTE.station.apply(ctx);
-        ctx.fill_preserve().ok();
-        ctx.set_line_width(0.8);
-        PALETTE.paper.apply(ctx);
-        ctx.stroke().ok();
-        if selected {
+    fn draw_station(&self, ctx: &Context, spec: &StationSpec<'_>) {
+        // Labels leave a current point; `arc` would otherwise join it.
+        ctx.new_path();
+        let pos = spec.pos;
+        let px_per_mm = spec.px_per_mm;
+        let size = match spec.importance {
+            Some(ImportanceClass::Minor) => 0.75,
+            Some(ImportanceClass::Hub) => 1.35,
+            _ => 1.0,
+        };
+        let radius = px_per_mm.scale(2.4 * size * spec.station_scale.get()).max(0.4);
+        if spec.metro_overlay && !spec.lines.is_empty() {
+            let sectors = spec.lines.len() as f64;
+            for (i, line) in spec.lines.iter().enumerate() {
+                let start = -std::f64::consts::FRAC_PI_2 + i as f64 * TAU / sectors;
+                ctx.move_to(pos.x, pos.y);
+                ctx.arc(pos.x, pos.y, radius, start, start + TAU / sectors);
+                ctx.close_path();
+                PALETTE.transport_color(Transport::Metro, Some(line), spec.map).apply(ctx);
+                ctx.fill().ok();
+            }
+        } else {
+            ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
+            PALETTE.station.apply(ctx);
+            ctx.fill_preserve().ok();
+            ctx.set_line_width(0.8);
+            PALETTE.paper.apply(ctx);
+            ctx.stroke().ok();
+        }
+        for (i, transport) in spec.served.iter().enumerate() {
+            ctx.arc(
+                pos.x,
+                pos.y,
+                radius + px_per_mm.scale(0.9 * spec.ring_width.get() * (spec.served.len() - i) as f64).max(0.4),
+                0.0,
+                TAU,
+            );
+            PALETTE.base_color(*transport).apply(ctx);
+            ctx.set_line_width(0.8 * spec.ring_width.get());
+            ctx.stroke().ok();
+        }
+        if spec.selected {
             ctx.arc(pos.x, pos.y, radius + px_per_mm.scale(2.6).max(0.4), 0.0, TAU);
             PALETTE.select.apply(ctx);
             ctx.set_line_width(1.6);
@@ -75,16 +130,37 @@ impl StyleRenderer for NeonStyle {
         }
     }
 
-    fn draw_label(&self, ctx: &Context, name: &str, pos: PxPos, radius: Pixels, px_per_mm: PixelsPerMm) {
+    fn draw_label(&self, ctx: &Context, spec: &LabelSpec<'_>) {
+        let pos = spec.pos;
         ctx.select_font_face("monospace", FontSlant::Normal, FontWeight::Normal);
-        ctx.set_font_size(px_per_mm.scale(3.4).max(7.0));
-        let Ok(extents) = ctx.text_extents(name) else { return };
-        ctx.move_to(pos.x - extents.width() / 2.0, pos.y + radius.as_f64() + px_per_mm.scale(5.0).max(9.0));
-        PALETTE.label.apply_alpha(ctx, Alpha::new(0.85));
-        ctx.show_text(name).ok();
+        ctx.set_font_size(spec.px_per_mm.scale(if spec.inside { 3.0 } else { 3.4 } * spec.label_scale.get()).max(7.0));
+        let Ok(extents) = ctx.text_extents(spec.text) else { return };
+        let _saved = ctx.save();
+        if let LabelOrientation::Radial { center } = spec.orientation {
+            let angle = (pos.y - center.y).atan2(pos.x - center.x) - std::f64::consts::FRAC_PI_2;
+            ctx.translate(pos.x, pos.y);
+            ctx.rotate(angle);
+            ctx.translate(-pos.x, -pos.y);
+        }
+        let y = if spec.inside {
+            pos.y + extents.height() / 2.0
+        } else {
+            pos.y + spec.radius.as_f64() + spec.px_per_mm.scale(5.0).max(9.0)
+        };
+        ctx.new_path();
+        ctx.move_to(pos.x - extents.width() / 2.0, y);
+        // In-disc numbers draw in paper ink - `label` is cyan glow.
+        if spec.inside {
+            PALETTE.paper.apply(ctx);
+        } else {
+            PALETTE.label.apply_alpha(ctx, Alpha::new(0.85));
+        }
+        ctx.show_text(spec.text).ok();
+        let _restored = ctx.restore();
     }
 
     fn draw_anchor(&self, ctx: &Context, pos: PxPos, tracked: bool, px_per_mm: PixelsPerMm) {
+        ctx.new_path();
         let radius = px_per_mm.scale(5.0).max(0.5);
         let color = if tracked { PALETTE.accent } else { PALETTE.dim };
         ctx.arc(pos.x, pos.y, radius, 0.0, TAU);

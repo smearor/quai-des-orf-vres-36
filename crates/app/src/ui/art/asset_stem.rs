@@ -4,6 +4,7 @@
 //! literal) become an `AssetStem`, so `ArtSpec` cannot be handed a
 //! raw display name by accident.
 
+use qdo36_map::LineName;
 use std::fmt;
 
 /// A canonical asset filename stem (no extension, lowercase, dashed).
@@ -31,6 +32,12 @@ impl AssetStem {
             "la-seine" => Self::new("seine-boat"),
             _ => Self(slug),
         }
+    }
+
+    /// The stem for a metro line badge (`ligne` family): the
+    /// pre-colored variant `metro-{line}-colored`.
+    pub fn for_line(line: &LineName) -> Self {
+        Self::new(&format!("metro-{}-colored", line.as_str().to_lowercase()))
     }
 
     /// The stem as a string slice.

@@ -21,6 +21,17 @@ pub struct Edge {
     /// brand color styles the drawn route).
     #[serde(default)]
     pub line: Option<LineName>,
+    /// Intermediate stations the drawn route passes through without
+    /// stopping, in `from` -> `to` order. Empty routes along the
+    /// street mesh automatically (`GameMap::route_on_surface`); set `via` to
+    /// override a single edge's drawn path.
+    #[serde(default)]
+    pub via: Vec<StationId>,
+    /// Draw the straight chord and skip street-mesh routing (metro
+    /// edges only - relevant where `via` is empty and the mesh
+    /// detour reads worse than the direct line).
+    #[serde(default)]
+    pub direct: bool,
 }
 
 impl Edge {
@@ -32,6 +43,8 @@ impl Edge {
             to,
             transport,
             line: None,
+            via: Vec::new(),
+            direct: false,
         }
     }
 

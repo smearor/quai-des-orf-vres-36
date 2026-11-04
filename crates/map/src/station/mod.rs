@@ -2,12 +2,14 @@
 //! adjacency entries.
 
 pub mod count;
+pub mod degree;
 pub mod id;
 pub mod kind;
 pub mod name;
 pub mod neighbor;
 
 pub use count::StationCount;
+pub use degree::StationDegree;
 pub use id::StationId;
 pub use kind::StationKind;
 pub use name::StationName;
@@ -59,5 +61,10 @@ impl Station {
     /// Returns `true` when this station has an underground access.
     pub fn is_underground(&self) -> bool {
         self.kinds.contains(&StationKind::Underground)
+    }
+
+    /// Returns `true` when this station stands at a bridge.
+    pub fn is_bridge(&self) -> bool {
+        self.kinds.contains(&StationKind::Bridge)
     }
 }

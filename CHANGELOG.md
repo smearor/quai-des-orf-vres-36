@@ -78,3 +78,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Engine split `session/{mod,validate,apply,undo,tests}.rs`;
   `SeatCount`/`MoveShape`/`TicketCounts::{UNLIMITED,DETECTIVE_START,
   FUGITIVE_START,gain}`/`Transport::for_ticket`/`DetectiveCount::pawns`
+- View/debug tools on the MCP surface: `screenshot` renders the
+  window via `WidgetPaintable`+GSK to PNG image content;
+  `scene_layout` reports every station/landmark in map-mm and
+  widget-px; `set_view` pans (`state.pan`, post-`MapTransform`
+  offset with exact `to_map` inverse), rotates (`DisplayRotation`
+  quarter turns) and zooms (`MapScale`); `set_layers` toggles
+  water/landmarks/per-transport edges/stations/labels plus
+  `hide_lines` for single metro lines
+- Tabletop labels + station data: `label_mode = radial|screen`
+  rotates labels to the nearest map edge; `numbers` and `scores`
+  layers draw station ids inside discs and the strategic
+  importance (`GameMap::importance`, tertile classes scale the
+  disc size) beside them
+- `reload_map` MCP tool re-reads the city dataset from disk for
+  no-restart map iteration
+- Metro overlay extras: `ligne/metro-{line}-colored.svg` badges on
+  edges carrying line termini plus every third segment; station
+  discs fill with the serving lines' colors as pie sectors;
+  parallel corridors draw per-line offset strands via
+  `EdgeSpec.offsets` + `edge_path` segment shifting
+- `set_anchor` MCP tool places a virtual anchor pose and lifts the
+  map page over the setup page; `set_view` gains `compass_mm`,
+  `set_layers` gains `compass` and `highlight`; `scene_layout`
+  falls back to the window size when the scene is unallocated
+- Scotland-Yard-style rendering: edges draw in a neutral `edge`
+  ink in the standard view; each station carries one ring per
+  served transport (taxi/bus/metro/batobus/underground palette
+  colors, `StylePalette::base_color` + generic `metro` token).
+  `set_layers` gains a `highlight` transport set - highlighted
+  layers render in their own colors on top of the grey web.
+  Metro edges route through the taxi mesh via
+  `GameMap::route_on` (distance-weighted Dijkstra) as
+  pass-through lines; an optional `Edge.via` overrides a single
+  edge's drawn path
+- `GameMap::lint` dataset-quality check (WP10 criteria Q1-Q12):
+  per-layer planarity (metro exempt, same-line self-crossings
+  report), per-transport connectivity, metro/batobus linearity,
+  line-transfer sharing, metro⊆bus∩taxi and bus⊆taxi≥90% coverage,
+  leaf/duplicate-position hygiene, start-station degree ≥ 2, the
+  soft taxi≥bus≥metro density order, plus informational
+  per-transport density; exposed as the `map_lint` tool on the
+  app-owned host (meta references `fugitive.station`/
+  `anchor.station` are already parse-validated)

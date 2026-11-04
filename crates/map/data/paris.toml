@@ -6,19 +6,26 @@
 # `qdo36-mapgen` from GTFS + OSM data (see concepts/planned/WP02).
 
 # Stations: id, display name, [x_mm, y_mm], special kinds
-# ("start" = start-deal eligible, "batobus" = Seine pier).
+# ("start" = start-deal eligible, "batobus" = Seine pier,
+#  "bridge" = Seine bridge, "underground" = Égouts access).
+#
+# Water rule: every "batobus" pier must also be a "bridge" (the boat
+# docks at bridge landings). "taxi"/"bus" edges may only cross a
+# water polyline when at least one endpoint is a "bridge" - road
+# traffic crosses the Seine via bridges; "metro"/"underground" edges
+# are exempt (tunnels).
 stations = [
     # --- Rive Gauche / west ---
-    { id = 1, name = "Tour Eiffel", pos_mm = [80.0, 220.0], kinds = ["start", "batobus"] },
+    { id = 1, name = "Tour Eiffel", pos_mm = [80.0, 220.0], kinds = ["start", "batobus", "bridge"] },
     { id = 2, name = "École Militaire", pos_mm = [95.0, 265.0], kinds = ["start"] },
-    { id = 3, name = "Invalides", pos_mm = [130.0, 215.0], kinds = ["start", "underground"] },
+    { id = 3, name = "Invalides", pos_mm = [130.0, 215.0], kinds = ["start", "underground", "bridge"] },
     { id = 4, name = "Trocadéro", pos_mm = [55.0, 165.0], kinds = ["start"] },
     { id = 5, name = "Étoile", pos_mm = [105.0, 115.0], kinds = ["start"] },
     { id = 6, name = "Champs-Élysées", pos_mm = [160.0, 165.0], kinds = ["start"] },
     { id = 7, name = "Concorde", pos_mm = [185.0, 190.0], kinds = ["start"] },
-    { id = 8, name = "Musée d'Orsay", pos_mm = [150.0, 205.0], kinds = ["batobus"] },
-    { id = 9, name = "Saint-Germain", pos_mm = [195.0, 218.0], kinds = ["start"] },
-    { id = 10, name = "Louvre", pos_mm = [208.0, 195.0], kinds = ["start", "batobus"] },
+    { id = 8, name = "Musée d'Orsay", pos_mm = [150.0, 205.0], kinds = [] },
+    { id = 9, name = "Saint-Germain", pos_mm = [195.0, 218.0], kinds = ["start", "batobus", "bridge"] },
+    { id = 10, name = "Louvre", pos_mm = [208.0, 195.0], kinds = ["start"] },
     { id = 11, name = "Palais Royal", pos_mm = [218.0, 178.0], kinds = ["start"] },
     { id = 12, name = "Opéra", pos_mm = [185.0, 140.0], kinds = ["start"] },
     { id = 13, name = "Saint-Lazare", pos_mm = [160.0, 112.0], kinds = ["start", "underground"] },
@@ -29,16 +36,16 @@ stations = [
     { id = 18, name = "Gare de l'Est", pos_mm = [278.0, 120.0], kinds = ["start"] },
     { id = 19, name = "République", pos_mm = [268.0, 150.0], kinds = ["start", "underground"] },
     { id = 20, name = "Châtelet", pos_mm = [232.0, 195.0], kinds = ["start"] },
-    { id = 21, name = "Pont Neuf", pos_mm = [222.0, 205.0], kinds = ["batobus", "underground"] },
-    { id = 22, name = "Saint-Michel", pos_mm = [228.0, 228.0], kinds = ["start"] },
-    { id = 23, name = "Notre-Dame", pos_mm = [262.0, 225.0], kinds = ["batobus"] },
+    { id = 21, name = "Pont Neuf", pos_mm = [222.0, 205.0], kinds = ["underground", "bridge"] },
+    { id = 22, name = "Saint-Michel", pos_mm = [228.0, 228.0], kinds = ["start", "batobus", "bridge"] },
+    { id = 23, name = "Notre-Dame", pos_mm = [262.0, 225.0], kinds = ["batobus", "bridge"] },
     { id = 24, name = "Hôtel de Ville", pos_mm = [252.0, 198.0], kinds = ["start"] },
     { id = 25, name = "Bastille", pos_mm = [288.0, 215.0], kinds = ["start", "underground"] },
     { id = 26, name = "Panthéon", pos_mm = [242.0, 258.0], kinds = ["start"] },
     { id = 27, name = "Luxembourg", pos_mm = [205.0, 250.0], kinds = ["start"] },
-    { id = 28, name = "Jardin des Plantes", pos_mm = [312.0, 255.0], kinds = ["batobus"] },
-    { id = 29, name = "Austerlitz", pos_mm = [318.0, 272.0], kinds = ["start", "batobus", "underground"] },
-    { id = 30, name = "Gare de Lyon", pos_mm = [322.0, 235.0], kinds = ["start"] },
+    { id = 28, name = "Jardin des Plantes", pos_mm = [312.0, 255.0], kinds = [] },
+    { id = 29, name = "Austerlitz", pos_mm = [318.0, 272.0], kinds = ["start", "underground", "bridge"] },
+    { id = 30, name = "Gare de Lyon", pos_mm = [322.0, 235.0], kinds = ["start", "batobus", "bridge"] },
     { id = 31, name = "Bercy", pos_mm = [372.0, 272.0], kinds = ["start"] },
     { id = 32, name = "Place d'Italie", pos_mm = [278.0, 312.0], kinds = ["start"] },
     { id = 33, name = "Gobelins", pos_mm = [268.0, 288.0], kinds = ["start"] },
@@ -50,19 +57,65 @@ stations = [
     { id = 39, name = "Père Lachaise", pos_mm = [332.0, 158.0], kinds = ["start", "underground"] },
     { id = 40, name = "Ménilmontant", pos_mm = [312.0, 130.0], kinds = ["start"] },
     { id = 41, name = "Buttes-Chaumont", pos_mm = [292.0, 75.0], kinds = ["start"] },
+    # --- 16e/15e west of the Eiffel tower ---
+    { id = 42, name = "Bir-Hakeim", pos_mm = [68.0, 212.0], kinds = ["batobus", "bridge"] },
+    { id = 43, name = "Passy", pos_mm = [60.0, 182.0], kinds = [] },
+    { id = 44, name = "La Muette", pos_mm = [38.0, 168.0], kinds = [] },
+    { id = 45, name = "Porte de Saint-Cloud", pos_mm = [34.0, 195.0], kinds = ["start", "underground"] },
+    { id = 46, name = "Javel", pos_mm = [42.0, 252.0], kinds = [] },
+    { id = 47, name = "Balard", pos_mm = [60.0, 305.0], kinds = ["start", "underground"] },
+    { id = 48, name = "Porte Maillot", pos_mm = [78.0, 98.0], kinds = ["start"] },
+    { id = 49, name = "La Motte-Picquet", pos_mm = [95.0, 248.0], kinds = ["underground"] },
+    # --- Auteuil / Boulogne corridor (16e, far west) ---
+    { id = 50, name = "Porte Dauphine", pos_mm = [48.0, 122.0], kinds = ["start"] },
+    { id = 51, name = "Ranelagh", pos_mm = [28.0, 150.0], kinds = ["start"] },
+    { id = 52, name = "Michel-Ange–Auteuil", pos_mm = [14.0, 168.0], kinds = ["start"] },
+    { id = 53, name = "Église d'Auteuil", pos_mm = [20.0, 182.0], kinds = ["start"] },
+    { id = 54, name = "Porte d'Auteuil", pos_mm = [12.0, 185.0], kinds = ["start", "underground"] },
+    { id = 55, name = "Boulogne", pos_mm = [8.0, 200.0], kinds = ["start"] },
+    { id = 56, name = "Porte de Sèvres", pos_mm = [28.0, 330.0], kinds = ["start"] },
+    { id = 57, name = "Les Sablons", pos_mm = [60.0, 95.0], kinds = ["start"] },
+    { id = 58, name = "Pont Mirabeau", pos_mm = [50.0, 220.0], kinds = ["batobus", "bridge"] },
+    { id = 59, name = "Pont Alexandre III", pos_mm = [160.0, 235.0], kinds = ["batobus", "bridge"] },
+    { id = 60, name = "Île Saint-Louis", pos_mm = [275.0, 226.0], kinds = ["batobus", "bridge"] },
+    { id = 61, name = "Nation", pos_mm = [330.0, 196.0], kinds = [] },
+    { id = 62, name = "Iéna", pos_mm = [70.0, 190.0], kinds = [] },
+    { id = 63, name = "Alma", pos_mm = [115.0, 200.0], kinds = [] },
+    { id = 64, name = "Franklin D. Roosevelt", pos_mm = [154.0, 187.0], kinds = [] },
+    { id = 65, name = "Kléber", pos_mm = [80.0, 135.0], kinds = [] },
+    { id = 66, name = "George V", pos_mm = [128.0, 140.0], kinds = [] },
+    { id = 67, name = "Saint-Philippe-du-Roule", pos_mm = [140.0, 160.0], kinds = [] },
+    { id = 68, name = "Miromesnil", pos_mm = [155.0, 140.0], kinds = [] },
+    { id = 69, name = "Daumesnil", pos_mm = [345.0, 208.0], kinds = [] },
+    { id = 70, name = "Monge", pos_mm = [277.0, 256.0], kinds = [] },
+    { id = 71, name = "Wagram", pos_mm = [115.0, 90.0], kinds = [] },
+    { id = 72, name = "Plaisance", pos_mm = [158.0, 309.0], kinds = [] },
+    { id = 73, name = "Rue de la Pompe", pos_mm = [58.0, 135.0], kinds = [] },
+    { id = 74, name = "Victor Hugo", pos_mm = [95.0, 160.0], kinds = [] },
+    { id = 75, name = "Charles Michels", pos_mm = [68.0, 250.0], kinds = [] },
+    { id = 76, name = "Porte de Vincennes", pos_mm = [370.0, 215.0], kinds = [] },
+    { id = 77, name = "Château de Vincennes", pos_mm = [430.0, 240.0], kinds = [] },
+    { id = 78, name = "Duroc", pos_mm = [140.0, 255.0], kinds = [] },
+    { id = 79, name = "Corvisart", pos_mm = [245.0, 315.0], kinds = [] },
+    { id = 80, name = "Pasteur", pos_mm = [137.0, 276.0], kinds = [] },
+    { id = 81, name = "Edgar Quinet", pos_mm = [191.0, 289.0], kinds = [] },
+    { id = 82, name = "La Tour-Maubourg", pos_mm = [108.0, 242.0], kinds = [] },
 ]
 
 # Edges: undirected routes (endpoint order is irrelevant).
 edges = [
     # --- Taxi edges (short street connections) ---
-    { from = 1, to = 2, transport = "taxi" },
-    { from = 1, to = 4, transport = "taxi" },
-    { from = 2, to = 3, transport = "taxi" },
+    { from = 2, to = 35, transport = "taxi" },
+    { from = 2, to = 78, transport = "taxi" },
+    { from = 35, to = 78, transport = "taxi" },
+    { from = 59, to = 78, transport = "taxi" },
     { from = 2, to = 36, transport = "taxi" },
+    { from = 2, to = 82, transport = "taxi" },
+    { from = 3, to = 82, transport = "taxi" },
+    { from = 49, to = 82, transport = "taxi" },
+    { from = 2, to = 46, transport = "taxi" },
     { from = 3, to = 6, transport = "taxi" },
     { from = 3, to = 8, transport = "taxi" },
-    { from = 4, to = 5, transport = "taxi" },
-    { from = 5, to = 6, transport = "taxi" },
     { from = 6, to = 7, transport = "taxi" },
     { from = 6, to = 12, transport = "taxi" },
     { from = 7, to = 10, transport = "taxi" },
@@ -95,10 +148,45 @@ edges = [
     { from = 22, to = 27, transport = "taxi" },
     { from = 23, to = 24, transport = "taxi" },
     { from = 23, to = 25, transport = "taxi" },
+    { from = 23, to = 60, transport = "taxi" },
     { from = 24, to = 25, transport = "taxi" },
+    { from = 25, to = 60, transport = "taxi" },
     { from = 25, to = 30, transport = "taxi" },
+    { from = 25, to = 61, transport = "taxi" },
+    { from = 30, to = 60, transport = "taxi" },
+    { from = 30, to = 61, transport = "taxi" },
+    { from = 39, to = 61, transport = "taxi" },
+    # --- 16e/8e/7e infill (Trocadéro - Étoile - Invalides area) ---
+    { from = 1, to = 62, transport = "taxi" },
+    { from = 4, to = 62, transport = "taxi" },
+    { from = 62, to = 63, transport = "taxi" },
+    { from = 3, to = 63, transport = "taxi" },
+    { from = 6, to = 63, transport = "taxi" },
+    { from = 6, to = 64, transport = "taxi" },
+    { from = 7, to = 64, transport = "taxi" },
+    { from = 4, to = 65, transport = "taxi" },
+    { from = 5, to = 65, transport = "taxi" },
+    { from = 48, to = 65, transport = "taxi" },
+    { from = 50, to = 65, transport = "taxi" },
+    { from = 5, to = 66, transport = "taxi" },
+    { from = 6, to = 66, transport = "taxi" },
+    { from = 66, to = 67, transport = "taxi" },
+    { from = 6, to = 67, transport = "taxi" },
+    { from = 63, to = 67, transport = "taxi" },
+    { from = 6, to = 68, transport = "taxi" },
+    { from = 12, to = 68, transport = "taxi" },
+    { from = 30, to = 69, transport = "taxi" },
+    { from = 39, to = 69, transport = "taxi" },
+    { from = 61, to = 69, transport = "taxi" },
+    { from = 69, to = 76, transport = "taxi" },
+    { from = 76, to = 77, transport = "taxi" },
+    { from = 5, to = 71, transport = "taxi" },
+    { from = 14, to = 71, transport = "taxi" },
+    { from = 48, to = 71, transport = "taxi" },
     { from = 26, to = 27, transport = "taxi" },
-    { from = 26, to = 28, transport = "taxi" },
+    { from = 23, to = 70, transport = "taxi" },
+    { from = 26, to = 70, transport = "taxi" },
+    { from = 28, to = 70, transport = "taxi" },
     { from = 26, to = 33, transport = "taxi" },
     { from = 27, to = 34, transport = "taxi" },
     { from = 27, to = 35, transport = "taxi" },
@@ -109,11 +197,59 @@ edges = [
     { from = 31, to = 32, transport = "taxi" },
     { from = 32, to = 33, transport = "taxi" },
     { from = 33, to = 34, transport = "taxi" },
-    { from = 34, to = 35, transport = "taxi" },
-    { from = 34, to = 37, transport = "taxi" },
-    { from = 35, to = 36, transport = "taxi" },
+    { from = 34, to = 81, transport = "taxi" },
+    { from = 35, to = 81, transport = "taxi" },
+    { from = 34, to = 72, transport = "taxi" },
+    { from = 34, to = 79, transport = "taxi" },
+    { from = 32, to = 79, transport = "taxi" },
+    { from = 35, to = 72, transport = "taxi" },
+    { from = 37, to = 72, transport = "taxi" },
+    { from = 35, to = 80, transport = "taxi" },
+    { from = 36, to = 80, transport = "taxi" },
     { from = 36, to = 37, transport = "taxi" },
     { from = 37, to = 38, transport = "taxi" },
+    # --- west of the Eiffel tower ---
+    { from = 1, to = 42, transport = "taxi" },
+    { from = 4, to = 43, transport = "taxi" },
+    { from = 42, to = 43, transport = "taxi" },
+    { from = 43, to = 44, transport = "taxi" },
+    { from = 44, to = 45, transport = "taxi" },
+    { from = 42, to = 45, transport = "taxi" },
+    { from = 42, to = 58, transport = "taxi" },
+    { from = 45, to = 58, transport = "taxi" },
+    { from = 1, to = 46, transport = "taxi" },
+    { from = 46, to = 47, transport = "taxi" },
+    { from = 46, to = 58, transport = "taxi" },
+    { from = 46, to = 75, transport = "taxi" },
+    { from = 49, to = 75, transport = "taxi" },
+    { from = 3, to = 59, transport = "taxi" },
+    { from = 8, to = 59, transport = "taxi" },
+    { from = 9, to = 59, transport = "taxi" },
+    { from = 35, to = 59, transport = "taxi" },
+    { from = 37, to = 47, transport = "taxi" },
+    { from = 38, to = 47, transport = "taxi" },
+    { from = 5, to = 48, transport = "taxi" },
+    { from = 2, to = 49, transport = "taxi" },
+    { from = 1, to = 49, transport = "taxi" },
+    { from = 48, to = 50, transport = "taxi" },
+    { from = 50, to = 51, transport = "taxi" },
+    { from = 51, to = 44, transport = "taxi" },
+    { from = 44, to = 52, transport = "taxi" },
+    { from = 52, to = 53, transport = "taxi" },
+    { from = 53, to = 54, transport = "taxi" },
+    { from = 54, to = 55, transport = "taxi" },
+    { from = 55, to = 45, transport = "taxi" },
+    { from = 48, to = 57, transport = "taxi" },
+    { from = 4, to = 73, transport = "taxi" },
+    { from = 4, to = 74, transport = "taxi" },
+    { from = 50, to = 73, transport = "taxi" },
+    { from = 65, to = 74, transport = "taxi" },
+    { from = 66, to = 74, transport = "taxi" },
+    { from = 67, to = 74, transport = "taxi" },
+    { from = 57, to = 50, transport = "taxi" },
+    { from = 65, to = 73, transport = "taxi" },
+    { from = 47, to = 56, transport = "taxi" },
+    { from = 56, to = 38, transport = "taxi" },
     { from = 25, to = 39, transport = "taxi" },
     { from = 39, to = 40, transport = "taxi" },
     { from = 19, to = 39, transport = "taxi" },
@@ -127,43 +263,123 @@ edges = [
     { from = 12, to = 19, transport = "bus" },
     { from = 19, to = 24, transport = "bus" },
     { from = 19, to = 39, transport = "bus" },
+    { from = 25, to = 61, transport = "bus" },
+    { from = 48, to = 57, transport = "bus" },
+    { from = 61, to = 76, transport = "bus" },
+    { from = 76, to = 77, transport = "bus" },
+    { from = 19, to = 41, transport = "bus", via = [18] },
     { from = 13, to = 15, transport = "bus" },
-    { from = 20, to = 25, transport = "bus" },
-    { from = 3, to = 7, transport = "bus" },
-    { from = 7, to = 20, transport = "bus" },
-    { from = 25, to = 29, transport = "bus" },
+    { from = 15, to = 17, transport = "bus", via = [16] },
+    { from = 15, to = 48, transport = "bus", via = [14, 71] },
+    { from = 20, to = 25, transport = "bus", via = [24] },
+    { from = 3, to = 7, transport = "bus", via = [8] },
+    { from = 3, to = 12, transport = "bus", via = [6] },
+    { from = 7, to = 20, transport = "bus", via = [10] },
+    { from = 25, to = 29, transport = "bus", via = [30] },
+    { from = 26, to = 28, transport = "bus", via = [70] },
+    { from = 26, to = 35, transport = "bus", via = [27] },
+    { from = 29, to = 30, transport = "bus", via = [28] },
     { from = 29, to = 32, transport = "bus" },
-    { from = 32, to = 34, transport = "bus" },
-    { from = 35, to = 34, transport = "bus" },
-    { from = 35, to = 3, transport = "bus" },
+    { from = 32, to = 34, transport = "bus", via = [79] },
+    { from = 34, to = 37, transport = "bus", via = [72] },
+    { from = 35, to = 34, transport = "bus", via = [81] },
+    { from = 35, to = 3, transport = "bus", via = [59] },
     { from = 2, to = 35, transport = "bus" },
+    { from = 35, to = 46, transport = "bus", via = [2] },
     { from = 40, to = 41, transport = "bus" },
-    { from = 39, to = 30, transport = "bus" },
+    { from = 39, to = 30, transport = "bus", via = [61] },
 
     # --- Metro edges (long-range lines, assigned to real RATP lines) ---
-    { from = 5, to = 20, transport = "metro", line = "M1" },
-    { from = 20, to = 30, transport = "metro", line = "M1" },
-    { from = 4, to = 24, transport = "metro", line = "M4" },
-    { from = 17, to = 20, transport = "metro", line = "M4" },
-    { from = 20, to = 22, transport = "metro", line = "M1" },
-    { from = 22, to = 34, transport = "metro", line = "M4" },
-    { from = 34, to = 35, transport = "metro", line = "M6" },
-    { from = 13, to = 35, transport = "metro", line = "M13" },
-    { from = 14, to = 4, transport = "metro", line = "M12" },
-    { from = 15, to = 19, transport = "metro", line = "M5" },
+    { from = 5, to = 20, transport = "metro", line = "M1", via = [66, 67, 6, 7, 10] },
+    { from = 20, to = 30, transport = "metro", line = "M1", via = [24, 25] },
+    { from = 30, to = 76, transport = "metro", line = "M1", via = [61] },
+    { from = 76, to = 77, transport = "metro", line = "M1" },
+    { from = 17, to = 20, transport = "metro", line = "M4", via = [18, 19, 24] },
+
+    { from = 20, to = 22, transport = "metro", line = "M4", via = [21] },
+    { from = 22, to = 34, transport = "metro", line = "M4", via = [27] },
+    { from = 32, to = 34, transport = "metro", line = "M4", via = [79] },
+    { from = 34, to = 35, transport = "metro", line = "M6", via = [81] },
+    { from = 13, to = 35, transport = "metro", line = "M13", via = [6, 3, 78] },
+    { from = 14, to = 4, transport = "metro", line = "M12", via = [5, 65] },
+    # M5 ausgesetzt: alle Stationen sind durch M2/M4/M6/M8/M13 abgedeckt
+    # { from = 15, to = 19, transport = "metro", line = "M5" },
     { from = 25, to = 32, transport = "metro", line = "M8" },
-    { from = 32, to = 35, transport = "metro", line = "M5" },
+    # { from = 32, to = 35, transport = "metro", line = "M5" },
     { from = 15, to = 41, transport = "metro", line = "M2" },
-    { from = 39, to = 29, transport = "metro", line = "M11" },
-    { from = 36, to = 1, transport = "metro", line = "M6" },
+    # M11 ausgesetzt: zu kurz und zickzack für den Spielnutzen
+    # { from = 39, to = 61, transport = "metro", line = "M11" },
+    # { from = 29, to = 61, transport = "metro", line = "M11", via = [30] },
+    # --- west extensions (16e/15e) ---
+    { from = 5, to = 48, transport = "bus" },
+    { from = 4, to = 5, transport = "bus", via = [65] },
+    { from = 4, to = 6, transport = "bus", via = [74, 67] },
+    { from = 4, to = 42, transport = "bus", via = [43] },
+    { from = 42, to = 46, transport = "bus", via = [58] },
+    { from = 46, to = 47, transport = "bus" },
+    { from = 37, to = 47, transport = "bus" },
+    # --- Q2 bridges: Hôtel de Ville - Châtelet joins the
+    # west/north net with the center, Père Lachaise - Ménilmontant
+    # attaches the Ménilmontant - Buttes-Chaumont arm.
+    { from = 24, to = 20, transport = "bus" },
+    { from = 39, to = 40, transport = "bus" },
+    # --- West bus feeders: Auteuil and Sevres join the net ---
+    { from = 4, to = 50, transport = "bus" },
+    { from = 51, to = 54, transport = "bus" },
+    { from = 55, to = 45, transport = "bus" },
+    { from = 54, to = 55, transport = "bus" },
+    { from = 45, to = 42, transport = "bus" },
+    { from = 47, to = 56, transport = "bus" },
+    { from = 4, to = 42, transport = "metro", line = "M6", via = [43] },
+    { from = 5, to = 4, transport = "metro", line = "M6", via = [65] },
+
+
+    { from = 42, to = 49, transport = "metro", line = "M6" },
+    { from = 36, to = 49, transport = "metro", line = "M6" },
+    { from = 35, to = 36, transport = "metro", line = "M6", via = [80] },
+    # M9 - the real westward line: Trocadero via La Muette,
+    # Ranelagh and Auteuil out to Boulogne.
+    { from = 4, to = 44, transport = "metro", line = "M9" },
+    { from = 44, to = 51, transport = "metro", line = "M9" },
+    { from = 51, to = 52, transport = "metro", line = "M9" },
+    { from = 52, to = 53, transport = "metro", line = "M9" },
+    { from = 53, to = 55, transport = "metro", line = "M9" },
+    # M10 - Porte de Saint-Cloud via Porte d'Auteuil, Michel-Ange
+    # and Javel to La Motte-Picquet (the real M10 corridor).
+    { from = 45, to = 54, transport = "metro", line = "M10" },
+    { from = 54, to = 52, transport = "metro", line = "M10" },
+    { from = 52, to = 46, transport = "metro", line = "M10", via = [53] },
+    { from = 46, to = 49, transport = "metro", line = "M10", via = [75] },
+    # M1 westward to Les Sablons via Porte Maillot (the real M1).
+    { from = 48, to = 57, transport = "metro", line = "M1" },
+    { from = 48, to = 5, transport = "metro", line = "M1" },
+    # M2 - the real arc: Porte Dauphine via Etoile, Place de Clichy
+    # and Sacre-Coeur onward to Menilmontant and Pere Lachaise.
+    { from = 48, to = 50, transport = "metro", line = "M2" },
+    { from = 50, to = 5, transport = "metro", line = "M2" },
+    { from = 5, to = 14, transport = "metro", line = "M2" },
+    { from = 14, to = 15, transport = "metro", line = "M2" },
+    { from = 41, to = 40, transport = "metro", line = "M2" },
+    { from = 40, to = 61, transport = "metro", line = "M2", via = [39] },
+    { from = 47, to = 49, transport = "metro", line = "M8", via = [46, 75] },
+    { from = 2, to = 49, transport = "metro", line = "M8" },
+    { from = 2, to = 3, transport = "metro", line = "M8", via = [82] },
+    { from = 3, to = 7, transport = "metro", line = "M8", via = [8] },
+    { from = 7, to = 12, transport = "metro", line = "M8" },
+    { from = 12, to = 19, transport = "metro", line = "M8" },
+    { from = 19, to = 25, transport = "metro", line = "M8" },
+    { from = 42, to = 58, transport = "batobus" },
+    { from = 42, to = 1, transport = "batobus" },
+    { from = 3, to = 49, transport = "underground" },
+    { from = 47, to = 49, transport = "underground" },
 
     # --- Batobus edges (Seine, Corbeau's black ticket) ---
-    { from = 1, to = 8, transport = "batobus" },
-    { from = 8, to = 10, transport = "batobus" },
-    { from = 10, to = 21, transport = "batobus" },
-    { from = 21, to = 23, transport = "batobus" },
-    { from = 23, to = 28, transport = "batobus" },
-    { from = 28, to = 29, transport = "batobus" },
+    { from = 1, to = 59, transport = "batobus" },
+    { from = 9, to = 59, transport = "batobus" },
+    { from = 9, to = 22, transport = "batobus" },
+    { from = 22, to = 23, transport = "batobus" },
+    { from = 23, to = 60, transport = "batobus" },
+    { from = 30, to = 60, transport = "batobus" },
 
     # underground - Les Égouts (fugitive-only tunnels, Valjean-style)
     { from = 3, to = 21, transport = "underground" },
@@ -175,13 +391,14 @@ edges = [
     { from = 29, to = 39, transport = "underground" },
     { from = 25, to = 17, transport = "underground" },
     { from = 34, to = 13, transport = "underground" },
+    { from = 45, to = 54, transport = "underground" },
 ]
 
 [map]
 name = "paris"
 slogan = "The city of light holds its breath."
 story = "Monsieur Corbeau vanished at dawn beneath the Eiffel Tower. The detectives of Quai des Orfèvres 36 fan out through the boulevards - every métro gate, every Batobus pier is watched. Catch him before the last round ends."
-bounds_mm = [0.0, 0.0, 600.0, 420.0]
+bounds_mm = [-30.0, 0.0, 600.0, 420.0]
 max_rounds = 24
 reveal_rounds = [3, 8, 13, 18, 24]
 
@@ -210,6 +427,7 @@ M6 = "#83C491"
 M7 = "#F3A4BA"
 M8 = "#CEADD2"
 M9 = "#D5C900"
+M10 = "#E0B03A"
 M11 = "#8D5E2A"
 M12 = "#00814F"
 M13 = "#98D4E2"
@@ -219,11 +437,12 @@ M14 = "#662483"
 # landmark markers at real positions.
 [backdrop]
 water = [[
+    -60.0, 232.0,  # west of the board (Boulogne reach)
     0.0, 225.0,
-    50.0, 220.0,
+    50.0, 220.0,   # Pont Mirabeau pier
     80.0, 215.0,   # Tour Eiffel pier
     115.0, 225.0,
-    160.0, 235.0,  # Invalides bend
+    160.0, 235.0,  # Pont Alexandre III pier
     200.0, 230.0,
     228.0, 222.0,  # Saint-Michel
     262.0, 220.0,  # Notre-Dame
@@ -231,7 +450,8 @@ water = [[
     340.0, 235.0,
     400.0, 250.0,  # Austerlitz bend
     470.0, 260.0,
-    600.0, 255.0
+    600.0, 255.0,
+    660.0, 252.0   # east of the board (towards Vincennes)
 ]]
 landmarks = [
     # monuments - towers, memorials, historic buildings

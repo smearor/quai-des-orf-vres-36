@@ -6,42 +6,48 @@
 # Transport mapping: "bus" = Bus lines, "metro" = U-/S-Bahn trunk,
 # "taxi" = street-level connections, "batobus" = Spreefahre piers.
 #
+# Water rule: every "batobus" pier must also be a "bridge" (the boat
+# docks at bridge landings). "taxi"/"bus" edges may only cross a
+# water polyline when at least one endpoint is a "bridge" - road
+# traffic crosses the Spree via bridges; "metro"/"underground" edges
+# are exempt (tunnels).
+#
 # Berlin is a larger sprawl than Paris: the dataset ships a longer
 # game (28 rounds) and a custom reveal schedule - exercising the
 # city-defaults path in GameConfig::for_map.
 
 stations = [
-    { id = 1, name = "Schloss Charlottenburg", pos_mm = [90.0, 175.0], kinds = ["start", "batobus"] },
+    { id = 1, name = "Schloss Charlottenburg", pos_mm = [90.0, 175.0], kinds = ["start", "batobus", "bridge"] },
     { id = 2, name = "Olympiastadion", pos_mm = [45.0, 115.0], kinds = ["start"] },
     { id = 3, name = "Spandau", pos_mm = [60.0, 45.0], kinds = ["start", "underground"] },
     { id = 4, name = "Tegel", pos_mm = [150.0, 35.0], kinds = ["start"] },
-    { id = 5, name = "Zoologischer Garten", pos_mm = [140.0, 200.0], kinds = ["start"] },
+    { id = 5, name = "Zoologischer Garten", pos_mm = [140.0, 200.0], kinds = ["start", "bridge"] },
     { id = 6, name = "Siegessäule", pos_mm = [170.0, 160.0], kinds = ["start"] },
     { id = 7, name = "Kurfürstendamm", pos_mm = [115.0, 220.0], kinds = ["start"] },
     { id = 8, name = "Wittenbergplatz", pos_mm = [155.0, 235.0], kinds = ["start"] },
-    { id = 9, name = "Hauptbahnhof", pos_mm = [205.0, 140.0], kinds = ["start", "batobus"] },
+    { id = 9, name = "Hauptbahnhof", pos_mm = [205.0, 140.0], kinds = ["start", "batobus", "bridge"] },
     { id = 10, name = "Reichstag", pos_mm = [195.0, 165.0], kinds = ["start"] },
     { id = 11, name = "Brandenburger Tor", pos_mm = [212.0, 178.0], kinds = ["start"] },
     { id = 12, name = "Potsdamer Platz", pos_mm = [215.0, 208.0], kinds = ["start", "underground"] },
     { id = 13, name = "Tiergarten", pos_mm = [183.0, 190.0], kinds = ["start"] },
-    { id = 14, name = "Friedrichstraße", pos_mm = [237.0, 168.0], kinds = ["batobus"] },
+    { id = 14, name = "Friedrichstraße", pos_mm = [237.0, 168.0], kinds = ["batobus", "bridge"] },
     { id = 15, name = "Gendarmenmarkt", pos_mm = [242.0, 192.0], kinds = ["start"] },
     { id = 16, name = "Checkpoint Charlie", pos_mm = [248.0, 218.0], kinds = ["start", "underground"] },
-    { id = 17, name = "Unter den Linden", pos_mm = [228.0, 180.0], kinds = ["start"] },
-    { id = 18, name = "Museuminsel", pos_mm = [257.0, 182.0], kinds = ["start", "batobus"] },
-    { id = 19, name = "Alexanderplatz", pos_mm = [278.0, 162.0], kinds = ["start"] },
+    { id = 17, name = "Unter den Linden", pos_mm = [228.0, 180.0], kinds = ["start", "bridge"] },
+    { id = 18, name = "Museuminsel", pos_mm = [257.0, 182.0], kinds = ["start", "batobus", "bridge"] },
+    { id = 19, name = "Alexanderplatz", pos_mm = [278.0, 162.0], kinds = ["start", "bridge"] },
     { id = 20, name = "Hackescher Markt", pos_mm = [258.0, 158.0], kinds = ["start"] },
     { id = 21, name = "Mauerpark", pos_mm = [268.0, 95.0], kinds = ["start"] },
     { id = 22, name = "Gesundbrunnen", pos_mm = [232.0, 68.0], kinds = ["start", "underground"] },
     { id = 23, name = "Wedding", pos_mm = [212.0, 90.0], kinds = ["start", "underground"] },
     { id = 24, name = "Prenzlauer Berg", pos_mm = [292.0, 108.0], kinds = ["start", "underground"] },
     { id = 25, name = "Friedrichshain", pos_mm = [312.0, 148.0], kinds = ["start"] },
-    { id = 26, name = "Ostbahnhof", pos_mm = [318.0, 178.0], kinds = ["start", "batobus"] },
+    { id = 26, name = "Ostbahnhof", pos_mm = [318.0, 178.0], kinds = ["start", "batobus", "bridge"] },
     { id = 27, name = "Warschauer Straße", pos_mm = [318.0, 208.0], kinds = ["start"] },
-    { id = 28, name = "East Side Gallery", pos_mm = [328.0, 195.0], kinds = ["batobus"] },
+    { id = 28, name = "East Side Gallery", pos_mm = [328.0, 195.0], kinds = ["batobus", "bridge"] },
     { id = 29, name = "Kreuzberg", pos_mm = [258.0, 248.0], kinds = ["start", "underground"] },
     { id = 30, name = "Görlitzer Park", pos_mm = [288.0, 248.0], kinds = ["start"] },
-    { id = 31, name = "Treptower Park", pos_mm = [348.0, 228.0], kinds = ["start", "batobus", "underground"] },
+    { id = 31, name = "Treptower Park", pos_mm = [348.0, 228.0], kinds = ["start", "batobus", "underground", "bridge"] },
     { id = 32, name = "Neukölln", pos_mm = [278.0, 298.0], kinds = ["start", "underground"] },
     { id = 33, name = "Tempelhofer Feld", pos_mm = [228.0, 292.0], kinds = ["start"] },
     { id = 34, name = "Schöneberg", pos_mm = [188.0, 252.0], kinds = ["start"] },
@@ -51,7 +57,7 @@ stations = [
     { id = 38, name = "Lichtenberg", pos_mm = [358.0, 118.0], kinds = ["start"] },
     { id = 39, name = "Marzahn", pos_mm = [402.0, 78.0], kinds = ["start"] },
     { id = 40, name = "Flughafen BER", pos_mm = [345.0, 368.0], kinds = ["start"] },
-    { id = 41, name = "Westend", pos_mm = [128.0, 140.0], kinds = ["start"] },
+    { id = 41, name = "Westend", pos_mm = [128.0, 140.0], kinds = ["start", "bridge"] },
 ]
 
 edges = [

@@ -8,6 +8,7 @@ use async_channel::Receiver;
 use futures_lite::StreamExt;
 use tangible_objects_client::Endpoint;
 use tangible_objects_client::GraphQLClient;
+use tangible_objects_client::ProfileQuery;
 use tangible_objects_model::Lifetime;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Owner;
@@ -18,6 +19,7 @@ use tangible_objects_model::TouchPoint;
 use tangible_objects_model::TrackedTangible;
 use tangible_objects_model::UnitsPerMm;
 use tracing::debug;
+use tracing::info;
 use tracing::warn;
 
 /// Tangible source backed by the `tangible-objects` daemon.
@@ -60,7 +62,29 @@ impl TangibleSource for GraphQlSource {
         match result {
             RegisterPatternResult::Registered(registered) => Ok(registered.pattern_id),
             RegisterPatternResult::Rejected(rejected) => {
-                Err(DaemonError::Registration(format!("registerPattern rejected {}: {}", profile.profile().name, rejected.reason)))
+                // A stale registration from a crashed or restarted run:
+                // when the daemon still holds the identical profile
+                // under our owner, adopt it instead of failing.
+                let Ok(profiles) = self
+                    .client
+                    .profiles(&ProfileQuery {
+                        owner: Some(self.owner.clone()),
+                        static_only: None,
+                    })
+                    .await
+                else {
+                    return Err(DaemonError::Registration(format!("registerPattern rejected {}: {}", profile.profile().name, rejected.reason)));
+                };
+                let identical = profiles
+                    .iter()
+                    .find(|candidate| candidate.name == profile.profile().name && candidate.num_points.as_usize() == profile.profile().points.len());
+                match identical {
+                    Some(existing) => {
+                        info!("registerPattern: adopting existing identical profile '{}' (id {})", existing.name, existing.pattern_id);
+                        Ok(existing.pattern_id)
+                    }
+                    None => Err(DaemonError::Registration(format!("registerPattern rejected {}: {}", profile.profile().name, rejected.reason))),
+                }
             }
         }
     }

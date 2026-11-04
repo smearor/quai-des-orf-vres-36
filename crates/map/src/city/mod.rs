@@ -7,6 +7,7 @@ pub use name::CityName;
 use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
+use std::path::PathBuf;
 
 /// A bundled city dataset.
 ///
@@ -32,6 +33,14 @@ impl City {
             Self::Paris => include_str!("../../data/paris.toml"),
             Self::Berlin => include_str!("../../data/berlin.toml"),
         }
+    }
+
+    /// The city's dataset on disk for hot reloads - resolves next
+    /// to the crate in a dev checkout; `None` in installed layouts
+    /// where only the bundled copy exists.
+    pub fn dataset_path(&self) -> Option<PathBuf> {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("data").join(format!("{}.toml", self.name()));
+        path.is_file().then_some(path)
     }
 
     /// The city's name.

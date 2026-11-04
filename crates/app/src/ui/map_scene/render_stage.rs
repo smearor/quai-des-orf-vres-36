@@ -20,6 +20,8 @@ pub struct RenderStage {
     pub fit: SurfaceFit,
     /// Map-mm -> surface-mm transform.
     transform: MapTransform,
+    /// View pan offset in surface-mm (post-transform).
+    pan: Vec2<Millimeters>,
 }
 
 impl RenderStage {
@@ -35,16 +37,19 @@ impl RenderStage {
         Self {
             fit: SurfaceFit::new(surface.width, surface.height, width, height, state.display_rotation),
             transform: MapTransform::new(pose, &state.config, state.scale),
+            pan: state.pan,
         }
     }
 
-    /// map-mm -> widget-px.
+    /// map-mm -> widget-px (transform, then the view pan).
     pub fn to_px(&self, pos: Vec2<Millimeters>) -> PxPos {
-        self.fit.map(self.transform.map_to_surface(pos))
+        let surface = self.transform.map_to_surface(pos);
+        self.fit.map(Vec2::new(surface.x + self.pan.x, surface.y + self.pan.y))
     }
 
     /// widget-px -> map-mm (exact inverse of `to_px`).
     pub fn to_map(&self, pos: PxPos) -> Vec2<Millimeters> {
-        self.transform.surface_to_map(self.fit.unmap(pos))
+        let surface = self.fit.unmap(pos);
+        self.transform.surface_to_map(Vec2::new(surface.x - self.pan.x, surface.y - self.pan.y))
     }
 }

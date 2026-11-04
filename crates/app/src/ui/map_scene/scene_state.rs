@@ -9,8 +9,12 @@ use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::MapScale;
 use qdo36_tangibles::SurfaceMm;
 use tangible_objects_model::DisplayRotation;
+use tangible_objects_model::Millimeters;
+use tangible_objects_model::Vec2;
 
 use crate::ui::art::ArtAssets;
+use crate::ui::map_scene::RenderParams;
+use crate::ui::map_scene::SceneLayers;
 use crate::ui::style::MapStyle;
 
 /// Everything the scene draws - the map, anchor, surface and view
@@ -39,4 +43,12 @@ pub struct SceneState {
     /// Overlay hint shown while the anchor is virtual (tower lifted
     /// / not yet placed).
     pub anchor_hint: Option<String>,
+    /// Which scene sections render (MCP `set_layers`).
+    pub layers: SceneLayers,
+    /// View pan offset in surface-mm (MCP `set_view`).
+    pub pan: Vec2<Millimeters>,
+    /// Compass rose position in map-mm (MCP `set_view compass_mm`).
+    pub compass_pos: Vec2<Millimeters>,
+    /// Global render factors (MCP `set_params` / UI controls).
+    pub params: RenderParams,
 }

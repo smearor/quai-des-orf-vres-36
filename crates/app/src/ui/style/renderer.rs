@@ -1,13 +1,26 @@
 //! `StyleRenderer` - the draw interface a map style implements.
 
+use crate::ui::style::EdgeSpec;
+use crate::ui::style::LabelSpec;
+use crate::ui::style::RgbColor;
+use crate::ui::style::StationSpec;
 use cairo::Context;
+use qdo36_tangibles::ScaleFactor;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Pixels;
 use tangible_objects_model::PixelsPerMm;
 use tangible_objects_model::Vec2;
 
-use crate::ui::style::EdgeSpec;
-use crate::ui::style::RgbColor;
+/// How a label orients on the tabletop.
+#[derive(Debug, Clone, Copy)]
+pub enum LabelOrientation {
+    /// Upright in screen space.
+    Screen,
+    /// Rotated so the text-up faces the map edge nearest the
+    /// station - the player on that side reads it upright. The
+    /// `PxPos` is the map center in widget px.
+    Radial { center: PxPos },
+}
 
 /// A position in widget pixels - `to_px` produces these, the style
 /// draws them.
@@ -24,17 +37,24 @@ pub trait StyleRenderer {
     /// A water polyline (river, canal).
     fn draw_water(&self, ctx: &Context, points: &[Vec2<Millimeters>], px_per_mm: PixelsPerMm, to_px: &dyn Fn(Vec2<Millimeters>) -> PxPos);
 
+    /// A bridge deck - the short plank a road edge crosses the
+    /// water on, drawn under the edge line.
+    fn draw_bridge(&self, ctx: &Context, from: PxPos, to: PxPos, px_per_mm: PixelsPerMm);
+
     /// A station pair's edge.
     fn draw_edge(&self, ctx: &Context, edge: &EdgeSpec<'_>);
 
     /// A backdrop landmark marker.
-    fn draw_landmark(&self, ctx: &Context, pos: PxPos, px_per_mm: PixelsPerMm);
+    fn draw_landmark(&self, ctx: &Context, pos: PxPos, scale: ScaleFactor, px_per_mm: PixelsPerMm);
 
-    /// A station node (fill + outline + selection ring).
-    fn draw_station(&self, ctx: &Context, pos: PxPos, selected: bool, px_per_mm: PixelsPerMm);
+    /// A station node (fill + outline + one ring per served
+    /// transport + line pie fill in the metro overlay +
+    /// selection ring).
+    fn draw_station(&self, ctx: &Context, spec: &StationSpec<'_>);
 
-    /// A station name label below the node.
-    fn draw_label(&self, ctx: &Context, name: &str, pos: PxPos, radius: Pixels, px_per_mm: PixelsPerMm);
+    /// Text attached to a station - name under the disc, number
+    /// inside it, score further out.
+    fn draw_label(&self, ctx: &Context, spec: &LabelSpec<'_>);
 
     /// The anchor marker (filled = tracked, hollow = virtual).
     fn draw_anchor(&self, ctx: &Context, pos: PxPos, tracked: bool, px_per_mm: PixelsPerMm);

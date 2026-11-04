@@ -8,8 +8,13 @@ use glib::subclass::types::ObjectSubclassIsExt;
 use gtk4::prelude::WidgetExt;
 use gtk4::prelude::WidgetExtManual;
 use qdo36_map::StationId;
+use qdo36_tangibles::AnchorPose;
 use qdo36_tangibles::AnchorState;
+use qdo36_tangibles::MapScale;
+use qdo36_tangibles::MapTransform;
+use tangible_objects_model::Millimeters;
 use tangible_objects_model::Pixels;
+use tangible_objects_model::Vec2;
 
 use crate::ui::map_scene::PoseAnimator;
 use crate::ui::map_scene::RenderStage;
@@ -113,5 +118,24 @@ impl MapScene {
             .nearest_station(stage.to_map(pos))
             .filter(|(_, distance)| distance.as_f64() <= SNAP_RADIUS_MM)
             .map(|(id, _)| id)
+    }
+
+    /// The view pan keeping the map point under `from` (widget px)
+    /// beneath `to` (widget px) once the map transform becomes
+    /// `pose`/`scale` - the centroid anchor for the two-finger
+    /// pan/pinch/rotate updates (`from` == `to` pins the rotate
+    /// pivot). Computed in state space (the animator's eased pose is
+    /// render smoothing only). Keeps the current pan while the fit
+    /// has no scale.
+    pub fn anchored_pan(&self, state: &SceneState, from: PxPos, to: PxPos, pose: AnchorPose, scale: MapScale) -> Vec2<Millimeters> {
+        let stage = RenderStage::new(state, state.anchor.pose(), Pixels::new(self.width() as f64), Pixels::new(self.height() as f64));
+        if stage.fit.scale.as_f64() <= 0.0 {
+            return state.pan;
+        }
+        let anchored = stage.to_map(from);
+        let transform = MapTransform::new(pose, &state.config, scale);
+        let target = stage.fit.unmap(to);
+        let shifted = transform.map_to_surface(anchored);
+        Vec2::new(target.x - shifted.x, target.y - shifted.y)
     }
 }

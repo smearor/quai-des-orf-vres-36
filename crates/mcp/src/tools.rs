@@ -9,14 +9,23 @@ use crate::JoinGameArgs;
 use crate::McpError;
 use crate::NewGameArgs;
 use crate::RequestMoveArgs;
+use crate::SetAnchorArgs;
 use crate::SetConfigArgs;
+use crate::SetLayersArgs;
+use crate::SetParamsArgs;
+use crate::SetViewArgs;
 use crate::TokenArgs;
+use qdo36_tangibles::MapScale;
+use qdo36_tangibles::ScaleFactor;
 use rmcp::ErrorData;
 use rmcp::handler::server::wrapper::Parameters;
 use rmcp::model::CallToolResult;
 use rmcp::model::ContentBlock;
 use rmcp::tool;
 use rmcp::tool_router;
+use tangible_objects_model::DisplayRotation;
+use tangible_objects_model::RotationRad;
+use tangible_objects_model::Vec2;
 
 #[tool_router(vis = "pub(super)")]
 impl QdoMcp {
@@ -118,6 +127,92 @@ impl QdoMcp {
             ContentBlock::image(reply.png_base64, "image/png".to_string()),
             ContentBlock::text(format!("screenshot ({:.0}x{:.0})", reply.width.as_f64(), reply.height.as_f64())),
         ]))
+    }
+
+    /// Lint the loaded map dataset against the quality criteria
+    /// (planarity, connectivity, line linearity, coverage, density).
+    #[tool(
+        description = "Lint the map dataset: crossings per layer, connectivity per transport, metro-line linearity + transfers, service coverage, density metrics."
+    )]
+    async fn map_lint(&self) -> Result<CallToolResult, ErrorData> {
+        self.forward(CommandKind::MapLint).await
+    }
+
+    /// Every drawn entity's mm + px position under the current view.
+    #[tool(description = "Get the scene layout: every station and landmark with its position in map-mm and widget-px under the current view transform.")]
+    async fn scene_layout(&self) -> Result<CallToolResult, ErrorData> {
+        self.forward(CommandKind::SceneLayout).await
+    }
+
+    /// Pan/rotate/zoom the view for visual debugging (view-only,
+    /// not persisted).
+    #[tool(description = "Set the view: 'zoom' factor (0.5-5.0), 'rotate' in quarter turns (0-3), 'pan_mm' [dx,dy] in surface-mm.")]
+    async fn set_view(&self, Parameters(args): Parameters<SetViewArgs>) -> Result<CallToolResult, ErrorData> {
+        let zoom = args
+            .zoom
+            .map(MapScale::try_new)
+            .transpose()
+            .map_err(|e| ErrorData::invalid_params(e.to_string(), None))?;
+        let rotate = args
+            .rotate
+            .map(|turns| match turns {
+                0 => Ok(DisplayRotation::Deg0),
+                1 => Ok(DisplayRotation::Deg90),
+                2 => Ok(DisplayRotation::Deg180),
+                3 => Ok(DisplayRotation::Deg270),
+                other => Err(ErrorData::invalid_params(format!("rotate must be 0-3, got {other}"), None)),
+            })
+            .transpose()?;
+        self.forward(CommandKind::SetView {
+            zoom,
+            rotate,
+            pan: args.pan_mm.map(|[dx, dy]| Vec2::new(dx, dy)),
+            compass: args.compass_mm.map(|[x, y]| Vec2::new(x, y)),
+        })
+        .await
+    }
+
+    /// Reload the city dataset from disk - iterate map data
+    /// without restarting the app.
+    #[tool(description = "Reload the city map dataset from disk (dev iteration, no restart).")]
+    async fn reload_map(&self) -> Result<CallToolResult, ErrorData> {
+        self.forward(CommandKind::ReloadMap).await
+    }
+
+    /// Adjust the global render factors (1.0 neutral): station discs,
+    /// landmark pins, metro badges, transport rings, label fonts.
+    #[tool(description = "Adjust global render factors (station/landmark/metro sizes, ring width, label font).")]
+    async fn set_params(&self, Parameters(args): Parameters<SetParamsArgs>) -> Result<CallToolResult, ErrorData> {
+        self.forward(CommandKind::SetParams {
+            station_scale: args.station_scale.map(ScaleFactor::new),
+            landmark_scale: args.landmark_scale.map(ScaleFactor::new),
+            metro_scale: args.metro_scale.map(ScaleFactor::new),
+            ring_width: args.ring_width.map(ScaleFactor::new),
+            label_scale: args.label_scale.map(ScaleFactor::new),
+        })
+        .await
+    }
+
+    /// Set a virtual anchor pose on the surface - bypasses the
+    /// "place the tower" setup for headless/table-less runs.
+    #[tool(description = "Set a virtual anchor: 'center_mm' [x,y] in surface-mm and optional 'rotation_rad' - places the tower without a tangible.")]
+    async fn set_anchor(&self, Parameters(args): Parameters<SetAnchorArgs>) -> Result<CallToolResult, ErrorData> {
+        let [x, y] = args.center_mm;
+        self.forward(CommandKind::SetAnchor {
+            center: Vec2::new(x, y),
+            rotation_rad: args.rotation_rad.map(RotationRad::new),
+        })
+        .await
+    }
+
+    /// Toggle scene layers (water, landmarks, per-transport edges,
+    /// stations, labels) for visual debugging - plus `hide_lines`
+    /// to hide single metro lines by name.
+    #[tool(
+        description = "Toggle scene layers: water, landmarks, taxi/bus/metro/batobus/underground edges, stations, labels - plus 'hide_lines': [\"M4\",\"M13\"] to hide single metro lines."
+    )]
+    async fn set_layers(&self, Parameters(args): Parameters<SetLayersArgs>) -> Result<CallToolResult, ErrorData> {
+        self.forward(CommandKind::SetLayers { mask: args.mask }).await
     }
 }
 

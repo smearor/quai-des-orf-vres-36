@@ -1,6 +1,7 @@
 //! `CommandResult`/`CommandReply` - the typed answers the game host
 //! sends back over the request's oneshot channel.
 
+use qdo36_map::LintReport;
 use qdo36_material::Role;
 use qdo36_moves::Hop;
 use qdo36_moves::MoveOutcome;
@@ -11,6 +12,7 @@ use serde::Serialize;
 
 use crate::GameStateView;
 use crate::McpError;
+use crate::SceneLayout;
 use crate::ScreenshotReply;
 
 /// A successful command outcome.
@@ -36,8 +38,22 @@ pub enum CommandResult {
     Legal(Vec<Hop>),
     /// `Move` outcome (applied or game-ending).
     Moved(MoveOutcome),
+    /// `MapLint` dataset-quality report.
+    Lint(Box<LintReport>),
     /// `Screenshot` PNG payload.
     Screenshot(ScreenshotReply),
+    /// `SceneLayout` entity list.
+    Layout(SceneLayout),
+    /// `SetView` applied.
+    ViewApplied,
+    /// `SetLayers` applied.
+    LayersApplied,
+    /// `SetAnchor` applied.
+    AnchorSet,
+    /// `ReloadMap` applied.
+    MapReloaded,
+    /// `SetParams` applied.
+    ParamsApplied,
 }
 
 /// The reply channel payload: a result or a typed failure.

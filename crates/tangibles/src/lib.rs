@@ -16,6 +16,7 @@ pub use anchor::AnchorState;
 pub use map::MapScale;
 pub use map::MapScaleError;
 pub use map::MapTransform;
+pub use map::ScaleFactor;
 pub use source::DaemonError;
 pub use source::GraphQlSource;
 pub use source::SurfaceMm;

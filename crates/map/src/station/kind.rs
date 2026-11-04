@@ -17,6 +17,11 @@ pub enum StationKind {
     /// Underground access hatch: `Transport::Underground` edges may
     /// terminate here (Paris: Égouts, Berlin: Unterwelten).
     Underground,
+    /// Bridge over a water course: `taxi`/`bus` edges may only cross
+    /// a `backdrop.water` polyline when at least one endpoint carries
+    /// this kind. Every `batobus` pier must also be a bridge - the
+    /// boat docks at the bridge landing.
+    Bridge,
 }
 
 impl fmt::Display for StationKind {
@@ -25,6 +30,7 @@ impl fmt::Display for StationKind {
             Self::Start => "start",
             Self::Batobus => "batobus",
             Self::Underground => "underground",
+            Self::Bridge => "bridge",
         };
         f.write_str(name)
     }

@@ -25,12 +25,22 @@ use crate::qdo_mcp::QdoMcp;
 #[tool_handler]
 impl ServerHandler for QdoMcp {
     fn get_info(&self) -> ServerConfig {
-        ServerConfig::new(ServerCapabilities::builder().enable_resources().enable_resources_subscribe().build()).with_instructions(
+        ServerConfig::new(
+            ServerCapabilities::builder()
+                .enable_resources()
+                .enable_resources_subscribe()
+                .enable_tools()
+                .build(),
+        )
+        .with_instructions(
             "Quai des Orfevres 36 - Scotland Yard on the tangible-objects \
              surface. The qdo36://state resource mirrors the app's live \
-             snapshot (anchor pose, map) and supports resources/subscribe \
-             for change notifications. Play/introspection tools land in \
-             later phases - the schema stays additive.",
+             snapshot (anchor pose, map, session) and supports \
+             resources/subscribe for change notifications. The tools \
+             expose introspection (anchor_state, map_info, move_log, \
+             game_config), the agent play API (new_game, join_game, \
+             game_state, legal_moves, request_move) and window \
+             screenshots - the schema stays additive.",
         )
     }
 

@@ -3,6 +3,7 @@ use crate::Edge;
 use crate::EdgeCount;
 use crate::MapError;
 use crate::Neighbor;
+use crate::Segment;
 use crate::Station;
 use crate::StationCount;
 use crate::StationId;
@@ -10,8 +11,11 @@ use crate::Transport;
 use crate::map::MapMeta;
 use crate::map::MapToml;
 use crate::map::backdrop::Backdrop;
+use crate::map::cost::Cost;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
+use std::collections::HashMap;
+use std::collections::binary_heap::BinaryHeap;
 use std::str::FromStr;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Region;
@@ -136,6 +140,66 @@ impl GameMap {
     /// legal TOML but almost certainly a data bug (a Scotland Yard map
     /// must be one component). Bundled maps are asserted connected in
     /// tests; callers may warn on non-empty results.
+    /// Shortest path between two stations along `transport` edges,
+    /// weighted by straight-line distance - the drawn route of an
+    /// edge that passes stations without stopping (metro lines
+    /// routed through the taxi mesh).
+    pub fn route_on(&self, from: StationId, to: StationId, transport: Transport) -> Option<Vec<StationId>> {
+        self.route_on_where(from, to, |t| t == transport)
+    }
+
+    /// Shortest path along the surface street mesh (taxi + bus
+    /// edges), weighted by straight-line distance - the drawn route
+    /// of a metro edge that passes stations without stopping.
+    pub fn route_on_surface(&self, from: StationId, to: StationId) -> Option<Vec<StationId>> {
+        self.route_on_where(from, to, |t| matches!(t, Transport::Taxi | Transport::Bus))
+    }
+
+    /// Dijkstra over the neighbors that `serves` admits, weighted
+    /// by straight-line distance; `None` when unreachable.
+    fn route_on_where(&self, from: StationId, to: StationId, serves: impl Fn(Transport) -> bool) -> Option<Vec<StationId>> {
+        let mut dist: HashMap<StationId, f64> = HashMap::new();
+        let mut prev: HashMap<StationId, StationId> = HashMap::new();
+        let mut heap = BinaryHeap::new();
+        dist.insert(from, 0.0);
+        heap.push((Cost::new(0.0), from));
+        while let Some((cost, node)) = heap.pop() {
+            if node == to {
+                break;
+            }
+            let here = *dist.get(&node).unwrap_or(&f64::INFINITY);
+            if cost.get() > here {
+                continue;
+            }
+            for next in self.neighbors(node).iter().filter_map(|n| serves(n.transport).then_some(n.station)) {
+                let leg = self
+                    .station(node)
+                    .zip(self.station(next))
+                    .map(|(a, b)| a.pos.distance(&b.pos).as_f64())
+                    .unwrap_or(1.0);
+                let candidate = here + leg;
+                if candidate < *dist.get(&next).unwrap_or(&f64::INFINITY) {
+                    dist.insert(next, candidate);
+                    prev.insert(next, node);
+                    heap.push((Cost::new(candidate), next));
+                }
+            }
+        }
+        if !prev.contains_key(&to) && from != to {
+            return None;
+        }
+        let mut path = vec![to];
+        while *path.last().unwrap_or(&to) != from {
+            let node = *path.last().unwrap_or(&to);
+            match prev.get(&node) {
+                Some(&p) => path.push(p),
+                None => break,
+            }
+        }
+        path.reverse();
+        Some(path)
+    }
+
     pub fn disconnected(&self) -> Vec<StationId> {
         let Some(start) = self.stations.keys().next() else {
             return Vec::new();
@@ -179,6 +243,9 @@ impl TryFrom<MapToml> for GameMap {
             if !pos.x.is_finite() || !pos.y.is_finite() || !bounds.contains(&pos) {
                 return Err(MapError::OutOfBounds(station.id));
             }
+            if station.is_batobus() && !station.is_bridge() {
+                return Err(MapError::BatobusOffBridge(station.id));
+            }
             if stations.insert(station.id, station.clone()).is_some() {
                 return Err(MapError::DuplicateStationId(station.id));
             }
@@ -195,6 +262,13 @@ impl TryFrom<MapToml> for GameMap {
             return Err(MapError::MissingStation(fugitive.station));
         }
 
+        let water_segments: Vec<Segment<Millimeters>> = dataset
+            .backdrop
+            .water
+            .iter()
+            .flat_map(|polyline| polyline.points().windows(2).map(|pair| Segment::new(pair[0], pair[1])))
+            .collect();
+
         let mut edges = Vec::with_capacity(dataset.edges.len());
         let mut seen = BTreeSet::new();
         for edge_toml in &dataset.edges {
@@ -202,16 +276,20 @@ impl TryFrom<MapToml> for GameMap {
             if a == b {
                 return Err(MapError::SelfEdge(a));
             }
-            for id in [a, b] {
+            for id in [a, b].into_iter().chain(edge_toml.via.iter().copied()) {
                 if !stations.contains_key(&id) {
                     return Err(MapError::MissingStation(id));
                 }
             }
             // canonicalize: deserialization does not enforce `from < to`
-            let edge = Edge {
+            let mut edge = Edge {
                 line: edge_toml.line.clone(),
+                via: edge_toml.via.clone(),
                 ..Edge::new(a, b, edge_toml.transport)
             };
+            if edge_toml.from > edge_toml.to {
+                edge.via.reverse();
+            }
             if let Some(line) = &edge.line {
                 if edge.transport != Transport::Metro {
                     return Err(MapError::LineOnNonMetro {
@@ -234,6 +312,25 @@ impl TryFrom<MapToml> for GameMap {
                 let both_accesses = [edge.from, edge.to].iter().all(|id| stations.get(id).is_some_and(|s| s.is_underground()));
                 if !both_accesses {
                     return Err(MapError::UndergroundOnSurface(edge.from, edge.to));
+                }
+            }
+            if matches!(edge.transport, Transport::Taxi | Transport::Bus) {
+                // Every hop of the drawn route (via points included)
+                // needs a bridge when it crosses water.
+                let path: Vec<StationId> = [edge.from].into_iter().chain(edge.via.iter().copied()).chain([edge.to]).collect();
+                let crossing = path.windows(2).any(|hop| {
+                    water_segments
+                        .iter()
+                        .any(|water| Segment::new(stations[&hop[0]].pos, stations[&hop[1]].pos).crosses(water))
+                        && !stations[&hop[0]].is_bridge()
+                        && !stations[&hop[1]].is_bridge()
+                });
+                if crossing {
+                    return Err(MapError::RoadCrossesWater {
+                        from: a,
+                        to: b,
+                        transport: edge.transport,
+                    });
                 }
             }
             if !seen.insert(edge.clone()) {
@@ -271,8 +368,8 @@ mod tests {
     fn mini_map() -> &'static str {
         r#"
 stations = [
-    { id = 1, name = "Tour Eiffel", pos_mm = [10.0, 10.0], kinds = ["start", "batobus"] },
-    { id = 2, name = "Louvre", pos_mm = [50.0, 50.0], kinds = ["start", "batobus"] },
+    { id = 1, name = "Tour Eiffel", pos_mm = [10.0, 10.0], kinds = ["start", "batobus", "bridge"] },
+    { id = 2, name = "Louvre", pos_mm = [50.0, 50.0], kinds = ["start", "batobus", "bridge"] },
     { id = 3, name = "Opéra", pos_mm = [80.0, 20.0], kinds = ["start"] },
 ]
 
@@ -286,6 +383,50 @@ edges = [
 name = "mini"
 bounds_mm = [0.0, 0.0, 100.0, 100.0]
 "#
+    }
+
+    fn river_map() -> &'static str {
+        r#"
+stations = [
+    { id = 1, name = "North", pos_mm = [40.0, 10.0], kinds = [] },
+    { id = 2, name = "South", pos_mm = [40.0, 90.0], kinds = [] },
+    { id = 3, name = "Bridge", pos_mm = [10.0, 40.0], kinds = ["bridge"] },
+]
+
+edges = [
+    { from = 1, to = 2, transport = "taxi" },
+]
+
+[map]
+name = "river"
+bounds_mm = [0.0, 0.0, 100.0, 100.0]
+
+[backdrop]
+water = [[0.0, 50.0, 100.0, 50.0]]
+"#
+    }
+
+    #[test]
+    fn route_on_finds_a_taxi_path() {
+        let map = GameMap::from_str(mini_map()).unwrap_or_else(|e| panic!("{e}"));
+        let route = map
+            .route_on(StationId::new(1), StationId::new(3), Transport::Taxi)
+            .unwrap_or_else(|| panic!("no taxi route"));
+        assert_eq!(route, vec![StationId::new(1), StationId::new(3)]);
+        assert!(map.route_on(StationId::new(1), StationId::new(3), Transport::Metro).is_none());
+    }
+
+    #[test]
+    fn route_on_passes_intermediate_stations() {
+        let map = GameMap::from_str(include_str!("../../data/paris.toml")).expect("paris parses");
+        // Châtelet -> République over the taxi mesh hops through the
+        // dense grid instead of a straight chord.
+        let route = map
+            .route_on(StationId::new(20), StationId::new(19), Transport::Taxi)
+            .unwrap_or_else(|| panic!("no route"));
+        assert!(route.len() >= 2);
+        assert_eq!(route.first().copied(), Some(StationId::new(20)));
+        assert_eq!(route.last().copied(), Some(StationId::new(19)));
     }
 
     #[test]
@@ -377,6 +518,41 @@ bounds_mm = [0.0, 0.0, 100.0, 100.0]
     fn rejects_batobus_edge_on_land() {
         let source = mini_map().replace("{ from = 1, to = 3, transport = \"taxi\" }", "{ from = 1, to = 3, transport = \"batobus\" }");
         assert!(matches!(GameMap::from_str(&source), Err(MapError::BatobusOnLand(..))));
+    }
+
+    #[test]
+    fn rejects_batobus_pier_off_bridge() {
+        let source = mini_map().replace(r#"kinds = ["start", "batobus", "bridge"]"#, r#"kinds = ["start", "batobus"]"#);
+        assert!(matches!(GameMap::from_str(&source), Err(MapError::BatobusOffBridge(id)) if id == StationId::new(1)));
+    }
+
+    #[test]
+    fn rejects_road_crossing_water_off_bridge() {
+        assert!(matches!(
+            GameMap::from_str(river_map()),
+            Err(MapError::RoadCrossesWater {
+                transport: Transport::Taxi,
+                ..
+            })
+        ));
+    }
+
+    #[test]
+    fn allows_road_crossing_water_via_bridge() {
+        let source = river_map().replace("{ from = 1, to = 2", "{ from = 2, to = 3");
+        assert!(GameMap::from_str(&source).is_ok());
+    }
+
+    #[test]
+    fn allows_metro_crossing_water() {
+        let source = river_map().replace("taxi", "metro");
+        assert!(GameMap::from_str(&source).is_ok());
+    }
+
+    #[test]
+    fn allows_underground_crossing_water() {
+        let source = river_map().replace("taxi", "underground").replace("kinds = []", r#"kinds = ["underground"]"#);
+        assert!(GameMap::from_str(&source).is_ok());
     }
 
     #[test]

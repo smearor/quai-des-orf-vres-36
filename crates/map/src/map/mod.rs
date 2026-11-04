@@ -3,6 +3,7 @@
 //! errors.
 
 pub mod backdrop;
+pub mod cost;
 pub mod edge;
 pub mod edge_count;
 pub mod error;
@@ -11,6 +12,7 @@ pub mod game_map;
 pub mod line_color;
 pub mod line_name;
 pub mod meta;
+pub mod segment;
 pub mod slogan;
 pub mod story;
 pub mod toml;
@@ -31,6 +33,7 @@ pub use game_map::GameMap;
 pub use line_color::LineColor;
 pub use line_name::LineName;
 pub use meta::MapMeta;
+pub use segment::Segment;
 pub use slogan::MapSlogan;
 pub use story::MapStory;
 pub use toml::MapToml;

@@ -41,24 +41,39 @@ pub struct StylePalette {
     pub batobus: RgbColor,
     /// Underground secret-route color.
     pub underground: RgbColor,
+    /// Generic metro color for unbranded metro marks (station rings);
+    /// edges use the per-line `[map.lines]` color instead.
+    pub metro: RgbColor,
+    /// Neutral edge ink - the default web color when a transport
+    /// layer is not highlighted (standard view).
+    pub edge: RgbColor,
 }
 
 impl StylePalette {
-    /// Edge color per transport: fixed routes come from the palette,
-    /// metro edges carry their declared line color from `map.lines`.
-    pub fn transport_color(&self, transport: Transport, line: Option<&LineName>, map: &GameMap) -> RgbColor {
+    /// The transport's own palette color (no line lookup) - the
+    /// ring color of a served station.
+    pub fn base_color(&self, transport: Transport) -> RgbColor {
         match transport {
             Transport::Taxi => self.taxi,
             Transport::Bus => self.bus,
             Transport::Batobus => self.batobus,
             Transport::Underground => self.underground,
+            Transport::Metro => self.metro,
+        }
+    }
+
+    /// Edge color per transport: fixed routes come from the palette,
+    /// metro edges carry their declared line color from `map.lines`.
+    pub fn transport_color(&self, transport: Transport, line: Option<&LineName>, map: &GameMap) -> RgbColor {
+        match transport {
             Transport::Metro => line
                 .and_then(|name| map.meta().lines.get(name))
                 .map(|color| {
                     let [r, g, b] = color.rgb_u8();
                     RgbColor::from_u8(r, g, b)
                 })
-                .unwrap_or(self.ink),
+                .unwrap_or(self.metro),
+            other => self.base_color(other),
         }
     }
 }

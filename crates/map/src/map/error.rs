@@ -34,6 +34,20 @@ pub enum MapError {
     /// An underground edge terminates at a station with no access.
     #[error("underground edge between {0} and {1} requires both ends to be underground accesses")]
     UndergroundOnSurface(StationId, StationId),
+    /// A batobus pier is not flagged as a bridge station.
+    #[error("batobus pier {0} must also be a bridge (the boat docks at bridge landings)")]
+    BatobusOffBridge(StationId),
+    /// A taxi/bus edge crosses a water polyline with no bridge on
+    /// either end (roads cross water only via bridges).
+    #[error("{transport} edge between {from} and {to} crosses water but neither end is a bridge")]
+    RoadCrossesWater {
+        /// One endpoint of the offending edge.
+        from: StationId,
+        /// The other endpoint.
+        to: StationId,
+        /// Transport mode of the crossing edge (`taxi` or `bus`).
+        transport: Transport,
+    },
     /// A station position lies outside the declared map bounds.
     #[error("station {0} lies outside the map bounds")]
     OutOfBounds(StationId),
