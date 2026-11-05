@@ -3,6 +3,7 @@
 use cairo::Context;
 
 use crate::ui::style::Alpha;
+use crate::ui::style::Luminance;
 
 /// A normalized RGB color (each channel 0.0-1.0).
 ///
@@ -27,6 +28,23 @@ impl RgbColor {
     /// From 0-255 channels.
     pub fn from_u8(r: u8, g: u8, b: u8) -> Self {
         Self::new(f64::from(r) / 255.0, f64::from(g) / 255.0, f64::from(b) / 255.0)
+    }
+
+    /// The perceived luminance (ITU-R BT.709 weights, 0-1).
+    pub fn luminance(&self) -> Luminance {
+        Luminance::new(self.r * 0.2126 + self.g * 0.7152 + self.b * 0.0722)
+    }
+
+    /// The color lifted to at least `min` luminance by blending
+    /// toward white - dark line colors stay readable on a dark
+    /// field (lerp toward white moves luminance linearly toward 1).
+    pub fn with_min_luminance(&self, min: Luminance) -> Self {
+        let lum = self.luminance().as_f64();
+        if lum >= min.as_f64() {
+            return *self;
+        }
+        let t = ((min.as_f64() - lum) / (1.0 - lum)).clamp(0.0, 1.0);
+        Self::new(self.r + (1.0 - self.r) * t, self.g + (1.0 - self.g) * t, self.b + (1.0 - self.b) * t)
     }
 
     /// Sets this color as the cairo source.

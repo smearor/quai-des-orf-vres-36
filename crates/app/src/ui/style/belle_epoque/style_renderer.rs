@@ -19,8 +19,11 @@ use crate::ui::style::PxPos;
 use crate::ui::style::RgbColor;
 use crate::ui::style::StationSpec;
 use crate::ui::style::StyleRenderer;
+use crate::ui::style::WATER_HALF_WIDTH;
+use crate::ui::style::WaterBanks;
+use crate::ui::style::band_path;
 use crate::ui::style::edge_path;
-use crate::ui::style::polyline_path;
+use crate::ui::style::px_polyline_path;
 use qdo36_tangibles::ScaleFactor;
 
 /// The Belle-Époque look: parchment field, engraving-style double
@@ -35,16 +38,25 @@ impl StyleRenderer for BelleEpoqueStyle {
     }
 
     fn draw_water(&self, ctx: &Context, points: &[Vec2<Millimeters>], px_per_mm: PixelsPerMm, to_px: &dyn Fn(Vec2<Millimeters>) -> PxPos) {
+        // Engraved river: a pale wash band framed by thin sepia
+        // bank hairlines, like the rivers on period maps. The 7 mm
+        // band width is map-space, so the river zooms with the map.
+        let banks = WaterBanks::new(points, WATER_HALF_WIDTH);
+        if banks.left.is_empty() {
+            return;
+        }
+        let left_bank: Vec<PxPos> = banks.left.iter().map(|pos| to_px(*pos)).collect();
+        let right_bank: Vec<PxPos> = banks.right.iter().map(|pos| to_px(*pos)).collect();
         ctx.set_line_cap(LineCap::Round);
-        // Engraved river: a pale wash band with a thin sepia hairline
-        // down the middle, like the bank lines on period maps.
-        polyline_path(ctx, points, to_px);
-        ctx.set_line_width(px_per_mm.scale(6.0));
-        PALETTE.water.apply(ctx);
-        ctx.stroke_preserve().ok();
+        band_path(ctx, &left_bank, &right_bank);
+        PALETTE.water_fill.apply(ctx);
+        ctx.fill().ok();
         ctx.set_line_width(px_per_mm.scale(0.6).max(0.3));
         PALETTE.ink.apply_alpha(ctx, Alpha::new(0.55));
-        ctx.stroke().ok();
+        for bank in [&left_bank, &right_bank] {
+            px_polyline_path(ctx, bank);
+            ctx.stroke().ok();
+        }
     }
 
     fn draw_bridge(&self, ctx: &Context, from: PxPos, to: PxPos, px_per_mm: PixelsPerMm) {
@@ -76,14 +88,21 @@ impl StyleRenderer for BelleEpoqueStyle {
             ctx.set_dash(&[], 0.0);
             return;
         }
+        if edge.dashed {
+            // Metro lane in the combined overlay: dashes with the
+            // sepia frame keep lookalike colors apart (M1 vs taxi).
+            ctx.set_dash(&[px.scale(4.0), px.scale(2.5)], 0.0);
+        }
         // Engraving frame: a fine sepia hairline under the route color,
-        // so every line reads like a plated double-rule.
-        ctx.set_line_width(px.scale(2.6).max(0.6));
+        // so every line reads like a plated double-rule - also the
+        // boat wake's rim.
+        ctx.set_line_width(px.scale(if edge.wavy { 2.2 } else { 2.6 }).max(0.6));
         PALETTE.ink.apply_alpha(ctx, Alpha::new(if edge.highlight { 0.45 } else { 0.25 }));
         ctx.stroke_preserve().ok();
         ctx.set_line_width(px.scale(1.6).max(0.4));
         color.apply(ctx);
         ctx.stroke().ok();
+        ctx.set_dash(&[], 0.0);
     }
 
     fn draw_landmark(&self, ctx: &Context, pos: PxPos, scale: ScaleFactor, px_per_mm: PixelsPerMm) {

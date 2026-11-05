@@ -1,6 +1,10 @@
 //! `CommandKind` - the write commands crossing from MCP tools into
 //! the app's session owner.
 
+use crate::LayerMask;
+use crate::RoleClaim;
+use crate::StyleName;
+use qdo36_map::StationId;
 use qdo36_material::RoundNumber;
 use qdo36_moves::MoveRequest;
 use qdo36_session::GameConfig;
@@ -14,9 +18,6 @@ use tangible_objects_model::DisplayRotation;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::RotationRad;
 use tangible_objects_model::Vec2;
-
-use crate::LayerMask;
-use crate::RoleClaim;
 
 /// One command for the game host.
 ///
@@ -76,6 +77,15 @@ pub enum CommandKind {
     /// Every drawn entity's mm + px position under the current view
     /// transform (visual debugging).
     SceneLayout,
+    /// Center the view on one station or frame a hop between two
+    /// (app-side view state, not persisted).
+    Goto {
+        /// The stations to frame: one centers, two auto-fit.
+        stations: Vec<StationId>,
+        /// Zoom override; `None` auto-fits for two stations and
+        /// keeps the zoom for one.
+        zoom: Option<MapScale>,
+    },
     /// Pan/rotate/zoom the view (app-side view state, not persisted).
     SetView {
         /// Zoom factor; `None` keeps.
@@ -117,5 +127,11 @@ pub enum CommandKind {
     SetLayers {
         /// Per-layer flags; `None` fields keep current values.
         mask: LayerMask,
+    },
+    /// Switch the map artwork style at runtime (app-side render
+    /// state, not persisted).
+    SetStyle {
+        /// `"comic"`, `"belle_epoque"` or `"neon"`.
+        style: StyleName,
     },
 }

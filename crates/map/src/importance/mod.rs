@@ -18,7 +18,8 @@ pub use station_importance::StationImportance;
 
 use crate::GameMap;
 use crate::StationId;
-use std::collections::{BTreeSet, HashMap};
+use std::collections::BTreeSet;
+use std::collections::HashMap;
 
 impl GameMap {
     /// Strategic importance per station: weighted score split into

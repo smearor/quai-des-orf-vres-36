@@ -54,6 +54,8 @@ pub enum CommandResult {
     MapReloaded,
     /// `SetParams` applied.
     ParamsApplied,
+    /// `SetStyle` applied.
+    StyleApplied,
 }
 
 /// The reply channel payload: a result or a typed failure.

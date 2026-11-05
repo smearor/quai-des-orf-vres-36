@@ -13,8 +13,10 @@ pub(super) const PALETTE: StylePalette = StylePalette {
     accent: RgbColor::new(0.10, 0.95, 1.0),
     // #4D7380 - dimmed cyan: virtual anchor.
     dim: RgbColor::new(0.30, 0.45, 0.50),
-    // #1AF2FF - Seine glow (drawn at ~0.25 alpha).
+    // #1AF2FF - glowing Seine bank lines.
     water: RgbColor::new(0.10, 0.95, 1.0),
+    // #0A2130 - dark river body, distinct from the near-black field.
+    water_fill: RgbColor::new(0.04, 0.13, 0.19),
     // #FF4DD9 - pink selection ring.
     select: RgbColor::new(1.0, 0.30, 0.85),
     // #1AF2FF - station discs glow on the dark field.
@@ -33,6 +35,7 @@ pub(super) const PALETTE: StylePalette = StylePalette {
     underground: RgbColor::new(1.0, 0.45, 0.15),
     // #1A2B38 - dim neutral edge ink (standard view, no highlight).
     edge: RgbColor::new(0.10, 0.17, 0.22),
-    // #F2F2F2 - generic metro ring mark (unbranded).
-    metro: RgbColor::new(0.95, 0.95, 0.95),
+    // #B44DFF - purple glow: generic metro ring mark and the
+    // metro lane in parallel-transports view.
+    metro: RgbColor::new(0.71, 0.30, 1.0),
 };

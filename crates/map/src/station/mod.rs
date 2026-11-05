@@ -7,6 +7,7 @@ pub mod id;
 pub mod kind;
 pub mod name;
 pub mod neighbor;
+pub mod pair;
 
 pub use count::StationCount;
 pub use degree::StationDegree;
@@ -14,6 +15,7 @@ pub use id::StationId;
 pub use kind::StationKind;
 pub use name::StationName;
 pub use neighbor::Neighbor;
+pub use pair::StationPair;
 
 use serde::Deserialize;
 use serde::Serialize;

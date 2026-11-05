@@ -23,8 +23,11 @@ pub struct StylePalette {
     pub accent: RgbColor,
     /// Dimmed secondary: virtual anchor, muted elements.
     pub dim: RgbColor,
-    /// Water fill/wash.
+    /// Water accent - the river's two bank lines.
     pub water: RgbColor,
+    /// The river body between the bank lines - darker than `water`,
+    /// distinct from `paper`.
+    pub water_fill: RgbColor,
     /// Selection highlight ring.
     pub select: RgbColor,
     /// Station node fill.

@@ -15,12 +15,16 @@ use crate::ui::style::Alpha;
 use crate::ui::style::EdgeSpec;
 use crate::ui::style::LabelOrientation;
 use crate::ui::style::LabelSpec;
+use crate::ui::style::Luminance;
 use crate::ui::style::PxPos;
 use crate::ui::style::RgbColor;
 use crate::ui::style::StationSpec;
 use crate::ui::style::StyleRenderer;
+use crate::ui::style::WATER_HALF_WIDTH;
+use crate::ui::style::WaterBanks;
+use crate::ui::style::band_path;
 use crate::ui::style::edge_path;
-use crate::ui::style::polyline_path;
+use crate::ui::style::px_polyline_path;
 use qdo36_tangibles::ScaleFactor;
 
 /// The Neon look: near-black field, glowing double-stroked edges,
@@ -34,14 +38,28 @@ impl StyleRenderer for NeonStyle {
     }
 
     fn draw_water(&self, ctx: &Context, points: &[Vec2<Millimeters>], px_per_mm: PixelsPerMm, to_px: &dyn Fn(Vec2<Millimeters>) -> PxPos) {
+        // Two glowing bank lines around a dark river body - the
+        // Seine reads as a band, not a stroke. The 7 mm band width
+        // is map-space, so the river zooms with the map.
+        let banks = WaterBanks::new(points, WATER_HALF_WIDTH);
+        if banks.left.is_empty() {
+            return;
+        }
+        let left_bank: Vec<PxPos> = banks.left.iter().map(|pos| to_px(*pos)).collect();
+        let right_bank: Vec<PxPos> = banks.right.iter().map(|pos| to_px(*pos)).collect();
         ctx.set_line_cap(LineCap::Round);
-        polyline_path(ctx, points, to_px);
-        ctx.set_line_width(px_per_mm.scale(6.0));
-        PALETTE.water.apply_alpha(ctx, Alpha::new(0.25));
-        ctx.stroke_preserve().ok();
-        ctx.set_line_width(px_per_mm.scale(1.6).max(0.4));
-        PALETTE.water.apply(ctx);
-        ctx.stroke().ok();
+        band_path(ctx, &left_bank, &right_bank);
+        PALETTE.water_fill.apply(ctx);
+        ctx.fill().ok();
+        for bank in [&left_bank, &right_bank] {
+            px_polyline_path(ctx, bank);
+            ctx.set_line_width(px_per_mm.scale(1.8).max(0.5));
+            PALETTE.water.apply_alpha(ctx, Alpha::new(0.25));
+            ctx.stroke_preserve().ok();
+            ctx.set_line_width(px_per_mm.scale(0.9).max(0.4));
+            PALETTE.water.apply(ctx);
+            ctx.stroke().ok();
+        }
     }
 
     fn draw_bridge(&self, ctx: &Context, from: PxPos, to: PxPos, px_per_mm: PixelsPerMm) {
@@ -64,6 +82,35 @@ impl StyleRenderer for NeonStyle {
             PALETTE.edge
         };
         ctx.set_line_cap(LineCap::Round);
+        if edge.wavy {
+            // Boat wake: a dark rim under the wave keeps the cyan
+            // swell readable over the water band.
+            edge_path(ctx, edge);
+            ctx.set_line_width(px.scale(2.2).max(0.5));
+            PALETTE.paper.apply(ctx);
+            ctx.stroke_preserve().ok();
+            ctx.set_line_width(px.scale(1.3).max(0.4));
+            color.apply(ctx);
+            ctx.stroke().ok();
+            return;
+        }
+        if edge.dashed {
+            // Metro lane in the combined overlay: a dashed
+            // line-color stroke with a dark rim separates it from
+            // lookalike transport lanes (M1 vs taxi). Dark line
+            // colors lift toward white, or M12-vanish-into-paper.
+            let color = color.with_min_luminance(Luminance::new(0.5));
+            ctx.set_dash(&[px.scale(4.0), px.scale(2.5)], 0.0);
+            edge_path(ctx, edge);
+            ctx.set_line_width(px.scale(2.4).max(0.5));
+            PALETTE.paper.apply(ctx);
+            ctx.stroke_preserve().ok();
+            ctx.set_line_width(px.scale(1.4).max(0.4));
+            color.apply(ctx);
+            ctx.stroke().ok();
+            ctx.set_dash(&[], 0.0);
+            return;
+        }
         ctx.set_line_width(px.scale(if edge.highlight { 3.6 } else { 1.6 }).max(0.5));
         color.apply_alpha(ctx, Alpha::new(if edge.highlight { 0.28 } else { 0.9 }));
         edge_path(ctx, edge);

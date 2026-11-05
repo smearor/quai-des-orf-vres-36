@@ -7,6 +7,7 @@ use crate::ui::map_scene::LayerToggle;
 use gtk4::Align;
 use gtk4::Orientation;
 use gtk4::prelude::*;
+use crate::ui::style::MapStyle;
 
 /// Builds the vertical control bar anchored to the screen edge.
 /// The handlers mutate the scene through the same `mcp_bridge`
@@ -39,7 +40,48 @@ pub fn controls() -> gtk4::Box {
     bar.append(&label_mode);
 
     bar.append(&layer_menu());
+    bar.append(&style_menu());
     bar
+}
+
+/// The style popover: radio picks per artwork style, live via the
+/// same bridge the `set_style` MCP command uses.
+fn style_menu() -> gtk4::MenuButton {
+    let button = gtk4::MenuButton::builder().icon_name("preferences-color-symbolic").tooltip_text("Stil").build();
+    let popover = gtk4::Popover::new();
+    let list = gtk4::Box::builder()
+        .orientation(Orientation::Vertical)
+        .spacing(4)
+        .margin_top(8)
+        .margin_bottom(8)
+        .margin_start(10)
+        .margin_end(10)
+        .build();
+    let styles = [
+        ("Comic", MapStyle::Comic),
+        ("Belle Époque", MapStyle::BelleEpoque),
+        ("Neon", MapStyle::Neon),
+    ];
+    let current = mcp_bridge::current_style().unwrap_or_default();
+    let mut group: Option<gtk4::CheckButton> = None;
+    for (label, style) in styles {
+        let check = gtk4::CheckButton::with_label(label);
+        check.set_active(style == current);
+        if let Some(first) = &group {
+            check.set_group(Some(first));
+        } else {
+            group = Some(check.clone());
+        }
+        check.connect_toggled(move |check| {
+            if check.is_active() {
+                mcp_bridge::set_map_style(style);
+            }
+        });
+        list.append(&check);
+    }
+    popover.set_child(Some(&list));
+    button.set_popover(Some(&popover));
+    button
 }
 
 /// The overlay popover: checkboxes per scene layer.

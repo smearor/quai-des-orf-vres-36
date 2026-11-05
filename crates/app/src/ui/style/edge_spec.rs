@@ -3,6 +3,8 @@
 use qdo36_map::GameMap;
 use qdo36_map::LineName;
 use qdo36_map::Transport;
+use tangible_objects_model::Millimeters;
+use tangible_objects_model::Pixels;
 use tangible_objects_model::PixelsPerMm;
 
 use crate::ui::style::PxPos;
@@ -23,10 +25,26 @@ pub struct EdgeSpec<'a> {
     /// The drawn polyline in px (routed through intermediate stations);
     /// empty means a straight `from` -> `to` segment.
     pub route: Vec<PxPos>,
-    /// Perpendicular px offset per drawn segment - parallel metro
-    /// lines shift sideways so every line keeps its own color; one
-    /// entry per drawn segment, empty means centered.
-    pub offsets: Vec<f64>,
+    /// Perpendicular pixel offset per drawn segment - parallel
+    /// metro lines shift sideways so every line keeps its own
+    /// color; one entry per drawn segment, empty means centered.
+    pub offsets: Vec<Pixels>,
+    /// Draw the `route` as a smooth spline through its interior
+    /// points (Catmull-Rom) with straight first/last hops - the
+    /// Batobus boat course curves along the river, the pier stubs
+    /// stay straight.
+    pub smooth: bool,
+    /// Draw the edge dashed with a dark rim - metro lanes in the
+    /// combined parallel+metro overlay, so a line color matching a
+    /// neighbor lane (M1 vs taxi, M6/M12 vs bus) stays readable.
+    pub dashed: bool,
+    /// Draw the edge as a sine wave along its route - the Batobus
+    /// boat wake on the water.
+    pub wavy: bool,
+    /// Arc-length phase offset of the wave, anchored to the
+    /// water course - edges sharing a stretch trace identical
+    /// waves instead of two crossing ones.
+    pub wave_phase: Millimeters,
     /// Whether the edge draws in its transport/line color; `false`
     /// draws the neutral `edge` ink (standard view).
     pub highlight: bool,

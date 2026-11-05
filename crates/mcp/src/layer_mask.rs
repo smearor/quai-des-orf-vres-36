@@ -29,6 +29,10 @@ pub struct LayerMask {
     /// Underground secret-route edges.
     #[serde(default)]
     pub underground: Option<bool>,
+    /// Taxi/bus hops shared by several transports drawn side by
+    /// side in each transport's color.
+    #[serde(default)]
+    pub parallel_transports: Option<bool>,
     /// Transports drawn in their own colors (the rest render as
     /// neutral edges); replaces the highlight set when present.
     #[serde(default)]

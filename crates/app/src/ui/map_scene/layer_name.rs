@@ -19,6 +19,9 @@ pub enum LayerName {
     Underground,
     /// Batobus edges.
     Batobus,
+    /// Parallel transports: taxi/bus hops shared by several
+    /// transports draw side by side in each transport's color.
+    ParallelTransports,
     /// Water backdrop.
     Water,
     /// Landmark markers.
@@ -47,6 +50,7 @@ impl LayerName {
         Self::MetroOverlay,
         Self::Underground,
         Self::Batobus,
+        Self::ParallelTransports,
         Self::Water,
         Self::Landmarks,
         Self::Stations,
@@ -66,6 +70,7 @@ impl LayerName {
             Self::MetroOverlay => "metro overlay",
             Self::Underground => "underground",
             Self::Batobus => "batobus",
+            Self::ParallelTransports => "parallel transports",
             Self::Water => "water",
             Self::Landmarks => "landmarks",
             Self::Stations => "stations",

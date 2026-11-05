@@ -4,6 +4,7 @@ use crate::ui::style::BelleEpoqueStyle;
 use crate::ui::style::ComicStyle;
 use crate::ui::style::NeonStyle;
 use crate::ui::style::StyleRenderer;
+use qdo36_mcp::StyleName;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -37,6 +38,16 @@ impl MapStyle {
             Self::Comic => Box::new(ComicStyle),
             Self::BelleEpoque => Box::new(BelleEpoqueStyle),
             Self::Neon => Box::new(NeonStyle),
+        }
+    }
+}
+
+impl From<StyleName> for MapStyle {
+    fn from(name: StyleName) -> Self {
+        match name {
+            StyleName::Comic => Self::Comic,
+            StyleName::BelleEpoque => Self::BelleEpoque,
+            StyleName::Neon => Self::Neon,
         }
     }
 }

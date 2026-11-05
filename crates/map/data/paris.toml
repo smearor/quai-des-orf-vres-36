@@ -316,7 +316,7 @@ edges = [
     { from = 4, to = 54, transport = "metro", line = "M12", via = [44] },
     # M5 ausgesetzt: alle Stationen sind durch M2/M4/M6/M8/M13 abgedeckt
     # { from = 15, to = 19, transport = "metro", line = "M5" },
-    { from = 25, to = 32, transport = "metro", line = "M8" },
+    { from = 25, to = 32, transport = "metro", line = "M8", via = [60, 28, 29] },
     # { from = 32, to = 35, transport = "metro", line = "M5" },
     { from = 15, to = 41, transport = "metro", line = "M2" },
     # M11 ausgesetzt: zu kurz und zickzack für den Spielnutzen

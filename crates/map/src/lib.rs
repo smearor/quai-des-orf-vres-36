@@ -55,6 +55,7 @@ pub use station::StationDegree;
 pub use station::StationId;
 pub use station::StationKind;
 pub use station::StationName;
+pub use station::StationPair;
 pub use tangible_objects_model::Millimeters;
 pub use tangible_objects_model::Region;
 pub use tangible_objects_model::Vec2;

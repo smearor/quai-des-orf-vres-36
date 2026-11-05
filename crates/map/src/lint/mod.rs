@@ -27,12 +27,13 @@ pub use mean_degree::MeanDegree;
 pub use missing_service::MissingService;
 pub use report::LintReport;
 
+use crate::Edge;
+use crate::GameMap;
 use crate::LineName;
 use crate::Segment;
 use crate::StationCount;
 use crate::StationId;
 use crate::Transport;
-use crate::{Edge, GameMap};
 use std::collections::BTreeMap;
 use std::collections::HashSet;
 use tangible_objects_model::Millimeters;
@@ -41,7 +42,7 @@ use tangible_objects_model::Vec2;
 impl GameMap {
     /// Station clearance (Q14): an edge passing within this distance
     /// of a foreign station reads as running through it.
-    const STATION_CLEARANCE_MM: f64 = 4.0;
+    const STATION_CLEARANCE: Millimeters = Millimeters::new(4.0);
 
     /// Lints the dataset against the WP10 quality criteria Q1-Q9.
     pub fn lint(&self) -> LintReport {
@@ -126,7 +127,7 @@ impl GameMap {
                     .windows(2)
                     .filter_map(|hop| Segment::new(self.pos(hop[0]), self.pos(hop[1])).interior_distance(&station.pos))
                     .fold(f64::INFINITY, f64::min);
-                if distance_mm < Self::STATION_CLEARANCE_MM {
+                if Millimeters::new(distance_mm) < Self::STATION_CLEARANCE {
                     findings.push(Finding::StationOnEdge {
                         transport: edge.transport,
                         edge: EdgePair {
@@ -150,11 +151,6 @@ impl GameMap {
     /// A station's map-mm position as a raw pair.
     fn pos(&self, id: StationId) -> Vec2<Millimeters> {
         self.station(id).map(|s| s.pos).unwrap_or_else(|| Vec2::new(0.0, 0.0))
-    }
-
-    /// The straight segment an edge's endpoint stations span.
-    fn segment_of(&self, edge: &Edge) -> Segment<Millimeters> {
-        Segment::new(self.pos(edge.from), self.pos(edge.to))
     }
 
     /// Q2: each transport net must be one component. Underground

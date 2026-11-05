@@ -25,6 +25,9 @@ pub struct SceneLayers {
     /// Metro lines hidden by name (e.g. `"M4"`) - on top of the
     /// `metro` transport flag.
     pub hidden_lines: BTreeSet<LineName>,
+    /// Taxi/bus hops shared by several transports draw side by
+    /// side in each transport's color (metro-line style).
+    pub parallel_transports: bool,
     /// Station discs.
     pub stations: bool,
     /// Station name labels.
@@ -51,6 +54,7 @@ impl SceneLayers {
             LayerName::MetroOverlay => self.highlight.contains(&Transport::Metro),
             LayerName::Underground => self.transports.underground,
             LayerName::Batobus => self.transports.batobus,
+            LayerName::ParallelTransports => self.parallel_transports,
             LayerName::Water => self.water,
             LayerName::Landmarks => self.landmarks,
             LayerName::Stations => self.stations,
@@ -86,6 +90,7 @@ impl SceneLayers {
             LayerName::Metro => &mut self.transports.metro,
             LayerName::Underground => &mut self.transports.underground,
             LayerName::Batobus => &mut self.transports.batobus,
+            LayerName::ParallelTransports => &mut self.parallel_transports,
             LayerName::Water => &mut self.water,
             LayerName::Landmarks => &mut self.landmarks,
             LayerName::Stations => &mut self.stations,
@@ -108,12 +113,13 @@ impl Default for SceneLayers {
             transports: TransportLayers::default(),
             highlight: BTreeSet::new(),
             hidden_lines: BTreeSet::new(),
+            parallel_transports: true,
             stations: true,
             labels: true,
-            numbers: false,
+            numbers: true,
             scores: false,
             label_mode: LabelMode::default(),
-            compass: true,
+            compass: false,
             bridges: false,
         }
     }

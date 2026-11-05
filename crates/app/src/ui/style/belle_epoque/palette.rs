@@ -16,6 +16,8 @@ pub(super) const PALETTE: StylePalette = StylePalette {
     dim: RgbColor::new(0.55, 0.45, 0.30),
     // #9EB8C7 - pale engraved Seine wash.
     water: RgbColor::new(0.62, 0.72, 0.78),
+    // #94ADBB - river body, a touch deeper than the bank wash.
+    water_fill: RgbColor::new(0.58, 0.68, 0.73),
     // #B8871C - gold selection ring (the same accent tone).
     select: RgbColor::new(0.72, 0.53, 0.11),
     // #FAF2DB - station disc fill, lighter than the paper.
@@ -34,6 +36,7 @@ pub(super) const PALETTE: StylePalette = StylePalette {
     underground: RgbColor::new(0.33, 0.17, 0.08),
     // #6E6252 - neutral edge ink in sepia (standard view).
     edge: RgbColor::new(0.43, 0.38, 0.32),
-    // #8A6F3C - generic metro ring mark in gilt.
-    metro: RgbColor::new(0.54, 0.44, 0.24),
+    // #6B4A8E - period mauve: generic metro ring mark and the
+    // metro lane in parallel-transports view.
+    metro: RgbColor::new(0.42, 0.29, 0.56),
 };

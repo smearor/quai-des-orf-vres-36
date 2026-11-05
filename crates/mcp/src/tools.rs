@@ -5,6 +5,8 @@
 use super::qdo_mcp::QdoMcp;
 use crate::CommandKind;
 use crate::CommandResult;
+use crate::GotoHopArgs;
+use crate::GotoStationArgs;
 use crate::JoinGameArgs;
 use crate::McpError;
 use crate::NewGameArgs;
@@ -13,6 +15,7 @@ use crate::SetAnchorArgs;
 use crate::SetConfigArgs;
 use crate::SetLayersArgs;
 use crate::SetParamsArgs;
+use crate::SetStyleArgs;
 use crate::SetViewArgs;
 use crate::TokenArgs;
 use qdo36_tangibles::MapScale;
@@ -144,6 +147,37 @@ impl QdoMcp {
         self.forward(CommandKind::SceneLayout).await
     }
 
+    /// Center the view on one station (visual debugging).
+    #[tool(description = "Center the view on a station: 'station' id, optional 'zoom' factor (0.5-5.0, keeps current when omitted).")]
+    async fn goto_station(&self, Parameters(args): Parameters<GotoStationArgs>) -> Result<CallToolResult, ErrorData> {
+        let zoom = args
+            .zoom
+            .map(MapScale::try_new)
+            .transpose()
+            .map_err(|e| ErrorData::invalid_params(e.to_string(), None))?;
+        self.forward(CommandKind::Goto {
+            stations: vec![args.station],
+            zoom,
+        })
+        .await
+    }
+
+    /// Frame a hop between two stations: centers on the midpoint
+    /// and auto-fits the zoom (visual debugging).
+    #[tool(description = "Frame a hop between two stations: 'from'/'to' station ids; auto-zooms so both fit, optional 'zoom' override (0.5-5.0).")]
+    async fn goto_hop(&self, Parameters(args): Parameters<GotoHopArgs>) -> Result<CallToolResult, ErrorData> {
+        let zoom = args
+            .zoom
+            .map(MapScale::try_new)
+            .transpose()
+            .map_err(|e| ErrorData::invalid_params(e.to_string(), None))?;
+        self.forward(CommandKind::Goto {
+            stations: vec![args.from, args.to],
+            zoom,
+        })
+        .await
+    }
+
     /// Pan/rotate/zoom the view for visual debugging (view-only,
     /// not persisted).
     #[tool(description = "Set the view: 'zoom' factor (0.5-5.0), 'rotate' in quarter turns (0-3), 'pan_mm' [dx,dy] in surface-mm.")]
@@ -205,11 +239,18 @@ impl QdoMcp {
         .await
     }
 
+    /// Switch the map artwork style at runtime: comic (default),
+    /// belle_epoque or neon.
+    #[tool(description = "Switch the map artwork style at runtime: 'comic', 'belle_epoque' or 'neon' (affects style render, not persisted).")]
+    async fn set_style(&self, Parameters(args): Parameters<SetStyleArgs>) -> Result<CallToolResult, ErrorData> {
+        self.forward(CommandKind::SetStyle { style: args.style }).await
+    }
+
     /// Toggle scene layers (water, landmarks, per-transport edges,
     /// stations, labels) for visual debugging - plus `hide_lines`
     /// to hide single metro lines by name.
     #[tool(
-        description = "Toggle scene layers: water, landmarks, taxi/bus/metro/batobus/underground edges, stations, labels - plus 'hide_lines': [\"M4\",\"M13\"] to hide single metro lines."
+        description = "Toggle scene layers: water, landmarks, taxi/bus/metro/batobus/underground edges, stations, labels, parallel_transports - plus 'hide_lines': [\"M4\",\"M13\"] to hide single metro lines."
     )]
     async fn set_layers(&self, Parameters(args): Parameters<SetLayersArgs>) -> Result<CallToolResult, ErrorData> {
         self.forward(CommandKind::SetLayers { mask: args.mask }).await

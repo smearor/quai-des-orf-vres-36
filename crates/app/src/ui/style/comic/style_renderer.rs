@@ -15,12 +15,16 @@ use crate::ui::style::Alpha;
 use crate::ui::style::EdgeSpec;
 use crate::ui::style::LabelOrientation;
 use crate::ui::style::LabelSpec;
+use crate::ui::style::Luminance;
 use crate::ui::style::PxPos;
 use crate::ui::style::RgbColor;
 use crate::ui::style::StationSpec;
 use crate::ui::style::StyleRenderer;
+use crate::ui::style::WATER_HALF_WIDTH;
+use crate::ui::style::WaterBanks;
+use crate::ui::style::band_path;
 use crate::ui::style::edge_path;
-use crate::ui::style::polyline_path;
+use crate::ui::style::px_polyline_path;
 use qdo36_tangibles::ScaleFactor;
 
 /// The default look: flat fills, bold outlines, halftone-tinted
@@ -34,11 +38,25 @@ impl StyleRenderer for ComicStyle {
     }
 
     fn draw_water(&self, ctx: &Context, points: &[Vec2<Millimeters>], px_per_mm: PixelsPerMm, to_px: &dyn Fn(Vec2<Millimeters>) -> PxPos) {
-        ctx.set_line_width(px_per_mm.scale(6.0));
+        // Two bank lines around a darker river body - the Seine
+        // reads as a band, not a stroke. The 7 mm band width is
+        // map-space, so the river zooms with the map.
+        let banks = WaterBanks::new(points, WATER_HALF_WIDTH);
+        if banks.left.is_empty() {
+            return;
+        }
+        let left_bank: Vec<PxPos> = banks.left.iter().map(|pos| to_px(*pos)).collect();
+        let right_bank: Vec<PxPos> = banks.right.iter().map(|pos| to_px(*pos)).collect();
+        band_path(ctx, &left_bank, &right_bank);
+        PALETTE.water_fill.apply(ctx);
+        ctx.fill().ok();
         ctx.set_line_cap(LineCap::Round);
+        ctx.set_line_width(px_per_mm.scale(1.2).max(0.5));
         PALETTE.water.apply(ctx);
-        polyline_path(ctx, points, to_px);
-        ctx.stroke().ok();
+        for bank in [&left_bank, &right_bank] {
+            px_polyline_path(ctx, bank);
+            ctx.stroke().ok();
+        }
     }
 
     fn draw_bridge(&self, ctx: &Context, from: PxPos, to: PxPos, px_per_mm: PixelsPerMm) {
@@ -67,6 +85,25 @@ impl StyleRenderer for ComicStyle {
         color.apply(ctx);
         ctx.set_line_width(px.scale(2.4).max(0.5));
         edge_path(ctx, edge);
+        if edge.wavy {
+            // Boat wake: ink rim under the colored wave.
+            ctx.set_line_width(px.scale(3.2).max(0.7));
+            PALETTE.ink.apply(ctx);
+            ctx.stroke_preserve().ok();
+            ctx.set_line_width(px.scale(2.2).max(0.5));
+            color.apply(ctx);
+        }
+        if edge.dashed {
+            // Metro lane in the combined overlay: dark rim under
+            // the dashed color stroke keeps lookalike colors
+            // (M1 vs taxi, M6/M12 vs bus) apart.
+            ctx.set_dash(&[px.scale(4.0), px.scale(2.5)], 0.0);
+            ctx.set_line_width(px.scale(3.4).max(0.7));
+            PALETTE.ink.apply(ctx);
+            ctx.stroke_preserve().ok();
+            ctx.set_line_width(px.scale(2.4).max(0.5));
+            color.with_min_luminance(Luminance::new(0.5)).apply(ctx);
+        }
         ctx.stroke().ok();
         ctx.set_dash(&[], 0.0);
     }

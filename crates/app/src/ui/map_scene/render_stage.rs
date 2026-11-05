@@ -52,4 +52,13 @@ impl RenderStage {
         let surface = self.fit.unmap(pos);
         self.transform.surface_to_map(Vec2::new(surface.x - self.pan.x, surface.y - self.pan.y))
     }
+
+    /// The view pan that puts map position `target` on widget
+    /// pixel `point` under the current transform (the `goto_*`
+    /// tools' centering math).
+    pub fn pan_for(&self, target: Vec2<Millimeters>, point: PxPos) -> Vec2<Millimeters> {
+        let surface = self.transform.map_to_surface(target);
+        let want = self.fit.unmap(point);
+        Vec2::new(want.x - surface.x, want.y - surface.y)
+    }
 }

@@ -7,15 +7,21 @@
 //! the document and forwards commands - no GTK access from the
 //! server, ever (WP05 R5).
 
+use crate::ui::map_scene::LabelMode;
 use crate::ui::map_scene::MapScene;
 use crate::ui::map_scene::RenderStage;
+use crate::ui::map_scene::SceneLayers;
 use crate::ui::map_scene::SceneState;
+use crate::ui::style::MapStyle;
+use crate::ui::style::PxPos;
 use async_channel::unbounded;
 use glib::MainContext;
 use libadwaita as adw;
 use qdo36_host::GameHost;
-use qdo36_map::GameMap;
-use qdo36_mcp::AnchorStateSnapshot;
+use qdo36_map::LineName;
+use qdo36_map::StationId;
+use qdo36_map::Transport;
+use qdo36_map::{City, GameMap};
 use qdo36_mcp::CommandKind;
 use qdo36_mcp::CommandReply;
 use qdo36_mcp::CommandResult;
@@ -25,12 +31,14 @@ use qdo36_mcp::MapInfo;
 use qdo36_mcp::McpError;
 use qdo36_mcp::ScreenshotReply;
 use qdo36_mcp::StateSnapshot;
+use qdo36_mcp::StyleName;
 use qdo36_mcp::spawn_http;
+use qdo36_mcp::{AnchorStateSnapshot, EntityKind, SceneEntity};
 use qdo36_session::GameSession;
-use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::MapScale;
 use qdo36_tangibles::ScaleFactor;
 use qdo36_tangibles::SurfaceMm;
+use qdo36_tangibles::{AnchorPose, AnchorState};
 use rand::SeedableRng;
 use rand::rngs::StdRng;
 use std::cell::RefCell;
@@ -96,7 +104,9 @@ pub fn attach(addr: SocketAddr) {
                 CommandKind::Screenshot => mcp_screenshot(),
                 CommandKind::SceneLayout => scene_layout(),
                 CommandKind::SetView { zoom, rotate, pan, compass } => set_view(*zoom, *rotate, *pan, *compass),
+                CommandKind::Goto { stations, zoom } => goto(stations, *zoom),
                 CommandKind::SetLayers { mask } => set_layers(mask),
+                CommandKind::SetStyle { style } => set_style(*style),
                 CommandKind::SetAnchor { center, rotation_rad } => set_anchor(*center, *rotation_rad),
                 CommandKind::ReloadMap => reload_map(),
                 CommandKind::SetParams {
@@ -165,9 +175,6 @@ pub fn register_scene(state: &Rc<RefCell<SceneState>>, scene: &MapScene, show_ma
 /// The `set_anchor` command: virtual anchor pose on the surface +
 /// lift the map page over the setup page.
 fn set_anchor(center: Vec2<Millimeters>, rotation_rad: Option<RotationRad>) -> CommandReply {
-    use qdo36_tangibles::AnchorPose;
-    use qdo36_tangibles::AnchorState;
-
     let Some((state, scene, show_map)) = SCENE.with(|slot| slot.borrow().clone()) else {
         return Err(McpError::ChannelClosed);
     };
@@ -219,8 +226,6 @@ fn set_params(
 /// (dev checkout) or the bundled copy, swaps the scene map and
 /// hands it to the game host.
 fn reload_map() -> CommandReply {
-    use qdo36_map::City;
-
     with_scene(|state, scene| {
         let map = {
             let state = state.borrow();
@@ -253,8 +258,6 @@ fn reload_map() -> CommandReply {
 /// map-mm and widget-px positions under the current transform.
 fn scene_layout() -> CommandReply {
     use gtk4::prelude::WidgetExt;
-    use qdo36_mcp::EntityKind;
-    use qdo36_mcp::SceneEntity;
 
     let Some((entities,)) = with_scene(|state, scene| {
         let state = state.borrow();
@@ -330,6 +333,51 @@ pub(crate) fn zoom_by(factor: f64) {
 }
 
 /// Resets zoom to `MapScale::ONE` and clears the pan.
+/// The `goto_*` commands: centers the view on the stations'
+/// midpoint. Two stations auto-zoom so the hop fills roughly 55%
+/// of the window's smaller side; one station keeps the zoom unless
+/// `zoom` overrides.
+fn goto(stations: &[StationId], zoom: Option<MapScale>) -> CommandReply {
+    use gtk4::prelude::WidgetExt;
+
+    with_scene(|state, scene| {
+        {
+            let mut state = state.borrow_mut();
+            let positions: Vec<Vec2<Millimeters>> = stations.iter().filter_map(|id| state.map.station(*id)).map(|s| s.pos).collect();
+            if positions.is_empty() {
+                return Err(McpError::InvalidParams(format!("unknown station(s) {stations:?}")));
+            }
+            let (width, height) = match (scene.width(), scene.height()) {
+                (w, h) if w > 0 && h > 0 => (w, h),
+                _ => APP_WINDOW
+                    .with(|slot| slot.borrow().as_ref().map(|w| (w.width(), w.height())))
+                    .unwrap_or((0, 0)),
+            };
+            let stage = RenderStage::new(&state, state.anchor.pose(), Pixels::new(width as f64), Pixels::new(height as f64));
+            let center = Vec2::new(
+                positions.iter().map(|pos| pos.x).sum::<f64>() / positions.len() as f64,
+                positions.iter().map(|pos| pos.y).sum::<f64>() / positions.len() as f64,
+            );
+            state.pan = stage.pan_for(center, PxPos::new(width as f64 / 2.0, height as f64 / 2.0));
+            // Auto-fit: widget px per map-mm is zoom * fit.scale, so
+            // the zoom landing the station distance on 55% of the
+            // smaller side is target_px / (distance * fit.scale).
+            let scale = zoom.or_else(|| {
+                let [a, b] = positions.as_slice() else { return None };
+                let distance = (b.x - a.x).hypot(b.y - a.y);
+                let fit = 0.55 * (width.min(height) as f64) / (distance * stage.fit.scale.as_f64());
+                MapScale::try_new(fit.clamp(MapScale::MIN.factor(), MapScale::MAX.factor())).ok()
+            });
+            if let Some(scale) = scale {
+                state.scale = scale;
+            }
+        }
+        scene.update(Rc::new(state.borrow().clone()));
+        Ok(CommandResult::ViewApplied)
+    })
+    .unwrap_or(Err(McpError::StateUnavailable))
+}
+
 pub(crate) fn reset_view() {
     with_scene(|state, scene| {
         {
@@ -347,8 +395,8 @@ pub(crate) fn toggle_label_mode() {
         {
             let mut state = state.borrow_mut();
             state.layers.label_mode = match state.layers.label_mode {
-                crate::ui::map_scene::LabelMode::Radial => crate::ui::map_scene::LabelMode::Screen,
-                crate::ui::map_scene::LabelMode::Screen => crate::ui::map_scene::LabelMode::Radial,
+                LabelMode::Radial => LabelMode::Screen,
+                LabelMode::Screen => LabelMode::Radial,
             };
         }
         scene.update(Rc::new(state.borrow().clone()));
@@ -356,7 +404,7 @@ pub(crate) fn toggle_label_mode() {
 }
 
 /// Mutates the layer set (overlay menu checkboxes).
-pub(crate) fn mutate_layers(f: impl FnOnce(&mut crate::ui::map_scene::SceneLayers) + 'static) {
+pub(crate) fn mutate_layers(f: impl FnOnce(&mut SceneLayers) + 'static) {
     with_scene(|state, scene| {
         {
             let mut state = state.borrow_mut();
@@ -367,8 +415,32 @@ pub(crate) fn mutate_layers(f: impl FnOnce(&mut crate::ui::map_scene::SceneLayer
 }
 
 /// The current layer set (checkbox initial states on the UI).
-pub(crate) fn current_layers() -> Option<crate::ui::map_scene::SceneLayers> {
+pub(crate) fn current_layers() -> Option<SceneLayers> {
     with_scene(|state, _| state.borrow().layers.clone())
+}
+
+/// Mutates the artwork style (style-menu buttons; also the
+/// `set_style` MCP command).
+pub(crate) fn set_map_style(style: MapStyle) {
+    with_scene(|state, scene| {
+        {
+            let mut state = state.borrow_mut();
+            state.style = style;
+        }
+        scene.update(Rc::new(state.borrow().clone()));
+    });
+}
+
+/// The current artwork style (style-menu initial state on the UI).
+pub(crate) fn current_style() -> Option<MapStyle> {
+    with_scene(|state, _| state.borrow().style)
+}
+
+/// The `set_style` command: switch the map artwork at runtime.
+fn set_style(style: StyleName) -> CommandReply {
+    with_scene(|_, _| set_map_style(style.into()))
+        .map(|_| CommandResult::StyleApplied)
+        .ok_or(McpError::StateUnavailable)
 }
 
 /// The `set_layers` command: layer-visibility toggles.
@@ -399,14 +471,17 @@ fn set_layers(mask: &LayerMask) -> CommandReply {
             if let Some(v) = mask.underground {
                 t.underground = v;
             }
+            if let Some(v) = mask.parallel_transports {
+                l.parallel_transports = v;
+            }
             if let Some(lines) = &mask.hide_lines {
-                l.hidden_lines = lines.iter().map(|name| qdo36_map::LineName::from(name.as_str())).collect();
+                l.hidden_lines = lines.iter().map(|name| LineName::from(name.as_str())).collect();
             }
             if let Some(transports) = &mask.highlight {
                 l.highlight = transports
                     .iter()
                     .map(|name| {
-                        name.parse::<qdo36_map::Transport>()
+                        name.parse::<Transport>()
                             .map_err(|_| McpError::InvalidParams(format!("unknown transport {name}")))
                     })
                     .collect::<Result<_, _>>()?;
@@ -424,11 +499,7 @@ fn set_layers(mask: &LayerMask) -> CommandReply {
                 l.scores = v;
             }
             if let Some(mode) = &mask.label_mode {
-                l.label_mode = match mode.as_str() {
-                    "radial" => crate::ui::map_scene::LabelMode::Radial,
-                    "screen" => crate::ui::map_scene::LabelMode::Screen,
-                    other => return Err(McpError::InvalidParams(format!("unknown label_mode {other}"))),
-                };
+                l.label_mode = mode.parse().map_err(|_| McpError::InvalidParams(format!("unknown label_mode {mode}")))?;
             }
             if let Some(v) = mask.compass {
                 l.compass = v;

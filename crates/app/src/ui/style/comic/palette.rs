@@ -14,8 +14,10 @@ pub(super) const PALETTE: StylePalette = StylePalette {
     accent: RgbColor::new(0.95, 0.45, 0.20),
     // #8C8073 - virtual anchor, landmark rings.
     dim: RgbColor::new(0.55, 0.50, 0.45),
-    // #2E526B - halftone Seine wash.
+    // #2E526B - halftone Seine bank lines.
     water: RgbColor::new(0.18, 0.32, 0.42),
+    // #0F1C29 - dark river body, cooler than the warm field.
+    water_fill: RgbColor::new(0.06, 0.11, 0.16),
     // #F28C26 - selection ring.
     select: RgbColor::new(0.95, 0.55, 0.15),
     // #EBE0CC - cream station discs.
@@ -34,6 +36,7 @@ pub(super) const PALETTE: StylePalette = StylePalette {
     underground: RgbColor::new(0.42, 0.32, 0.22),
     // #4A443C - neutral edge ink (standard view, no highlight).
     edge: RgbColor::new(0.29, 0.27, 0.24),
-    // #C9B458 - generic metro ring mark (unbranded).
-    metro: RgbColor::new(0.79, 0.71, 0.35),
+    // #7C3AED - bold purple: generic metro ring mark and the
+    // metro lane in parallel-transports view.
+    metro: RgbColor::new(0.49, 0.23, 0.93),
 };

@@ -83,10 +83,12 @@ impl GameHost {
             CommandKind::Screenshot
             | CommandKind::SceneLayout
             | CommandKind::SetView { .. }
+            | CommandKind::Goto { .. }
             | CommandKind::SetLayers { .. }
             | CommandKind::SetAnchor { .. }
             | CommandKind::ReloadMap
-            | CommandKind::SetParams { .. } => Err(McpError::InvalidParams("view commands are app commands".to_string())),
+            | CommandKind::SetParams { .. }
+            | CommandKind::SetStyle { .. } => Err(McpError::InvalidParams("view commands are app commands".to_string())),
         }
     }
 
