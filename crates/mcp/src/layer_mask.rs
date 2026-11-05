@@ -57,6 +57,11 @@ pub struct LayerMask {
     /// (tabletop default), `screen` draws every label upright.
     #[serde(default)]
     pub label_mode: Option<String>,
+    /// Landmark artwork orientation: `screen` keeps the pins
+    /// upright (default), `radial` points them away from the
+    /// view center; each pin additionally dodges nearby geometry.
+    #[serde(default)]
+    pub landmark_mode: Option<String>,
     /// The compass rose.
     #[serde(default)]
     pub compass: Option<bool>,

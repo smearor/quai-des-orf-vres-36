@@ -76,7 +76,13 @@ impl ArtAssets {
         };
         let width = height * aspect;
         let rect = Rectangle::new(spec.pos.x - spec.anchor.x * width, spec.pos.y - spec.anchor.y * height, width, height);
-        if spec.alpha.as_f64() >= 0.999 {
+        // The anchor point is the rotation pivot: the pin tip stays
+        // on its position, the body swings.
+        ctx.save().ok();
+        ctx.translate(spec.pos.x, spec.pos.y);
+        ctx.rotate(spec.rotation.as_f64());
+        ctx.translate(-spec.pos.x, -spec.pos.y);
+        let drawn = if spec.alpha.as_f64() >= 0.999 {
             CairoRenderer::new(&handle).render_document(ctx, &rect).is_ok()
         } else {
             ctx.push_group();
@@ -88,7 +94,9 @@ impl ArtAssets {
                 ctx.new_path();
             }
             drawn
-        }
+        };
+        ctx.restore().ok();
+        drawn
     }
 
     /// The cached handle for `art/{family}/{city}/{style}/{stem}.svg`.

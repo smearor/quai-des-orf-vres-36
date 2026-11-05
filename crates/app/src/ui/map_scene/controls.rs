@@ -4,10 +4,10 @@
 use crate::mcp_bridge;
 use crate::ui::map_scene::LayerName;
 use crate::ui::map_scene::LayerToggle;
+use crate::ui::style::MapStyle;
 use gtk4::Align;
 use gtk4::Orientation;
 use gtk4::prelude::*;
-use crate::ui::style::MapStyle;
 
 /// Builds the vertical control bar anchored to the screen edge.
 /// The handlers mutate the scene through the same `mcp_bridge`
@@ -39,6 +39,11 @@ pub fn controls() -> gtk4::Box {
     label_mode.connect_clicked(|_| mcp_bridge::toggle_label_mode());
     bar.append(&label_mode);
 
+    let landmark_mode = gtk4::Button::from_icon_name("object-rotate-left-symbolic");
+    landmark_mode.set_tooltip_text(Some("landmarks: screen / radial"));
+    landmark_mode.connect_clicked(|_| mcp_bridge::toggle_landmark_mode());
+    bar.append(&landmark_mode);
+
     bar.append(&layer_menu());
     bar.append(&style_menu());
     bar
@@ -57,11 +62,7 @@ fn style_menu() -> gtk4::MenuButton {
         .margin_start(10)
         .margin_end(10)
         .build();
-    let styles = [
-        ("Comic", MapStyle::Comic),
-        ("Belle Époque", MapStyle::BelleEpoque),
-        ("Neon", MapStyle::Neon),
-    ];
+    let styles = [("Comic", MapStyle::Comic), ("Belle Époque", MapStyle::BelleEpoque), ("Neon", MapStyle::Neon)];
     let current = mcp_bridge::current_style().unwrap_or_default();
     let mut group: Option<gtk4::CheckButton> = None;
     for (label, style) in styles {

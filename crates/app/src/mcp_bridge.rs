@@ -403,6 +403,20 @@ pub(crate) fn toggle_label_mode() {
     });
 }
 
+/// Toggles the landmark orientation (screen <-> radial).
+pub(crate) fn toggle_landmark_mode() {
+    with_scene(|state, scene| {
+        {
+            let mut state = state.borrow_mut();
+            state.layers.landmark_mode = match state.layers.landmark_mode {
+                LabelMode::Radial => LabelMode::Screen,
+                LabelMode::Screen => LabelMode::Radial,
+            };
+        }
+        scene.update(Rc::new(state.borrow().clone()));
+    });
+}
+
 /// Mutates the layer set (overlay menu checkboxes).
 pub(crate) fn mutate_layers(f: impl FnOnce(&mut SceneLayers) + 'static) {
     with_scene(|state, scene| {
@@ -500,6 +514,9 @@ fn set_layers(mask: &LayerMask) -> CommandReply {
             }
             if let Some(mode) = &mask.label_mode {
                 l.label_mode = mode.parse().map_err(|_| McpError::InvalidParams(format!("unknown label_mode {mode}")))?;
+            }
+            if let Some(mode) = &mask.landmark_mode {
+                l.landmark_mode = mode.parse().map_err(|_| McpError::InvalidParams(format!("unknown landmark_mode {mode}")))?;
             }
             if let Some(v) = mask.compass {
                 l.compass = v;

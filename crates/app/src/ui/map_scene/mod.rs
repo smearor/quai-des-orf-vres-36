@@ -66,6 +66,7 @@ use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::ScaleFactor;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Pixels;
+use tangible_objects_model::RotationRad;
 use tangible_objects_model::Vec2;
 
 /// Full scene render: paper, backdrop, edges, stations, anchor,
@@ -124,15 +125,53 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
         .flat_map(|course| course.windows(2).map(|pair| Segment::new(pair[0], pair[1])))
         .collect();
     let line_hidden = |edge: &Edge| edge.line.as_ref().is_some_and(|line| state.layers.hidden_lines.contains(line));
+    // Radial orientation faces away from the *screen* center - the
+    // player's seat side - like the radial labels below.
+    let center = PxPos::new(width.as_f64() / 2.0, height.as_f64() / 2.0);
     if state.layers.landmarks {
+        // Obstacle geometry the pins dodge: every station disc and
+        // each edge's station-chain chords (px space).
+        let station_discs: Vec<(PxPos, f64)> = map
+            .stations()
+            .map(|station| (to_px(station.pos), px_per_mm.scale(3.2 * state.params.station_scale.get())))
+            .collect();
+        let edge_segments: Vec<(PxPos, PxPos)> = map
+            .edges()
+            .iter()
+            .flat_map(|edge| {
+                let ids: Vec<StationId> = [edge.from].into_iter().chain(edge.via.iter().copied()).chain([edge.to]).collect();
+                ids.windows(2)
+                    .filter_map(|w| {
+                        let (Some(a), Some(b)) = (map.station(w[0]), map.station(w[1])) else {
+                            return None;
+                        };
+                        Some((to_px(a.pos), to_px(b.pos)))
+                    })
+                    .collect::<Vec<_>>()
+            })
+            .collect();
         for landmark in &backdrop.landmarks {
             let pos = to_px(landmark.pos);
+            let height_mm = 14.0 * state.params.landmark_scale.get();
+            let preferred = match state.layers.landmark_mode {
+                LabelMode::Screen => -std::f64::consts::FRAC_PI_2,
+                LabelMode::Radial => (pos.y - center.y).atan2(pos.x - center.x),
+            };
+            let angle = landmark_rotation(
+                pos,
+                preferred,
+                px_per_mm.scale(height_mm * 0.5),
+                px_per_mm.scale(height_mm * 0.4),
+                &station_discs,
+                &edge_segments,
+            );
             let spec = ArtSpec {
                 family: ArtFamily::Landmarks,
                 stem: AssetStem::for_landmark(landmark.name.as_str()),
                 pos,
-                height: Millimeters::new(14.0 * state.params.landmark_scale.get()),
+                height: Millimeters::new(height_mm),
                 anchor: AnchorFrac::PIN_TIP,
+                rotation: RotationRad::new(angle + std::f64::consts::FRAC_PI_2),
                 alpha: Alpha::OPAQUE,
             };
             if !state.assets.draw(ctx, state.style, &spec, px_per_mm) {
@@ -638,6 +677,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                     pos: mid,
                     height: Millimeters::new(6.0 * state.params.metro_scale.get()),
                     anchor: AnchorFrac::CENTER,
+                    rotation: RotationRad::new(0.0),
                     alpha: Alpha::OPAQUE,
                 };
                 state.assets.draw(ctx, state.style, &spec, px_per_mm);
@@ -645,11 +685,10 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
         }
     }
 
-    // Stations + labels + numbers + scores.
+    // Stations + labels + numbers + scores. Radial labels face the
+    // nearest *screen* edge - not the map center (which pans off-
+    // viewport) - the same `center` the radial landmarks use.
     let importance = map.importance();
-    // Radial labels face the nearest *screen* edge - the player's
-    // seat side - not the map center (which pans off-viewport).
-    let center = PxPos::new(width.as_f64() / 2.0, height.as_f64() / 2.0);
     let orientation = match state.layers.label_mode {
         LabelMode::Radial => LabelOrientation::Radial { center },
         LabelMode::Screen => LabelOrientation::Screen,
@@ -741,6 +780,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
         pos: anchor_pos,
         height: Millimeters::new(16.0),
         anchor: AnchorFrac::PIN_TIP,
+        rotation: RotationRad::new(0.0),
         alpha: if tracked { Alpha::OPAQUE } else { Alpha::new(0.4) },
     };
     if !state.assets.draw(ctx, state.style, &anchor_spec, px_per_mm) {
@@ -756,6 +796,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
             pos: compass_pos,
             height: Millimeters::new(26.0),
             anchor: AnchorFrac::CENTER,
+            rotation: RotationRad::new(0.0),
             alpha: Alpha::new(0.9),
         };
         state.assets.draw(ctx, state.style, &compass_spec, px_per_mm);
@@ -957,4 +998,36 @@ fn centered_rank<'a, S: PartialEq + 'a>(shares: impl IntoIterator<Item = &'a S>,
         .position(|share| share == want)
         .map(|rank| rank as f64 - (count as f64 - 1.0) / 2.0)
         .unwrap_or(0.0)
+}
+
+/// The pin direction (screen radians) a landmark artwork takes:
+/// the candidate direction least covered by station discs and
+/// edges, staying closest to `preferred` when ties allow. The pin
+/// body sits `body_offset` px out from the tip and covers
+/// `body_radius`.
+fn landmark_rotation(pos: PxPos, preferred: f64, body_offset: f64, body_radius: f64, stations: &[(PxPos, f64)], edges: &[(PxPos, PxPos)]) -> f64 {
+    const STEPS: usize = 16;
+    let segment_distance = |px: f64, py: f64, a: PxPos, b: PxPos| {
+        let (vx, vy) = (b.x - a.x, b.y - a.y);
+        let len_sq = vx * vx + vy * vy;
+        let t = if len_sq > 1e-9 {
+            (((px - a.x) * vx + (py - a.y) * vy) / len_sq).clamp(0.0, 1.0)
+        } else {
+            0.0
+        };
+        (px - a.x - t * vx).hypot(py - a.y - t * vy)
+    };
+    let mut best = (f64::INFINITY, f64::INFINITY, preferred);
+    for i in 0..STEPS {
+        let angle = i as f64 * std::f64::consts::TAU / STEPS as f64;
+        let (cx, cy) = (pos.x + angle.cos() * body_offset, pos.y + angle.sin() * body_offset);
+        let station_cover: f64 = stations.iter().map(|(s, r)| (r + body_radius - (cx - s.x).hypot(cy - s.y)).max(0.0)).sum();
+        let edge_cover: f64 = edges.iter().map(|(a, b)| (body_radius - segment_distance(cx, cy, *a, *b)).max(0.0)).sum();
+        let occlusion = station_cover + edge_cover;
+        let deviation = (angle - preferred).sin().atan2((angle - preferred).cos()).abs();
+        if occlusion < best.0 - 1e-9 || (occlusion <= best.0 + 1e-9 && deviation < best.1) {
+            best = (occlusion, deviation, angle);
+        }
+    }
+    best.2
 }

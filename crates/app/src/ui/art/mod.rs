@@ -31,6 +31,7 @@ mod tests {
     use cairo::ImageSurface;
     use tangible_objects_model::Millimeters;
     use tangible_objects_model::PixelsPerMm;
+    use tangible_objects_model::RotationRad;
 
     #[test]
     fn draws_existing_assets_and_falls_back() {
@@ -47,6 +48,7 @@ mod tests {
             pos,
             height: Millimeters::new(12.0),
             anchor: AnchorFrac::PIN_TIP,
+            rotation: RotationRad::new(0.0),
             alpha: Alpha::OPAQUE,
         };
         assert!(assets.draw(&ctx, MapStyle::BelleEpoque, &spec, px_per_mm));
@@ -57,6 +59,7 @@ mod tests {
             pos,
             height: Millimeters::new(12.0),
             anchor: AnchorFrac::PIN_TIP,
+            rotation: RotationRad::new(0.0),
             alpha: Alpha::OPAQUE,
         };
         assert!(!assets.draw(&ctx, MapStyle::Comic, &missing, px_per_mm));

@@ -38,6 +38,10 @@ pub struct SceneLayers {
     pub scores: bool,
     /// Label orientation for tabletop play.
     pub label_mode: LabelMode,
+    /// Landmark artwork orientation: upright pins (`Screen`) or
+    /// pins facing the nearest table edge (`Radial`); each pin
+    /// additionally dodges stations and edges.
+    pub landmark_mode: LabelMode,
     /// The compass rose.
     pub compass: bool,
     /// Bridge-station markers (dataset debugging, MCP-only layer).
@@ -119,6 +123,7 @@ impl Default for SceneLayers {
             numbers: true,
             scores: false,
             label_mode: LabelMode::default(),
+            landmark_mode: LabelMode::Screen,
             compass: false,
             bridges: false,
         }

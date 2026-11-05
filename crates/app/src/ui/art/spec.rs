@@ -2,6 +2,7 @@
 //! artwork).
 
 use tangible_objects_model::Millimeters;
+use tangible_objects_model::RotationRad;
 
 use crate::ui::art::AnchorFrac;
 use crate::ui::art::ArtFamily;
@@ -21,6 +22,8 @@ pub struct ArtSpec {
     pub height: Millimeters,
     /// Which document fraction sits on `pos`.
     pub anchor: AnchorFrac,
+    /// Rotation around `pos` - the anchor point is the pivot.
+    pub rotation: RotationRad,
     /// Group opacity.
     pub alpha: Alpha,
 }
