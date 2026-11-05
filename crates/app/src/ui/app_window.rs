@@ -28,11 +28,13 @@ use gdk4::EventType;
 use gdk4::ModifierType;
 use glib::MainContext;
 use glib::Propagation;
+use gtk4::Align;
 use gtk4::EventControllerLegacy;
 use gtk4::EventControllerScroll;
 use gtk4::EventControllerScrollFlags;
 use gtk4::EventSequenceState;
 use gtk4::GestureClick;
+use gtk4::GestureDrag;
 use libadwaita as adw;
 use libadwaita::prelude::*;
 use qdo36_map::GameMap;
@@ -48,6 +50,7 @@ use qdo36_tangibles::SurfaceMm;
 use qdo36_tangibles::TangibleEvent;
 use tangible_objects_model::RotationRad;
 use tangible_objects_model::Vec2;
+use tracing::debug;
 use tracing::info;
 use tracing::warn;
 
@@ -91,7 +94,64 @@ impl AppWindow {
         // overlay at the screen edge (independent of the map camera).
         let map_page = gtk4::Overlay::new();
         map_page.set_child(Some(&scene));
-        map_page.add_overlay(&controls());
+        map_page.add_overlay(&controls(&l10n));
+        // Area-screenshot rubber band: hidden overlay rect the armed
+        // drag sizes; the tools menu arms the mode via the bridge.
+        let rubber = gtk4::Box::builder()
+            .css_classes(["shot-selection"])
+            .halign(Align::Start)
+            .valign(Align::Start)
+            .visible(false)
+            .build();
+        map_page.add_overlay(&rubber);
+        let drag = GestureDrag::new();
+        drag.set_button(0);
+        // `drag.start_point()` is already cleared by `drag-end`; the
+        // press position is kept here instead.
+        let drag_start = Rc::new(Cell::new(None));
+        {
+            let rubber = rubber.clone();
+            let drag_start = drag_start.clone();
+            drag.connect_drag_begin(move |drag, x, y| {
+                if !crate::mcp_bridge::area_shot_armed() {
+                    drag.set_state(EventSequenceState::Denied);
+                    return;
+                }
+                debug!(x, y, "area shot: drag begin");
+                drag_start.set(Some((x, y)));
+                position_rubber(&rubber, x, y, x, y);
+                rubber.set_visible(true);
+            });
+        }
+        {
+            let rubber = rubber.clone();
+            let drag_start = drag_start.clone();
+            drag.connect_drag_update(move |_, dx, dy| {
+                if let Some((x, y)) = drag_start.get() {
+                    position_rubber(&rubber, x, y, x + dx, y + dy);
+                }
+            });
+        }
+        drag.connect_drag_end(move |_, dx, dy| {
+            rubber.set_visible(false);
+            // A near-zero drag counts as a click: cancel the mode.
+            match drag_start.take() {
+                Some((x, y)) if dx.abs() > 4.0 && dy.abs() > 4.0 => {
+                    let rect = gtk4::graphene::Rect::new(x.min(x + dx) as f32, y.min(y + dy) as f32, dx.abs() as f32, dy.abs() as f32);
+                    debug!(x, y, dx, dy, "area shot: capturing rect");
+                    // Schedules on after-paint: hiding the rubber
+                    // just invalidated the render node cache.
+                    crate::mcp_bridge::save_shot(Some(rect));
+                }
+                Some(_) => debug!(dx, dy, "area shot: drag below threshold, cancelled"),
+                None => debug!("area shot: drag end without start point"),
+            }
+            // Disarm deferred past the release dispatch so the
+            // scene's click gesture still sees the armed flag and
+            // skips its station selection.
+            glib::idle_add_local_once(crate::mcp_bridge::disarm_area_shot);
+        });
+        map_page.add_controller(drag);
         stack.add_named(&map_page, Some("map"));
 
         window.set_content(Some(&stack));
@@ -190,6 +250,11 @@ impl AppWindow {
             let state = state.clone();
             let scene = self.scene.clone();
             gesture.connect_released(move |_, _, px, py| {
+                // An area-shot drag ends on the same release - it
+                // must not ring a station.
+                if crate::mcp_bridge::area_shot_armed() {
+                    return;
+                }
                 let station = scene.station_at(&state.borrow(), Vec2::new(px, py));
                 if let Some(station) = station {
                     state.borrow_mut().selected = Some(station);
@@ -306,7 +371,9 @@ impl AppWindow {
                         let Some((x, y)) = event.position() else {
                             return Propagation::Proceed;
                         };
-                        let armed = event.modifier_state().contains(ModifierType::CONTROL_MASK) && matches!(state.borrow().anchor, AnchorState::Virtual(_));
+                        let armed = event.modifier_state().contains(ModifierType::CONTROL_MASK)
+                            && matches!(state.borrow().anchor, AnchorState::Virtual(_))
+                            && !crate::mcp_bridge::area_shot_armed();
                         if !armed {
                             return Propagation::Proceed;
                         }
@@ -503,6 +570,14 @@ impl AppWindow {
             anchor_hint: Some(self.l10n.msg("tower-missing")),
         }
     }
+}
+
+/// Places the rubber-band overlay: top-left margin at the rect's
+/// origin, size request as its extent.
+fn position_rubber(rubber: &gtk4::Box, from_x: f64, from_y: f64, to_x: f64, to_y: f64) {
+    rubber.set_margin_start(from_x.min(to_x) as i32);
+    rubber.set_margin_top(from_y.min(to_y) as i32);
+    rubber.set_size_request((to_x - from_x).abs().max(1.0) as i32, (to_y - from_y).abs().max(1.0) as i32);
 }
 
 /// Wraps an angle delta into [-pi, pi] (the orbit ray is directed,

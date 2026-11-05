@@ -1,4 +1,12 @@
 app-title = Quai des Orfèvres 36
+controls-labels = Labels
+controls-landmarks = Landmarks
+controls-mode-radial = Radial
+controls-mode-screen = Screen
+controls-orientation = Orientation
+controls-shot-all = Take screenshot
+controls-shot-area = Select screenshot area
+controls-tools = Tools
 daemon-connecting = Connecting to daemon…
 daemon-ready = Daemon connected
 daemon-unreachable = Daemon unreachable

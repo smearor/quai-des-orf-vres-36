@@ -9,3 +9,9 @@ window {
 statuspage {
   background-color: #1a1816;
 }
+
+/* Rubber-band rect of the area-screenshot tool. */
+.shot-selection {
+  border: 2px dashed rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.12);
+}

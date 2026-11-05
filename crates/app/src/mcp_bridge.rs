@@ -7,7 +7,6 @@
 //! the document and forwards commands - no GTK access from the
 //! server, ever (WP05 R5).
 
-use crate::ui::map_scene::LabelMode;
 use crate::ui::map_scene::MapScene;
 use crate::ui::map_scene::RenderStage;
 use crate::ui::map_scene::SceneLayers;
@@ -41,8 +40,10 @@ use qdo36_tangibles::SurfaceMm;
 use qdo36_tangibles::{AnchorPose, AnchorState};
 use rand::SeedableRng;
 use rand::rngs::StdRng;
+use std::cell::Cell;
 use std::cell::RefCell;
 use std::net::SocketAddr;
+use std::path::PathBuf;
 use std::rc::Rc;
 use std::sync::Arc;
 use tangible_objects_model::DisplayRotation;
@@ -53,6 +54,7 @@ use tangible_objects_model::Vec2;
 use tokio::sync::watch::Sender;
 use tokio::sync::watch::channel;
 use tracing::info;
+use tracing::warn;
 
 thread_local! {
     /// Latest-state channel feeding the MCP `qdo36://state` resource
@@ -68,6 +70,9 @@ thread_local! {
     /// commands mutate and `scene_layout` enumerates; installed by
     /// [`register_scene`].
     static SCENE: RefCell<Option<SceneHandle>> = const { RefCell::new(None) };
+    /// Armed flag of the area-screenshot tool (tools menu): the
+    /// map-page drag claims the pointer sequence while set.
+    static AREA_SHOT_ARMED: Cell<bool> = const { Cell::new(false) };
 }
 
 /// The registered scene: shared state, the scene widget and a
@@ -132,18 +137,38 @@ pub fn register_window(window: &adw::ApplicationWindow) {
     APP_WINDOW.with(|slot| *slot.borrow_mut() = Some(window.clone()));
 }
 
-/// Renders the registered window into a PNG texture; `None` when no
-/// window or surface is available.
-fn screenshot_texture() -> Option<gdk4::Texture> {
+/// Renders the registered window into a PNG texture, cropped to
+/// `viewport` when given; `None` captures the full window. `None`
+/// when no window or surface is available.
+fn window_texture(viewport: Option<gtk4::graphene::Rect>) -> Option<gdk4::Texture> {
     use gtk4::prelude::*;
 
-    let window = APP_WINDOW.with(|slot| slot.borrow().clone())?;
-    let surface = window.surface()?;
+    let Some(window) = APP_WINDOW.with(|slot| slot.borrow().clone()) else {
+        warn!("screenshot: no app window registered");
+        return None;
+    };
+    let Some(surface) = window.surface() else {
+        warn!("screenshot: window has no surface");
+        return None;
+    };
     let snapshot = gtk4::Snapshot::new();
     gtk4::WidgetPaintable::new(Some(&window)).snapshot(&snapshot, f64::from(window.width()), f64::from(window.height()));
-    let node = snapshot.to_node()?;
-    let renderer = gtk4::gsk::Renderer::for_surface(&surface)?;
-    let viewport = gtk4::graphene::Rect::new(0.0, 0.0, window.width() as f32, window.height() as f32);
+    let Some(node) = snapshot.to_node() else {
+        warn!(
+            visible = window.is_visible(),
+            realized = window.is_realized(),
+            mapped = window.is_mapped(),
+            width = window.width(),
+            height = window.height(),
+            "screenshot: snapshot produced no render node"
+        );
+        return None;
+    };
+    let Some(renderer) = gtk4::gsk::Renderer::for_surface(&surface) else {
+        warn!("screenshot: no renderer for surface");
+        return None;
+    };
+    let viewport = viewport.unwrap_or_else(|| gtk4::graphene::Rect::new(0.0, 0.0, window.width() as f32, window.height() as f32));
     let texture = renderer.render_texture(&node, Some(&viewport));
     // A renderer may only be disposed while unrealized - dropping it
     // while realized on the surface asserts in GSK.
@@ -151,11 +176,94 @@ fn screenshot_texture() -> Option<gdk4::Texture> {
     Some(texture)
 }
 
+/// Arms the area-screenshot selection: the map-page drag claims the
+/// next pointer sequence and [`save_shot`] crops to its rect.
+pub(crate) fn arm_area_shot() {
+    AREA_SHOT_ARMED.with(|armed| armed.set(true));
+}
+
+/// Whether the area-shot selection is armed; map gestures check
+/// this before interpreting taps/drags as map input.
+pub(crate) fn area_shot_armed() -> bool {
+    AREA_SHOT_ARMED.with(Cell::get)
+}
+
+/// Disarms the area-shot selection (after a capture or a
+/// too-small drag cancels it).
+pub(crate) fn disarm_area_shot() {
+    AREA_SHOT_ARMED.with(|armed| armed.set(false));
+}
+
+/// Schedules a screenshot of the window (or the `viewport` sub-rect
+/// for the area shot) into the user's screenshot directory. The
+/// widget paintable renders the *cached* render node, which is NULL
+/// between an invalidation and the following paint - so the capture
+/// runs on `after-paint` of the next frame (forced via
+/// `queue_draw`).
+pub(crate) fn save_shot(viewport: Option<gtk4::graphene::Rect>) {
+    use gtk4::prelude::*;
+
+    let Some(window) = APP_WINDOW.with(|slot| slot.borrow().clone()) else {
+        warn!("screenshot: no app window registered");
+        return;
+    };
+    let Some(surface) = window.surface() else {
+        warn!("screenshot: window has no surface");
+        return;
+    };
+    let handler_id = Rc::new(RefCell::new(None));
+    let id_slot = handler_id.clone();
+    let id = surface.frame_clock().connect_after_paint(move |clock| {
+        if let Some(id) = id_slot.borrow_mut().take() {
+            glib::object::ObjectExt::disconnect(clock, id);
+        }
+        write_shot(viewport);
+    });
+    handler_id.replace(Some(id));
+    window.queue_draw();
+}
+
+/// Writes the window PNG into the screenshot dir; returns the path.
+fn write_shot(viewport: Option<gtk4::graphene::Rect>) -> Option<PathBuf> {
+    use gdk4::prelude::TextureExt;
+
+    let Some(texture) = window_texture(viewport) else {
+        warn!("screenshot: render failed");
+        return None;
+    };
+    let dir = glib::user_special_dir(glib::UserDirectory::Pictures)
+        .unwrap_or_else(|| glib::home_dir().join("Pictures"))
+        .join("Screenshots");
+    if let Err(err) = std::fs::create_dir_all(&dir) {
+        warn!(%err, dir = %dir.display(), "screenshot: create dir failed");
+        return None;
+    }
+    let Some(now) = glib::DateTime::now_local().ok() else {
+        warn!("screenshot: local time unavailable");
+        return None;
+    };
+    let Some(stamp) = now.format("%Y-%m-%d_%H-%M-%S").ok() else {
+        warn!("screenshot: timestamp format failed");
+        return None;
+    };
+    let path = dir.join(format!("qdo36-{stamp}-{:03}.png", now.microsecond() / 1000));
+    match std::fs::write(&path, texture.save_to_png_bytes().as_ref()) {
+        Ok(()) => {
+            info!(path = %path.display(), "screenshot saved");
+            Some(path)
+        }
+        Err(err) => {
+            warn!(%err, path = %path.display(), "screenshot: write failed");
+            None
+        }
+    }
+}
+
 /// The `screenshot` command: PNG of the window, base64-encoded.
 fn mcp_screenshot() -> CommandReply {
     use gdk4::prelude::TextureExt;
 
-    let Some(texture) = screenshot_texture() else {
+    let Some(texture) = window_texture(None) else {
         return Err(McpError::StateUnavailable);
     };
     let bytes = texture.save_to_png_bytes();
@@ -384,34 +492,6 @@ pub(crate) fn reset_view() {
             let mut state = state.borrow_mut();
             state.scale = MapScale::ONE;
             state.pan = Vec2::new(0.0, 0.0);
-        }
-        scene.update(Rc::new(state.borrow().clone()));
-    });
-}
-
-/// Toggles the label orientation (radial <-> screen).
-pub(crate) fn toggle_label_mode() {
-    with_scene(|state, scene| {
-        {
-            let mut state = state.borrow_mut();
-            state.layers.label_mode = match state.layers.label_mode {
-                LabelMode::Radial => LabelMode::Screen,
-                LabelMode::Screen => LabelMode::Radial,
-            };
-        }
-        scene.update(Rc::new(state.borrow().clone()));
-    });
-}
-
-/// Toggles the landmark orientation (screen <-> radial).
-pub(crate) fn toggle_landmark_mode() {
-    with_scene(|state, scene| {
-        {
-            let mut state = state.borrow_mut();
-            state.layers.landmark_mode = match state.layers.landmark_mode {
-                LabelMode::Radial => LabelMode::Screen,
-                LabelMode::Screen => LabelMode::Radial,
-            };
         }
         scene.update(Rc::new(state.borrow().clone()));
     });
