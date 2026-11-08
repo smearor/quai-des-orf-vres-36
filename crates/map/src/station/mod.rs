@@ -6,16 +6,22 @@ pub mod degree;
 pub mod id;
 pub mod kind;
 pub mod name;
+pub mod nearest;
 pub mod neighbor;
+pub mod neighbors;
 pub mod pair;
+pub mod stations;
 
 pub use count::StationCount;
 pub use degree::StationDegree;
 pub use id::StationId;
 pub use kind::StationKind;
 pub use name::StationName;
+pub use nearest::NearestStation;
 pub use neighbor::Neighbor;
+pub use neighbors::Neighbors;
 pub use pair::StationPair;
+pub use stations::Stations;
 
 use serde::Deserialize;
 use serde::Serialize;
@@ -46,10 +52,15 @@ pub struct Station {
     /// Adjacent stations with the transport mode to reach them.
     /// Derived during map validation; always `[]` in the dataset.
     #[serde(default)]
-    pub neighbors: Vec<Neighbor>,
+    pub neighbors: Neighbors,
 }
 
 impl Station {
+    /// The straight-line distance to `other` in map mm.
+    pub fn distance(&self, other: &Station) -> Millimeters {
+        self.pos.distance(&other.pos)
+    }
+
     /// Returns `true` when this station is eligible for the start deal.
     pub fn is_start(&self) -> bool {
         self.kinds.contains(&StationKind::Start)

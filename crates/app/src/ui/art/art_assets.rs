@@ -70,7 +70,7 @@ impl ArtAssets {
         let Some(handle) = self.handle(spec.family, style, spec.stem.as_str()) else {
             return false;
         };
-        let height = px_per_mm.scale(spec.height.as_f64());
+        let height = px_per_mm.scale(spec.height).as_f64();
         let Some(aspect) = self.intrinsic_size(&handle).and_then(|size| size.aspect()) else {
             return false;
         };

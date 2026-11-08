@@ -5,7 +5,7 @@ use crate::ui::style::StylePalette;
 
 /// Parchment field, sepia engraving ink, muted gold accents - the
 /// same voice as the generated masters.
-pub(super) const PALETTE: StylePalette = StylePalette {
+pub(crate) const PALETTE: StylePalette = StylePalette {
     // #F7EBD0 - parchment field.
     paper: RgbColor::new(0.97, 0.92, 0.81),
     // #542C15 - sepia engraving ink: outlines, hairlines, anchor disc.
@@ -39,4 +39,15 @@ pub(super) const PALETTE: StylePalette = StylePalette {
     // #6B4A8E - period mauve: generic metro ring mark and the
     // metro lane in parallel-transports view.
     metro: RgbColor::new(0.42, 0.29, 0.56),
+    // #C9B98F - faded sepia: city-block outlines on the
+    // parchment field.
+    block: RgbColor::new(0.79, 0.73, 0.56),
+    // #E4D3A9 - aged-stone fill for the procedural houses.
+    building: RgbColor::new(0.89, 0.83, 0.66),
+    park: RgbColor::new(0.62, 0.72, 0.50),
+    // #A98F61 - engraved sepia roof lines, darker than the
+    // building fill.
+    roof: RgbColor::new(0.66, 0.56, 0.38),
+    // #8F7D5C - quiet sepia for decorative streets.
+    street: RgbColor::new(0.56, 0.49, 0.36),
 };

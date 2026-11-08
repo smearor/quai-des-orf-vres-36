@@ -5,6 +5,7 @@ mod controller;
 mod fonts;
 mod heading_offset_deg;
 mod l10n;
+mod layers_config;
 mod mcp_bridge;
 mod settings;
 mod tangible_host;

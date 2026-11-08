@@ -4,12 +4,10 @@
 pub mod kind;
 pub mod landmark;
 pub mod name;
-pub mod polyline;
-
+pub use crate::map::Polyline;
 pub use kind::LandmarkKind;
 pub use landmark::Landmark;
 pub use name::LandmarkName;
-pub use polyline::Polyline;
 
 use serde::Deserialize;
 use serde::Serialize;

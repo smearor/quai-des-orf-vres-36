@@ -27,7 +27,6 @@ pub use mean_degree::MeanDegree;
 pub use missing_service::MissingService;
 pub use report::LintReport;
 
-use crate::Edge;
 use crate::GameMap;
 use crate::LineName;
 use crate::Segment;
@@ -61,7 +60,7 @@ impl GameMap {
 
     /// Edges of one transport layer.
     fn edges_of(&self, transport: Transport) -> EdgeSet<'_> {
-        self.edges().iter().filter(|e| e.transport == transport).collect()
+        self.edges_by(transport).collect()
     }
 
     /// Q1: same-layer crossings are defects (metro exempt - lines
@@ -76,8 +75,8 @@ impl GameMap {
                 for b in &edges[i + 1..] {
                     // A shared station on either drawn path is a
                     // junction, not a crossing.
-                    let path_a = self.path_of(a);
-                    let path_b = self.path_of(b);
+                    let path_a: Vec<StationId> = a.station_chain().collect();
+                    let path_b: Vec<StationId> = b.station_chain().collect();
                     if path_a.iter().any(|id| path_b.contains(id)) {
                         continue;
                     }
@@ -117,7 +116,7 @@ impl GameMap {
     /// `via` waypoints are declared pass-throughs, not served stops.
     fn check_station_clearance(&self, findings: &mut Vec<Finding>) {
         for edge in self.edges() {
-            let path: Vec<StationId> = [edge.from].into_iter().chain(edge.via.iter().copied()).chain([edge.to]).collect();
+            let path: Vec<StationId> = edge.station_chain().collect();
             let on_path: HashSet<StationId> = path.iter().copied().collect();
             for station in self.stations() {
                 if on_path.contains(&station.id) {
@@ -126,8 +125,8 @@ impl GameMap {
                 let distance_mm = path
                     .windows(2)
                     .filter_map(|hop| Segment::new(self.pos(hop[0]), self.pos(hop[1])).interior_distance(&station.pos))
-                    .fold(f64::INFINITY, f64::min);
-                if Millimeters::new(distance_mm) < Self::STATION_CLEARANCE {
+                    .fold(Millimeters::INFINITY, Millimeters::min);
+                if distance_mm < Self::STATION_CLEARANCE {
                     findings.push(Finding::StationOnEdge {
                         transport: edge.transport,
                         edge: EdgePair {
@@ -143,14 +142,9 @@ impl GameMap {
         }
     }
 
-    /// The drawn route path: endpoints + declared `via` waypoints.
-    fn path_of(&self, edge: &Edge) -> Vec<StationId> {
-        [edge.from].into_iter().chain(edge.via.iter().copied()).chain([edge.to]).collect()
-    }
-
     /// A station's map-mm position as a raw pair.
     fn pos(&self, id: StationId) -> Vec2<Millimeters> {
-        self.station(id).map(|s| s.pos).unwrap_or_else(|| Vec2::new(0.0, 0.0))
+        self.station(id).map(|s| s.pos).unwrap_or(Vec2::ZERO)
     }
 
     /// Q2: each transport net must be one component. Underground

@@ -15,3 +15,70 @@ statuspage {
   border: 2px dashed rgba(255, 255, 255, 0.85);
   background-color: rgba(255, 255, 255, 0.12);
 }
+
+/* On-screen control bar: a style-following panel rotated toward
+   the screen edge by the wrot-rotation wrapper. */
+.map-controls {
+  padding: 12px;
+  border-radius: 14px;
+}
+
+/* The burger button carries `.map-controls` itself, so its rule
+   must also match a button the class sits on - not only
+   descendants. */
+.map-controls button,
+button.map-controls {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 10px;
+  border-radius: 10px;
+  -gtk-icon-size: 20px;
+}
+
+.map-controls popover label {
+  font-size: 1.1em;
+}
+
+/* Comic: ink-dark card, gold edge, paper-colored icons. */
+.map-controls.style-comic {
+  color: #faf2db;
+  background-color: rgba(38, 33, 28, 0.94);
+  border: 1.5px solid #c9a227;
+}
+.map-controls.style-comic button {
+  color: #faf2db;
+}
+.map-controls.style-comic button:hover {
+  background-color: rgba(201, 162, 39, 0.25);
+}
+
+/* Belle Époque: parchment card, sepia ink. */
+.map-controls.style-belle {
+  color: #542c15;
+  background-color: rgba(243, 233, 207, 0.95);
+  border: 1.5px solid #8c734c;
+}
+.map-controls.style-belle button {
+  color: #542c15;
+}
+.map-controls.style-belle button:hover {
+  background-color: rgba(140, 115, 76, 0.22);
+}
+
+/* Neon: deep field, cyan glow edge. */
+.map-controls.style-neon {
+  color: #9df3ff;
+  background-color: rgba(4, 12, 16, 0.94);
+  border: 1px solid #1af2ff;
+}
+.map-controls.style-neon button {
+  color: #9df3ff;
+}
+.map-controls.style-neon button:hover {
+  background-color: rgba(26, 242, 255, 0.16);
+}
+
+/* The active style in the style section. */
+.map-controls button.checked {
+  outline: 2px solid currentColor;
+}

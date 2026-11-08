@@ -3,7 +3,11 @@
 use crate::ui::style::BelleEpoqueStyle;
 use crate::ui::style::ComicStyle;
 use crate::ui::style::NeonStyle;
+use crate::ui::style::StylePalette;
 use crate::ui::style::StyleRenderer;
+use crate::ui::style::belle_epoque;
+use crate::ui::style::comic;
+use crate::ui::style::neon;
 use qdo36_mcp::StyleName;
 use serde::Deserialize;
 use serde::Serialize;
@@ -38,6 +42,25 @@ impl MapStyle {
             Self::Comic => Box::new(ComicStyle),
             Self::BelleEpoque => Box::new(BelleEpoqueStyle),
             Self::Neon => Box::new(NeonStyle),
+        }
+    }
+
+    /// The style's semantic palette (menu previews etc).
+    pub fn palette(&self) -> &'static StylePalette {
+        match self {
+            Self::Comic => &comic::palette::PALETTE,
+            Self::BelleEpoque => &belle_epoque::palette::PALETTE,
+            Self::Neon => &neon::palette::PALETTE,
+        }
+    }
+
+    /// The CSS family class the overlay menu carries so its panel
+    /// follows the map look (`style-*` rules in `style.css`).
+    pub fn controls_class(&self) -> &'static str {
+        match self {
+            Self::Comic => "style-comic",
+            Self::BelleEpoque => "style-belle",
+            Self::Neon => "style-neon",
         }
     }
 }

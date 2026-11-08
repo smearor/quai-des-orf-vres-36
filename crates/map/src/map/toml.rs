@@ -1,5 +1,7 @@
+use crate::map::District;
 use crate::map::Edge;
 use crate::map::MapMeta;
+use crate::map::Park;
 use crate::map::backdrop::Backdrop;
 use crate::station::Station;
 use serde::Deserialize;
@@ -21,4 +23,12 @@ pub struct MapToml {
     /// gameplay-inert).
     #[serde(default)]
     pub backdrop: Backdrop,
+    /// Named city quarters (`[[districts]]` - optional): names the
+    /// inner blocks carry, pinned geographically via `pos_mm`.
+    #[serde(default)]
+    pub districts: Vec<District>,
+    /// Named parks (`[[parks]]` - optional): green spots large
+    /// blocks keep free of houses.
+    #[serde(default)]
+    pub parks: Vec<Park>,
 }

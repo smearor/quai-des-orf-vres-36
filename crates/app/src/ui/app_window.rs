@@ -1,4 +1,5 @@
 use std::cell::Cell;
+use std::cell::OnceCell;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::f64::consts::PI;
@@ -8,6 +9,7 @@ use crate::anchor_tracker;
 use crate::controller;
 use crate::controller::Controller;
 use crate::l10n::L10n;
+use crate::l10n::LabelKey;
 use crate::mcp_bridge::publish_map;
 use crate::mcp_bridge::register_scene;
 use crate::mcp_bridge::register_window;
@@ -48,6 +50,7 @@ use qdo36_tangibles::GraphQlSource;
 use qdo36_tangibles::MapScale;
 use qdo36_tangibles::SurfaceMm;
 use qdo36_tangibles::TangibleEvent;
+use tangible_objects_model::Millimeters;
 use tangible_objects_model::RotationRad;
 use tangible_objects_model::Vec2;
 use tracing::debug;
@@ -83,8 +86,8 @@ impl AppWindow {
 
         let stack = gtk4::Stack::new();
         let setup = adw::StatusPage::builder()
-            .title(l10n.msg("app-title"))
-            .description(l10n.msg("daemon-connecting"))
+            .title(l10n.msg_key(LabelKey("app-title")))
+            .description(l10n.msg_key(LabelKey("daemon-connecting")))
             .icon_name("qdo-map-symbolic")
             .build();
         stack.add_named(&setup, Some("setup"));
@@ -94,7 +97,9 @@ impl AppWindow {
         // overlay at the screen edge (independent of the map camera).
         let map_page = gtk4::Overlay::new();
         map_page.set_child(Some(&scene));
-        map_page.add_overlay(&controls(&l10n));
+        for menu in controls(&l10n, &settings) {
+            map_page.add_overlay(&menu);
+        }
         // Area-screenshot rubber band: hidden overlay rect the armed
         // drag sizes; the tools menu arms the mode via the bridge.
         let rubber = gtk4::Box::builder()
@@ -200,7 +205,7 @@ impl AppWindow {
                 Ok(Err(err)) => {
                     warn!("daemon handshake failed: {err}");
                     let status = match &err {
-                        DaemonError::Connect { .. } => this.l10n.msg("daemon-unreachable"),
+                        DaemonError::Connect { .. } => this.l10n.msg_key(LabelKey("daemon-unreachable")),
                         _ => err.to_string(),
                     };
                     this.setup.set_description(Some(&status));
@@ -226,12 +231,17 @@ impl AppWindow {
             let surface = controller.host().surface(&source).ok();
             controller.set_source(source);
             let status = match surface {
-                Some(surface) => format!("{} ({:.0} x {:.0} mm)", self.l10n.msg("daemon-ready"), surface.width.as_f64(), surface.height.as_f64()),
-                None => self.l10n.msg("daemon-ready"),
+                Some(surface) => format!(
+                    "{} ({:.0} x {:.0} mm)",
+                    self.l10n.msg_key(LabelKey("daemon-ready")),
+                    surface.width.as_f64(),
+                    surface.height.as_f64()
+                ),
+                None => self.l10n.msg_key(LabelKey("daemon-ready")),
             };
             (status, surface)
         };
-        let prompt = self.l10n.msg("place-tower");
+        let prompt = self.l10n.msg_key(LabelKey("place-tower"));
         self.setup.set_description(Some(&format!("{status}\n\n{prompt}")));
         info!("daemon handshake complete");
 
@@ -502,7 +512,7 @@ impl AppWindow {
                         // drop the finger pan so the rendered anchor
                         // lands back under the tangible.
                         if tracked && matches!(state.anchor, AnchorState::Virtual(_)) {
-                            state.pan = Vec2::new(0.0, 0.0);
+                            state.pan = Vec2::ZERO;
                         }
                         state.anchor = anchor;
                         crate::mcp_bridge::publish_state(&anchor, surface.as_ref());
@@ -544,7 +554,7 @@ impl AppWindow {
             .and_then(|spec| map.station(spec.station))
             .or_else(|| map.stations().next())
             .map(|station| station.pos)
-            .unwrap_or_else(|| Vec2::new(0.0, 0.0));
+            .unwrap_or(Vec2::ZERO);
         publish_map(MapInfo::from_map(map, Some(anchor_pos)));
         set_game_map(map.clone());
         let mut config = AnchorConfig::at_station(map.bounds(), anchor_pos);
@@ -559,15 +569,24 @@ impl AppWindow {
             scale,
             selected: None,
             display_rotation: self.settings.display_rotation,
-            layers: SceneLayers::default(),
-            pan: Vec2::new(0.0, 0.0),
+            layers: {
+                let mut layers = SceneLayers::default();
+                self.settings.layers.apply_to(&mut layers);
+                layers
+            },
+            pan: Vec2::ZERO,
             params: RenderParams::default(),
             // Inside the bounds' top-right corner - the previous
             // margin position (x_max + 16, y_min - 16) clipped away.
-            compass_pos: Vec2::new(map.bounds().x_max.as_f64() - 24.0, map.bounds().y_min.as_f64() + 24.0),
+            compass_pos: Vec2::from_mm(map.bounds().x_max - Millimeters::new(24.0), map.bounds().y_min + Millimeters::new(24.0)),
             style: self.settings.map_style,
             assets: ArtAssets::detect(),
-            anchor_hint: Some(self.l10n.msg("tower-missing")),
+            anchor_hint: Some(self.l10n.msg_key(LabelKey("tower-missing"))),
+            block_layout: OnceCell::new(),
+            block_shapes: RefCell::new(None),
+            decks: OnceCell::new(),
+            water_courses: OnceCell::new(),
+            water_segments: OnceCell::new(),
         }
     }
 }

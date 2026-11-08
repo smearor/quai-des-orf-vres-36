@@ -1,8 +1,6 @@
 use crate::AnchorPose;
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::RotationRad;
-use tangible_objects_model::Vec2;
 
 /// Where the map anchor currently is.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
@@ -19,10 +17,7 @@ impl AnchorState {
     /// A centered, upright default pose used in touch-only mode or
     /// before the tower is placed.
     pub fn default_virtual() -> Self {
-        Self::Virtual(AnchorPose {
-            center: Vec2::new(0.0, 0.0),
-            rotation_rad: RotationRad::new(0.0),
-        })
+        Self::Virtual(AnchorPose::ZERO)
     }
 
     /// The current pose regardless of tracking state.

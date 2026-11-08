@@ -11,6 +11,9 @@ pub struct LayerMask {
     /// Water polylines.
     #[serde(default)]
     pub water: Option<bool>,
+    /// City-block outlines.
+    #[serde(default)]
+    pub blocks: Option<bool>,
     /// Backdrop landmark pins.
     #[serde(default)]
     pub landmarks: Option<bool>,
@@ -62,6 +65,19 @@ pub struct LayerMask {
     /// view center; each pin additionally dodges nearby geometry.
     #[serde(default)]
     pub landmark_mode: Option<String>,
+    /// District caption orientation: `radial` (default) faces the
+    /// nearest table edge, `screen` draws it upright.
+    #[serde(default)]
+    pub district_mode: Option<String>,
+    /// Park caption orientation: `radial` (default) faces the
+    /// nearest table edge, `screen` draws it upright.
+    #[serde(default)]
+    pub park_mode: Option<String>,
+    /// House rendering mode: `radial-iso` (default) extrudes each
+    /// block's houses toward its nearest table edge, `iso` uses
+    /// one fixed direction, `top-down` draws flat footprints.
+    #[serde(default)]
+    pub house_mode: Option<String>,
     /// The compass rose.
     #[serde(default)]
     pub compass: Option<bool>,

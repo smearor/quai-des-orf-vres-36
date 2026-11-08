@@ -2,6 +2,7 @@
 
 use serde::Deserialize;
 use serde::Serialize;
+use tangible_objects_model::Pixels;
 
 /// A positive render scaling factor shared by all render-param
 /// knobs and the spec structs they feed.
@@ -16,6 +17,14 @@ impl ScaleFactor {
     /// A factor; clamps non-finite and non-positive input to `ONE`.
     pub fn new(factor: f64) -> Self {
         if factor.is_finite() && factor > 0.0 { Self(factor) } else { Self::ONE }
+    }
+
+    /// The factor `after / before` - `ONE` for a `before` span at
+    /// or below ~1 px (a degenerate pinch never scales).
+    pub fn between(before: Pixels, after: Pixels) -> ScaleFactor {
+        /// Base spans at or below this never pinch (division guard).
+        const MIN_BASE: Pixels = Pixels::new(1.0);
+        if before > MIN_BASE { Self::new(after / before) } else { Self::ONE }
     }
 
     /// The bare number, for arithmetic.

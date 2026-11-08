@@ -1,12 +1,14 @@
 //! Path helpers shared by the style renderers.
 
-mod banks;
+mod building;
+mod caption_style;
 mod edge;
+mod ground;
 mod water;
 
-pub use banks::WaterBanks;
-pub use edge::edge_path;
-pub use edge::px_polyline_path;
+pub use building::BuildingPathExt;
+pub use caption_style::CaptionStyle;
+pub use edge::EdgePathExt;
+pub use ground::GroundExt;
 pub use water::WATER_HALF_WIDTH;
-pub use water::band_path;
-pub use water::smooth_polyline;
+pub use water::WaterPathExt;

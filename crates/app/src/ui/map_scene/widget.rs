@@ -116,8 +116,8 @@ impl MapScene {
         state
             .map
             .nearest_station(stage.to_map(pos))
-            .filter(|(_, distance)| distance.as_f64() <= SNAP_RADIUS_MM)
-            .map(|(id, _)| id)
+            .filter(|nearest| nearest.distance.as_f64() <= SNAP_RADIUS_MM)
+            .map(|nearest| nearest.station)
     }
 
     /// The view pan keeping the map point under `from` (widget px)

@@ -5,7 +5,7 @@ use crate::ui::style::StylePalette;
 
 /// Flat fills on a dark comic-board field, cream station discs,
 /// orange accents.
-pub(super) const PALETTE: StylePalette = StylePalette {
+pub(crate) const PALETTE: StylePalette = StylePalette {
     // #1A1714 - dark field the board paints on.
     paper: RgbColor::new(0.10, 0.09, 0.08),
     // #26211C - node outlines.
@@ -39,4 +39,14 @@ pub(super) const PALETTE: StylePalette = StylePalette {
     // #7C3AED - bold purple: generic metro ring mark and the
     // metro lane in parallel-transports view.
     metro: RgbColor::new(0.49, 0.23, 0.93),
+    // #3D3229 - quiet warm brown: city-block outlines over the
+    // dark field.
+    block: RgbColor::new(0.24, 0.20, 0.16),
+    // #4A3B28 - warm brick fill for the procedural houses.
+    building: RgbColor::new(0.29, 0.23, 0.16),
+    park: RgbColor::new(0.48, 0.58, 0.30),
+    // #9E8B64 - light sepia roof lines on the dark building fill.
+    roof: RgbColor::new(0.62, 0.55, 0.39),
+    // #6B5F4C - quiet warm grey for decorative streets.
+    street: RgbColor::new(0.42, 0.37, 0.30),
 };

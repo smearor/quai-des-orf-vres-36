@@ -50,6 +50,21 @@ pub struct StylePalette {
     /// Neutral edge ink - the default web color when a transport
     /// layer is not highlighted (standard view).
     pub edge: RgbColor,
+    /// City-block outline - the free areas between streets, river
+    /// and border.
+    pub block: RgbColor,
+    /// Procedural building fill inside a block - slightly raised
+    /// from `paper`.
+    pub building: RgbColor,
+    /// Park green inside a block - the dataset's named green
+    /// spots.
+    pub park: RgbColor,
+    /// Roof detail lines inside a house footprint - contrast
+    /// against `building`, not `block`.
+    pub roof: RgbColor,
+    /// Decorative streets crossing a block interior - muted, below
+    /// the transport colors.
+    pub street: RgbColor,
 }
 
 impl StylePalette {

@@ -436,6 +436,143 @@ edges = [
     { from = 24, to = 39, transport = "underground", via = [86] },
 ]
 
+# Named city quarters: the inner blocks (the free areas between
+# the street web, the Seine and the border) carry these names so
+# players can talk about map areas. `pos_mm` pins a quarter to the
+# block containing it - the names stay geographically close to
+# reality. Entries without `pos_mm` fill the still-unnamed inner
+# blocks in dataset order.
+districts = [
+    # --- Rive Gauche / west ---
+    { name = "Auteuil", pos_mm = [55.0, 258.0] },
+    { name = "Javel", pos_mm = [42.0, 258.0] },
+    { name = "Grenelle", pos_mm = [80.0, 252.0] },
+    { name = "La Motte-Picquet", pos_mm = [98.0, 252.0] },
+    { name = "Champ-de-Mars", pos_mm = [78.0, 240.0] },
+    { name = "École Militaire", pos_mm = [98.0, 268.0] },
+    { name = "Vaugirard", pos_mm = [112.0, 288.0] },
+    { name = "Montparnasse", pos_mm = [160.0, 275.0] },
+    { name = "Saint-Lambert", pos_mm = [145.0, 300.0] },
+    { name = "Plaisance", pos_mm = [130.0, 322.0] },
+    { name = "Petit-Montrouge", pos_mm = [185.0, 355.0] },
+    { name = "Porte de Sèvres", pos_mm = [30.0, 335.0] },
+    # --- Rive Gauche / Seine side ---
+    { name = "Saint-Germain", pos_mm = [192.0, 224.0] },
+    { name = "Quartier Latin", pos_mm = [230.0, 245.0] },
+    { name = "Luxembourg", pos_mm = [200.0, 260.0] },
+    { name = "Odéon", pos_mm = [205.0, 240.0] },
+    { name = "Saint-Marcel", pos_mm = [300.0, 258.0] },
+    { name = "Austerlitz", pos_mm = [315.0, 278.0] },
+    { name = "Gobelins", pos_mm = [255.0, 290.0] },
+    { name = "Butte-aux-Cailles", pos_mm = [278.0, 335.0] },
+    { name = "Place d'Italie", pos_mm = [280.0, 318.0] },
+    { name = "Alésia", pos_mm = [200.0, 330.0] },
+    # --- Seine islands ---
+    { name = "Île de la Cité", pos_mm = [245.0, 212.0] },
+    { name = "Île Saint-Louis", pos_mm = [278.0, 228.0] },
+    # --- Rive Droite / center ---
+    { name = "Louvre", pos_mm = [210.0, 190.0] },
+    { name = "Palais-Royal", pos_mm = [220.0, 175.0] },
+    { name = "Les Halles", pos_mm = [228.0, 178.0] },
+    { name = "Châtelet", pos_mm = [235.0, 188.0] },
+    { name = "Hôtel de Ville", pos_mm = [255.0, 195.0] },
+    { name = "Le Marais", pos_mm = [258.0, 178.0] },
+    { name = "Bastille", pos_mm = [288.0, 218.0] },
+    { name = "Arsenal", pos_mm = [295.0, 230.0] },
+    { name = "République", pos_mm = [272.0, 155.0] },
+    { name = "Canal Saint-Martin", pos_mm = [292.0, 120.0] },
+    { name = "Gare de Lyon", pos_mm = [325.0, 238.0] },
+    { name = "Bercy", pos_mm = [368.0, 268.0] },
+    { name = "Daumesnil", pos_mm = [350.0, 205.0] },
+    { name = "Nation", pos_mm = [335.0, 198.0] },
+    # --- Rive Droite / east ---
+    { name = "Ménilmontant", pos_mm = [315.0, 135.0] },
+    { name = "Père Lachaise", pos_mm = [332.0, 148.0] },
+    { name = "Charonne", pos_mm = [345.0, 168.0] },
+    { name = "Belleville", pos_mm = [298.0, 108.0] },
+    { name = "Buttes-Chaumont", pos_mm = [295.0, 82.0] },
+    { name = "La Villette", pos_mm = [315.0, 60.0] },
+    # --- Rive Droite / north-center ---
+    { name = "Sentier", pos_mm = [242.0, 158.0] },
+    { name = "Bonne-Nouvelle", pos_mm = [250.0, 150.0] },
+    { name = "Faubourg-Montmartre", pos_mm = [222.0, 142.0] },
+    { name = "Saint-Georges", pos_mm = [212.0, 128.0] },
+    { name = "Pigalle", pos_mm = [248.0, 112.0] },
+    { name = "Rochechouart", pos_mm = [235.0, 120.0] },
+    { name = "Montmartre", pos_mm = [252.0, 88.0] },
+    { name = "Clignancourt", pos_mm = [262.0, 52.0] },
+    { name = "La Chapelle", pos_mm = [282.0, 55.0] },
+    # --- Rive Droite / west ---
+    { name = "Trocadéro", pos_mm = [62.0, 165.0] },
+    { name = "Chaillot", pos_mm = [72.0, 178.0] },
+    { name = "Passy", pos_mm = [52.0, 185.0] },
+    { name = "La Muette", pos_mm = [40.0, 172.0] },
+    { name = "Étoile", pos_mm = [105.0, 122.0] },
+    { name = "Champs-Élysées", pos_mm = [135.0, 152.0] },
+    { name = "Concorde", pos_mm = [182.0, 198.0] },
+    { name = "Madeleine", pos_mm = [192.0, 148.0] },
+    { name = "Monceau", pos_mm = [152.0, 105.0] },
+    { name = "Batignolles", pos_mm = [148.0, 82.0] },
+    { name = "Clichy", pos_mm = [112.0, 72.0] },
+    { name = "Épinettes", pos_mm = [140.0, 68.0] },
+    { name = "Invalides", pos_mm = [132.0, 218.0] },
+    { name = "Gros-Caillou", pos_mm = [112.0, 205.0] },
+    { name = "Notre-Dame-des-Champs", pos_mm = [185.0, 288.0] },
+    { name = "Necker", pos_mm = [175.0, 298.0] },
+    { name = "Observatoire", pos_mm = [218.0, 272.0] },
+    { name = "Mouffetard", pos_mm = [258.0, 265.0] },
+    { name = "Jardin des Plantes", pos_mm = [318.0, 258.0] },
+    # --- unpositioned fillers: real quartiers for blocks whose
+    # positioned names already landed elsewhere ---
+    { name = "Sainte-Avoye" },
+    { name = "Enfants-Rouges" },
+    { name = "Folie-Méricourt" },
+    { name = "Hôpital-Saint-Louis" },
+    { name = "Porte-Saint-Martin" },
+    { name = "Saint-Vincent-de-Paul" },
+    { name = "Faubourg-du-Roule" },
+    { name = "Les Ternes" },
+    { name = "Plaine-de-Monceaux" },
+    { name = "Quinze-Vingts" },
+    { name = "Picpus" },
+    { name = "Bel-Air" },
+    { name = "Salpêtrière" },
+    { name = "Croulebarbe" },
+    { name = "Maison-Blanche" },
+    { name = "Saint-Victor" },
+    { name = "Chaussée-d'Antin" },
+    { name = "Vivienne" },
+    { name = "Mail" },
+    { name = "Bonne-Nouvelle-Strasbourg" },
+    { name = "Arts-et-Métiers" },
+    { name = "Saint-Ambroise" },
+    { name = "Roquette" },
+    { name = "Sainte-Marguerite" },
+    { name = "Gare" },
+    { name = "Val-de-Grâce" },
+    { name = "Sorbonne" },
+    { name = "Monnaie" },
+    { name = "Saint-Thomas-d'Aquin" },
+    { name = "Colombier" },
+]
+
+# Named parks: large blocks keep them free of houses and draw a
+# green blob with the name - positioned near their real spots.
+parks = [
+    { name = "Jardin des Tuileries", pos_mm = [200.0, 180.0] },
+    { name = "Jardin du Luxembourg", pos_mm = [195.0, 272.0] },
+    { name = "Jardin des Plantes", pos_mm = [335.0, 265.0] },
+    { name = "Parc des Buttes-Chaumont", pos_mm = [268.0, 92.0] },
+    { name = "Parc Monceau", pos_mm = [140.0, 100.0] },
+    { name = "Champ-de-Mars", pos_mm = [74.0, 240.0] },
+    { name = "Jardins du Trocadéro", pos_mm = [100.0, 176.0] },
+    { name = "Square du Temple", pos_mm = [243.0, 180.0] },
+    { name = "Parc André-Citroën", pos_mm = [70.0, 280.0] },
+    { name = "Parc Montsouris", pos_mm = [250.0, 318.0] },
+    { name = "Cimetière du Père Lachaise", pos_mm = [300.0, 138.0] },
+    { name = "Esplanade des Invalides", pos_mm = [149.0, 216.0] },
+]
+
 [map]
 name = "paris"
 slogan = "The city of light holds its breath."

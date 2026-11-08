@@ -37,7 +37,7 @@ impl AnchorConfig {
     pub fn at_station(map_bounds: Region, tower_station: Vec2<Millimeters>) -> Self {
         Self {
             anchor_map_pos: tower_station,
-            heading_offset: RotationRad::new(0.0),
+            heading_offset: RotationRad::ZERO,
             base_scale: MapScale::default(),
             map_bounds,
         }

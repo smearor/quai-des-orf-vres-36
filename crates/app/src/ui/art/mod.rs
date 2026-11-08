@@ -48,7 +48,7 @@ mod tests {
             pos,
             height: Millimeters::new(12.0),
             anchor: AnchorFrac::PIN_TIP,
-            rotation: RotationRad::new(0.0),
+            rotation: RotationRad::ZERO,
             alpha: Alpha::OPAQUE,
         };
         assert!(assets.draw(&ctx, MapStyle::BelleEpoque, &spec, px_per_mm));
@@ -59,7 +59,7 @@ mod tests {
             pos,
             height: Millimeters::new(12.0),
             anchor: AnchorFrac::PIN_TIP,
-            rotation: RotationRad::new(0.0),
+            rotation: RotationRad::ZERO,
             alpha: Alpha::OPAQUE,
         };
         assert!(!assets.draw(&ctx, MapStyle::Comic, &missing, px_per_mm));

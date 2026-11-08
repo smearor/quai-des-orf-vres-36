@@ -1,76 +1,98 @@
 //! Edge paths: lane-offset polylines, waves and splines in widget px.
 
 use cairo::Context;
+use tangible_objects_model::Millimeters;
 use tangible_objects_model::Pixels;
 
 use crate::ui::style::EdgeSpec;
 use crate::ui::style::PxPos;
 
-/// Builds the edge path: the `route` polyline (or the straight
-/// `from` -> `to` chord) shifted per segment by `offsets` - parallel
-/// metro lines draw side by side in their own colors.
-pub fn edge_path(ctx: &Context, edge: &EdgeSpec<'_>) {
-    if edge.wavy && edge.route.len() >= 2 {
-        wavy_path(
-            ctx,
-            &edge.route,
-            Pixels::new(edge.px_per_mm.scale(32.0)),
-            Pixels::new(edge.px_per_mm.scale(1.2)),
-            Pixels::new(edge.px_per_mm.scale(edge.wave_phase.as_f64())),
-        );
-        return;
-    }
-    if edge.smooth && edge.route.len() >= 3 {
-        smooth_path(ctx, &edge.route);
-        return;
-    }
-    if edge.route.is_empty() {
-        let offset = edge.offsets.first().map(|offset| offset.as_f64()).unwrap_or(0.0);
-        let (dx, dy) = (edge.to.x - edge.from.x, edge.to.y - edge.from.y);
-        let len = (dx * dx + dy * dy).sqrt().max(1e-6);
-        ctx.move_to(edge.from.x - dy / len * offset, edge.from.y + dx / len * offset);
-        ctx.line_to(edge.to.x - dy / len * offset, edge.to.y + dx / len * offset);
-        return;
-    }
-    if edge.route.len() < 2 {
-        return;
-    }
-    // Per-vertex lane position: the wider corridor keeps its lane
-    // right up to the vertex (the bigger |offset| wins), so a
-    // lane disappearing into a thinner corridor peels off on its
-    // own hop instead of gliding across neighbor lanes. Equal
-    // offsets join in a miter (via vertices on one corridor).
-    let seg_shift = |segment: usize| -> (f64, f64) {
-        let offset = edge.offsets.get(segment).map(|offset| offset.as_f64()).unwrap_or(0.0);
-        let (a, b) = (edge.route[segment], edge.route[segment + 1]);
-        let (dx, dy) = (b.x - a.x, b.y - a.y);
-        let len = dx.hypot(dy).max(1e-6);
-        (-dy / len * offset, dx / len * offset)
-    };
-    let last = edge.route.len() - 1;
-    let vertex_shift = |index: usize| -> (f64, f64) {
-        if index == 0 {
-            seg_shift(0)
-        } else if index == last {
-            seg_shift(last - 1)
-        } else {
-            let (ax, ay) = seg_shift(index - 1);
-            let (bx, by) = seg_shift(index);
-            let (wa, wb) = (ax.hypot(ay), bx.hypot(by));
-            if (wa - wb).abs() < 1e-9 {
-                ((ax + bx) / 2.0, (ay + by) / 2.0)
-            } else if wa > wb {
-                (ax, ay)
+/// Cairo edge paths: `ctx.edge_path(..)` appends the lane-offset
+/// polyline, `ctx.px_polyline_path(..)` traces a px polyline.
+pub trait EdgePathExt {
+    /// Builds the edge path: the `route` polyline (or the straight
+    /// `from` -> `to` chord) shifted per segment by `offsets` -
+    /// parallel metro lines draw side by side in their own colors.
+    fn edge_path(&self, edge: &EdgeSpec<'_>);
+    /// Strokes a polyline already transformed to widget px.
+    fn px_polyline_path(&self, points: &[PxPos]);
+}
+
+impl EdgePathExt for Context {
+    fn edge_path(&self, edge: &EdgeSpec<'_>) {
+        if edge.wavy && edge.route.len() >= 2 {
+            wavy_path(
+                self,
+                &edge.route,
+                edge.px_per_mm.scale(Millimeters::new(32.0)),
+                edge.px_per_mm.scale(Millimeters::new(1.2)),
+                edge.px_per_mm.scale(edge.wave_phase),
+            );
+            return;
+        }
+        if edge.smooth && edge.route.len() >= 3 {
+            smooth_path(self, &edge.route);
+            return;
+        }
+        if edge.route.is_empty() {
+            let offset = edge.offsets.first().map(|offset| offset.as_f64()).unwrap_or(0.0);
+            let (dx, dy) = (edge.to.x - edge.from.x, edge.to.y - edge.from.y);
+            let len = (dx * dx + dy * dy).sqrt().max(1e-6);
+            self.move_to(edge.from.x - dy / len * offset, edge.from.y + dx / len * offset);
+            self.line_to(edge.to.x - dy / len * offset, edge.to.y + dx / len * offset);
+            return;
+        }
+        if edge.route.len() < 2 {
+            return;
+        }
+        // Per-vertex lane position: the wider corridor keeps its lane
+        // right up to the vertex (the bigger |offset| wins), so a
+        // lane disappearing into a thinner corridor peels off on its
+        // own hop instead of gliding across neighbor lanes. Equal
+        // offsets join in a miter (via vertices on one corridor).
+        let seg_shift = |segment: usize| -> (f64, f64) {
+            let offset = edge.offsets.get(segment).map(|offset| offset.as_f64()).unwrap_or(0.0);
+            let (a, b) = (edge.route[segment], edge.route[segment + 1]);
+            let (dx, dy) = (b.x - a.x, b.y - a.y);
+            let len = dx.hypot(dy).max(1e-6);
+            (-dy / len * offset, dx / len * offset)
+        };
+        let last = edge.route.len() - 1;
+        let vertex_shift = |index: usize| -> (f64, f64) {
+            if index == 0 {
+                seg_shift(0)
+            } else if index == last {
+                seg_shift(last - 1)
             } else {
-                (bx, by)
+                let (ax, ay) = seg_shift(index - 1);
+                let (bx, by) = seg_shift(index);
+                let (wa, wb) = (ax.hypot(ay), bx.hypot(by));
+                if (wa - wb).abs() < 1e-9 {
+                    ((ax + bx) / 2.0, (ay + by) / 2.0)
+                } else if wa > wb {
+                    (ax, ay)
+                } else {
+                    (bx, by)
+                }
+            }
+        };
+        let (nx, ny) = vertex_shift(0);
+        self.move_to(edge.route[0].x + nx, edge.route[0].y + ny);
+        for index in 1..edge.route.len() {
+            let (nx, ny) = vertex_shift(index);
+            self.line_to(edge.route[index].x + nx, edge.route[index].y + ny);
+        }
+    }
+
+    fn px_polyline_path(&self, points: &[PxPos]) {
+        self.new_path();
+        for (index, point) in points.iter().enumerate() {
+            if index == 0 {
+                self.move_to(point.x, point.y);
+            } else {
+                self.line_to(point.x, point.y);
             }
         }
-    };
-    let (nx, ny) = vertex_shift(0);
-    ctx.move_to(edge.route[0].x + nx, edge.route[0].y + ny);
-    for index in 1..edge.route.len() {
-        let (nx, ny) = vertex_shift(index);
-        ctx.line_to(edge.route[index].x + nx, edge.route[index].y + ny);
     }
 }
 
@@ -138,16 +160,4 @@ fn smooth_path(ctx: &Context, points: &[PxPos]) {
         );
     }
     ctx.line_to(points[last + 1].x, points[last + 1].y);
-}
-
-/// Strokes a polyline already transformed to widget px.
-pub fn px_polyline_path(ctx: &Context, points: &[PxPos]) {
-    ctx.new_path();
-    for (index, point) in points.iter().enumerate() {
-        if index == 0 {
-            ctx.move_to(point.x, point.y);
-        } else {
-            ctx.line_to(point.x, point.y);
-        }
-    }
 }

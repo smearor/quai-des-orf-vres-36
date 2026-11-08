@@ -11,14 +11,12 @@ use tangible_objects_model::Pixels;
 use tangible_objects_model::RotationRad;
 use tangible_objects_model::Vec2;
 
-/// Centroid travel in widget px locking the session into move mode.
-const MOVE_LOCK_PX: f64 = 8.0;
-/// Span change in widget px locking the session into move mode.
-const SPAN_LOCK_PX: f64 = 12.0;
-/// Line rotation in rad locking the session into rotate mode.
-const ROTATE_LOCK_RAD: f64 = 0.15;
-/// Spans at or below this never pinch (division guard).
-const MIN_SPAN_PX: f64 = 1.0;
+/// Centroid travel locking the session into move mode.
+const MOVE_LOCK: Pixels = Pixels::new(8.0);
+/// Span change locking the session into move mode.
+const SPAN_LOCK: Pixels = Pixels::new(12.0);
+/// Line rotation locking the session into rotate mode.
+const ROTATE_LOCK: RotationRad = RotationRad::new(0.15);
 
 /// The two-finger session state: the undecided/move/rotate lock and
 /// the pair as it looked when the second finger landed - the
@@ -74,11 +72,11 @@ impl TwoFingerGesture {
             TwoFingerMode::Move => Some(TwoFingerStep::Move {
                 centroid_before: Vec2::centroid(&[before, other]),
                 centroid_after: Vec2::centroid(&[after, other]),
-                span_factor: span_factor(before, after, other),
+                span_factor: ScaleFactor::between(before.distance(&other), after.distance(&other)),
             }),
             TwoFingerMode::Rotate => Some(TwoFingerStep::Rotate {
                 pivot: Vec2::centroid(&[after, other]),
-                delta_rad: RotationRad::new(wrap_half_pi(line_angle(other, after) - line_angle(other, before))),
+                delta_rad: wrap_half_pi(line_angle(other, after) - line_angle(other, before)),
             }),
             TwoFingerMode::Undecided => None,
         }
@@ -92,38 +90,28 @@ impl TwoFingerGesture {
         let Some((first, second)) = self.reference else {
             return TwoFingerMode::Undecided;
         };
-        let turned = wrap_half_pi(line_angle(other, after) - line_angle(first, second)).abs();
-        if turned > ROTATE_LOCK_RAD {
+        let turned = wrap_half_pi(line_angle(other, after) - line_angle(first, second));
+        if turned.as_f64().abs() > ROTATE_LOCK.as_f64() {
             return TwoFingerMode::Rotate;
         }
         let moved = Vec2::centroid(&[first, second]).distance(&Vec2::centroid(&[after, other]));
         let spanned = (after.distance(&other) - first.distance(&second)).abs();
-        if moved > Pixels::new(MOVE_LOCK_PX) || spanned > Pixels::new(SPAN_LOCK_PX) {
+        if moved > MOVE_LOCK || spanned > SPAN_LOCK {
             return TwoFingerMode::Move;
         }
         TwoFingerMode::Undecided
     }
 }
 
-/// `span_after / span_before` with the small-span division guard.
-fn span_factor(before: PxPos, after: PxPos, other: PxPos) -> ScaleFactor {
-    let span_before = before.distance(&other);
-    if span_before > Pixels::new(MIN_SPAN_PX) {
-        ScaleFactor::new(after.distance(&other) / span_before)
-    } else {
-        ScaleFactor::ONE
-    }
-}
-
-/// The line direction normalized to [-pi/2, pi/2) - orientation
-/// agnostic, so either endpoint may play `after`/`other`.
-fn line_angle(from: PxPos, to: PxPos) -> f64 {
-    (to.y - from.y).atan2(to.x - from.x).rem_euclid(PI) - FRAC_PI_2
+/// The line direction as an undirected axis in [-pi/2, pi/2) -
+/// either endpoint may play `after`/`other`.
+fn line_angle(from: PxPos, to: PxPos) -> RotationRad {
+    (to - from).direction().axis()
 }
 
 /// Wraps an angle delta into [-pi/2, pi/2] (line angles live mod pi).
-fn wrap_half_pi(delta: f64) -> f64 {
-    (delta + FRAC_PI_2).rem_euclid(PI) - FRAC_PI_2
+fn wrap_half_pi(delta: RotationRad) -> RotationRad {
+    RotationRad::new((delta.as_f64() + FRAC_PI_2).rem_euclid(PI) - FRAC_PI_2)
 }
 
 #[cfg(test)]

@@ -35,7 +35,7 @@ impl RenderStage {
             height: Millimeters::new(height.as_f64().max(bounds.height().as_f64())),
         });
         Self {
-            fit: SurfaceFit::new(surface.width, surface.height, width, height, state.display_rotation),
+            fit: SurfaceFit::new(Vec2::from_mm(surface.width, surface.height), Vec2::from_px(width, height), state.display_rotation),
             transform: MapTransform::new(pose, &state.config, state.scale),
             pan: state.pan,
         }

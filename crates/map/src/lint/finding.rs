@@ -14,6 +14,7 @@ use crate::lint::LinearityCause;
 use crate::lint::MissingService;
 use serde::Deserialize;
 use serde::Serialize;
+use tangible_objects_model::Millimeters;
 use thiserror::Error;
 
 /// A dataset quality violation.
@@ -89,7 +90,7 @@ pub enum Finding {
     /// route visually runs through the station without serving it,
     /// so the direct edge is hard to tell from the detour via the
     /// station (Q14, readability).
-    #[error("{transport} edge {edge:?} runs within {distance_mm:.1}mm of station {station}")]
+    #[error("{transport} edge {edge:?} runs within {distance_mm:.1} of station {station}")]
     StationOnEdge {
         /// The transport layer the offending edge belongs to.
         transport: Transport,
@@ -98,7 +99,7 @@ pub enum Finding {
         /// The station sitting on the line.
         station: StationId,
         /// Perpendicular distance in map millimeters.
-        distance_mm: f64,
+        distance_mm: Millimeters,
     },
     /// A start-deal station has fewer than two edges - a dealt
     /// detective would start trapped (Q10).

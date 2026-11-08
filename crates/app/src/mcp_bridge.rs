@@ -7,6 +7,8 @@
 //! the document and forwards commands - no GTK access from the
 //! server, ever (WP05 R5).
 
+use crate::layers_config::LayersConfig;
+use crate::settings::AppSettings;
 use crate::ui::map_scene::MapScene;
 use crate::ui::map_scene::RenderStage;
 use crate::ui::map_scene::SceneLayers;
@@ -17,27 +19,31 @@ use async_channel::unbounded;
 use glib::MainContext;
 use libadwaita as adw;
 use qdo36_host::GameHost;
+use qdo36_map::City;
+use qdo36_map::GameMap;
 use qdo36_map::LineName;
 use qdo36_map::StationId;
 use qdo36_map::Transport;
-use qdo36_map::{City, GameMap};
+use qdo36_mcp::AnchorStateSnapshot;
 use qdo36_mcp::CommandKind;
 use qdo36_mcp::CommandReply;
 use qdo36_mcp::CommandResult;
+use qdo36_mcp::EntityKind;
 use qdo36_mcp::GameRequest;
 use qdo36_mcp::LayerMask;
 use qdo36_mcp::MapInfo;
 use qdo36_mcp::McpError;
+use qdo36_mcp::SceneEntity;
 use qdo36_mcp::ScreenshotReply;
 use qdo36_mcp::StateSnapshot;
 use qdo36_mcp::StyleName;
 use qdo36_mcp::spawn_http;
-use qdo36_mcp::{AnchorStateSnapshot, EntityKind, SceneEntity};
 use qdo36_session::GameSession;
+use qdo36_tangibles::AnchorPose;
+use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::MapScale;
 use qdo36_tangibles::ScaleFactor;
 use qdo36_tangibles::SurfaceMm;
-use qdo36_tangibles::{AnchorPose, AnchorState};
 use rand::SeedableRng;
 use rand::rngs::StdRng;
 use std::cell::Cell;
@@ -73,6 +79,77 @@ thread_local! {
     /// Armed flag of the area-screenshot tool (tools menu): the
     /// map-page drag claims the pointer sequence while set.
     static AREA_SHOT_ARMED: Cell<bool> = const { Cell::new(false) };
+    /// The overlay menus (one per screen edge): the control bars
+    /// and their rotation wrappers, installed by [`register_menu`]
+    /// so style changes reach every menu.
+    static MENU: RefCell<Vec<MenuParts>> = const { RefCell::new(Vec::new()) };
+    /// The persisted app settings (`config.toml`), installed by
+    /// [`register_settings`] so layer/style mutations save through.
+    static APP_SETTINGS: RefCell<Option<AppSettings>> = const { RefCell::new(None) };
+}
+
+/// One registered overlay menu: the panels the style class lives
+/// on (bar, section drawer, burger button).
+struct MenuParts {
+    /// The menu's panels carrying the `style-*` CSS family class.
+    panels: Vec<gtk4::Widget>,
+}
+
+/// Registers one edge's overlay menu so `set_map_style` can
+/// restyle its panels.
+pub(crate) fn register_menu(panels: &[gtk4::Widget]) {
+    MENU.with(|slot| {
+        slot.borrow_mut().push(MenuParts { panels: panels.to_vec() });
+    });
+}
+
+/// Swaps the menus' `style-*` family class so their panels follow
+/// the map look.
+fn menu_apply_style(style: MapStyle) {
+    use gtk4::prelude::WidgetExt;
+    MENU.with(|slot| {
+        for menu in slot.borrow().iter() {
+            for panel in &menu.panels {
+                for class in [MapStyle::Comic, MapStyle::BelleEpoque, MapStyle::Neon].map(|style| style.controls_class()) {
+                    panel.remove_css_class(class);
+                }
+                panel.add_css_class(style.controls_class());
+            }
+        }
+    });
+}
+
+/// Installs the loaded app settings so layer/style mutations
+/// persist to `config.toml`.
+pub(crate) fn register_settings(settings: &AppSettings) {
+    APP_SETTINGS.with(|slot| {
+        *slot.borrow_mut() = Some(settings.clone());
+    });
+}
+
+/// Writes the current layers + style back into `config.toml`.
+fn persist_view() {
+    APP_SETTINGS.with(|slot| {
+        if let Some(settings) = slot.borrow_mut().as_mut() {
+            if let Some(layers) = current_layers() {
+                settings.layers = LayersConfig::capture(&layers);
+            }
+            if let Some(style) = current_style() {
+                settings.map_style = style;
+            }
+            settings.save();
+        }
+    });
+}
+
+/// The quit-menu action: closing the window ends the app.
+pub(crate) fn quit_app() {
+    use gtk4::prelude::GtkWindowExt;
+    APP_WINDOW.with(|slot| {
+        if let Some(window) = slot.borrow().as_ref() {
+            window.close();
+        }
+    });
 }
 
 /// The registered scene: shared state, the scene widget and a
@@ -491,7 +568,7 @@ pub(crate) fn reset_view() {
         {
             let mut state = state.borrow_mut();
             state.scale = MapScale::ONE;
-            state.pan = Vec2::new(0.0, 0.0);
+            state.pan = Vec2::ZERO;
         }
         scene.update(Rc::new(state.borrow().clone()));
     });
@@ -506,6 +583,7 @@ pub(crate) fn mutate_layers(f: impl FnOnce(&mut SceneLayers) + 'static) {
         }
         scene.update(Rc::new(state.borrow().clone()));
     });
+    persist_view();
 }
 
 /// The current layer set (checkbox initial states on the UI).
@@ -523,6 +601,8 @@ pub(crate) fn set_map_style(style: MapStyle) {
         }
         scene.update(Rc::new(state.borrow().clone()));
     });
+    menu_apply_style(style);
+    persist_view();
 }
 
 /// The current artwork style (style-menu initial state on the UI).
@@ -545,6 +625,9 @@ fn set_layers(mask: &LayerMask) -> CommandReply {
             let l = &mut state.layers;
             if let Some(v) = mask.water {
                 l.water = v;
+            }
+            if let Some(v) = mask.blocks {
+                l.blocks = v;
             }
             if let Some(v) = mask.landmarks {
                 l.landmarks = v;
@@ -598,6 +681,15 @@ fn set_layers(mask: &LayerMask) -> CommandReply {
             if let Some(mode) = &mask.landmark_mode {
                 l.landmark_mode = mode.parse().map_err(|_| McpError::InvalidParams(format!("unknown landmark_mode {mode}")))?;
             }
+            if let Some(mode) = &mask.district_mode {
+                l.district_mode = mode.parse().map_err(|_| McpError::InvalidParams(format!("unknown district_mode {mode}")))?;
+            }
+            if let Some(mode) = &mask.park_mode {
+                l.park_mode = mode.parse().map_err(|_| McpError::InvalidParams(format!("unknown park_mode {mode}")))?;
+            }
+            if let Some(mode) = &mask.house_mode {
+                l.house_mode = mode.parse().map_err(|_| McpError::InvalidParams(format!("unknown house_mode {mode}")))?;
+            }
             if let Some(v) = mask.compass {
                 l.compass = v;
             }
@@ -606,6 +698,7 @@ fn set_layers(mask: &LayerMask) -> CommandReply {
             }
         }
         scene.update(Rc::new(state.borrow().clone()));
+        persist_view();
         Ok(CommandResult::LayersApplied)
     })
     .unwrap_or(Err(McpError::StateUnavailable))

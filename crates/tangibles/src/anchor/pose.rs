@@ -20,6 +20,12 @@ pub struct AnchorPose {
 }
 
 impl AnchorPose {
+    /// The neutral pose at the surface origin, facing north.
+    pub const ZERO: Self = Self {
+        center: Vec2::ZERO,
+        rotation_rad: RotationRad::ZERO,
+    };
+
     /// Interpolates toward `to` by `factor` (`0.0` = `self`, `1.0` =
     /// `to`): linear in position, shortest-arc in rotation.
     pub fn lerp(self, to: AnchorPose, factor: f64) -> AnchorPose {

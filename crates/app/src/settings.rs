@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use crate::Args;
 use crate::heading_offset_deg::HeadingOffsetDeg;
+use crate::layers_config::LayersConfig;
 use crate::ui::style::MapStyle;
 use qdo36_map::City;
 use qdo36_tangibles::MapScale;
@@ -33,6 +34,10 @@ pub struct AppSettings {
     /// frame and map north, in degrees (WP04 data model).
     #[serde(default)]
     pub heading_offset_deg: HeadingOffsetDeg,
+    /// Persisted layer visibility + caption orientations
+    /// (stations, landmarks, districts, parks).
+    #[serde(default)]
+    pub layers: LayersConfig,
 }
 
 impl Default for AppSettings {
@@ -45,6 +50,7 @@ impl Default for AppSettings {
             display_rotation: DisplayRotation::default(),
             map_style: MapStyle::default(),
             heading_offset_deg: HeadingOffsetDeg::default(),
+            layers: LayersConfig::default(),
         }
     }
 }
@@ -52,7 +58,7 @@ impl Default for AppSettings {
 impl AppSettings {
     /// Settings file path below the user config dir.
     fn path() -> PathBuf {
-        glib::user_config_dir().join("qdo36").join("settings.toml")
+        glib::user_config_dir().join("qdo36").join("config.toml")
     }
 
     /// Loads settings; falls back to defaults on any error.

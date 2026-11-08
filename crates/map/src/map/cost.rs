@@ -1,20 +1,21 @@
 //! `Cost` - an accumulated path cost for the min-heap search.
 
 use std::cmp::Ordering;
+use tangible_objects_model::Millimeters;
 
 /// A routing cost (distance sum) with reversed `Ord` so the
 /// `BinaryHeap` pops the cheapest path first.
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Cost(f64);
+pub struct Cost(Millimeters);
 
 impl Cost {
     /// A cost of `c`.
-    pub const fn new(c: f64) -> Self {
+    pub const fn new(c: Millimeters) -> Self {
         Self(c)
     }
 
     /// The bare cost value.
-    pub const fn get(self) -> f64 {
+    pub const fn get(self) -> Millimeters {
         self.0
     }
 }

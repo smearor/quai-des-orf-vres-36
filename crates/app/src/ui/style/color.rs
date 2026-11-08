@@ -47,6 +47,12 @@ impl RgbColor {
         Self::new(self.r + (1.0 - self.r) * t, self.g + (1.0 - self.g) * t, self.b + (1.0 - self.b) * t)
     }
 
+    /// Linear blend toward `other` by `t` (0 = self, 1 = other).
+    pub fn lerp(&self, other: &RgbColor, t: f64) -> Self {
+        let t = t.clamp(0.0, 1.0);
+        Self::new(self.r + (other.r - self.r) * t, self.g + (other.g - self.g) * t, self.b + (other.b - self.b) * t)
+    }
+
     /// Sets this color as the cairo source.
     pub fn apply(&self, ctx: &Context) {
         ctx.set_source_rgb(self.r, self.g, self.b);

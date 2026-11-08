@@ -40,10 +40,7 @@ impl MapTransform {
 
     /// Map millimeters -> surface millimeters.
     pub fn map_to_surface(&self, pos: Vec2<Millimeters>) -> Vec2<Millimeters> {
-        let dx = (pos.x - self.anchor_map.x) * self.scale.factor();
-        let dy = (pos.y - self.anchor_map.y) * self.scale.factor();
-        let (sin, cos) = self.rotation_rad.sin_cos();
-        Vec2::new(self.anchor_surface.x + dx * cos - dy * sin, self.anchor_surface.y + dx * sin + dy * cos)
+        self.anchor_surface + ((pos - self.anchor_map) * self.scale.factor()).rotated(self.rotation_rad)
     }
 
     /// Surface millimeters -> map millimeters (inverse of
@@ -51,13 +48,7 @@ impl MapTransform {
     ///
     /// Used for touch hit-testing and pawn snap queries.
     pub fn surface_to_map(&self, pos: Vec2<Millimeters>) -> Vec2<Millimeters> {
-        let dx = pos.x - self.anchor_surface.x;
-        let dy = pos.y - self.anchor_surface.y;
-        let (sin, cos) = self.rotation_rad.sin_cos();
-        Vec2::new(
-            self.anchor_map.x + (dx * cos + dy * sin) / self.scale.factor(),
-            self.anchor_map.y + (-dx * sin + dy * cos) / self.scale.factor(),
-        )
+        self.anchor_map + (pos - self.anchor_surface).rotated(-self.rotation_rad) / self.scale.factor()
     }
 }
 
@@ -69,11 +60,11 @@ mod tests {
     fn config() -> AnchorConfig {
         AnchorConfig {
             anchor_map_pos: Vec2::new(100.0, 100.0),
-            heading_offset: RotationRad::new(0.0),
+            heading_offset: RotationRad::ZERO,
             base_scale: MapScale::default(),
             map_bounds: Region {
-                x_min: Millimeters::new(0.0),
-                y_min: Millimeters::new(0.0),
+                x_min: Millimeters::ZERO,
+                y_min: Millimeters::ZERO,
                 x_max: Millimeters::new(600.0),
                 y_max: Millimeters::new(420.0),
             },
@@ -100,7 +91,7 @@ mod tests {
         let transform = MapTransform::new(
             AnchorPose {
                 center: Vec2::new(300.0, 200.0),
-                rotation_rad: RotationRad::new(0.0),
+                rotation_rad: RotationRad::ZERO,
             },
             &config(),
             MapScale::ONE,
@@ -113,7 +104,7 @@ mod tests {
     fn pure_rotation() {
         let transform = MapTransform::new(
             AnchorPose {
-                center: Vec2::new(0.0, 0.0),
+                center: Vec2::ZERO,
                 rotation_rad: RotationRad::new(std::f64::consts::FRAC_PI_2),
             },
             &config(),

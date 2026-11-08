@@ -1,42 +1,42 @@
 //! The map scene widget: renders the GameMap under `MapTransform`
 //! (map-mm -> surface-mm -> widget-px) on every snapshot.
 
-pub mod bridge_deck;
+pub mod blocks;
 pub mod controls;
-pub mod deck_side;
-pub mod hop_share;
 pub mod label_mode;
-pub mod lane_constraint;
-pub mod layer_name;
-pub mod layer_toggle;
-pub mod parallel_share;
+pub mod lane;
+pub mod layer;
 pub mod pose_animator;
-pub mod render_params;
 pub mod render_stage;
-pub mod scene_layers;
-pub mod scene_state;
-pub mod transport_layers;
+pub mod route;
+pub mod scene;
+pub mod share;
 pub mod two_finger;
 pub mod widget;
 
 use cairo::Context;
 pub use controls::controls;
-pub use deck_side::DeckSide;
-pub use hop_share::HopShare;
 pub use label_mode::LabelMode;
-pub use lane_constraint::LaneConstraint;
-pub use layer_name::LayerName;
-pub use layer_toggle::LayerToggle;
-pub use parallel_share::ParallelShare;
+pub use lane::LaneConstraint;
+pub use lane::LaneSides;
+pub use lane::Sharing;
+pub use layer::LayerName;
+pub use layer::LayerToggle;
 pub use pose_animator::PoseAnimator;
-pub use render_params::RenderParams;
 pub use render_stage::RenderStage;
-pub use scene_layers::SceneLayers;
-pub use scene_state::SceneState;
+pub use route::RoutePlan;
+pub use route::WaterRoute;
+pub use scene::RenderParams;
+pub use scene::SceneLayers;
+pub use scene::SceneState;
+pub use scene::TransportLayers;
+pub use share::HopShare;
+pub use share::ParallelShare;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
-use std::collections::HashMap;
-pub use transport_layers::TransportLayers;
+use std::f64::consts::FRAC_PI_2;
+use std::f64::consts::TAU;
+use std::rc::Rc;
 pub use two_finger::TwoFingerGesture;
 pub use two_finger::TwoFingerStep;
 pub use widget::MapScene;
@@ -45,20 +45,23 @@ use crate::ui::art::AnchorFrac;
 use crate::ui::art::ArtFamily;
 use crate::ui::art::ArtSpec;
 use crate::ui::art::AssetStem;
-use crate::ui::map_scene::bridge_deck::BridgeDeck;
 use crate::ui::style::Alpha;
+use crate::ui::style::EdgePathExt;
 use crate::ui::style::EdgeSpec;
-use crate::ui::style::LabelOrientation;
 use crate::ui::style::LabelSpec;
+use crate::ui::style::OuterSpec;
 use crate::ui::style::PxPos;
 use crate::ui::style::StationSpec;
+use crate::ui::style::ToPx;
 use crate::ui::style::WATER_HALF_WIDTH;
-use crate::ui::style::smooth_polyline;
 use qdo36_map::Edge;
-use qdo36_map::GameMap;
+use qdo36_map::EdgePath;
 use qdo36_map::LineName;
+use qdo36_map::Polygon;
+use qdo36_map::Polyline;
 use qdo36_map::Segment;
 use qdo36_map::StationId;
+use qdo36_map::StationKind;
 use qdo36_map::StationPair;
 use qdo36_map::Transport;
 use qdo36_tangibles::AnchorPose;
@@ -68,6 +71,18 @@ use tangible_objects_model::Millimeters;
 use tangible_objects_model::Pixels;
 use tangible_objects_model::RotationRad;
 use tangible_objects_model::Vec2;
+
+/// The station disc's nominal radius - labels and the
+/// landmark-obstacle rings size off it (obstacles pad ~10 %).
+const STATION_RADIUS_MM: Millimeters = Millimeters::new(3.0);
+/// Half the drawn bridge glyph's span along its road (mm).
+const BRIDGE_HALF_SPAN: Millimeters = Millimeters::new(6.0);
+/// Base height of a metro line badge before `metro_scale` (mm).
+const LIGNE_BADGE_HEIGHT: Millimeters = Millimeters::new(6.0);
+/// Height of the anchor (Eiffel tower) glyph (mm).
+const ANCHOR_HEIGHT: Millimeters = Millimeters::new(16.0);
+/// Height of the compass rose glyph (mm).
+const COMPASS_HEIGHT: Millimeters = Millimeters::new(26.0);
 
 /// Full scene render: paper, backdrop, edges, stations, anchor,
 /// overlay - each element delegated to the active `StyleRenderer`.
@@ -85,61 +100,78 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
     ctx.paint().ok();
 
     // Backdrop: water + landmarks (gameplay-inert dressing). The
-    // Chaikin-smoothed courses feed both the river bands and the
-    // Batobus routes, so band and boat line can never diverge.
-    // Water vertices that sit on a `bridge` station stay pinned:
-    // the river keeps flowing right under those markers.
+    // Chaikin-smoothed courses feed the river bands, the Batobus
+    // routes and the block cuts, so band, boat line and block
+    // outline can never diverge. Water vertices that sit on a
+    // `bridge` station stay pinned: the river keeps flowing right
+    // under those markers.
     let backdrop = map.backdrop();
-    let bridge_positions: Vec<Vec2<Millimeters>> = map.stations().filter(|station| station.is_bridge()).map(|station| station.pos).collect();
-    let water_courses: Vec<Vec<Vec2<Millimeters>>> = backdrop
-        .water
-        .iter()
-        .map(|polyline| {
-            let pinned: Vec<usize> = polyline
-                .points()
-                .iter()
-                .enumerate()
-                .filter(|(_, point)| bridge_positions.iter().any(|pos| (pos.x - point.x).hypot(pos.y - point.y) < 1.5))
-                .map(|(index, _)| index)
-                .collect();
-            smooth_polyline(polyline.points(), 2, &pinned)
-        })
-        .collect();
+    let water_courses = state.water_courses();
+
+    // Countryside texture + city ground: the style's infinite
+    // outer texture covers everything the ground polygons don't -
+    // drawn under the Seine so the river washes its textured
+    // banks too, and cached per view mode like the blocks.
+    let blocks_geometry = if state.layers.blocks {
+        let metro_overlay = state.layers.highlight.contains(&Transport::Metro);
+        let parallel = state.layers.parallel_transports;
+        let key = blocks::blocks_key(parallel, metro_overlay);
+        let cached = state.block_shapes.borrow();
+        let geometry = match cached.as_ref().filter(|(k, _)| *k == key) {
+            Some((_, geometry)) => geometry.clone(),
+            None => {
+                drop(cached);
+                let computed = Rc::new(blocks::BlocksGeometry::compute(state.block_layout(), parallel, metro_overlay));
+                *state.block_shapes.borrow_mut() = Some((key, computed.clone()));
+                computed
+            }
+        };
+        renderer.draw_outer(
+            ctx,
+            &OuterSpec {
+                ground: &geometry.ground,
+                pin: Vec2::ZERO,
+                width,
+                height,
+                px_per_mm,
+            },
+            ToPx(&to_px),
+        );
+        Some(geometry)
+    } else {
+        None
+    };
+
     if state.layers.water {
-        for course in &water_courses {
-            renderer.draw_water(ctx, course, px_per_mm, &to_px);
+        for course in water_courses {
+            renderer.draw_water(ctx, course, px_per_mm, ToPx(&to_px));
         }
     }
-    // Bridge-station decks: one per `bridge` station, perpendicular
-    // to the smoothed course, station marker mid-deck. Only while
-    // the water layer is on - an invisible deck must not reroute
-    // the roads either.
-    let decks: HashMap<StationId, BridgeDeck> = if state.layers.water {
-        BridgeDeck::decks(map, &water_courses, WATER_HALF_WIDTH)
-    } else {
-        HashMap::new()
-    };
+
+    // City blocks: the free areas the streets, river and border
+    // cut the map into. Drawn under everything else - lines,
+    // labels and landmarks stay on top. The insets widen with the
+    // street corridors in the parallel/metro overlays.
+    if let Some(geometry) = &blocks_geometry {
+        geometry.draw(ctx, renderer.as_ref(), &state.layers, PxPos::from_px(width / 2.0, height / 2.0), px_per_mm, ToPx(&to_px));
+    }
+    // Bridge-station decks for docking and drawing.
+    let decks = state.decks();
     // Smoothed water segments drive the bridge crossing tests.
-    let water_segments: Vec<Segment<Millimeters>> = water_courses
-        .iter()
-        .flat_map(|course| course.windows(2).map(|pair| Segment::new(pair[0], pair[1])))
-        .collect();
+    let water_segments = state.water_segments();
     let line_hidden = |edge: &Edge| edge.line.as_ref().is_some_and(|line| state.layers.hidden_lines.contains(line));
     // Radial orientation faces away from the *screen* center - the
     // player's seat side - like the radial labels below.
-    let center = PxPos::new(width.as_f64() / 2.0, height.as_f64() / 2.0);
+    let center = PxPos::from_px(width / 2.0, height / 2.0);
     if state.layers.landmarks {
         // Obstacle geometry the pins dodge: every station disc and
         // each edge's station-chain chords (px space).
-        let station_discs: Vec<(PxPos, f64)> = map
-            .stations()
-            .map(|station| (to_px(station.pos), px_per_mm.scale(3.2 * state.params.station_scale.get())))
-            .collect();
+        let station_discs = station_discs(state, &stage);
         let edge_segments: Vec<(PxPos, PxPos)> = map
             .edges()
             .iter()
             .flat_map(|edge| {
-                let ids: Vec<StationId> = [edge.from].into_iter().chain(edge.via.iter().copied()).chain([edge.to]).collect();
+                let ids: Vec<StationId> = edge.station_chain().collect();
                 ids.windows(2)
                     .filter_map(|w| {
                         let (Some(a), Some(b)) = (map.station(w[0]), map.station(w[1])) else {
@@ -153,15 +185,12 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
         for landmark in &backdrop.landmarks {
             let pos = to_px(landmark.pos);
             let height_mm = 14.0 * state.params.landmark_scale.get();
-            let preferred = match state.layers.landmark_mode {
-                LabelMode::Screen => -std::f64::consts::FRAC_PI_2,
-                LabelMode::Radial => (pos.y - center.y).atan2(pos.x - center.x),
-            };
+            let preferred = state.layers.landmark_mode.preferred(pos, center);
             let angle = landmark_rotation(
                 pos,
                 preferred,
-                px_per_mm.scale(height_mm * 0.5),
-                px_per_mm.scale(height_mm * 0.4),
+                px_per_mm.scale(Millimeters::new(height_mm * 0.5)).as_f64(),
+                px_per_mm.scale(Millimeters::new(height_mm * 0.4)).as_f64(),
                 &station_discs,
                 &edge_segments,
             );
@@ -171,12 +200,253 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                 pos,
                 height: Millimeters::new(height_mm),
                 anchor: AnchorFrac::PIN_TIP,
-                rotation: RotationRad::new(angle + std::f64::consts::FRAC_PI_2),
+                rotation: angle + RotationRad::new(FRAC_PI_2),
                 alpha: Alpha::OPAQUE,
             };
             if !state.assets.draw(ctx, state.style, &spec, px_per_mm) {
                 renderer.draw_landmark(ctx, pos, state.params.landmark_scale, px_per_mm);
             }
+        }
+    }
+
+    // Resolve every metro/underground edge's station path once
+    // (metro: via > street mesh > chord, tunnels: via > chord) and
+    // collect who shares each hop: metro by distinct line,
+    // underground by edge - shared hops draw as parallel offsets
+    // instead of piling identical strokes on top of each other.
+    let mut routed_paths: Vec<(usize, EdgePath)> = Vec::new();
+    let mut sharing: Sharing<Vec<HopShare>> = Sharing::default();
+    for (edge_i, edge) in map.edges().iter().enumerate() {
+        if !matches!(edge.transport, Transport::Metro | Transport::Underground) || line_hidden(edge) || !state.layers.transports.visible(edge.transport) {
+            continue;
+        }
+        let path = map.edge_path(edge);
+        let share = HopShare::of(edge, edge_i);
+        for w in path.hops() {
+            let bucket = sharing.entry(w).or_default();
+            if !bucket.contains(&share) {
+                bucket.push(share.clone());
+            }
+        }
+        routed_paths.push((edge_i, path));
+    }
+
+    // Parallel transports: hops shared by several lanes draw side
+    // by side, each lane in its own color (metro-line style). A
+    // lane is a whole transport - taxi, bus; also metro while its
+    // overlay is off - or, with the metro overlay on, a single
+    // metro line in its line color.
+    let metro_overlay = state.layers.highlight.contains(&Transport::Metro);
+    let mut surface_sharing: Sharing<BTreeSet<ParallelShare>> = Sharing::default();
+    if state.layers.parallel_transports {
+        for edge in map.edges() {
+            if !matches!(edge.transport, Transport::Taxi | Transport::Bus) {
+                continue;
+            }
+            let ids: Vec<StationId> = edge.station_chain().collect();
+            for hop in ids.windows(2) {
+                let key = StationPair::new(hop[0], hop[1]);
+                surface_sharing.entry(key).or_default().insert(ParallelShare::Transport(edge.transport));
+            }
+        }
+        for (edge_i, path) in &routed_paths {
+            let Some(edge) = map.edges().get(*edge_i).filter(|edge| edge.is_transport(Transport::Metro)) else {
+                continue;
+            };
+            let share = ParallelShare::for_metro(edge.line.as_ref(), metro_overlay);
+            for hop in path.hops() {
+                surface_sharing.entry(hop).or_default().insert(share.clone());
+            }
+        }
+    }
+    // Lane side per hop: the rank ordering on a hop may be
+    // mirrored for all lanes at once (the lanes stay distinct);
+    // the sign is chosen so lanes keep their side through via
+    // vertices where possible. Without it, a hop traversed against
+    // its canonical direction forces every lane to cross the
+    // corridor at the vertex.
+    let hop_normal = |key: StationPair| -> Option<Vec2<Millimeters>> {
+        let (Some(a), Some(b)) = (map.station(key.a()), map.station(key.b())) else {
+            return None;
+        };
+        let direction = b.pos - a.pos;
+        (direction.magnitude() > Millimeters::new(1e-9)).then(|| direction.normalized().perpendicular())
+    };
+    // One continuity vote per via vertex: side(v) should equal
+    // side(u) * c, with c = sign(rank_u * rank_v * (n_u . n_v)).
+    let mut constraints: Vec<LaneConstraint> = Vec::new();
+    if state.layers.parallel_transports {
+        for edge in map.edges() {
+            if !matches!(edge.transport, Transport::Taxi | Transport::Bus) {
+                continue;
+            }
+            let hops: Vec<StationPair> = edge.chain().hops().collect();
+            let share = ParallelShare::Transport(edge.transport);
+            constraints.extend(LaneConstraint::chain(&hops, &surface_sharing.ranks(&hops, &share), hop_normal));
+        }
+        for (edge_i, path) in &routed_paths {
+            let Some(edge) = map.edges().get(*edge_i).filter(|edge| edge.is_transport(Transport::Metro)) else {
+                continue;
+            };
+            let share = ParallelShare::for_metro(edge.line.as_ref(), metro_overlay);
+            let hops: Vec<StationPair> = path.hops().collect();
+            constraints.extend(LaneConstraint::chain(&hops, &surface_sharing.ranks(&hops, &share), hop_normal));
+        }
+    } else {
+        for (edge_i, path) in &routed_paths {
+            let hops: Vec<StationPair> = path.hops().collect();
+            let Some(edge) = map.edges().get(*edge_i) else { continue };
+            let share = HopShare::of(edge, *edge_i);
+            constraints.extend(LaneConstraint::chain(&hops, &sharing.ranks(&hops, &share), hop_normal));
+        }
+    }
+    let hop_side = LaneSides::solve(&constraints);
+    // The hop's parallel offset for a lane: its rank among the
+    // lanes serving the hop, centered - relative to the canonical
+    // a < b direction, so opposite-direction traversals land on
+    // different lanes instead of collapsing onto one - times the
+    // hop's lane side (keeps lanes on their side at via vertices).
+    let spacing = px_per_mm.scale(Millimeters::new(2.6)).as_f64();
+    let surface_offset = |share: &ParallelShare, a: StationId, b: StationId| -> f64 { share.offset(&surface_sharing, &hop_side, a, b, spacing) };
+    let metro_in_parallel = |edge: &Edge| edge.is_transport(Transport::Metro) && state.layers.parallel_transports && !metro_overlay;
+
+    // Metro + underground draw under the surface traffic - the
+    // boats and roads ride over the tunnels.
+    let edge_route = |edge_i: usize, edge: &Edge| -> Option<RoutePlan> {
+        let (Some(_), Some(_)) = (map.station(edge.from), map.station(edge.to)) else {
+            return None;
+        };
+        // `via` waypoints draw any edge's route as a bent polyline
+        // (metro/tunnel hops shared with others draw parallel
+        // offsets). Batobus edges already drew under the bridges.
+        if matches!(edge.transport, Transport::Metro | Transport::Underground) {
+            let path = routed_paths
+                .iter()
+                .find(|(e_i, _)| *e_i == edge_i)
+                .map(|(_, path)| path.as_slice())
+                .unwrap_or(&[]);
+            let share = HopShare::of(edge, edge_i);
+            let offsets: Vec<Pixels> = if edge.is_transport(Transport::Metro) && state.layers.parallel_transports {
+                let share = ParallelShare::for_metro(edge.line.as_ref(), metro_overlay);
+                path.windows(2).map(|w| Pixels::new(surface_offset(&share, w[0], w[1]))).collect()
+            } else {
+                path.windows(2)
+                    .map(|w| {
+                        let key = StationPair::new(w[0], w[1]);
+                        let dir = key.direction(w[0]);
+                        let side = hop_side.of(&key);
+                        Pixels::new(sharing.offset(&key, &share, spacing, dir, side))
+                    })
+                    .collect()
+            };
+            let route_mm: Polyline = path.iter().filter_map(|id| map.station(*id)).map(|s| s.pos).collect();
+            let route: Vec<PxPos> = route_mm.iter().map(|pos| to_px(*pos)).collect();
+            Some(RoutePlan { route, offsets, route_mm })
+        } else {
+            // Above-ground edges dock at bridge-station deck ends;
+            // everything else follows its `via` stations (or the
+            // straight chord when `via` is empty). Hops shared by
+            // several transports draw parallel offsets in the
+            // edge's own color (parallel-transports overlay).
+            let ids: Vec<StationId> = edge.station_chain().collect();
+            let route_plan = map.road_route(&ids, decks, water_segments);
+            let route_mm = &route_plan.polyline;
+            let route: Vec<PxPos> = route_mm.iter().map(|pos| to_px(*pos)).collect();
+            let offsets: Vec<Pixels> = if state.layers.parallel_transports {
+                (0..route.len().saturating_sub(1))
+                    .map(|segment| {
+                        let hop = route_plan.hops[segment];
+                        Pixels::new(surface_offset(&ParallelShare::Transport(edge.transport), hop.a(), hop.b()))
+                    })
+                    .collect()
+            } else {
+                Vec::new()
+            };
+            Some(RoutePlan {
+                route,
+                offsets,
+                route_mm: route_plan.polyline,
+            })
+        }
+    };
+    let draw_surface_edge = |edge_i: usize, edge: &Edge| {
+        let (Some(from), Some(to)) = (map.station(edge.from), map.station(edge.to)) else {
+            return;
+        };
+        let Some(RoutePlan { route, offsets, .. }) = edge_route(edge_i, edge) else {
+            return;
+        };
+        renderer.draw_edge(
+            ctx,
+            &EdgeSpec {
+                from: to_px(from.pos),
+                to: to_px(to.pos),
+                transport: edge.transport,
+                // A metro in parallel mode draws the generic metro
+                // color, not per-line colors (those are the metro
+                // overlay's job).
+                line: if metro_in_parallel(edge) { None } else { edge.line.as_ref() },
+                map,
+                route,
+                offsets,
+                smooth: false,
+                wavy: false,
+                wave_phase: Millimeters::ZERO,
+                // A metro lane dashes while both overlays run, so
+                // a line color matching a neighboring transport
+                // lane stays readable.
+                dashed: edge.is_transport(Transport::Metro) && state.layers.parallel_transports && metro_overlay,
+                highlight: state.layers.highlight.contains(&edge.transport)
+                    || (state.layers.parallel_transports && matches!(edge.transport, Transport::Taxi | Transport::Bus))
+                    || metro_in_parallel(edge),
+                px_per_mm,
+            },
+        );
+    };
+
+    // Dim regions for the tunnel lines: the river bands and every
+    // park blob - where a metro/underground line crosses one, it
+    // fades under a paper wash.
+    let mut dim_regions: Vec<Polygon> = Vec::new();
+    for course in water_courses {
+        let banks = qdo36_map::WaterBanks::new(course, WATER_HALF_WIDTH);
+        if banks.left.len() >= 2 {
+            let mut band = banks.left;
+            band.0.extend(banks.right.iter().rev().copied());
+            dim_regions.push(Polygon::new(band.into()));
+        }
+    }
+    if let Some(geometry) = &blocks_geometry {
+        for block in &geometry.shapes {
+            for park in &block.parks {
+                dim_regions.push(park.polygon.clone());
+            }
+        }
+    }
+    for (edge_i, edge) in map.edges().iter().enumerate() {
+        if !matches!(edge.transport, Transport::Metro | Transport::Underground) || !state.layers.transports.visible(edge.transport) || line_hidden(edge) {
+            continue;
+        }
+        let Some(RoutePlan { route, route_mm, .. }) = edge_route(edge_i, edge) else {
+            continue;
+        };
+        draw_surface_edge(edge_i, edge);
+        // The tunnel fades inside every dim region it crosses.
+        for region in &dim_regions {
+            let crosses = route_mm.windows(2).any(|hop| region.crossed(&Segment::new(hop[0], hop[1])));
+            if !crosses {
+                continue;
+            }
+            let region_px: Vec<PxPos> = region.iter().map(|pos| to_px(*pos)).collect();
+            ctx.save().ok();
+            ctx.px_polyline_path(&region_px);
+            ctx.close_path();
+            ctx.clip();
+            renderer.paper().apply_alpha(ctx, Alpha::new(0.55));
+            ctx.set_line_width(px_per_mm.scale(Millimeters::new(2.6)).max(Pixels::new(0.5)).as_f64());
+            ctx.px_polyline_path(&route);
+            ctx.stroke().ok();
+            ctx.restore().ok();
         }
     }
 
@@ -200,28 +470,29 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                     .map_or(station.pos, |deck| deck.end_on_side(station.pos))
             })
         };
-        let (mut route_mm, entry_arc) = if edge.via.is_empty() {
+        let WaterRoute {
+            route: mut route_mm,
+            entry_arc,
+        } = if edge.via.is_empty() {
             match (dock(edge.from), dock(edge.to)) {
-                (Some(a), Some(b)) => water_route(&water_courses, a, b),
-                _ => (vec![from.pos, to.pos], 0.0),
+                (Some(a), Some(b)) => WaterRoute::along(water_courses, a, b),
+                _ => WaterRoute {
+                    route: Polyline::new(vec![from.pos, to.pos]),
+                    entry_arc: Millimeters::ZERO,
+                },
             }
         } else {
-            (
-                [edge.from]
-                    .into_iter()
-                    .chain(edge.via.iter().copied())
-                    .chain([edge.to])
-                    .filter_map(dock)
-                    .collect(),
-                0.0,
-            )
+            WaterRoute {
+                route: edge.station_chain().filter_map(dock).collect(),
+                entry_arc: Millimeters::ZERO,
+            }
         };
         // The wave phase anchored to the course: the pier stub
         // shifts the local arc, so edges sharing a water stretch
         // trace the same wave instead of two crossing ones.
         let wave_phase = match (route_mm.first(), route_mm.get(1)) {
-            (Some(a), Some(b)) => entry_arc - (b.x - a.x).hypot(b.y - a.y),
-            _ => 0.0,
+            (Some(a), Some(b)) => entry_arc - Millimeters::new((b.x - a.x).hypot(b.y - a.y)),
+            _ => Millimeters::ZERO,
         };
         // Bridgehead docks bend into an arc: the water-course stub
         // inside the bend zone is trimmed, then two waypoints -
@@ -231,12 +502,12 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
         if route_mm.len() >= 2
             && let Some(deck) = decks.get(&edge.from).filter(|d| !d.on_water)
         {
-            dock_arc(&mut route_mm, deck, true);
+            deck.dock_start(&mut route_mm);
         }
         if route_mm.len() >= 2
             && let Some(deck) = decks.get(&edge.to).filter(|d| !d.on_water)
         {
-            dock_arc(&mut route_mm, deck, false);
+            deck.dock_end(&mut route_mm);
         }
         let route: Vec<PxPos> = route_mm.iter().map(|pos| to_px(*pos)).collect();
         renderer.draw_edge(
@@ -252,7 +523,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                 smooth: true,
                 dashed: false,
                 wavy: true,
-                wave_phase: Millimeters::new(wave_phase),
+                wave_phase,
                 highlight: state.layers.highlight.contains(&edge.transport) || state.layers.parallel_transports,
                 px_per_mm,
             },
@@ -269,7 +540,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
             if !matches!(edge.transport, Transport::Taxi | Transport::Bus) || !state.layers.transports.visible(edge.transport) {
                 continue;
             }
-            let hop_ids: Vec<StationId> = [edge.from].into_iter().chain(edge.via.iter().copied()).chain([edge.to]).collect();
+            let hop_ids: Vec<StationId> = edge.station_chain().collect();
             let hops: Vec<Vec2<Millimeters>> = hop_ids.iter().filter_map(|id| map.station(*id)).map(|station| station.pos).collect();
             if hops.len() != hop_ids.len() {
                 continue;
@@ -285,21 +556,18 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                 // Strict crossing only - an edge merely ending on
                 // the waterline is a pier access, not a bridge
                 // (Q13 rule).
-                let Some(cross) = water_segments
-                    .iter()
-                    .find_map(|water| if road.crosses(water) { road.intersection(water) } else { None })
-                else {
+                let Some(cross) = water_segments.iter().find_map(|water| road.crossing_point(water)) else {
                     continue;
                 };
-                let (dx, dy) = (road.to.x - road.from.x, road.to.y - road.from.y);
-                if dx == 0.0 && dy == 0.0 {
+                let direction = road.to - road.from;
+                if direction.magnitude() <= Millimeters::new(1e-9) {
                     continue;
                 }
-                let half = 6.0 / dx.hypot(dy);
+                let unit = direction.normalized();
                 renderer.draw_bridge(
                     ctx,
-                    to_px(Vec2::new(cross.x - dx * half, cross.y - dy * half)),
-                    to_px(Vec2::new(cross.x + dx * half, cross.y + dy * half)),
+                    to_px(cross - unit * BRIDGE_HALF_SPAN.as_f64()),
+                    to_px(cross + unit * BRIDGE_HALF_SPAN.as_f64()),
                     px_per_mm,
                 );
             }
@@ -313,314 +581,23 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
     }
 
     // Per-station served transports drive the service rings.
-    let mut served: HashMap<StationId, Vec<Transport>> = HashMap::new();
-    for edge in map.edges() {
-        for id in [edge.from, edge.to] {
-            let list = served.entry(id).or_default();
-            if !list.contains(&edge.transport) {
-                list.push(edge.transport);
-            }
-        }
-    }
+    let served_transports = map.served_transports();
 
-    // Edges: transport layer on + the line not hidden by name;
-    // highlighted transports draw in their own colors, everything
-    // else in neutral ink. Metro edges route through the street mesh
-    // (or their declared `via`) as pass-through lines; hops shared
-    // by distinct lines draw parallel offsets in each line's color.
-
-    // Resolve every metro/underground edge's station path once
-    // (metro: via > street mesh > chord, tunnels: via > chord) and
-    // collect who shares each hop: metro by distinct line,
-    // underground by edge - shared hops draw as parallel offsets
-    // instead of piling identical strokes on top of each other.
-    let mut routed_paths: Vec<(usize, Vec<StationId>)> = Vec::new();
-    let mut sharing: HashMap<StationPair, Vec<HopShare>> = HashMap::new();
+    // Taxi + bus draw over the tunnels and the boat courses -
+    // surface traffic rides on top.
     for (edge_i, edge) in map.edges().iter().enumerate() {
-        if !matches!(edge.transport, Transport::Metro | Transport::Underground) || line_hidden(edge) || !state.layers.transports.visible(edge.transport) {
+        if !matches!(edge.transport, Transport::Taxi | Transport::Bus) || !state.layers.transports.visible(edge.transport) || line_hidden(edge) {
             continue;
         }
-        let path = if !edge.via.is_empty() {
-            let mut path = vec![edge.from];
-            path.extend_from_slice(&edge.via);
-            path.push(edge.to);
-            path
-        } else if edge.transport == Transport::Underground || edge.direct {
-            vec![edge.from, edge.to]
-        } else {
-            map.route_on_surface(edge.from, edge.to).unwrap_or_else(|| vec![edge.from, edge.to])
-        };
-        let share = match edge.transport {
-            Transport::Metro => edge.line.clone().map(HopShare::Metro).unwrap_or(HopShare::Edge(edge_i)),
-            _ => HopShare::Edge(edge_i),
-        };
-        for w in path.windows(2) {
-            let bucket = sharing.entry(StationPair::new(w[0], w[1])).or_default();
-            if !bucket.contains(&share) {
-                bucket.push(share.clone());
-            }
-        }
-        routed_paths.push((edge_i, path));
-    }
-
-    // Parallel transports: hops shared by several lanes draw side
-    // by side, each lane in its own color (metro-line style). A
-    // lane is a whole transport - taxi, bus; also metro while its
-    // overlay is off - or, with the metro overlay on, a single
-    // metro line in its line color.
-    let metro_overlay = state.layers.highlight.contains(&Transport::Metro);
-    let mut surface_sharing: HashMap<StationPair, BTreeSet<ParallelShare>> = HashMap::new();
-    if state.layers.parallel_transports {
-        for edge in map.edges() {
-            if !matches!(edge.transport, Transport::Taxi | Transport::Bus) {
-                continue;
-            }
-            let ids: Vec<StationId> = [edge.from].into_iter().chain(edge.via.iter().copied()).chain([edge.to]).collect();
-            for hop in ids.windows(2) {
-                let key = StationPair::new(hop[0], hop[1]);
-                surface_sharing.entry(key).or_default().insert(ParallelShare::Transport(edge.transport));
-            }
-        }
-        for (edge_i, path) in &routed_paths {
-            let Some(edge) = map.edges().get(*edge_i).filter(|edge| edge.transport == Transport::Metro) else {
-                continue;
-            };
-            let share = ParallelShare::for_metro(edge.line.as_ref(), metro_overlay);
-            for hop in path.windows(2) {
-                let key = StationPair::new(hop[0], hop[1]);
-                surface_sharing.entry(key).or_default().insert(share.clone());
-            }
-        }
-    }
-    // Lane side per hop: the rank ordering on a hop may be
-    // mirrored for all lanes at once (the lanes stay distinct);
-    // the sign is chosen so lanes keep their side through via
-    // vertices where possible. Without it, a hop traversed against
-    // its canonical direction forces every lane to cross the
-    // corridor at the vertex.
-    let hop_normal = |key: StationPair| -> Option<Vec2<Millimeters>> {
-        let (Some(a), Some(b)) = (map.station(key.a()), map.station(key.b())) else {
-            return None;
-        };
-        let (dx, dy) = (b.pos.x - a.pos.x, b.pos.y - a.pos.y);
-        let len = dx.hypot(dy);
-        (len > 1e-9).then(|| Vec2::new(-dy / len, dx / len))
-    };
-    // One continuity vote per via vertex: side(v) should equal
-    // side(u) * c, with c = sign(rank_u * rank_v * (n_u . n_v)).
-    let mut constraints: Vec<LaneConstraint> = Vec::new();
-    let mut collect = |hops: &[StationPair], ranks: &[f64]| {
-        for i in 1..hops.len() {
-            let (u, v) = (hops[i - 1], hops[i]);
-            let (Some(n_u), Some(n_v)) = (hop_normal(u), hop_normal(v)) else { continue };
-            let c = ranks[i - 1] * ranks[i] * (n_u.x * n_v.x + n_u.y * n_v.y);
-            if c.abs() > 1e-9 {
-                constraints.push(LaneConstraint {
-                    from: u,
-                    to: v,
-                    relation: c.signum(),
-                });
-            }
-        }
-    };
-    if state.layers.parallel_transports {
-        for edge in map.edges() {
-            if !matches!(edge.transport, Transport::Taxi | Transport::Bus) {
-                continue;
-            }
-            let ids: Vec<StationId> = [edge.from].into_iter().chain(edge.via.iter().copied()).chain([edge.to]).collect();
-            let hops: Vec<StationPair> = ids.windows(2).map(|w| StationPair::new(w[0], w[1])).collect();
-            let share = ParallelShare::Transport(edge.transport);
-            let ranks: Vec<f64> = hops
-                .iter()
-                .map(|key| {
-                    surface_sharing
-                        .get(key)
-                        .map(|shares| centered_rank(shares.iter(), shares.len(), &share))
-                        .unwrap_or(0.0)
-                })
-                .collect();
-            collect(&hops, &ranks);
-        }
-        for (edge_i, path) in &routed_paths {
-            let Some(edge) = map.edges().get(*edge_i).filter(|edge| edge.transport == Transport::Metro) else {
-                continue;
-            };
-            let share = ParallelShare::for_metro(edge.line.as_ref(), metro_overlay);
-            let hops: Vec<StationPair> = path.windows(2).map(|w| StationPair::new(w[0], w[1])).collect();
-            let ranks: Vec<f64> = hops
-                .iter()
-                .map(|key| {
-                    surface_sharing
-                        .get(key)
-                        .map(|shares| centered_rank(shares.iter(), shares.len(), &share))
-                        .unwrap_or(0.0)
-                })
-                .collect();
-            collect(&hops, &ranks);
-        }
-    } else {
-        for (edge_i, path) in &routed_paths {
-            let hops: Vec<StationPair> = path.windows(2).map(|w| StationPair::new(w[0], w[1])).collect();
-            let Some(edge) = map.edges().get(*edge_i) else { continue };
-            let share = match edge.transport {
-                Transport::Metro => edge.line.clone().map(HopShare::Metro).unwrap_or(HopShare::Edge(*edge_i)),
-                _ => HopShare::Edge(*edge_i),
-            };
-            let ranks: Vec<f64> = hops
-                .iter()
-                .map(|key| sharing.get(key).map(|shares| centered_rank(shares.iter(), shares.len(), &share)).unwrap_or(0.0))
-                .collect();
-            collect(&hops, &ranks);
-        }
-    }
-    let mut hop_side: HashMap<StationPair, f64> = HashMap::new();
-    for _ in 0..2 {
-        for constraint in &constraints {
-            let (from, to, relation) = (constraint.from, constraint.to, constraint.relation);
-            match (hop_side.get(&from).copied(), hop_side.get(&to).copied()) {
-                (Some(s_from), None) => {
-                    hop_side.insert(to, s_from * relation);
-                }
-                (None, Some(s_to)) => {
-                    hop_side.insert(from, s_to * relation);
-                }
-                (None, None) => {
-                    hop_side.insert(from, 1.0);
-                    hop_side.insert(to, relation);
-                }
-                _ => {}
-            }
-        }
-    }
-    // The hop's parallel offset for a lane: its rank among the
-    // lanes serving the hop, centered - relative to the canonical
-    // a < b direction, so opposite-direction traversals land on
-    // different lanes instead of collapsing onto one - times the
-    // hop's lane side (keeps lanes on their side at via vertices).
-    let spacing = px_per_mm.scale(2.6);
-    let surface_offset = |share: &ParallelShare, a: StationId, b: StationId| -> f64 {
-        let key = StationPair::new(a, b);
-        let dir = key.direction(a);
-        let side = hop_side.get(&key).copied().unwrap_or(1.0);
-        surface_sharing
-            .get(&key)
-            .filter(|shares| shares.len() > 1)
-            .map(|shares| {
-                let rank = shares.iter().position(|s| s == share).unwrap_or(0);
-                (rank as f64 - (shares.len() as f64 - 1.0) / 2.0) * spacing * dir * side
-            })
-            .unwrap_or(0.0)
-    };
-    let metro_in_parallel = |edge: &Edge| edge.transport == Transport::Metro && state.layers.parallel_transports && !metro_overlay;
-
-    for (edge_i, edge) in map.edges().iter().enumerate() {
-        if edge.transport == Transport::Batobus || !state.layers.transports.visible(edge.transport) || line_hidden(edge) {
-            continue;
-        }
-        let (Some(from), Some(to)) = (map.station(edge.from), map.station(edge.to)) else {
-            continue;
-        };
-        // `via` waypoints draw any edge's route as a bent polyline
-        // (metro/tunnel hops shared with others draw parallel
-        // offsets). Batobus edges already drew under the bridges.
-        let (route, offsets) = if matches!(edge.transport, Transport::Metro | Transport::Underground) {
-            let path = routed_paths
-                .iter()
-                .find(|(e_i, _)| *e_i == edge_i)
-                .map(|(_, path)| path.as_slice())
-                .unwrap_or(&[]);
-            let share = match edge.transport {
-                Transport::Metro => edge.line.clone().map(HopShare::Metro).unwrap_or(HopShare::Edge(edge_i)),
-                _ => HopShare::Edge(edge_i),
-            };
-            let offsets: Vec<Pixels> = if edge.transport == Transport::Metro && state.layers.parallel_transports {
-                let share = ParallelShare::for_metro(edge.line.as_ref(), metro_overlay);
-                path.windows(2).map(|w| Pixels::new(surface_offset(&share, w[0], w[1]))).collect()
-            } else {
-                path.windows(2)
-                    .map(|w| {
-                        let key = StationPair::new(w[0], w[1]);
-                        let dir = key.direction(w[0]);
-                        let side = hop_side.get(&key).copied().unwrap_or(1.0);
-                        let (count, rank) = sharing
-                            .get(&key)
-                            .and_then(|bucket| bucket.iter().position(|s| *s == share).map(|rank| (bucket.len(), rank)))
-                            .unwrap_or((1, 0));
-                        Pixels::new((rank as f64 - (count as f64 - 1.0) / 2.0) * spacing * dir * side)
-                    })
-                    .collect()
-            };
-            let route: Vec<_> = path.iter().filter_map(|id| map.station(*id)).map(|s| to_px(s.pos)).collect();
-            (route, offsets)
-        } else {
-            // Above-ground edges dock at bridge-station deck ends;
-            // everything else follows its `via` stations (or the
-            // straight chord when `via` is empty). Hops shared by
-            // several transports draw parallel offsets in the
-            // edge's own color (parallel-transports overlay).
-            let ids: Vec<StationId> = [edge.from].into_iter().chain(edge.via.iter().copied()).chain([edge.to]).collect();
-            let (route_mm, hop_tags) = road_route(&ids, map, &decks, &water_segments);
-            let route: Vec<PxPos> = route_mm.iter().map(|pos| to_px(*pos)).collect();
-            let offsets: Vec<Pixels> = if state.layers.parallel_transports {
-                (0..route.len().saturating_sub(1))
-                    .map(|segment| {
-                        let hop = hop_tags[segment];
-                        Pixels::new(surface_offset(&ParallelShare::Transport(edge.transport), ids[hop], ids[hop + 1]))
-                    })
-                    .collect()
-            } else {
-                Vec::new()
-            };
-            (route, offsets)
-        };
-        renderer.draw_edge(
-            ctx,
-            &EdgeSpec {
-                from: to_px(from.pos),
-                to: to_px(to.pos),
-                transport: edge.transport,
-                // A metro in parallel mode draws the generic metro
-                // color, not per-line colors (those are the metro
-                // overlay's job).
-                line: if metro_in_parallel(edge) { None } else { edge.line.as_ref() },
-                map,
-                route,
-                offsets,
-                smooth: false,
-                wavy: false,
-                wave_phase: Millimeters::new(0.0),
-                // A metro lane dashes while both overlays run, so
-                // a line color matching a neighboring transport
-                // lane stays readable.
-                dashed: edge.transport == Transport::Metro && state.layers.parallel_transports && metro_overlay,
-                highlight: state.layers.highlight.contains(&edge.transport)
-                    || (state.layers.parallel_transports && matches!(edge.transport, Transport::Taxi | Transport::Bus))
-                    || metro_in_parallel(edge),
-                px_per_mm,
-            },
-        );
+        draw_surface_edge(edge_i, edge);
     }
 
     // Per-station served metro lines drive the overlay pie fill.
-    let mut served_lines: HashMap<StationId, Vec<LineName>> = HashMap::new();
-    for edge in map.edges() {
-        if edge.transport == Transport::Metro
-            && !line_hidden(edge)
-            && let Some(line) = &edge.line
-        {
-            for id in [edge.from, edge.to] {
-                let list = served_lines.entry(id).or_default();
-                if !list.contains(line) {
-                    list.push(line.clone());
-                }
-            }
-        }
-    }
+    let served_lines = map.served_lines(&state.layers.hidden_lines);
     // Metro line badges on the routed paths: on the two edges
     // carrying the line's end stations plus every third segment.
     if metro_overlay {
-        let mut lines: BTreeMap<LineName, Vec<Vec<StationId>>> = BTreeMap::new();
+        let mut lines: BTreeMap<LineName, Vec<EdgePath>> = BTreeMap::new();
         for (edge_i, path) in &routed_paths {
             if let Some(line) = map.edges().get(*edge_i).and_then(|e| e.line.clone()) {
                 lines.entry(line).or_default().push(path.clone());
@@ -629,17 +606,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
         for (line, paths) in &lines {
             // Chain the line's paths into one station sequence by
             // shared endpoints.
-            let mut chain = paths.first().cloned().unwrap_or_default();
-            let mut rest: Vec<Vec<qdo36_map::StationId>> = paths.iter().skip(1).cloned().collect();
-            while let Some(idx) = rest.iter().position(|p| p.first() == chain.last() || p.last() == chain.last()) {
-                let mut piece = rest.swap_remove(idx);
-                if piece.first() == chain.last() {
-                    chain.extend(piece.into_iter().skip(1));
-                } else {
-                    piece.reverse();
-                    chain.extend(piece.into_iter().skip(1));
-                }
-            }
+            let chain = EdgePath::joined(paths.clone());
             let segments = chain.len().saturating_sub(1);
             for i in 0..segments {
                 if i != 0 && i != segments - 1 && i % 3 != 0 {
@@ -656,26 +623,17 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                 } else {
                     let key = StationPair::new(chain[i], chain[i + 1]);
                     let dir = key.direction(chain[i]);
-                    let side = hop_side.get(&key).copied().unwrap_or(1.0);
-                    sharing
-                        .get(&key)
-                        .and_then(|bucket| {
-                            bucket
-                                .iter()
-                                .position(|s| *s == HopShare::Metro(line.clone()))
-                                .map(|rank| (rank as f64 - (bucket.len() as f64 - 1.0) / 2.0) * spacing * dir * side)
-                        })
-                        .unwrap_or(0.0)
+                    let side = hop_side.of(&key);
+                    sharing.offset(&key, &HopShare::Metro(line.clone()), spacing, dir, side)
                 };
                 let (a_px, b_px) = (to_px(a.pos), to_px(b.pos));
-                let (dx, dy) = (b_px.x - a_px.x, b_px.y - a_px.y);
-                let len = dx.hypot(dy).max(1e-6);
-                let mid = PxPos::new((a_px.x + b_px.x) / 2.0 - dy / len * offset, (a_px.y + b_px.y) / 2.0 + dx / len * offset);
+                let normal = (b_px - a_px).normalized().perpendicular();
+                let mid = (a_px + b_px) * 0.5 + normal * offset;
                 let spec = ArtSpec {
                     family: ArtFamily::Ligne,
                     stem: AssetStem::for_line(line),
                     pos: mid,
-                    height: Millimeters::new(6.0 * state.params.metro_scale.get()),
+                    height: LIGNE_BADGE_HEIGHT * state.params.metro_scale.get(),
                     anchor: AnchorFrac::CENTER,
                     rotation: RotationRad::new(0.0),
                     alpha: Alpha::OPAQUE,
@@ -689,11 +647,8 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
     // nearest *screen* edge - not the map center (which pans off-
     // viewport) - the same `center` the radial landmarks use.
     let importance = map.importance();
-    let orientation = match state.layers.label_mode {
-        LabelMode::Radial => LabelOrientation::Radial { center },
-        LabelMode::Screen => LabelOrientation::Screen,
-    };
-    let radius = Pixels::new(px_per_mm.scale(3.0).max(0.4));
+    let orientation = state.layers.label_mode.orientation(center);
+    let radius = px_per_mm.scale(STATION_RADIUS_MM).max(Pixels::new(0.4));
     for station in map.stations() {
         let pos = to_px(station.pos);
         let station_importance = importance.get(&station.id);
@@ -702,7 +657,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                 ctx,
                 &StationSpec {
                     pos,
-                    served: served.get(&station.id).map(Vec::as_slice).unwrap_or_default(),
+                    served: served_transports.get(&station.id).map(Vec::as_slice).unwrap_or_default(),
                     lines: served_lines.get(&station.id).map(Vec::as_slice).unwrap_or_default(),
                     map,
                     metro_overlay,
@@ -751,7 +706,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                 &LabelSpec {
                     text: &info.score.0.to_string(),
                     pos,
-                    radius: Pixels::new(radius.as_f64() * 2.4),
+                    radius: radius * 2.4,
                     orientation,
                     inside: false,
                     label_scale: state.params.label_scale,
@@ -763,10 +718,8 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
 
     // Dataset-debug layer: ring every `bridge` station.
     if state.layers.bridges {
-        for station in map.stations() {
-            if station.is_bridge() {
-                renderer.draw_landmark(ctx, to_px(station.pos), ScaleFactor::new(2.0), px_per_mm);
-            }
+        for station in map.stations_of_kind(StationKind::Bridge) {
+            renderer.draw_landmark(ctx, to_px(station.pos), ScaleFactor::new(2.0), px_per_mm);
         }
     }
 
@@ -778,7 +731,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
         family: ArtFamily::Landmarks,
         stem: AssetStem::new("eiffel-anchor"),
         pos: anchor_pos,
-        height: Millimeters::new(16.0),
+        height: ANCHOR_HEIGHT,
         anchor: AnchorFrac::PIN_TIP,
         rotation: RotationRad::new(0.0),
         alpha: if tracked { Alpha::OPAQUE } else { Alpha::new(0.4) },
@@ -794,7 +747,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
             family: ArtFamily::Map,
             stem: AssetStem::new("compass"),
             pos: compass_pos,
-            height: Millimeters::new(26.0),
+            height: COMPASS_HEIGHT,
             anchor: AnchorFrac::CENTER,
             rotation: RotationRad::new(0.0),
             alpha: Alpha::new(0.9),
@@ -802,202 +755,25 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
         state.assets.draw(ctx, state.style, &compass_spec, px_per_mm);
     }
 
-    // "Tower missing" hint - only while virtual.
+    // "Tower missing" hint - only while virtual; floats above
+    // the menu strip at the screen edge.
     if let (Some(hint), AnchorState::Virtual(_)) = (&state.anchor_hint, state.anchor) {
-        renderer.draw_hint(ctx, hint, width, height);
+        renderer.draw_hint(ctx, hint, width, height, Pixels::new(controls::EDGE_RESERVE));
     }
 }
 
-/// The pier-to-pier course a Batobus edge draws: both station
-/// positions are projected onto the closest water course and the
-/// route follows the waterline between the two projected points -
-/// the boat hugs the river instead of cutting corners over land.
-/// `water` carries the same smoothed courses the bands draw from.
-/// Empty when the map ships no water.
-/// The boat route plus the course arc length at the water-entry
-/// point - the second value anchors the wave phase so edges
-/// sharing a stretch trace identical waves.
-fn water_route(water: &[Vec<Vec2<Millimeters>>], from: Vec2<Millimeters>, to: Vec2<Millimeters>) -> (Vec<Vec2<Millimeters>>, f64) {
-    // The closest point on a polyline: (position along the line as
-    // segment index + fraction, projected point, approach distance).
-    let closest = |points: &[Vec2<Millimeters>], pos: Vec2<Millimeters>| {
-        let mut best: Option<(f64, Vec2<Millimeters>, f64)> = None;
-        for (index, window) in points.windows(2).enumerate() {
-            let (vx, vy) = (window[1].x - window[0].x, window[1].y - window[0].y);
-            let len_sq = vx * vx + vy * vy;
-            if len_sq == 0.0 {
-                continue;
-            }
-            let t = (((pos.x - window[0].x) * vx + (pos.y - window[0].y) * vy) / len_sq).clamp(0.0, 1.0);
-            let projected = Vec2::new(window[0].x + t * vx, window[0].y + t * vy);
-            let distance = (pos.x - projected.x).hypot(pos.y - projected.y);
-            if best.is_none_or(|(_, _, d)| distance < d) {
-                best = Some((index as f64 + t, projected, distance));
-            }
-        }
-        best
-    };
-    let (mut best_score, mut best) = (f64::INFINITY, None);
-    for points in water {
-        let (Some(entry), Some(exit)) = (closest(points, from), closest(points, to)) else {
-            continue;
-        };
-        let score = entry.2 + exit.2;
-        if score < best_score {
-            (best_score, best) = (score, Some((points, entry, exit)));
-        }
-    }
-    let Some((points, entry, exit)) = best else { return (Vec::new(), 0.0) };
-    // Follow the course from `entry` to `exit` - the inner course
-    // vertices run in polyline order when `entry` is upstream, in
-    // reverse otherwise.
-    let (low, high) = if entry.0 <= exit.0 { (entry, exit) } else { (exit, entry) };
-    let i0 = low.0.floor() as usize + 1;
-    let i1 = high.0.floor() as usize;
-    let inner: &[Vec2<Millimeters>] = if i0 <= i1 { &points[i0..=i1] } else { &[] };
-    let mut route = vec![from, entry.1];
-    if entry.0 <= exit.0 {
-        route.extend_from_slice(inner);
-    } else {
-        route.extend(inner.iter().rev().copied());
-    }
-    route.extend_from_slice(&[exit.1, to]);
-    // The entry point's arc length along the course anchors the
-    // wave phase: edges sharing a stretch draw matching waves.
-    let entry_arc = points
-        .windows(2)
-        .take(entry.0.floor() as usize)
-        .map(|pair| (pair[1].x - pair[0].x).hypot(pair[1].y - pair[0].y))
-        .sum::<f64>()
-        + {
-            let i = entry.0.floor() as usize;
-            let frac = entry.0.fract();
-            let (a, b) = (points[i], points[(i + 1).min(points.len() - 1)]);
-            (b.x - a.x).hypot(b.y - a.y) * frac
-        };
-    (route, entry_arc)
-}
-
-/// Bends a bridgehead dock into an arc on the water course: trims
-/// the course points inside the bend zone (the raw route would
-/// otherwise overshoot to the dock's projection and double back -
-/// a hairpin), then splices two waypoints upstream of the deck
-/// center along the river tangent, part way toward the bank-side
-/// dock end. `at_start` docks the route's first point, `false`
-/// its last.
-fn dock_arc(route: &mut Vec<Vec2<Millimeters>>, deck: &BridgeDeck, at_start: bool) {
-    const FAR: f64 = 5.5;
-    let tangent: Vec2<Millimeters> = Vec2::new(-deck.axis.y, deck.axis.x);
-    let t_of = |p: Vec2<Millimeters>| (p.x - deck.center.x) * tangent.x + (p.y - deck.center.y) * tangent.y;
-    let Some(dock) = (if at_start { route.first() } else { route.last() }).copied() else {
-        return;
-    };
-    let bend = |upstream_mm: f64, bank_frac: f64, side: f64| -> Vec2<Millimeters> {
-        Vec2::new(
-            deck.center.x + tangent.x * upstream_mm * side + (dock.x - deck.center.x) * bank_frac,
-            deck.center.y + tangent.y * upstream_mm * side + (dock.y - deck.center.y) * bank_frac,
-        )
-    };
-    let side_of = |route: &[Vec2<Millimeters>], index: usize| route.get(index).map(|w| if t_of(*w) >= 0.0 { 1.0 } else { -1.0 }).unwrap_or(1.0);
-    if at_start {
-        while route.len() > 2 && t_of(route[1]).abs() < FAR {
-            route.remove(1);
-        }
-        let side = side_of(route, 1);
-        route.splice(1..1, [bend(2.0, 0.7, side), bend(FAR, 0.3, side)]);
-    } else {
-        while route.len() > 2 && t_of(route[route.len() - 2]).abs() < FAR {
-            route.remove(route.len() - 2);
-        }
-        let side = side_of(route, route.len() - 2);
-        route.splice(route.len() - 1..route.len() - 1, [bend(FAR, 0.3, side), bend(2.0, 0.7, side)]);
-    }
-}
-
-/// The drawn path of an above-ground edge (map mm): on-water
-/// bridge-station endpoints snap to their deck end on the
-/// neighbor's side - roads meet the bridge instead of drawing onto
-/// the water. An interior on-water bridge station (`via`) enters
-/// at the near deck end, passes the station mid-deck and leaves at
-/// the far end. A hop that crosses water next to a bridgehead
-/// station bends onto that station's deck, so roads always cross
-/// on a bridge - never beside it.
-/// Returns the route points plus, per point, the index of the
-/// `ids` hop its outgoing segment belongs to - the parallel-
-/// transports overlay shifts each segment by its hop's offset.
-fn road_route(
-    ids: &[StationId],
-    map: &GameMap,
-    decks: &HashMap<StationId, BridgeDeck>,
-    water_segments: &[Segment<Millimeters>],
-) -> (Vec<Vec2<Millimeters>>, Vec<usize>) {
-    let station_pos = |index: usize| ids.get(index).and_then(|id| map.station(*id)).map(|station| station.pos);
-    let mut route = Vec::with_capacity(ids.len() + 2);
-    let mut hops = Vec::with_capacity(ids.len() + 2);
-    for (i, id) in ids.iter().enumerate() {
-        let Some(station) = map.station(*id) else { continue };
-        match decks.get(id) {
-            Some(deck) if deck.on_water && (i == 0 || i + 1 == ids.len()) => {
-                let neighbor = station_pos(if i == 0 { 1 } else { i - 1 }).unwrap_or(station.pos);
-                route.push(deck.end_on_side(neighbor));
-                hops.push(i.saturating_sub(1));
-            }
-            Some(deck) if deck.on_water => {
-                route.push(deck.end_on_side(station_pos(i - 1).unwrap_or(station.pos)));
-                route.push(station.pos);
-                route.push(deck.end_on_side(station_pos(i + 1).unwrap_or(station.pos)));
-                hops.extend_from_slice(&[i - 1, i, i]);
-            }
-            _ => {
-                route.push(station.pos);
-                hops.push(i.min(ids.len().saturating_sub(2)));
-            }
-        }
-        // Bend the next hop onto a bridge: when the drawn segment
-        // crosses water and a hop endpoint owns a bridgehead deck,
-        // the road enters the near deck end and leaves the far one.
-        let (Some(&from), Some(to_raw)) = (route.last(), station_pos(i + 1)) else {
-            continue;
-        };
-        // An on-water endpoint snaps to its deck end - the drawn
-        // hop ends on the bank and crosses nothing.
-        let to = match ids.get(i + 1).and_then(|next| decks.get(next)).filter(|deck| deck.on_water) {
-            Some(deck) => deck.end_on_side(from),
-            None => to_raw,
-        };
-        let road = Segment::new(from, to);
-        let Some(crossing) = water_segments
-            .iter()
-            .find_map(|water| if road.crosses(water) { road.intersection(water) } else { None })
-        else {
-            continue;
-        };
-        let Some(deck) = [decks.get(id), ids.get(i + 1).and_then(|next| decks.get(next))]
-            .into_iter()
-            .flatten()
-            .filter(|deck| !deck.on_water)
-            .min_by(|a, b| {
-                let da = (a.center.x - crossing.x).hypot(a.center.y - crossing.y);
-                let db = (b.center.x - crossing.x).hypot(b.center.y - crossing.y);
-                da.partial_cmp(&db).unwrap_or(std::cmp::Ordering::Equal)
-            })
-        else {
-            continue;
-        };
-        route.push(deck.end_on_side(from));
-        route.push(deck.end_on_side(to));
-        hops.extend_from_slice(&[i, i]);
-    }
-    (route, hops)
-}
-
-/// The share's centered rank offset among the hop's lanes.
-fn centered_rank<'a, S: PartialEq + 'a>(shares: impl IntoIterator<Item = &'a S>, count: usize, want: &S) -> f64 {
-    shares
-        .into_iter()
-        .position(|share| share == want)
-        .map(|rank| rank as f64 - (count as f64 - 1.0) / 2.0)
-        .unwrap_or(0.0)
+/// The station obstacle discs the landmark pins dodge - position
+/// and radius in px (the radius pads the nominal station disc by
+/// ~10 %).
+fn station_discs(state: &SceneState, stage: &RenderStage) -> Vec<(PxPos, Pixels)> {
+    state
+        .map
+        .stations()
+        .map(|station| {
+            let radius = STATION_RADIUS_MM * (1.1 * state.params.station_scale.get());
+            (stage.to_px(station.pos), stage.fit.scale.scale(radius))
+        })
+        .collect()
 }
 
 /// The pin direction (screen radians) a landmark artwork takes:
@@ -1005,7 +781,14 @@ fn centered_rank<'a, S: PartialEq + 'a>(shares: impl IntoIterator<Item = &'a S>,
 /// edges, staying closest to `preferred` when ties allow. The pin
 /// body sits `body_offset` px out from the tip and covers
 /// `body_radius`.
-fn landmark_rotation(pos: PxPos, preferred: f64, body_offset: f64, body_radius: f64, stations: &[(PxPos, f64)], edges: &[(PxPos, PxPos)]) -> f64 {
+fn landmark_rotation(
+    pos: PxPos,
+    preferred: RotationRad,
+    body_offset: f64,
+    body_radius: f64,
+    stations: &[(PxPos, Pixels)],
+    edges: &[(PxPos, PxPos)],
+) -> RotationRad {
     const STEPS: usize = 16;
     let segment_distance = |px: f64, py: f64, a: PxPos, b: PxPos| {
         let (vx, vy) = (b.x - a.x, b.y - a.y);
@@ -1019,12 +802,15 @@ fn landmark_rotation(pos: PxPos, preferred: f64, body_offset: f64, body_radius: 
     };
     let mut best = (f64::INFINITY, f64::INFINITY, preferred);
     for i in 0..STEPS {
-        let angle = i as f64 * std::f64::consts::TAU / STEPS as f64;
-        let (cx, cy) = (pos.x + angle.cos() * body_offset, pos.y + angle.sin() * body_offset);
-        let station_cover: f64 = stations.iter().map(|(s, r)| (r + body_radius - (cx - s.x).hypot(cy - s.y)).max(0.0)).sum();
+        let angle = RotationRad::new(i as f64 * TAU / STEPS as f64);
+        let (cx, cy) = (pos.x + angle.as_f64().cos() * body_offset, pos.y + angle.as_f64().sin() * body_offset);
+        let station_cover: f64 = stations
+            .iter()
+            .map(|(s, r)| (r.as_f64() + body_radius - (cx - s.x).hypot(cy - s.y)).max(0.0))
+            .sum();
         let edge_cover: f64 = edges.iter().map(|(a, b)| (body_radius - segment_distance(cx, cy, *a, *b)).max(0.0)).sum();
         let occlusion = station_cover + edge_cover;
-        let deviation = (angle - preferred).sin().atan2((angle - preferred).cos()).abs();
+        let deviation = angle.signed_delta_to(preferred).as_f64().abs();
         if occlusion < best.0 - 1e-9 || (occlusion <= best.0 + 1e-9 && deviation < best.1) {
             best = (occlusion, deviation, angle);
         }
