@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/app/src/ui/map_scene/blocks/geometry.rs`."><title>geometry.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../../static.files/rustdoc-0c87338a.css"><meta name="rustdoc-vars" data-root-path="../../../../../" data-static-root-path="../../../../../static.files/" data-current-crate="qdo36" data-themes="" data-resource-suffix="" data-rustdoc-version="1.99.1 (58cf8f9c3 2026-10-13)" data-channel="1.99.1" data-search-js="search-cf4fc35e.js" data-stringdex-js="stringdex-b5109af9.js" data-settings-js="settings-170eb4bf.js" ><script src="../../../../../static.files/storage-41dd4d93.js"></script><script defer src="../../../../../static.files/src-script-813739b1.js"></script><script defer src="../../../../../src-files.js"></script><script defer src="../../../../../static.files/main-417ebf0a.js"></script><noscript><link rel="stylesheet" href="../../../../../static.files/noscript-9f56287d.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">qdo36/ui/map_scene/blocks/</div>geometry.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! `BlocksGeometry` - the mode-dependent block render data.
+<a href=#2 id=2 data-nosnippet>2</a>
+<a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>cairo::Context;
+<a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>qdo36_map::BlockCut;
+<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>qdo36_map::BlockLayout;
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>qdo36_map::BuildingParams;
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>qdo36_map::Depth;
+<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>qdo36_map::Ground;
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>qdo36_map::Height;
+<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>qdo36_map::House;
+<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>qdo36_map::Obstacles;
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>qdo36_map::Polygon;
+<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>qdo36_map::Segment;
+<a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span>qdo36_map::Street;
+<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span>qdo36_map::Units;
+<a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span>qdo36_map::Variant;
+<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span>std::rc::Rc;
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>tangible_objects_model::Millimeters;
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>tangible_objects_model::PixelsPerMm;
+<a href=#20 id=20 data-nosnippet>20</a>
+<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span><span class="kw">crate</span>::ui::map_scene::SceneLayers;
+<a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span><span class="kw">crate</span>::ui::map_scene::blocks::BlockShapes;
+<a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::BlockSpec;
+<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::DistrictLabel;
+<a href=#25 id=25 data-nosnippet>25</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::ParkSpot;
+<a href=#26 id=26 data-nosnippet>26</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::PxPos;
+<a href=#27 id=27 data-nosnippet>27</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::StyleRenderer;
+<a href=#28 id=28 data-nosnippet>28</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::ToPx;
+<a href=#29 id=29 data-nosnippet>29</a>
+<a href=#30 id=30 data-nosnippet>30</a><span class="doccomment">/// The mode-dependent block render data: drawable inner blocks
+<a href=#31 id=31 data-nosnippet>31</a>/// plus the ground mask covering the whole city - everything
+<a href=#32 id=32 data-nosnippet>32</a>/// outside it takes the style's outer texture instead.
+<a href=#33 id=33 data-nosnippet>33</a></span><span class="kw">pub struct </span>BlocksGeometry {
+<a href=#34 id=34 data-nosnippet>34</a>    <span class="doccomment">/// Drawable blocks: inner faces with a valid inset, without
+<a href=#35 id=35 data-nosnippet>35</a>    /// the faces underground lines suppress.
+<a href=#36 id=36 data-nosnippet>36</a>    </span><span class="kw">pub </span>shapes: Vec&lt;BlockShapes&gt;,
+<a href=#37 id=37 data-nosnippet>37</a>    <span class="doccomment">/// Ground mask covering the city: every inner face's raw
+<a href=#38 id=38 data-nosnippet>38</a>    /// outline expanded by each edge's setback, so the fill reaches
+<a href=#39 id=39 data-nosnippet>39</a>    /// exactly the outer faces' inset edge - streets, corridors
+<a href=#40 id=40 data-nosnippet>40</a>    /// and suppressed faces all rest on ground, never on texture.
+<a href=#41 id=41 data-nosnippet>41</a>    </span><span class="kw">pub </span>ground: Ground,
+<a href=#42 id=42 data-nosnippet>42</a>}
+<a href=#43 id=43 data-nosnippet>43</a>
+<a href=#44 id=44 data-nosnippet>44</a><span class="doccomment">/// The cache key for the mode-dependent block geometry.
+<a href=#45 id=45 data-nosnippet>45</a></span><span class="kw">pub fn </span>blocks_key(parallel: bool, metro_overlay: bool) -&gt; u8 {
+<a href=#46 id=46 data-nosnippet>46</a>    u8::from(parallel) | (u8::from(metro_overlay) &lt;&lt; <span class="number">1</span>)
+<a href=#47 id=47 data-nosnippet>47</a>}
+<a href=#48 id=48 data-nosnippet>48</a>
+<a href=#49 id=49 data-nosnippet>49</a><span class="kw">impl </span>BlocksGeometry {
+<a href=#50 id=50 data-nosnippet>50</a>    <span class="doccomment">/// Computes every face's inset outline, houses and the city
+<a href=#51 id=51 data-nosnippet>51</a>    /// ground mask for the current view mode.
+<a href=#52 id=52 data-nosnippet>52</a>    </span><span class="kw">pub fn </span>compute(layout: <span class="kw-2">&amp;</span>BlockLayout, parallel: bool, metro_overlay: bool) -&gt; <span class="self">Self </span>{
+<a href=#53 id=53 data-nosnippet>53</a>        <span class="kw">let </span>margin = |cut: <span class="kw-2">&amp;</span>BlockCut| layout.setback(cut, parallel, metro_overlay).as_f64();
+<a href=#54 id=54 data-nosnippet>54</a>        <span class="kw">let </span>params = BuildingParams::default();
+<a href=#55 id=55 data-nosnippet>55</a>        <span class="kw">let </span><span class="kw-2">mut </span>shapes = Vec::new();
+<a href=#56 id=56 data-nosnippet>56</a>        <span class="kw">let </span><span class="kw-2">mut </span>ground = Ground::default();
+<a href=#57 id=57 data-nosnippet>57</a>        <span class="kw">for </span>(index, face) <span class="kw">in </span>layout.faces.iter().enumerate() {
+<a href=#58 id=58 data-nosnippet>58</a>            <span class="kw">if </span>face.is_outer() {
+<a href=#59 id=59 data-nosnippet>59</a>                <span class="kw">continue</span>;
+<a href=#60 id=60 data-nosnippet>60</a>            }
+<a href=#61 id=61 data-nosnippet>61</a>            ground.<span class="number">0</span>.push(face.outset(<span class="kw-2">&amp;</span>margin));
+<a href=#62 id=62 data-nosnippet>62</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(outline) = face.inset(<span class="kw-2">&amp;</span>margin) {
+<a href=#63 id=63 data-nosnippet>63</a>                <span class="comment">// Obstacles the houses stay out of: tunnel corridors,
+<a href=#64 id=64 data-nosnippet>64</a>                // decorative street corridors, park blobs.
+<a href=#65 id=65 data-nosnippet>65</a>                </span><span class="kw">let </span><span class="kw-2">mut </span>obstacles = Obstacles(face.tunnels.iter().map(|tunnel| tunnel.corridor(Millimeters::new(<span class="number">0.8</span>))).collect());
+<a href=#66 id=66 data-nosnippet>66</a>                <span class="kw">let </span>streets = Street::of_block(<span class="kw-2">&amp;</span>outline, index <span class="kw">as </span>u64);
+<a href=#67 id=67 data-nosnippet>67</a>                <span class="kw">for </span>street <span class="kw">in </span><span class="kw-2">&amp;</span>streets {
+<a href=#68 id=68 data-nosnippet>68</a>                    <span class="kw">for </span>pair <span class="kw">in </span>street.windows(<span class="number">2</span>) {
+<a href=#69 id=69 data-nosnippet>69</a>                        obstacles.<span class="number">0</span>.push(Segment::new(pair[<span class="number">0</span>], pair[<span class="number">1</span>]).corridor(Millimeters::new(<span class="number">1.6</span>)));
+<a href=#70 id=70 data-nosnippet>70</a>                    }
+<a href=#71 id=71 data-nosnippet>71</a>                }
+<a href=#72 id=72 data-nosnippet>72</a>                <span class="kw">let </span>parks: Vec&lt;ParkSpot&gt; = face
+<a href=#73 id=73 data-nosnippet>73</a>                    .parks
+<a href=#74 id=74 data-nosnippet>74</a>                    .iter()
+<a href=#75 id=75 data-nosnippet>75</a>                    .filter_map(|park| {
+<a href=#76 id=76 data-nosnippet>76</a>                        park.polygon(<span class="kw-2">&amp;</span>outline, index <span class="kw">as </span>u64).map(|polygon| ParkSpot {
+<a href=#77 id=77 data-nosnippet>77</a>                            name: park.name.clone(),
+<a href=#78 id=78 data-nosnippet>78</a>                            polygon,
+<a href=#79 id=79 data-nosnippet>79</a>                        })
+<a href=#80 id=80 data-nosnippet>80</a>                    })
+<a href=#81 id=81 data-nosnippet>81</a>                    .collect();
+<a href=#82 id=82 data-nosnippet>82</a>                <span class="kw">for </span>park <span class="kw">in </span><span class="kw-2">&amp;</span>parks {
+<a href=#83 id=83 data-nosnippet>83</a>                    obstacles.<span class="number">0</span>.push(park.polygon.clone());
+<a href=#84 id=84 data-nosnippet>84</a>                }
+<a href=#85 id=85 data-nosnippet>85</a>                <span class="comment">// Landmark volumes: a landmark inside the block becomes
+<a href=#86 id=86 data-nosnippet>86</a>                // a tall octagonal house - its pin stays the roof plate.
+<a href=#87 id=87 data-nosnippet>87</a>                </span><span class="kw">let </span>landmark_footprints: Vec&lt;Polygon&gt; = face.landmarks.iter().filter_map(|landmark| landmark.footprint(<span class="kw-2">&amp;</span>outline)).collect();
+<a href=#88 id=88 data-nosnippet>88</a>                obstacles.<span class="number">0</span>.extend(landmark_footprints.iter().cloned());
+<a href=#89 id=89 data-nosnippet>89</a>                <span class="comment">// The district caption dodges the park blobs so it
+<a href=#90 id=90 data-nosnippet>90</a>                // never lands on a park name.
+<a href=#91 id=91 data-nosnippet>91</a>                </span><span class="kw">let </span>avoid: Vec&lt;Polygon&gt; = parks.iter().map(|park| park.polygon.clone()).collect();
+<a href=#92 id=92 data-nosnippet>92</a>                <span class="kw">let </span>label = face.district.as_ref().and_then(|name| {
+<a href=#93 id=93 data-nosnippet>93</a>                    outline.deepest_point_avoiding(<span class="kw-2">&amp;</span>avoid).map(|pos| DistrictLabel {
+<a href=#94 id=94 data-nosnippet>94</a>                        name: Rc::from(name.as_str()),
+<a href=#95 id=95 data-nosnippet>95</a>                        pos,
+<a href=#96 id=96 data-nosnippet>96</a>                    })
+<a href=#97 id=97 data-nosnippet>97</a>                });
+<a href=#98 id=98 data-nosnippet>98</a>                <span class="kw">let </span><span class="kw-2">mut </span>buildings = params.houses(<span class="kw-2">&amp;</span>outline, index <span class="kw">as </span>u64, <span class="kw-2">&amp;</span>obstacles);
+<a href=#99 id=99 data-nosnippet>99</a>                buildings.extend(landmark_footprints.into_iter().map(|footprint| House {
+<a href=#100 id=100 data-nosnippet>100</a>                    footprint,
+<a href=#101 id=101 data-nosnippet>101</a>                    units: Units::ONE,
+<a href=#102 id=102 data-nosnippet>102</a>                    variant: Variant::LANDMARK,
+<a href=#103 id=103 data-nosnippet>103</a>                    depth: Depth::LANDMARK,
+<a href=#104 id=104 data-nosnippet>104</a>                    height: Height::LANDMARK,
+<a href=#105 id=105 data-nosnippet>105</a>                }));
+<a href=#106 id=106 data-nosnippet>106</a>                shapes.push(BlockShapes {
+<a href=#107 id=107 data-nosnippet>107</a>                    buildings,
+<a href=#108 id=108 data-nosnippet>108</a>                    outline,
+<a href=#109 id=109 data-nosnippet>109</a>                    streets: streets.into_iter().map(|street| street.<span class="number">0</span>).collect(),
+<a href=#110 id=110 data-nosnippet>110</a>                    parks,
+<a href=#111 id=111 data-nosnippet>111</a>                    label,
+<a href=#112 id=112 data-nosnippet>112</a>                });
+<a href=#113 id=113 data-nosnippet>113</a>            }
+<a href=#114 id=114 data-nosnippet>114</a>        }
+<a href=#115 id=115 data-nosnippet>115</a>        <span class="self">Self </span>{ shapes, ground }
+<a href=#116 id=116 data-nosnippet>116</a>    }
+<a href=#117 id=117 data-nosnippet>117</a>
+<a href=#118 id=118 data-nosnippet>118</a>    <span class="doccomment">/// Draws every inner block's inset outline and houses. `layers`
+<a href=#119 id=119 data-nosnippet>119</a>    /// picks the caption orientation per district/park label;
+<a href=#120 id=120 data-nosnippet>120</a>    /// `center` (widget px) is the radial pivot.
+<a href=#121 id=121 data-nosnippet>121</a>    </span><span class="kw">pub fn </span>draw(<span class="kw-2">&amp;</span><span class="self">self</span>, ctx: <span class="kw-2">&amp;</span>Context, renderer: <span class="kw-2">&amp;</span><span class="kw">dyn </span>StyleRenderer, layers: <span class="kw-2">&amp;</span>SceneLayers, center: PxPos, px_per_mm: PixelsPerMm, to_px: ToPx&lt;<span class="lifetime">'_</span>&gt;) {
+<a href=#122 id=122 data-nosnippet>122</a>        <span class="kw">for </span>block <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.shapes {
+<a href=#123 id=123 data-nosnippet>123</a>            renderer.draw_block(
+<a href=#124 id=124 data-nosnippet>124</a>                ctx,
+<a href=#125 id=125 data-nosnippet>125</a>                <span class="kw-2">&amp;</span>BlockSpec {
+<a href=#126 id=126 data-nosnippet>126</a>                    outline: <span class="kw-2">&amp;</span>block.outline,
+<a href=#127 id=127 data-nosnippet>127</a>                    buildings: <span class="kw-2">&amp;</span>block.buildings,
+<a href=#128 id=128 data-nosnippet>128</a>                    streets: <span class="kw-2">&amp;</span>block.streets,
+<a href=#129 id=129 data-nosnippet>129</a>                    parks: <span class="kw-2">&amp;</span>block.parks,
+<a href=#130 id=130 data-nosnippet>130</a>                    label: block.label.clone(),
+<a href=#131 id=131 data-nosnippet>131</a>                    district_orientation: layers.district_mode.orientation(center),
+<a href=#132 id=132 data-nosnippet>132</a>                    park_orientation: layers.park_mode.orientation(center),
+<a href=#133 id=133 data-nosnippet>133</a>                    house_mode: layers.house_mode,
+<a href=#134 id=134 data-nosnippet>134</a>                    center,
+<a href=#135 id=135 data-nosnippet>135</a>                    px_per_mm,
+<a href=#136 id=136 data-nosnippet>136</a>                },
+<a href=#137 id=137 data-nosnippet>137</a>                to_px,
+<a href=#138 id=138 data-nosnippet>138</a>            );
+<a href=#139 id=139 data-nosnippet>139</a>        }
+<a href=#140 id=140 data-nosnippet>140</a>    }
+<a href=#141 id=141 data-nosnippet>141</a>}
+</code></pre></div></section></main></body></html>

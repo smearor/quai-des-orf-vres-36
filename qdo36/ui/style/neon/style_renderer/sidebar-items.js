@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["NeonStyle"]};
+window.SIDEBAR_ITEMS = {"fn":["outer_tile"],"struct":["NeonStyle"]};

@@ -2,31 +2,40 @@
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>serde::Deserialize;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>serde::Serialize;
-<a href=#5 id=5 data-nosnippet>5</a>
-<a href=#6 id=6 data-nosnippet>6</a><span class="doccomment">/// A positive render scaling factor shared by all render-param
-<a href=#7 id=7 data-nosnippet>7</a>/// knobs and the spec structs they feed.
-<a href=#8 id=8 data-nosnippet>8</a></span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Serialize, Deserialize)]
-<a href=#9 id=9 data-nosnippet>9</a>#[serde(transparent)]
-<a href=#10 id=10 data-nosnippet>10</a></span><span class="kw">pub struct </span>ScaleFactor(f64);
-<a href=#11 id=11 data-nosnippet>11</a>
-<a href=#12 id=12 data-nosnippet>12</a><span class="kw">impl </span>ScaleFactor {
-<a href=#13 id=13 data-nosnippet>13</a>    <span class="doccomment">/// The neutral factor (no scaling).
-<a href=#14 id=14 data-nosnippet>14</a>    </span><span class="kw">pub const </span>ONE: ScaleFactor = ScaleFactor(<span class="number">1.0</span>);
-<a href=#15 id=15 data-nosnippet>15</a>
-<a href=#16 id=16 data-nosnippet>16</a>    <span class="doccomment">/// A factor; clamps non-finite and non-positive input to `ONE`.
-<a href=#17 id=17 data-nosnippet>17</a>    </span><span class="kw">pub fn </span>new(factor: f64) -&gt; <span class="self">Self </span>{
-<a href=#18 id=18 data-nosnippet>18</a>        <span class="kw">if </span>factor.is_finite() &amp;&amp; factor &gt; <span class="number">0.0 </span>{ <span class="self">Self</span>(factor) } <span class="kw">else </span>{ <span class="self">Self</span>::ONE }
-<a href=#19 id=19 data-nosnippet>19</a>    }
-<a href=#20 id=20 data-nosnippet>20</a>
-<a href=#21 id=21 data-nosnippet>21</a>    <span class="doccomment">/// The bare number, for arithmetic.
-<a href=#22 id=22 data-nosnippet>22</a>    </span><span class="kw">pub const fn </span>get(<span class="self">self</span>) -&gt; f64 {
-<a href=#23 id=23 data-nosnippet>23</a>        <span class="self">self</span>.<span class="number">0
-<a href=#24 id=24 data-nosnippet>24</a>    </span>}
-<a href=#25 id=25 data-nosnippet>25</a>}
-<a href=#26 id=26 data-nosnippet>26</a>
-<a href=#27 id=27 data-nosnippet>27</a><span class="kw">impl </span>Default <span class="kw">for </span>ScaleFactor {
-<a href=#28 id=28 data-nosnippet>28</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-<a href=#29 id=29 data-nosnippet>29</a>        <span class="self">Self</span>::ONE
-<a href=#30 id=30 data-nosnippet>30</a>    }
-<a href=#31 id=31 data-nosnippet>31</a>}
+<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>tangible_objects_model::Pixels;
+<a href=#6 id=6 data-nosnippet>6</a>
+<a href=#7 id=7 data-nosnippet>7</a><span class="doccomment">/// A positive render scaling factor shared by all render-param
+<a href=#8 id=8 data-nosnippet>8</a>/// knobs and the spec structs they feed.
+<a href=#9 id=9 data-nosnippet>9</a></span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Serialize, Deserialize)]
+<a href=#10 id=10 data-nosnippet>10</a>#[serde(transparent)]
+<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub struct </span>ScaleFactor(f64);
+<a href=#12 id=12 data-nosnippet>12</a>
+<a href=#13 id=13 data-nosnippet>13</a><span class="kw">impl </span>ScaleFactor {
+<a href=#14 id=14 data-nosnippet>14</a>    <span class="doccomment">/// The neutral factor (no scaling).
+<a href=#15 id=15 data-nosnippet>15</a>    </span><span class="kw">pub const </span>ONE: ScaleFactor = ScaleFactor(<span class="number">1.0</span>);
+<a href=#16 id=16 data-nosnippet>16</a>
+<a href=#17 id=17 data-nosnippet>17</a>    <span class="doccomment">/// A factor; clamps non-finite and non-positive input to `ONE`.
+<a href=#18 id=18 data-nosnippet>18</a>    </span><span class="kw">pub fn </span>new(factor: f64) -&gt; <span class="self">Self </span>{
+<a href=#19 id=19 data-nosnippet>19</a>        <span class="kw">if </span>factor.is_finite() &amp;&amp; factor &gt; <span class="number">0.0 </span>{ <span class="self">Self</span>(factor) } <span class="kw">else </span>{ <span class="self">Self</span>::ONE }
+<a href=#20 id=20 data-nosnippet>20</a>    }
+<a href=#21 id=21 data-nosnippet>21</a>
+<a href=#22 id=22 data-nosnippet>22</a>    <span class="doccomment">/// The factor `after / before` - `ONE` for a `before` span at
+<a href=#23 id=23 data-nosnippet>23</a>    /// or below ~1 px (a degenerate pinch never scales).
+<a href=#24 id=24 data-nosnippet>24</a>    </span><span class="kw">pub fn </span>between(before: Pixels, after: Pixels) -&gt; ScaleFactor {
+<a href=#25 id=25 data-nosnippet>25</a>        <span class="doccomment">/// Base spans at or below this never pinch (division guard).
+<a href=#26 id=26 data-nosnippet>26</a>        </span><span class="kw">const </span>MIN_BASE: Pixels = Pixels::new(<span class="number">1.0</span>);
+<a href=#27 id=27 data-nosnippet>27</a>        <span class="kw">if </span>before &gt; MIN_BASE { <span class="self">Self</span>::new(after / before) } <span class="kw">else </span>{ <span class="self">Self</span>::ONE }
+<a href=#28 id=28 data-nosnippet>28</a>    }
+<a href=#29 id=29 data-nosnippet>29</a>
+<a href=#30 id=30 data-nosnippet>30</a>    <span class="doccomment">/// The bare number, for arithmetic.
+<a href=#31 id=31 data-nosnippet>31</a>    </span><span class="kw">pub const fn </span>get(<span class="self">self</span>) -&gt; f64 {
+<a href=#32 id=32 data-nosnippet>32</a>        <span class="self">self</span>.<span class="number">0
+<a href=#33 id=33 data-nosnippet>33</a>    </span>}
+<a href=#34 id=34 data-nosnippet>34</a>}
+<a href=#35 id=35 data-nosnippet>35</a>
+<a href=#36 id=36 data-nosnippet>36</a><span class="kw">impl </span>Default <span class="kw">for </span>ScaleFactor {
+<a href=#37 id=37 data-nosnippet>37</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+<a href=#38 id=38 data-nosnippet>38</a>        <span class="self">Self</span>::ONE
+<a href=#39 id=39 data-nosnippet>39</a>    }
+<a href=#40 id=40 data-nosnippet>40</a>}
 </code></pre></div></section></main></body></html>

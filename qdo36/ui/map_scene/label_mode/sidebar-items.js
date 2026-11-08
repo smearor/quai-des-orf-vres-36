@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["LabelMode"]};
+window.SIDEBAR_ITEMS = {"enum":["LabelMode"],"struct":["UnknownLabelMode"]};

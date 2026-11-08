@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["action_row","clear","drawer_button","menu_heading","mode_radios"]};

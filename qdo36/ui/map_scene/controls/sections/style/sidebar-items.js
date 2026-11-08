@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["style_list","style_preview"]};

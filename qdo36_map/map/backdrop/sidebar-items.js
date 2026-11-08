@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["kind","landmark","name","polyline"],"struct":["Backdrop"]};
+window.SIDEBAR_ITEMS = {"mod":["kind","landmark","name"],"struct":["Backdrop"]};

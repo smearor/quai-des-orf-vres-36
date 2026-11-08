@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["edge_path","polyline_path"]};
+window.SIDEBAR_ITEMS = {"constant":["WATER_HALF_WIDTH"],"mod":["building","caption_style","edge","ground","water"]};

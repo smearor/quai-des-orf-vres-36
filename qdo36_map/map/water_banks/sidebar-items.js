@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["WATER_HALF_WIDTH"],"struct":["WaterBanks"]};

@@ -2,7 +2,7 @@
     pub text: &amp;'a <a class="primitive" href="https://doc.rust-lang.org/1.99.1/std/primitive.str.html">str</a>,
     pub pos: Vec2&lt;Pixels&gt;,
     pub radius: Pixels,
-    pub orientation: <a class="enum" href="../renderer/enum.LabelOrientation.html" title="enum qdo36::ui::style::renderer::LabelOrientation">LabelOrientation</a>,
+    pub orientation: <a class="enum" href="../label_orientation/enum.LabelOrientation.html" title="enum qdo36::ui::style::label_orientation::LabelOrientation">LabelOrientation</a>,
     pub inside: <a class="primitive" href="https://doc.rust-lang.org/1.99.1/std/primitive.bool.html">bool</a>,
     pub label_scale: <a class="struct" href="../../../../qdo36_tangibles/map/scale_factor/struct.ScaleFactor.html" title="struct qdo36_tangibles::map::scale_factor::ScaleFactor">ScaleFactor</a>,
     pub px_per_mm: PixelsPerMm,
@@ -11,7 +11,7 @@ inside it, score further out.</p>
 </div></details><h2 id="fields" class="fields section-header">Fields<a href="#fields" class="anchor">§</a></h2><span id="structfield.text" class="structfield section-header"><a href="#structfield.text" class="anchor field">§</a><code>text: &amp;'a <a class="primitive" href="https://doc.rust-lang.org/1.99.1/std/primitive.str.html">str</a></code></span><div class="docblock"><p>The text to draw.</p>
 </div><span id="structfield.pos" class="structfield section-header"><a href="#structfield.pos" class="anchor field">§</a><code>pos: Vec2&lt;Pixels&gt;</code></span><div class="docblock"><p>Station center in widget px.</p>
 </div><span id="structfield.radius" class="structfield section-header"><a href="#structfield.radius" class="anchor field">§</a><code>radius: Pixels</code></span><div class="docblock"><p>Station disc radius - the outside gap derives from it.</p>
-</div><span id="structfield.orientation" class="structfield section-header"><a href="#structfield.orientation" class="anchor field">§</a><code>orientation: <a class="enum" href="../renderer/enum.LabelOrientation.html" title="enum qdo36::ui::style::renderer::LabelOrientation">LabelOrientation</a></code></span><div class="docblock"><p>Orientation on the tabletop (screen vs radial).</p>
+</div><span id="structfield.orientation" class="structfield section-header"><a href="#structfield.orientation" class="anchor field">§</a><code>orientation: <a class="enum" href="../label_orientation/enum.LabelOrientation.html" title="enum qdo36::ui::style::label_orientation::LabelOrientation">LabelOrientation</a></code></span><div class="docblock"><p>Orientation on the tabletop (screen vs radial).</p>
 </div><span id="structfield.inside" class="structfield section-header"><a href="#structfield.inside" class="anchor field">§</a><code>inside: <a class="primitive" href="https://doc.rust-lang.org/1.99.1/std/primitive.bool.html">bool</a></code></span><div class="docblock"><p>Center the text on <code>pos</code> (inside the disc) instead of the
 outside gap.</p>
 </div><span id="structfield.label_scale" class="structfield section-header"><a href="#structfield.label_scale" class="anchor field">§</a><code>label_scale: <a class="struct" href="../../../../qdo36_tangibles/map/scale_factor/struct.ScaleFactor.html" title="struct qdo36_tangibles::map::scale_factor::ScaleFactor">ScaleFactor</a></code></span><div class="docblock"><p>Global font size factor (<code>RenderParams.label_scale</code>).</p>

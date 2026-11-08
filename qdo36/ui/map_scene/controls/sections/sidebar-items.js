@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["layer_group","layers","orientation","style","tools"]};

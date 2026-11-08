@@ -116,8 +116,8 @@
 <a href=#116 id=116 data-nosnippet>116</a>        state
 <a href=#117 id=117 data-nosnippet>117</a>            .map
 <a href=#118 id=118 data-nosnippet>118</a>            .nearest_station(stage.to_map(pos))
-<a href=#119 id=119 data-nosnippet>119</a>            .filter(|(<span class="kw">_</span>, distance)| distance.as_f64() &lt;= SNAP_RADIUS_MM)
-<a href=#120 id=120 data-nosnippet>120</a>            .map(|(id, <span class="kw">_</span>)| id)
+<a href=#119 id=119 data-nosnippet>119</a>            .filter(|nearest| nearest.distance.as_f64() &lt;= SNAP_RADIUS_MM)
+<a href=#120 id=120 data-nosnippet>120</a>            .map(|nearest| nearest.station)
 <a href=#121 id=121 data-nosnippet>121</a>    }
 <a href=#122 id=122 data-nosnippet>122</a>
 <a href=#123 id=123 data-nosnippet>123</a>    <span class="doccomment">/// The view pan keeping the map point under `from` (widget px)

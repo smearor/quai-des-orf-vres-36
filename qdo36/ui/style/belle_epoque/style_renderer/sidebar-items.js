@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["BelleEpoqueStyle"]};
+window.SIDEBAR_ITEMS = {"fn":["outer_tile"],"struct":["BelleEpoqueStyle"]};

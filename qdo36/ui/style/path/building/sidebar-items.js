@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ISO_HEIGHT_MM","ROOF_SHRINK"],"trait":["BuildingPathExt"]};

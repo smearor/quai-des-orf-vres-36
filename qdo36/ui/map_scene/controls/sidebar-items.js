@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["controls","layer_menu","layer_toggles"]};
+window.SIDEBAR_ITEMS = {"constant":["EDGE_RESERVE","MENU_INSET","SIDES"],"fn":["controls","side_menu"],"mod":["mode_option","sections","widgets"],"struct":["Side"]};

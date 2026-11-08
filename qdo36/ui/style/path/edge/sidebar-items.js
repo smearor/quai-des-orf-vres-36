@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["smooth_path","wavy_path"],"trait":["EdgePathExt"]};

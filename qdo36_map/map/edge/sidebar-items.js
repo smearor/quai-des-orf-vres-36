@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Edge"]};
+window.SIDEBAR_ITEMS = {"mod":["count","path"],"struct":["Edge"]};

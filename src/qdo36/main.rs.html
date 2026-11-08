@@ -5,150 +5,151 @@
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">mod </span>fonts;
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">mod </span>heading_offset_deg;
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">mod </span>l10n;
-<a href=#8 id=8 data-nosnippet>8</a><span class="kw">mod </span>mcp_bridge;
-<a href=#9 id=9 data-nosnippet>9</a><span class="kw">mod </span>settings;
-<a href=#10 id=10 data-nosnippet>10</a><span class="kw">mod </span>tangible_host;
-<a href=#11 id=11 data-nosnippet>11</a><span class="kw">mod </span>ui;
-<a href=#12 id=12 data-nosnippet>12</a>
-<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span><span class="kw">crate</span>::heading_offset_deg::HeadingOffsetDeg;
-<a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span><span class="kw">crate</span>::l10n::L10n;
-<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span><span class="kw">crate</span>::settings::AppSettings;
-<a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span><span class="kw">crate</span>::ui::app_window::AppWindow;
-<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span>glib::MainContext;
-<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>gtk4::prelude::<span class="kw-2">*</span>;
-<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>libadwaita <span class="kw">as </span>adw;
-<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>qdo36_icons::Qdo36Icons;
-<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>qdo36_map::City;
-<a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>signal_hook::iterator::Signals;
-<a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span>std::net::SocketAddr;
-<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span>std::rc::Rc;
-<a href=#25 id=25 data-nosnippet>25</a><span class="kw">use </span>tangible_objects_model::DisplayRotation;
-<a href=#26 id=26 data-nosnippet>26</a><span class="kw">use </span>tracing::warn;
-<a href=#27 id=27 data-nosnippet>27</a><span class="kw">use </span>tracing_subscriber::EnvFilter;
-<a href=#28 id=28 data-nosnippet>28</a><span class="kw">use </span>unic_langid::LanguageIdentifier;
-<a href=#29 id=29 data-nosnippet>29</a>
-<a href=#30 id=30 data-nosnippet>30</a><span class="doccomment">/// Command-line options.
-<a href=#31 id=31 data-nosnippet>31</a></span><span class="attr">#[derive(Debug, clap::Parser)]
-<a href=#32 id=32 data-nosnippet>32</a>#[command(name = <span class="string">"qdo36"</span>, about = <span class="string">"Quai des Orfèvres 36 - Scotland Yard for the smart desk"</span>)]
-<a href=#33 id=33 data-nosnippet>33</a></span><span class="kw">struct </span>Args {
-<a href=#34 id=34 data-nosnippet>34</a>    <span class="doccomment">/// tangible-objects daemon GraphQL endpoint.
-<a href=#35 id=35 data-nosnippet>35</a>    </span><span class="attr">#[arg(long)]
-<a href=#36 id=36 data-nosnippet>36</a>    </span>daemon_url: <span class="prelude-ty">Option</span>&lt;String&gt;,
-<a href=#37 id=37 data-nosnippet>37</a>    <span class="doccomment">/// Locale override (e.g. `de`, `en`).
-<a href=#38 id=38 data-nosnippet>38</a>    </span><span class="attr">#[arg(long)]
-<a href=#39 id=39 data-nosnippet>39</a>    </span>locale: <span class="prelude-ty">Option</span>&lt;String&gt;,
-<a href=#40 id=40 data-nosnippet>40</a>    <span class="doccomment">/// City board (`paris` or `berlin`).
-<a href=#41 id=41 data-nosnippet>41</a>    </span><span class="attr">#[arg(long)]
-<a href=#42 id=42 data-nosnippet>42</a>    </span>city: <span class="prelude-ty">Option</span>&lt;City&gt;,
-<a href=#43 id=43 data-nosnippet>43</a>    <span class="doccomment">/// Expose the game-domain MCP endpoint (Streamable HTTP, e.g.
-<a href=#44 id=44 data-nosnippet>44</a>    /// `127.0.0.1:8091` for LAN agents) - reserved for WP05.
-<a href=#45 id=45 data-nosnippet>45</a>    </span><span class="attr">#[arg(long)]
-<a href=#46 id=46 data-nosnippet>46</a>    </span>mcp_listen: <span class="prelude-ty">Option</span>&lt;SocketAddr&gt;,
-<a href=#47 id=47 data-nosnippet>47</a>    <span class="doccomment">/// Display rotation: quarter turns applied to surface-mm
-<a href=#48 id=48 data-nosnippet>48</a>    /// positions before the mm-to-pixel scale - needed when the
-<a href=#49 id=49 data-nosnippet>49</a>    /// desktop shows the panel rotated (e.g. GNOME portrait on a
-<a href=#50 id=50 data-nosnippet>50</a>    /// landscape touchscreen).
-<a href=#51 id=51 data-nosnippet>51</a>    </span><span class="attr">#[arg(long, value_name = <span class="string">"0|90|180|270"</span>)]
-<a href=#52 id=52 data-nosnippet>52</a>    </span>display_rotation: <span class="prelude-ty">Option</span>&lt;DisplayRotation&gt;,
-<a href=#53 id=53 data-nosnippet>53</a>    <span class="doccomment">/// Calibration offset between the Eiffel tower's pin frame and
-<a href=#54 id=54 data-nosnippet>54</a>    /// map north, in degrees.
-<a href=#55 id=55 data-nosnippet>55</a>    </span><span class="attr">#[arg(long, value_name = <span class="string">"DEG"</span>)]
-<a href=#56 id=56 data-nosnippet>56</a>    </span>heading_offset: <span class="prelude-ty">Option</span>&lt;HeadingOffsetDeg&gt;,
-<a href=#57 id=57 data-nosnippet>57</a>}
-<a href=#58 id=58 data-nosnippet>58</a>
-<a href=#59 id=59 data-nosnippet>59</a><span class="kw">fn </span>main() -&gt; glib::ExitCode {
-<a href=#60 id=60 data-nosnippet>60</a>    tracing_subscriber::fmt()
-<a href=#61 id=61 data-nosnippet>61</a>        .with_env_filter(EnvFilter::try_from_default_env().unwrap_or_else(|<span class="kw">_</span>| EnvFilter::new(<span class="string">"info"</span>)))
-<a href=#62 id=62 data-nosnippet>62</a>        .init();
-<a href=#63 id=63 data-nosnippet>63</a>
-<a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">let </span>args = &lt;Args <span class="kw">as </span>clap::Parser&gt;::parse();
-<a href=#65 id=65 data-nosnippet>65</a>    <span class="kw">let </span><span class="kw-2">mut </span>settings = AppSettings::load();
-<a href=#66 id=66 data-nosnippet>66</a>    settings.apply_overrides(<span class="kw-2">&amp;</span>args);
-<a href=#67 id=67 data-nosnippet>67</a>    <span class="comment">// CLI flags are sticky overrides: they land in the persisted
-<a href=#68 id=68 data-nosnippet>68</a>    // settings and stay effective until changed again.
-<a href=#69 id=69 data-nosnippet>69</a>    </span>settings.save();
-<a href=#70 id=70 data-nosnippet>70</a>
-<a href=#71 id=71 data-nosnippet>71</a>    <span class="kw">let </span>l10n = settings
-<a href=#72 id=72 data-nosnippet>72</a>        .locale
-<a href=#73 id=73 data-nosnippet>73</a>        .as_deref()
-<a href=#74 id=74 data-nosnippet>74</a>        .and_then(|code| code.parse::&lt;LanguageIdentifier&gt;().ok())
-<a href=#75 id=75 data-nosnippet>75</a>        .map_or_else(L10n::system, L10n::for_locale);
-<a href=#76 id=76 data-nosnippet>76</a>    <span class="kw">let </span>l10n = Rc::new(l10n);
-<a href=#77 id=77 data-nosnippet>77</a>
-<a href=#78 id=78 data-nosnippet>78</a>    <span class="kw">let </span>application = adw::Application::builder().application_id(<span class="string">"io.github.smearor.qdo36"</span>).build();
-<a href=#79 id=79 data-nosnippet>79</a>
-<a href=#80 id=80 data-nosnippet>80</a>    <span class="comment">// Bundled OFL fonts must be registered before the first text layout,
-<a href=#81 id=81 data-nosnippet>81</a>    // so they land here instead of inside `connect_activate`.
-<a href=#82 id=82 data-nosnippet>82</a>    </span>fonts::install();
-<a href=#83 id=83 data-nosnippet>83</a>
-<a href=#84 id=84 data-nosnippet>84</a>    <span class="comment">// The MCP endpoint shares state through a watch snapshot; without
-<a href=#85 id=85 data-nosnippet>85</a>    // the flag the app runs unchanged.
-<a href=#86 id=86 data-nosnippet>86</a>    </span><span class="kw">let </span>mcp_listen = args.mcp_listen;
-<a href=#87 id=87 data-nosnippet>87</a>
-<a href=#88 id=88 data-nosnippet>88</a>    application.connect_activate(<span class="kw">move </span>|app| {
-<a href=#89 id=89 data-nosnippet>89</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(addr) = mcp_listen {
-<a href=#90 id=90 data-nosnippet>90</a>            mcp_bridge::attach(addr);
-<a href=#91 id=91 data-nosnippet>91</a>        }
-<a href=#92 id=92 data-nosnippet>92</a>        <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = Qdo36Icons::install() {
-<a href=#93 id=93 data-nosnippet>93</a>            <span class="macro">warn!</span>(<span class="string">"icon set install failed: {err}"</span>);
-<a href=#94 id=94 data-nosnippet>94</a>        }
-<a href=#95 id=95 data-nosnippet>95</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(display) = gdk4::Display::default()
-<a href=#96 id=96 data-nosnippet>96</a>            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Err</span>(err) = Qdo36Icons::install_icon_theme(<span class="kw-2">&amp;</span>display)
-<a href=#97 id=97 data-nosnippet>97</a>        {
-<a href=#98 id=98 data-nosnippet>98</a>            <span class="macro">warn!</span>(<span class="string">"icon theme registration failed: {err}"</span>);
-<a href=#99 id=99 data-nosnippet>99</a>        }
-<a href=#100 id=100 data-nosnippet>100</a>        install_css();
-<a href=#101 id=101 data-nosnippet>101</a>        install_shutdown_handlers(app);
-<a href=#102 id=102 data-nosnippet>102</a>        <span class="kw">let </span>window = AppWindow::new(app, settings.clone(), l10n.clone());
-<a href=#103 id=103 data-nosnippet>103</a>        window.window.present();
-<a href=#104 id=104 data-nosnippet>104</a>        <span class="kw">if </span>std::env::var_os(<span class="string">"QDO36_NO_FULLSCREEN"</span>).is_none() {
-<a href=#105 id=105 data-nosnippet>105</a>            <span class="comment">// Fullscreen must be requested once the window is
-<a href=#106 id=106 data-nosnippet>106</a>            // presented; before that the content's natural size can
-<a href=#107 id=107 data-nosnippet>107</a>            // overshoot the monitor and the compositor clamps it
-<a href=#108 id=108 data-nosnippet>108</a>            // visually.
-<a href=#109 id=109 data-nosnippet>109</a>            </span>window.window.fullscreen();
-<a href=#110 id=110 data-nosnippet>110</a>        }
-<a href=#111 id=111 data-nosnippet>111</a>    });
-<a href=#112 id=112 data-nosnippet>112</a>
-<a href=#113 id=113 data-nosnippet>113</a>    <span class="comment">// `run()` would feed argv to GTK's own option parser, which rejects
-<a href=#114 id=114 data-nosnippet>114</a>    // our flags; clap already consumed them.
-<a href=#115 id=115 data-nosnippet>115</a>    </span>application.run_with_args(<span class="kw-2">&amp;</span>[<span class="string">"qdo36"</span>])
-<a href=#116 id=116 data-nosnippet>116</a>}
-<a href=#117 id=117 data-nosnippet>117</a>
-<a href=#118 id=118 data-nosnippet>118</a><span class="doccomment">/// Quits the app on SIGINT/SIGTERM so Ctrl+C on the desk exits
-<a href=#119 id=119 data-nosnippet>119</a>/// cleanly. Daemon registration cleanup (`unregister_owner`) hooks in
-<a href=#120 id=120 data-nosnippet>120</a>/// here once the controller exists (P2).
-<a href=#121 id=121 data-nosnippet>121</a></span><span class="kw">fn </span>install_shutdown_handlers(app: <span class="kw-2">&amp;</span>adw::Application) {
-<a href=#122 id=122 data-nosnippet>122</a>    <span class="kw">let </span>(tx, rx) = async_channel::unbounded::&lt;()&gt;();
-<a href=#123 id=123 data-nosnippet>123</a>    std::thread::spawn(<span class="kw">move </span>|| {
-<a href=#124 id=124 data-nosnippet>124</a>        <span class="kw">let </span><span class="kw-2">mut </span>signals = <span class="kw">match </span>Signals::new([signal_hook::consts::SIGINT, signal_hook::consts::SIGTERM]) {
-<a href=#125 id=125 data-nosnippet>125</a>            <span class="prelude-val">Ok</span>(signals) =&gt; signals,
-<a href=#126 id=126 data-nosnippet>126</a>            <span class="prelude-val">Err</span>(err) =&gt; {
-<a href=#127 id=127 data-nosnippet>127</a>                <span class="macro">warn!</span>(<span class="string">"signal handler install failed: {err}"</span>);
-<a href=#128 id=128 data-nosnippet>128</a>                <span class="kw">return</span>;
-<a href=#129 id=129 data-nosnippet>129</a>            }
-<a href=#130 id=130 data-nosnippet>130</a>        };
-<a href=#131 id=131 data-nosnippet>131</a>        <span class="kw">if </span>signals.forever().next().is_some() {
-<a href=#132 id=132 data-nosnippet>132</a>            <span class="kw">let _ </span>= tx.send_blocking(());
-<a href=#133 id=133 data-nosnippet>133</a>        }
-<a href=#134 id=134 data-nosnippet>134</a>    });
-<a href=#135 id=135 data-nosnippet>135</a>    <span class="kw">let </span>app = app.clone();
-<a href=#136 id=136 data-nosnippet>136</a>    MainContext::default().spawn_local(<span class="kw">async move </span>{
-<a href=#137 id=137 data-nosnippet>137</a>        <span class="kw">if </span>rx.recv().<span class="kw">await</span>.is_ok() {
-<a href=#138 id=138 data-nosnippet>138</a>            controller::with_controller(|controller| {
-<a href=#139 id=139 data-nosnippet>139</a>                controller.borrow_mut().release_registrations();
-<a href=#140 id=140 data-nosnippet>140</a>            });
-<a href=#141 id=141 data-nosnippet>141</a>            app.quit();
-<a href=#142 id=142 data-nosnippet>142</a>        }
-<a href=#143 id=143 data-nosnippet>143</a>    });
-<a href=#144 id=144 data-nosnippet>144</a>}
-<a href=#145 id=145 data-nosnippet>145</a>
-<a href=#146 id=146 data-nosnippet>146</a><span class="doccomment">/// Registers the application stylesheet.
-<a href=#147 id=147 data-nosnippet>147</a></span><span class="kw">fn </span>install_css() {
-<a href=#148 id=148 data-nosnippet>148</a>    <span class="kw">let </span>provider = gtk4::CssProvider::new();
-<a href=#149 id=149 data-nosnippet>149</a>    provider.load_from_string(<span class="macro">include_str!</span>(<span class="string">"../resources/style.css"</span>));
-<a href=#150 id=150 data-nosnippet>150</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(display) = gdk4::Display::default() {
-<a href=#151 id=151 data-nosnippet>151</a>        gtk4::style_context_add_provider_for_display(<span class="kw-2">&amp;</span>display, <span class="kw-2">&amp;</span>provider, gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION);
-<a href=#152 id=152 data-nosnippet>152</a>    }
-<a href=#153 id=153 data-nosnippet>153</a>}
+<a href=#8 id=8 data-nosnippet>8</a><span class="kw">mod </span>layers_config;
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">mod </span>mcp_bridge;
+<a href=#10 id=10 data-nosnippet>10</a><span class="kw">mod </span>settings;
+<a href=#11 id=11 data-nosnippet>11</a><span class="kw">mod </span>tangible_host;
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">mod </span>ui;
+<a href=#13 id=13 data-nosnippet>13</a>
+<a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span><span class="kw">crate</span>::heading_offset_deg::HeadingOffsetDeg;
+<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span><span class="kw">crate</span>::l10n::L10n;
+<a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span><span class="kw">crate</span>::settings::AppSettings;
+<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span><span class="kw">crate</span>::ui::app_window::AppWindow;
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>glib::MainContext;
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>gtk4::prelude::<span class="kw-2">*</span>;
+<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>libadwaita <span class="kw">as </span>adw;
+<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>qdo36_icons::Qdo36Icons;
+<a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>qdo36_map::City;
+<a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span>signal_hook::iterator::Signals;
+<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span>std::net::SocketAddr;
+<a href=#25 id=25 data-nosnippet>25</a><span class="kw">use </span>std::rc::Rc;
+<a href=#26 id=26 data-nosnippet>26</a><span class="kw">use </span>tangible_objects_model::DisplayRotation;
+<a href=#27 id=27 data-nosnippet>27</a><span class="kw">use </span>tracing::warn;
+<a href=#28 id=28 data-nosnippet>28</a><span class="kw">use </span>tracing_subscriber::EnvFilter;
+<a href=#29 id=29 data-nosnippet>29</a><span class="kw">use </span>unic_langid::LanguageIdentifier;
+<a href=#30 id=30 data-nosnippet>30</a>
+<a href=#31 id=31 data-nosnippet>31</a><span class="doccomment">/// Command-line options.
+<a href=#32 id=32 data-nosnippet>32</a></span><span class="attr">#[derive(Debug, clap::Parser)]
+<a href=#33 id=33 data-nosnippet>33</a>#[command(name = <span class="string">"qdo36"</span>, about = <span class="string">"Quai des Orfèvres 36 - Scotland Yard for the smart desk"</span>)]
+<a href=#34 id=34 data-nosnippet>34</a></span><span class="kw">struct </span>Args {
+<a href=#35 id=35 data-nosnippet>35</a>    <span class="doccomment">/// tangible-objects daemon GraphQL endpoint.
+<a href=#36 id=36 data-nosnippet>36</a>    </span><span class="attr">#[arg(long)]
+<a href=#37 id=37 data-nosnippet>37</a>    </span>daemon_url: <span class="prelude-ty">Option</span>&lt;String&gt;,
+<a href=#38 id=38 data-nosnippet>38</a>    <span class="doccomment">/// Locale override (e.g. `de`, `en`).
+<a href=#39 id=39 data-nosnippet>39</a>    </span><span class="attr">#[arg(long)]
+<a href=#40 id=40 data-nosnippet>40</a>    </span>locale: <span class="prelude-ty">Option</span>&lt;String&gt;,
+<a href=#41 id=41 data-nosnippet>41</a>    <span class="doccomment">/// City board (`paris` or `berlin`).
+<a href=#42 id=42 data-nosnippet>42</a>    </span><span class="attr">#[arg(long)]
+<a href=#43 id=43 data-nosnippet>43</a>    </span>city: <span class="prelude-ty">Option</span>&lt;City&gt;,
+<a href=#44 id=44 data-nosnippet>44</a>    <span class="doccomment">/// Expose the game-domain MCP endpoint (Streamable HTTP, e.g.
+<a href=#45 id=45 data-nosnippet>45</a>    /// `127.0.0.1:8091` for LAN agents) - reserved for WP05.
+<a href=#46 id=46 data-nosnippet>46</a>    </span><span class="attr">#[arg(long)]
+<a href=#47 id=47 data-nosnippet>47</a>    </span>mcp_listen: <span class="prelude-ty">Option</span>&lt;SocketAddr&gt;,
+<a href=#48 id=48 data-nosnippet>48</a>    <span class="doccomment">/// Display rotation: quarter turns applied to surface-mm
+<a href=#49 id=49 data-nosnippet>49</a>    /// positions before the mm-to-pixel scale - needed when the
+<a href=#50 id=50 data-nosnippet>50</a>    /// desktop shows the panel rotated (e.g. GNOME portrait on a
+<a href=#51 id=51 data-nosnippet>51</a>    /// landscape touchscreen).
+<a href=#52 id=52 data-nosnippet>52</a>    </span><span class="attr">#[arg(long, value_name = <span class="string">"0|90|180|270"</span>)]
+<a href=#53 id=53 data-nosnippet>53</a>    </span>display_rotation: <span class="prelude-ty">Option</span>&lt;DisplayRotation&gt;,
+<a href=#54 id=54 data-nosnippet>54</a>    <span class="doccomment">/// Calibration offset between the Eiffel tower's pin frame and
+<a href=#55 id=55 data-nosnippet>55</a>    /// map north, in degrees.
+<a href=#56 id=56 data-nosnippet>56</a>    </span><span class="attr">#[arg(long, value_name = <span class="string">"DEG"</span>)]
+<a href=#57 id=57 data-nosnippet>57</a>    </span>heading_offset: <span class="prelude-ty">Option</span>&lt;HeadingOffsetDeg&gt;,
+<a href=#58 id=58 data-nosnippet>58</a>}
+<a href=#59 id=59 data-nosnippet>59</a>
+<a href=#60 id=60 data-nosnippet>60</a><span class="kw">fn </span>main() -&gt; glib::ExitCode {
+<a href=#61 id=61 data-nosnippet>61</a>    tracing_subscriber::fmt()
+<a href=#62 id=62 data-nosnippet>62</a>        .with_env_filter(EnvFilter::try_from_default_env().unwrap_or_else(|<span class="kw">_</span>| EnvFilter::new(<span class="string">"info"</span>)))
+<a href=#63 id=63 data-nosnippet>63</a>        .init();
+<a href=#64 id=64 data-nosnippet>64</a>
+<a href=#65 id=65 data-nosnippet>65</a>    <span class="kw">let </span>args = &lt;Args <span class="kw">as </span>clap::Parser&gt;::parse();
+<a href=#66 id=66 data-nosnippet>66</a>    <span class="kw">let </span><span class="kw-2">mut </span>settings = AppSettings::load();
+<a href=#67 id=67 data-nosnippet>67</a>    settings.apply_overrides(<span class="kw-2">&amp;</span>args);
+<a href=#68 id=68 data-nosnippet>68</a>    <span class="comment">// CLI flags are sticky overrides: they land in the persisted
+<a href=#69 id=69 data-nosnippet>69</a>    // settings and stay effective until changed again.
+<a href=#70 id=70 data-nosnippet>70</a>    </span>settings.save();
+<a href=#71 id=71 data-nosnippet>71</a>
+<a href=#72 id=72 data-nosnippet>72</a>    <span class="kw">let </span>l10n = settings
+<a href=#73 id=73 data-nosnippet>73</a>        .locale
+<a href=#74 id=74 data-nosnippet>74</a>        .as_deref()
+<a href=#75 id=75 data-nosnippet>75</a>        .and_then(|code| code.parse::&lt;LanguageIdentifier&gt;().ok())
+<a href=#76 id=76 data-nosnippet>76</a>        .map_or_else(L10n::system, L10n::for_locale);
+<a href=#77 id=77 data-nosnippet>77</a>    <span class="kw">let </span>l10n = Rc::new(l10n);
+<a href=#78 id=78 data-nosnippet>78</a>
+<a href=#79 id=79 data-nosnippet>79</a>    <span class="kw">let </span>application = adw::Application::builder().application_id(<span class="string">"io.github.smearor.qdo36"</span>).build();
+<a href=#80 id=80 data-nosnippet>80</a>
+<a href=#81 id=81 data-nosnippet>81</a>    <span class="comment">// Bundled OFL fonts must be registered before the first text layout,
+<a href=#82 id=82 data-nosnippet>82</a>    // so they land here instead of inside `connect_activate`.
+<a href=#83 id=83 data-nosnippet>83</a>    </span>fonts::install();
+<a href=#84 id=84 data-nosnippet>84</a>
+<a href=#85 id=85 data-nosnippet>85</a>    <span class="comment">// The MCP endpoint shares state through a watch snapshot; without
+<a href=#86 id=86 data-nosnippet>86</a>    // the flag the app runs unchanged.
+<a href=#87 id=87 data-nosnippet>87</a>    </span><span class="kw">let </span>mcp_listen = args.mcp_listen;
+<a href=#88 id=88 data-nosnippet>88</a>
+<a href=#89 id=89 data-nosnippet>89</a>    application.connect_activate(<span class="kw">move </span>|app| {
+<a href=#90 id=90 data-nosnippet>90</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(addr) = mcp_listen {
+<a href=#91 id=91 data-nosnippet>91</a>            mcp_bridge::attach(addr);
+<a href=#92 id=92 data-nosnippet>92</a>        }
+<a href=#93 id=93 data-nosnippet>93</a>        <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = Qdo36Icons::install() {
+<a href=#94 id=94 data-nosnippet>94</a>            <span class="macro">warn!</span>(<span class="string">"icon set install failed: {err}"</span>);
+<a href=#95 id=95 data-nosnippet>95</a>        }
+<a href=#96 id=96 data-nosnippet>96</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(display) = gdk4::Display::default()
+<a href=#97 id=97 data-nosnippet>97</a>            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Err</span>(err) = Qdo36Icons::install_icon_theme(<span class="kw-2">&amp;</span>display)
+<a href=#98 id=98 data-nosnippet>98</a>        {
+<a href=#99 id=99 data-nosnippet>99</a>            <span class="macro">warn!</span>(<span class="string">"icon theme registration failed: {err}"</span>);
+<a href=#100 id=100 data-nosnippet>100</a>        }
+<a href=#101 id=101 data-nosnippet>101</a>        install_css();
+<a href=#102 id=102 data-nosnippet>102</a>        install_shutdown_handlers(app);
+<a href=#103 id=103 data-nosnippet>103</a>        <span class="kw">let </span>window = AppWindow::new(app, settings.clone(), l10n.clone());
+<a href=#104 id=104 data-nosnippet>104</a>        window.window.present();
+<a href=#105 id=105 data-nosnippet>105</a>        <span class="kw">if </span>std::env::var_os(<span class="string">"QDO36_NO_FULLSCREEN"</span>).is_none() {
+<a href=#106 id=106 data-nosnippet>106</a>            <span class="comment">// Fullscreen must be requested once the window is
+<a href=#107 id=107 data-nosnippet>107</a>            // presented; before that the content's natural size can
+<a href=#108 id=108 data-nosnippet>108</a>            // overshoot the monitor and the compositor clamps it
+<a href=#109 id=109 data-nosnippet>109</a>            // visually.
+<a href=#110 id=110 data-nosnippet>110</a>            </span>window.window.fullscreen();
+<a href=#111 id=111 data-nosnippet>111</a>        }
+<a href=#112 id=112 data-nosnippet>112</a>    });
+<a href=#113 id=113 data-nosnippet>113</a>
+<a href=#114 id=114 data-nosnippet>114</a>    <span class="comment">// `run()` would feed argv to GTK's own option parser, which rejects
+<a href=#115 id=115 data-nosnippet>115</a>    // our flags; clap already consumed them.
+<a href=#116 id=116 data-nosnippet>116</a>    </span>application.run_with_args(<span class="kw-2">&amp;</span>[<span class="string">"qdo36"</span>])
+<a href=#117 id=117 data-nosnippet>117</a>}
+<a href=#118 id=118 data-nosnippet>118</a>
+<a href=#119 id=119 data-nosnippet>119</a><span class="doccomment">/// Quits the app on SIGINT/SIGTERM so Ctrl+C on the desk exits
+<a href=#120 id=120 data-nosnippet>120</a>/// cleanly. Daemon registration cleanup (`unregister_owner`) hooks in
+<a href=#121 id=121 data-nosnippet>121</a>/// here once the controller exists (P2).
+<a href=#122 id=122 data-nosnippet>122</a></span><span class="kw">fn </span>install_shutdown_handlers(app: <span class="kw-2">&amp;</span>adw::Application) {
+<a href=#123 id=123 data-nosnippet>123</a>    <span class="kw">let </span>(tx, rx) = async_channel::unbounded::&lt;()&gt;();
+<a href=#124 id=124 data-nosnippet>124</a>    std::thread::spawn(<span class="kw">move </span>|| {
+<a href=#125 id=125 data-nosnippet>125</a>        <span class="kw">let </span><span class="kw-2">mut </span>signals = <span class="kw">match </span>Signals::new([signal_hook::consts::SIGINT, signal_hook::consts::SIGTERM]) {
+<a href=#126 id=126 data-nosnippet>126</a>            <span class="prelude-val">Ok</span>(signals) =&gt; signals,
+<a href=#127 id=127 data-nosnippet>127</a>            <span class="prelude-val">Err</span>(err) =&gt; {
+<a href=#128 id=128 data-nosnippet>128</a>                <span class="macro">warn!</span>(<span class="string">"signal handler install failed: {err}"</span>);
+<a href=#129 id=129 data-nosnippet>129</a>                <span class="kw">return</span>;
+<a href=#130 id=130 data-nosnippet>130</a>            }
+<a href=#131 id=131 data-nosnippet>131</a>        };
+<a href=#132 id=132 data-nosnippet>132</a>        <span class="kw">if </span>signals.forever().next().is_some() {
+<a href=#133 id=133 data-nosnippet>133</a>            <span class="kw">let _ </span>= tx.send_blocking(());
+<a href=#134 id=134 data-nosnippet>134</a>        }
+<a href=#135 id=135 data-nosnippet>135</a>    });
+<a href=#136 id=136 data-nosnippet>136</a>    <span class="kw">let </span>app = app.clone();
+<a href=#137 id=137 data-nosnippet>137</a>    MainContext::default().spawn_local(<span class="kw">async move </span>{
+<a href=#138 id=138 data-nosnippet>138</a>        <span class="kw">if </span>rx.recv().<span class="kw">await</span>.is_ok() {
+<a href=#139 id=139 data-nosnippet>139</a>            controller::with_controller(|controller| {
+<a href=#140 id=140 data-nosnippet>140</a>                controller.borrow_mut().release_registrations();
+<a href=#141 id=141 data-nosnippet>141</a>            });
+<a href=#142 id=142 data-nosnippet>142</a>            app.quit();
+<a href=#143 id=143 data-nosnippet>143</a>        }
+<a href=#144 id=144 data-nosnippet>144</a>    });
+<a href=#145 id=145 data-nosnippet>145</a>}
+<a href=#146 id=146 data-nosnippet>146</a>
+<a href=#147 id=147 data-nosnippet>147</a><span class="doccomment">/// Registers the application stylesheet.
+<a href=#148 id=148 data-nosnippet>148</a></span><span class="kw">fn </span>install_css() {
+<a href=#149 id=149 data-nosnippet>149</a>    <span class="kw">let </span>provider = gtk4::CssProvider::new();
+<a href=#150 id=150 data-nosnippet>150</a>    provider.load_from_string(<span class="macro">include_str!</span>(<span class="string">"../resources/style.css"</span>));
+<a href=#151 id=151 data-nosnippet>151</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(display) = gdk4::Display::default() {
+<a href=#152 id=152 data-nosnippet>152</a>        gtk4::style_context_add_provider_for_display(<span class="kw-2">&amp;</span>display, <span class="kw-2">&amp;</span>provider, gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION);
+<a href=#153 id=153 data-nosnippet>153</a>    }
+<a href=#154 id=154 data-nosnippet>154</a>}
 </code></pre></div></section></main></body></html>

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["MOUSE_ROTATE_MIN_RADIUS_PX","WHEEL_ZOOM_STEP"],"fn":["wrap_pi"],"struct":["AppWindow"]};
+window.SIDEBAR_ITEMS = {"constant":["MOUSE_ROTATE_MIN_RADIUS_PX","WHEEL_ZOOM_STEP"],"fn":["position_rubber","wrap_pi"],"struct":["AppWindow"]};

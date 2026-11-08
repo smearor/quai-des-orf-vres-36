@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["RESOURCES"],"struct":["L10n"]};
+window.SIDEBAR_ITEMS = {"constant":["RESOURCES"],"mod":["has_label_key","label_key"],"struct":["L10n"]};

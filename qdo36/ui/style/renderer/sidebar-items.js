@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["LabelOrientation"],"trait":["StyleRenderer"],"type":["PxPos"]};
+window.SIDEBAR_ITEMS = {"trait":["StyleRenderer"],"type":["PxPos"]};

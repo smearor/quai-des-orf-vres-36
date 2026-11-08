@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["backdrop","cost","edge","edge_count","error","fugitive","game_map","line_color","line_name","meta","segment","slogan","story","toml","transport","transport_name"]};
+window.SIDEBAR_ITEMS = {"mod":["backdrop","blocks","bridge","cost","district","edge","error","fugitive","game_map","geometry","line","meta","park","projection","segment","serde_pair_option","slogan","story","toml","transport","water_banks"],"struct":["SquareMillimeters"]};

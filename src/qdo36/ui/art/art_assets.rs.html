@@ -70,65 +70,73 @@
 <a href=#70 id=70 data-nosnippet>70</a>        <span class="kw">let </span><span class="prelude-val">Some</span>(handle) = <span class="self">self</span>.handle(spec.family, style, spec.stem.as_str()) <span class="kw">else </span>{
 <a href=#71 id=71 data-nosnippet>71</a>            <span class="kw">return </span><span class="bool-val">false</span>;
 <a href=#72 id=72 data-nosnippet>72</a>        };
-<a href=#73 id=73 data-nosnippet>73</a>        <span class="kw">let </span>height = px_per_mm.scale(spec.height.as_f64());
+<a href=#73 id=73 data-nosnippet>73</a>        <span class="kw">let </span>height = px_per_mm.scale(spec.height).as_f64();
 <a href=#74 id=74 data-nosnippet>74</a>        <span class="kw">let </span><span class="prelude-val">Some</span>(aspect) = <span class="self">self</span>.intrinsic_size(<span class="kw-2">&amp;</span>handle).and_then(|size| size.aspect()) <span class="kw">else </span>{
 <a href=#75 id=75 data-nosnippet>75</a>            <span class="kw">return </span><span class="bool-val">false</span>;
 <a href=#76 id=76 data-nosnippet>76</a>        };
 <a href=#77 id=77 data-nosnippet>77</a>        <span class="kw">let </span>width = height * aspect;
 <a href=#78 id=78 data-nosnippet>78</a>        <span class="kw">let </span>rect = Rectangle::new(spec.pos.x - spec.anchor.x * width, spec.pos.y - spec.anchor.y * height, width, height);
-<a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">if </span>spec.alpha.as_f64() &gt;= <span class="number">0.999 </span>{
-<a href=#80 id=80 data-nosnippet>80</a>            CairoRenderer::new(<span class="kw-2">&amp;</span>handle).render_document(ctx, <span class="kw-2">&amp;</span>rect).is_ok()
-<a href=#81 id=81 data-nosnippet>81</a>        } <span class="kw">else </span>{
-<a href=#82 id=82 data-nosnippet>82</a>            ctx.push_group();
-<a href=#83 id=83 data-nosnippet>83</a>            <span class="kw">let </span>drawn = CairoRenderer::new(<span class="kw-2">&amp;</span>handle).render_document(ctx, <span class="kw-2">&amp;</span>rect).is_ok();
-<a href=#84 id=84 data-nosnippet>84</a>            <span class="kw">if </span>drawn {
-<a href=#85 id=85 data-nosnippet>85</a>                ctx.pop_group_to_source().ok();
-<a href=#86 id=86 data-nosnippet>86</a>                ctx.paint_with_alpha(spec.alpha.as_f64()).ok();
-<a href=#87 id=87 data-nosnippet>87</a>            } <span class="kw">else </span>{
-<a href=#88 id=88 data-nosnippet>88</a>                ctx.new_path();
-<a href=#89 id=89 data-nosnippet>89</a>            }
-<a href=#90 id=90 data-nosnippet>90</a>            drawn
-<a href=#91 id=91 data-nosnippet>91</a>        }
-<a href=#92 id=92 data-nosnippet>92</a>    }
-<a href=#93 id=93 data-nosnippet>93</a>
-<a href=#94 id=94 data-nosnippet>94</a>    <span class="doccomment">/// The cached handle for `art/{family}/{city}/{style}/{stem}.svg`.
-<a href=#95 id=95 data-nosnippet>95</a>    </span><span class="kw">fn </span>handle(<span class="kw-2">&amp;</span><span class="self">self</span>, family: ArtFamily, style: MapStyle, stem: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;Rc&lt;SvgHandle&gt;&gt; {
-<a href=#96 id=96 data-nosnippet>96</a>        <span class="kw">let </span>path = <span class="self">self</span>.root.join(family.dir_name()).join(CITY).join(style.namespace()).join(<span class="macro">format!</span>(<span class="string">"{stem}.svg"</span>));
-<a href=#97 id=97 data-nosnippet>97</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(handle) = <span class="self">self</span>.handles.borrow().get(<span class="kw-2">&amp;</span>path) {
-<a href=#98 id=98 data-nosnippet>98</a>            <span class="kw">return </span><span class="prelude-val">Some</span>(handle.clone());
-<a href=#99 id=99 data-nosnippet>99</a>        }
-<a href=#100 id=100 data-nosnippet>100</a>        <span class="kw">if </span><span class="self">self</span>.misses.borrow().contains(<span class="kw-2">&amp;</span>path) {
-<a href=#101 id=101 data-nosnippet>101</a>            <span class="kw">return </span><span class="prelude-val">None</span>;
-<a href=#102 id=102 data-nosnippet>102</a>        }
-<a href=#103 id=103 data-nosnippet>103</a>        <span class="comment">// A missing file is the expected fallback path (not every
-<a href=#104 id=104 data-nosnippet>104</a>        // backdrop landmark ships artwork); only real load/parse
-<a href=#105 id=105 data-nosnippet>105</a>        // failures deserve a warning.
-<a href=#106 id=106 data-nosnippet>106</a>        </span><span class="kw">match </span>rsvg::Loader::new().read_path(<span class="kw-2">&amp;</span>path) {
-<a href=#107 id=107 data-nosnippet>107</a>            <span class="prelude-val">Ok</span>(handle) =&gt; {
-<a href=#108 id=108 data-nosnippet>108</a>                <span class="kw">let </span>handle = Rc::new(handle);
-<a href=#109 id=109 data-nosnippet>109</a>                <span class="self">self</span>.handles.borrow_mut().insert(path, handle.clone());
-<a href=#110 id=110 data-nosnippet>110</a>                <span class="prelude-val">Some</span>(handle)
-<a href=#111 id=111 data-nosnippet>111</a>            }
-<a href=#112 id=112 data-nosnippet>112</a>            <span class="prelude-val">Err</span>(err) =&gt; {
-<a href=#113 id=113 data-nosnippet>113</a>                <span class="kw">if </span>path.exists() {
-<a href=#114 id=114 data-nosnippet>114</a>                    <span class="macro">warn!</span>(path = %path.display(), <span class="string">"artwork asset failed to load: {err}"</span>);
-<a href=#115 id=115 data-nosnippet>115</a>                } <span class="kw">else </span>{
-<a href=#116 id=116 data-nosnippet>116</a>                    <span class="macro">debug!</span>(path = %path.display(), <span class="string">"no artwork asset, primitive fallback"</span>);
-<a href=#117 id=117 data-nosnippet>117</a>                }
-<a href=#118 id=118 data-nosnippet>118</a>                <span class="self">self</span>.misses.borrow_mut().insert(path);
-<a href=#119 id=119 data-nosnippet>119</a>                <span class="prelude-val">None
-<a href=#120 id=120 data-nosnippet>120</a>            </span>}
-<a href=#121 id=121 data-nosnippet>121</a>        }
-<a href=#122 id=122 data-nosnippet>122</a>    }
-<a href=#123 id=123 data-nosnippet>123</a>
-<a href=#124 id=124 data-nosnippet>124</a>    <span class="doccomment">/// The SVG's intrinsic size: the `viewBox` where pixels are not
-<a href=#125 id=125 data-nosnippet>125</a>    /// absolute (our generated assets use `width="100%"`).
-<a href=#126 id=126 data-nosnippet>126</a>    </span><span class="kw">fn </span>intrinsic_size(<span class="kw-2">&amp;</span><span class="self">self</span>, handle: <span class="kw-2">&amp;</span>SvgHandle) -&gt; <span class="prelude-ty">Option</span>&lt;DocumentSize&gt; {
-<a href=#127 id=127 data-nosnippet>127</a>        <span class="kw">let </span>renderer = CairoRenderer::new(handle);
-<a href=#128 id=128 data-nosnippet>128</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>((width, height)) = renderer.intrinsic_size_in_pixels() {
-<a href=#129 id=129 data-nosnippet>129</a>            <span class="kw">return </span><span class="prelude-val">Some</span>(DocumentSize::new(width, height));
-<a href=#130 id=130 data-nosnippet>130</a>        }
-<a href=#131 id=131 data-nosnippet>131</a>        renderer.intrinsic_dimensions().vbox.map(|vbox| DocumentSize::new(vbox.width(), vbox.height()))
-<a href=#132 id=132 data-nosnippet>132</a>    }
-<a href=#133 id=133 data-nosnippet>133</a>}
+<a href=#79 id=79 data-nosnippet>79</a>        <span class="comment">// The anchor point is the rotation pivot: the pin tip stays
+<a href=#80 id=80 data-nosnippet>80</a>        // on its position, the body swings.
+<a href=#81 id=81 data-nosnippet>81</a>        </span>ctx.save().ok();
+<a href=#82 id=82 data-nosnippet>82</a>        ctx.translate(spec.pos.x, spec.pos.y);
+<a href=#83 id=83 data-nosnippet>83</a>        ctx.rotate(spec.rotation.as_f64());
+<a href=#84 id=84 data-nosnippet>84</a>        ctx.translate(-spec.pos.x, -spec.pos.y);
+<a href=#85 id=85 data-nosnippet>85</a>        <span class="kw">let </span>drawn = <span class="kw">if </span>spec.alpha.as_f64() &gt;= <span class="number">0.999 </span>{
+<a href=#86 id=86 data-nosnippet>86</a>            CairoRenderer::new(<span class="kw-2">&amp;</span>handle).render_document(ctx, <span class="kw-2">&amp;</span>rect).is_ok()
+<a href=#87 id=87 data-nosnippet>87</a>        } <span class="kw">else </span>{
+<a href=#88 id=88 data-nosnippet>88</a>            ctx.push_group();
+<a href=#89 id=89 data-nosnippet>89</a>            <span class="kw">let </span>drawn = CairoRenderer::new(<span class="kw-2">&amp;</span>handle).render_document(ctx, <span class="kw-2">&amp;</span>rect).is_ok();
+<a href=#90 id=90 data-nosnippet>90</a>            <span class="kw">if </span>drawn {
+<a href=#91 id=91 data-nosnippet>91</a>                ctx.pop_group_to_source().ok();
+<a href=#92 id=92 data-nosnippet>92</a>                ctx.paint_with_alpha(spec.alpha.as_f64()).ok();
+<a href=#93 id=93 data-nosnippet>93</a>            } <span class="kw">else </span>{
+<a href=#94 id=94 data-nosnippet>94</a>                ctx.new_path();
+<a href=#95 id=95 data-nosnippet>95</a>            }
+<a href=#96 id=96 data-nosnippet>96</a>            drawn
+<a href=#97 id=97 data-nosnippet>97</a>        };
+<a href=#98 id=98 data-nosnippet>98</a>        ctx.restore().ok();
+<a href=#99 id=99 data-nosnippet>99</a>        drawn
+<a href=#100 id=100 data-nosnippet>100</a>    }
+<a href=#101 id=101 data-nosnippet>101</a>
+<a href=#102 id=102 data-nosnippet>102</a>    <span class="doccomment">/// The cached handle for `art/{family}/{city}/{style}/{stem}.svg`.
+<a href=#103 id=103 data-nosnippet>103</a>    </span><span class="kw">fn </span>handle(<span class="kw-2">&amp;</span><span class="self">self</span>, family: ArtFamily, style: MapStyle, stem: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;Rc&lt;SvgHandle&gt;&gt; {
+<a href=#104 id=104 data-nosnippet>104</a>        <span class="kw">let </span>path = <span class="self">self</span>.root.join(family.dir_name()).join(CITY).join(style.namespace()).join(<span class="macro">format!</span>(<span class="string">"{stem}.svg"</span>));
+<a href=#105 id=105 data-nosnippet>105</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(handle) = <span class="self">self</span>.handles.borrow().get(<span class="kw-2">&amp;</span>path) {
+<a href=#106 id=106 data-nosnippet>106</a>            <span class="kw">return </span><span class="prelude-val">Some</span>(handle.clone());
+<a href=#107 id=107 data-nosnippet>107</a>        }
+<a href=#108 id=108 data-nosnippet>108</a>        <span class="kw">if </span><span class="self">self</span>.misses.borrow().contains(<span class="kw-2">&amp;</span>path) {
+<a href=#109 id=109 data-nosnippet>109</a>            <span class="kw">return </span><span class="prelude-val">None</span>;
+<a href=#110 id=110 data-nosnippet>110</a>        }
+<a href=#111 id=111 data-nosnippet>111</a>        <span class="comment">// A missing file is the expected fallback path (not every
+<a href=#112 id=112 data-nosnippet>112</a>        // backdrop landmark ships artwork); only real load/parse
+<a href=#113 id=113 data-nosnippet>113</a>        // failures deserve a warning.
+<a href=#114 id=114 data-nosnippet>114</a>        </span><span class="kw">match </span>rsvg::Loader::new().read_path(<span class="kw-2">&amp;</span>path) {
+<a href=#115 id=115 data-nosnippet>115</a>            <span class="prelude-val">Ok</span>(handle) =&gt; {
+<a href=#116 id=116 data-nosnippet>116</a>                <span class="kw">let </span>handle = Rc::new(handle);
+<a href=#117 id=117 data-nosnippet>117</a>                <span class="self">self</span>.handles.borrow_mut().insert(path, handle.clone());
+<a href=#118 id=118 data-nosnippet>118</a>                <span class="prelude-val">Some</span>(handle)
+<a href=#119 id=119 data-nosnippet>119</a>            }
+<a href=#120 id=120 data-nosnippet>120</a>            <span class="prelude-val">Err</span>(err) =&gt; {
+<a href=#121 id=121 data-nosnippet>121</a>                <span class="kw">if </span>path.exists() {
+<a href=#122 id=122 data-nosnippet>122</a>                    <span class="macro">warn!</span>(path = %path.display(), <span class="string">"artwork asset failed to load: {err}"</span>);
+<a href=#123 id=123 data-nosnippet>123</a>                } <span class="kw">else </span>{
+<a href=#124 id=124 data-nosnippet>124</a>                    <span class="macro">debug!</span>(path = %path.display(), <span class="string">"no artwork asset, primitive fallback"</span>);
+<a href=#125 id=125 data-nosnippet>125</a>                }
+<a href=#126 id=126 data-nosnippet>126</a>                <span class="self">self</span>.misses.borrow_mut().insert(path);
+<a href=#127 id=127 data-nosnippet>127</a>                <span class="prelude-val">None
+<a href=#128 id=128 data-nosnippet>128</a>            </span>}
+<a href=#129 id=129 data-nosnippet>129</a>        }
+<a href=#130 id=130 data-nosnippet>130</a>    }
+<a href=#131 id=131 data-nosnippet>131</a>
+<a href=#132 id=132 data-nosnippet>132</a>    <span class="doccomment">/// The SVG's intrinsic size: the `viewBox` where pixels are not
+<a href=#133 id=133 data-nosnippet>133</a>    /// absolute (our generated assets use `width="100%"`).
+<a href=#134 id=134 data-nosnippet>134</a>    </span><span class="kw">fn </span>intrinsic_size(<span class="kw-2">&amp;</span><span class="self">self</span>, handle: <span class="kw-2">&amp;</span>SvgHandle) -&gt; <span class="prelude-ty">Option</span>&lt;DocumentSize&gt; {
+<a href=#135 id=135 data-nosnippet>135</a>        <span class="kw">let </span>renderer = CairoRenderer::new(handle);
+<a href=#136 id=136 data-nosnippet>136</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>((width, height)) = renderer.intrinsic_size_in_pixels() {
+<a href=#137 id=137 data-nosnippet>137</a>            <span class="kw">return </span><span class="prelude-val">Some</span>(DocumentSize::new(width, height));
+<a href=#138 id=138 data-nosnippet>138</a>        }
+<a href=#139 id=139 data-nosnippet>139</a>        renderer.intrinsic_dimensions().vbox.map(|vbox| DocumentSize::new(vbox.width(), vbox.height()))
+<a href=#140 id=140 data-nosnippet>140</a>    }
+<a href=#141 id=141 data-nosnippet>141</a>}
 </code></pre></div></section></main></body></html>

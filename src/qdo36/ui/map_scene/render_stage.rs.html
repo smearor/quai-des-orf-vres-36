@@ -35,7 +35,7 @@
 <a href=#35 id=35 data-nosnippet>35</a>            height: Millimeters::new(height.as_f64().max(bounds.height().as_f64())),
 <a href=#36 id=36 data-nosnippet>36</a>        });
 <a href=#37 id=37 data-nosnippet>37</a>        <span class="self">Self </span>{
-<a href=#38 id=38 data-nosnippet>38</a>            fit: SurfaceFit::new(surface.width, surface.height, width, height, state.display_rotation),
+<a href=#38 id=38 data-nosnippet>38</a>            fit: SurfaceFit::new(Vec2::from_mm(surface.width, surface.height), Vec2::from_px(width, height), state.display_rotation),
 <a href=#39 id=39 data-nosnippet>39</a>            transform: MapTransform::new(pose, <span class="kw-2">&amp;</span>state.config, state.scale),
 <a href=#40 id=40 data-nosnippet>40</a>            pan: state.pan,
 <a href=#41 id=41 data-nosnippet>41</a>        }
@@ -52,5 +52,14 @@
 <a href=#52 id=52 data-nosnippet>52</a>        <span class="kw">let </span>surface = <span class="self">self</span>.fit.unmap(pos);
 <a href=#53 id=53 data-nosnippet>53</a>        <span class="self">self</span>.transform.surface_to_map(Vec2::new(surface.x - <span class="self">self</span>.pan.x, surface.y - <span class="self">self</span>.pan.y))
 <a href=#54 id=54 data-nosnippet>54</a>    }
-<a href=#55 id=55 data-nosnippet>55</a>}
+<a href=#55 id=55 data-nosnippet>55</a>
+<a href=#56 id=56 data-nosnippet>56</a>    <span class="doccomment">/// The view pan that puts map position `target` on widget
+<a href=#57 id=57 data-nosnippet>57</a>    /// pixel `point` under the current transform (the `goto_*`
+<a href=#58 id=58 data-nosnippet>58</a>    /// tools' centering math).
+<a href=#59 id=59 data-nosnippet>59</a>    </span><span class="kw">pub fn </span>pan_for(<span class="kw-2">&amp;</span><span class="self">self</span>, target: Vec2&lt;Millimeters&gt;, point: PxPos) -&gt; Vec2&lt;Millimeters&gt; {
+<a href=#60 id=60 data-nosnippet>60</a>        <span class="kw">let </span>surface = <span class="self">self</span>.transform.map_to_surface(target);
+<a href=#61 id=61 data-nosnippet>61</a>        <span class="kw">let </span>want = <span class="self">self</span>.fit.unmap(point);
+<a href=#62 id=62 data-nosnippet>62</a>        Vec2::new(want.x - surface.x, want.y - surface.y)
+<a href=#63 id=63 data-nosnippet>63</a>    }
+<a href=#64 id=64 data-nosnippet>64</a>}
 </code></pre></div></section></main></body></html>

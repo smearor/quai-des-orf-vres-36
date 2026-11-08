@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["ComicStyle"]};
+window.SIDEBAR_ITEMS = {"fn":["outer_tile"],"struct":["ComicStyle"]};

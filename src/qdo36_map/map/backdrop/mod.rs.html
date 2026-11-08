@@ -4,39 +4,37 @@
 <a href=#4 id=4 data-nosnippet>4</a></span><span class="kw">pub mod </span>kind;
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">pub mod </span>landmark;
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">pub mod </span>name;
-<a href=#7 id=7 data-nosnippet>7</a><span class="kw">pub mod </span>polyline;
-<a href=#8 id=8 data-nosnippet>8</a>
-<a href=#9 id=9 data-nosnippet>9</a><span class="kw">pub use </span>kind::LandmarkKind;
-<a href=#10 id=10 data-nosnippet>10</a><span class="kw">pub use </span>landmark::Landmark;
-<a href=#11 id=11 data-nosnippet>11</a><span class="kw">pub use </span>name::LandmarkName;
-<a href=#12 id=12 data-nosnippet>12</a><span class="kw">pub use </span>polyline::Polyline;
-<a href=#13 id=13 data-nosnippet>13</a>
-<a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span>serde::Deserialize;
-<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span>serde::Serialize;
-<a href=#16 id=16 data-nosnippet>16</a>
-<a href=#17 id=17 data-nosnippet>17</a><span class="doccomment">/// The decorative backdrop layer of a map dataset.
-<a href=#18 id=18 data-nosnippet>18</a>///
-<a href=#19 id=19 data-nosnippet>19</a>/// Everything here is gameplay-inert: rivers the ferry routes run
-<a href=#20 id=20 data-nosnippet>20</a>/// along, landmark markers for visual orientation, coarse street
-<a href=#21 id=21 data-nosnippet>21</a>/// hints. The `MapStyle` renderer draws it under the station graph;
-<a href=#22 id=22 data-nosnippet>22</a>/// validation only happens inside the domain types themselves.
-<a href=#23 id=23 data-nosnippet>23</a></span><span class="attr">#[derive(Debug, Clone, Default, PartialEq, Deserialize, Serialize)]
-<a href=#24 id=24 data-nosnippet>24</a></span><span class="kw">pub struct </span>Backdrop {
-<a href=#25 id=25 data-nosnippet>25</a>    <span class="doccomment">/// Water polylines (Seine, Spree) in map millimeters.
-<a href=#26 id=26 data-nosnippet>26</a>    </span><span class="attr">#[serde(default)]
-<a href=#27 id=27 data-nosnippet>27</a>    </span><span class="kw">pub </span>water: Vec&lt;Polyline&gt;,
-<a href=#28 id=28 data-nosnippet>28</a>    <span class="doccomment">/// Landmark markers (Eiffel tower, Brandenburger Tor, ...).
-<a href=#29 id=29 data-nosnippet>29</a>    </span><span class="attr">#[serde(default)]
-<a href=#30 id=30 data-nosnippet>30</a>    </span><span class="kw">pub </span>landmarks: Vec&lt;Landmark&gt;,
-<a href=#31 id=31 data-nosnippet>31</a>    <span class="doccomment">/// Coarse street polylines for visual context.
-<a href=#32 id=32 data-nosnippet>32</a>    </span><span class="attr">#[serde(default)]
-<a href=#33 id=33 data-nosnippet>33</a>    </span><span class="kw">pub </span>streets: Vec&lt;Polyline&gt;,
-<a href=#34 id=34 data-nosnippet>34</a>}
-<a href=#35 id=35 data-nosnippet>35</a>
-<a href=#36 id=36 data-nosnippet>36</a><span class="kw">impl </span>Backdrop {
-<a href=#37 id=37 data-nosnippet>37</a>    <span class="doccomment">/// Whether the dataset carries any backdrop geometry.
-<a href=#38 id=38 data-nosnippet>38</a>    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#39 id=39 data-nosnippet>39</a>        <span class="self">self</span>.water.is_empty() &amp;&amp; <span class="self">self</span>.landmarks.is_empty() &amp;&amp; <span class="self">self</span>.streets.is_empty()
-<a href=#40 id=40 data-nosnippet>40</a>    }
-<a href=#41 id=41 data-nosnippet>41</a>}
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">pub use </span><span class="kw">crate</span>::map::Polyline;
+<a href=#8 id=8 data-nosnippet>8</a><span class="kw">pub use </span>kind::LandmarkKind;
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">pub use </span>landmark::Landmark;
+<a href=#10 id=10 data-nosnippet>10</a><span class="kw">pub use </span>name::LandmarkName;
+<a href=#11 id=11 data-nosnippet>11</a>
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>serde::Deserialize;
+<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>serde::Serialize;
+<a href=#14 id=14 data-nosnippet>14</a>
+<a href=#15 id=15 data-nosnippet>15</a><span class="doccomment">/// The decorative backdrop layer of a map dataset.
+<a href=#16 id=16 data-nosnippet>16</a>///
+<a href=#17 id=17 data-nosnippet>17</a>/// Everything here is gameplay-inert: rivers the ferry routes run
+<a href=#18 id=18 data-nosnippet>18</a>/// along, landmark markers for visual orientation, coarse street
+<a href=#19 id=19 data-nosnippet>19</a>/// hints. The `MapStyle` renderer draws it under the station graph;
+<a href=#20 id=20 data-nosnippet>20</a>/// validation only happens inside the domain types themselves.
+<a href=#21 id=21 data-nosnippet>21</a></span><span class="attr">#[derive(Debug, Clone, Default, PartialEq, Deserialize, Serialize)]
+<a href=#22 id=22 data-nosnippet>22</a></span><span class="kw">pub struct </span>Backdrop {
+<a href=#23 id=23 data-nosnippet>23</a>    <span class="doccomment">/// Water polylines (Seine, Spree) in map millimeters.
+<a href=#24 id=24 data-nosnippet>24</a>    </span><span class="attr">#[serde(default)]
+<a href=#25 id=25 data-nosnippet>25</a>    </span><span class="kw">pub </span>water: Vec&lt;Polyline&gt;,
+<a href=#26 id=26 data-nosnippet>26</a>    <span class="doccomment">/// Landmark markers (Eiffel tower, Brandenburger Tor, ...).
+<a href=#27 id=27 data-nosnippet>27</a>    </span><span class="attr">#[serde(default)]
+<a href=#28 id=28 data-nosnippet>28</a>    </span><span class="kw">pub </span>landmarks: Vec&lt;Landmark&gt;,
+<a href=#29 id=29 data-nosnippet>29</a>    <span class="doccomment">/// Coarse street polylines for visual context.
+<a href=#30 id=30 data-nosnippet>30</a>    </span><span class="attr">#[serde(default)]
+<a href=#31 id=31 data-nosnippet>31</a>    </span><span class="kw">pub </span>streets: Vec&lt;Polyline&gt;,
+<a href=#32 id=32 data-nosnippet>32</a>}
+<a href=#33 id=33 data-nosnippet>33</a>
+<a href=#34 id=34 data-nosnippet>34</a><span class="kw">impl </span>Backdrop {
+<a href=#35 id=35 data-nosnippet>35</a>    <span class="doccomment">/// Whether the dataset carries any backdrop geometry.
+<a href=#36 id=36 data-nosnippet>36</a>    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#37 id=37 data-nosnippet>37</a>        <span class="self">self</span>.water.is_empty() &amp;&amp; <span class="self">self</span>.landmarks.is_empty() &amp;&amp; <span class="self">self</span>.streets.is_empty()
+<a href=#38 id=38 data-nosnippet>38</a>    }
+<a href=#39 id=39 data-nosnippet>39</a>}
 </code></pre></div></section></main></body></html>

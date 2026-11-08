@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["render"],"mod":["controls","label_mode","layer_name","layer_toggle","pose_animator","render_params","render_stage","scene_layers","scene_state","transport_layers","two_finger","widget"]};
+window.SIDEBAR_ITEMS = {"constant":["ANCHOR_HEIGHT","BRIDGE_HALF_SPAN","COMPASS_HEIGHT","LIGNE_BADGE_HEIGHT","STATION_RADIUS_MM"],"fn":["landmark_rotation","render","station_discs"],"mod":["blocks","controls","label_mode","lane","layer","pose_animator","render_stage","route","scene","share","two_finger","widget"]};
