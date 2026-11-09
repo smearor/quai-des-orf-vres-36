@@ -1901,9 +1901,9 @@ dependencies = [
 
 [[package]]
 name = "itoa"
-version = "1.0.18"
+version = "1.0.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
+checksum = "3bd1574e617a9a6c1f8f8181bd7e841e1f20e4277607ef28945765188d6284d4"
 
 [[package]]
 name = "js-sys"
@@ -3842,7 +3842,7 @@ dependencies = [
 [[package]]
 name = "tangible-objects-analysis"
 version = "0.1.0"
-source = "git+https://github.com/smearor/tangible-objects-rs.git#89357223a440b325c73e4d1c5944ddf9df014188"
+source = "git+https://github.com/smearor/tangible-objects-rs.git#8bd2aecf607d5fe15ab2ad2340672e6d86ecbc82"
 dependencies = [
  "serde",
  "serde-jsonlines",
@@ -3854,7 +3854,7 @@ dependencies = [
 [[package]]
 name = "tangible-objects-client"
 version = "0.1.0"
-source = "git+https://github.com/smearor/tangible-objects-rs.git#89357223a440b325c73e4d1c5944ddf9df014188"
+source = "git+https://github.com/smearor/tangible-objects-rs.git#8bd2aecf607d5fe15ab2ad2340672e6d86ecbc82"
 dependencies = [
  "cynic",
  "futures",
@@ -3875,7 +3875,7 @@ dependencies = [
 [[package]]
 name = "tangible-objects-model"
 version = "0.1.0"
-source = "git+https://github.com/smearor/tangible-objects-rs.git#89357223a440b325c73e4d1c5944ddf9df014188"
+source = "git+https://github.com/smearor/tangible-objects-rs.git#8bd2aecf607d5fe15ab2ad2340672e6d86ecbc82"
 dependencies = [
  "cynic",
  "serde",
@@ -4394,9 +4394,9 @@ checksum = "3a3b425286980a367278453f3b6d28cdcb134b574e5a35824a6ff5eebad50bb6"
 
 [[package]]
 name = "uuid"
-version = "1.29.1"
+version = "1.29.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a06f08a856b009bc7bbaf7d3e79808595d032dd19074c0c2ef26e49e03e6bdc"
+checksum = "bed99139f7dac9b5cfe5f17be4d66dc7079a34dee1d74bcc77217119240e267c"
 dependencies = [
  "getrandom 0.4.3",
  "js-sys",
