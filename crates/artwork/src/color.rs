@@ -16,7 +16,7 @@ fn parse_hex_colour(value: &str) -> Result<Color<u8>, ArtworkError> {
 /// Computes the perceived luminance (Rec. 601) of a `#rrggbb` colour.
 pub(crate) fn luminance(value: &str) -> Result<f64, ArtworkError> {
     let color = parse_hex_colour(value)?;
-    Ok(Color::<f64>::from(color).luminance_601() * 255.0)
+    Ok(Color::<f64>::from(color).luminance_601().as_f64() * 255.0)
 }
 
 /// Lightens a `#rrggbb` colour by blending each channel toward white.

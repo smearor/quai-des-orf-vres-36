@@ -88,7 +88,7 @@ impl StylePalette {
                 .and_then(|name| map.meta().lines.get(name))
                 .map(|color| {
                     let [r, g, b] = color.rgb_u8();
-                    RgbColor::from_u8(r, g, b)
+                    smearor_commons_color::Color::<u8>::new(r, g, b).into()
                 })
                 .unwrap_or(self.metro),
             other => self.base_color(other),
