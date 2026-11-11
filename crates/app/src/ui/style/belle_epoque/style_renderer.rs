@@ -5,6 +5,7 @@ use cairo::ImageSurface;
 use cairo::LineCap;
 use qdo36_map::ImportanceClass;
 use qdo36_map::Transport;
+use smearor_commons_color::Alpha;
 use smearor_commons_color::Color;
 use std::f64::consts::TAU;
 use tangible_objects_model::Millimeters;
@@ -13,7 +14,6 @@ use tangible_objects_model::PixelsPerMm;
 use tangible_objects_model::Vec2;
 
 use super::palette::PALETTE;
-use crate::ui::style::Alpha;
 use crate::ui::style::BlockSpec;
 use crate::ui::style::BuildingPathExt;
 use crate::ui::style::CaptionStyle;

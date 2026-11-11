@@ -1,13 +1,13 @@
 //! `ArtSpec` - one artwork instance to draw (the `EdgeSpec` for
 //! artwork).
 
+use smearor_commons_color::Alpha;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::RotationRad;
 
 use crate::ui::art::AnchorFrac;
 use crate::ui::art::ArtFamily;
 use crate::ui::art::AssetStem;
-use crate::ui::style::Alpha;
 use crate::ui::style::PxPos;
 
 /// One artwork instance to draw.

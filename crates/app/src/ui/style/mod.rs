@@ -4,7 +4,6 @@
 //! backdrop, anchor); a [`StyleRenderer`] decides how it looks -
 //! palette, stroke treatment, decorations, label font.
 
-pub mod alpha;
 pub mod belle_epoque;
 pub mod block_spec;
 pub mod comic;
@@ -13,7 +12,6 @@ pub mod edge_spec;
 pub mod house_mode;
 pub mod label_orientation;
 pub mod label_spec;
-pub mod luminance;
 pub mod map_style;
 pub mod neon;
 pub mod outer_spec;
@@ -25,7 +23,6 @@ pub mod renderer;
 pub mod station_spec;
 pub mod to_px;
 
-pub use alpha::Alpha;
 pub use belle_epoque::BelleEpoqueStyle;
 pub use block_spec::BlockSpec;
 pub use comic::ComicStyle;
@@ -34,7 +31,6 @@ pub use edge_spec::EdgeSpec;
 pub use house_mode::HouseMode;
 pub use label_orientation::LabelOrientation;
 pub use label_spec::LabelSpec;
-pub use luminance::Luminance;
 pub use map_style::MapStyle;
 pub use neon::NeonStyle;
 pub use outer_spec::OuterSpec;

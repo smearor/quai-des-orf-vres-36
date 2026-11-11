@@ -23,12 +23,12 @@ pub use spec::ArtSpec;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ui::style::Alpha;
     use crate::ui::style::MapStyle;
     use crate::ui::style::PxPos;
     use cairo::Context;
     use cairo::Format;
     use cairo::ImageSurface;
+    use smearor_commons_color::Alpha;
     use tangible_objects_model::Millimeters;
     use tangible_objects_model::PixelsPerMm;
     use tangible_objects_model::RotationRad;
