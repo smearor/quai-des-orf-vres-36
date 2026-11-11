@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["PALETTE"]};
+window.SIDEBAR_ITEMS = {"static":["PALETTE"]};

@@ -4,11 +4,11 @@
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::EdgeSpec;
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::LabelSpec;
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::OuterSpec;
-<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::RgbColor;
-<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::StationSpec;
-<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::ToPx;
-<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>cairo::Context;
-<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>qdo36_tangibles::ScaleFactor;
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::StationSpec;
+<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::ToPx;
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>cairo::Context;
+<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>qdo36_tangibles::ScaleFactor;
+<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>smearor_commons_color::Color;
 <a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>tangible_objects_model::Millimeters;
 <a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>tangible_objects_model::Pixels;
 <a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span>tangible_objects_model::PixelsPerMm;
@@ -24,7 +24,7 @@
 <a href=#24 id=24 data-nosnippet>24</a>/// px/mm) already applied. `px_per_mm` scales stroke widths.
 <a href=#25 id=25 data-nosnippet>25</a></span><span class="kw">pub trait </span>StyleRenderer {
 <a href=#26 id=26 data-nosnippet>26</a>    <span class="doccomment">/// The paper color the scene is painted on.
-<a href=#27 id=27 data-nosnippet>27</a>    </span><span class="kw">fn </span>paper(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; RgbColor;
+<a href=#27 id=27 data-nosnippet>27</a>    </span><span class="kw">fn </span>paper(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color&lt;f64&gt;;
 <a href=#28 id=28 data-nosnippet>28</a>
 <a href=#29 id=29 data-nosnippet>29</a>    <span class="doccomment">/// The countryside outside the city: the style's infinitely
 <a href=#30 id=30 data-nosnippet>30</a>    /// repeated texture everywhere the ground polygons don't

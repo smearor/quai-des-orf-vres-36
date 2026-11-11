@@ -139,17 +139,17 @@
 <a href=#139 id=139 data-nosnippet>139</a>                <span class="comment">// Wall quads on the edges facing the spill direction -
 <a href=#140 id=140 data-nosnippet>140</a>                // slightly darker than the roof fill.
 <a href=#141 id=141 data-nosnippet>141</a>                </span><span class="self">self</span>.iso_wall_path(<span class="kw-2">&amp;</span>PxPolygon(quad), v);
-<a href=#142 id=142 data-nosnippet>142</a>                palette.building.lerp(<span class="kw-2">&amp;</span>palette.ink, <span class="number">0.30</span>).apply(<span class="self">self</span>);
+<a href=#142 id=142 data-nosnippet>142</a>                palette.building().lerp(<span class="kw-2">&amp;</span>palette.ink(), <span class="number">0.30</span>).apply(<span class="self">self</span>);
 <a href=#143 id=143 data-nosnippet>143</a>                <span class="self">self</span>.fill().ok();
 <a href=#144 id=144 data-nosnippet>144</a>            }
 <a href=#145 id=145 data-nosnippet>145</a>            <span class="self">self</span>.house_outline_path(<span class="kw-2">&amp;</span>PxPolygon(<span class="kw-2">&amp;</span>roof));
-<a href=#146 id=146 data-nosnippet>146</a>            palette.building.lerp(<span class="kw-2">&amp;</span>palette.paper, shade).apply(<span class="self">self</span>);
+<a href=#146 id=146 data-nosnippet>146</a>            palette.building().lerp(<span class="kw-2">&amp;</span>palette.paper(), shade).apply(<span class="self">self</span>);
 <a href=#147 id=147 data-nosnippet>147</a>            <span class="self">self</span>.fill_preserve().ok();
-<a href=#148 id=148 data-nosnippet>148</a>            palette.block.apply(<span class="self">self</span>);
+<a href=#148 id=148 data-nosnippet>148</a>            palette.block().apply(<span class="self">self</span>);
 <a href=#149 id=149 data-nosnippet>149</a>            <span class="self">self</span>.set_line_width(block.px_per_mm.scale(Millimeters::new(<span class="number">0.4</span>)).max(Pixels::new(<span class="number">0.2</span>)).as_f64());
 <a href=#150 id=150 data-nosnippet>150</a>            <span class="self">self</span>.stroke().ok();
 <a href=#151 id=151 data-nosnippet>151</a>            <span class="self">self</span>.house_detail_path(<span class="kw-2">&amp;</span>PxPolygon(<span class="kw-2">&amp;</span>roof), house.units);
-<a href=#152 id=152 data-nosnippet>152</a>            palette.roof.apply(<span class="self">self</span>);
+<a href=#152 id=152 data-nosnippet>152</a>            palette.roof().apply(<span class="self">self</span>);
 <a href=#153 id=153 data-nosnippet>153</a>            <span class="self">self</span>.set_line_width(block.px_per_mm.scale(Millimeters::new(<span class="number">0.28</span>)).max(Pixels::new(<span class="number">0.15</span>)).as_f64());
 <a href=#154 id=154 data-nosnippet>154</a>            <span class="self">self</span>.stroke().ok();
 <a href=#155 id=155 data-nosnippet>155</a>        }

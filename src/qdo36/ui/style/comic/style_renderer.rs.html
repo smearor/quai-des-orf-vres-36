@@ -5,25 +5,25 @@
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>cairo::LineCap;
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>qdo36_map::ImportanceClass;
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>qdo36_map::Transport;
-<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>std::f64::consts::TAU;
-<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>tangible_objects_model::Millimeters;
-<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>tangible_objects_model::Pixels;
-<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>tangible_objects_model::PixelsPerMm;
-<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>tangible_objects_model::Vec2;
-<a href=#13 id=13 data-nosnippet>13</a>
-<a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span><span class="kw">super</span>::palette::PALETTE;
-<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::Alpha;
-<a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::BlockSpec;
-<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::BuildingPathExt;
-<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::CaptionStyle;
-<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::EdgePathExt;
-<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::EdgeSpec;
-<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::GroundExt;
-<a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::LabelSpec;
-<a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::Luminance;
-<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::OuterSpec;
-<a href=#25 id=25 data-nosnippet>25</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::PxPos;
-<a href=#26 id=26 data-nosnippet>26</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::RgbColor;
+<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>smearor_commons_color::Alpha;
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>smearor_commons_color::Color;
+<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>smearor_commons_color::Luminance;
+<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>std::f64::consts::TAU;
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>tangible_objects_model::Millimeters;
+<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>tangible_objects_model::Pixels;
+<a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span>tangible_objects_model::PixelsPerMm;
+<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span>tangible_objects_model::Vec2;
+<a href=#16 id=16 data-nosnippet>16</a>
+<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span><span class="kw">super</span>::palette::PALETTE;
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::BlockSpec;
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::BuildingPathExt;
+<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::CaptionStyle;
+<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::EdgePathExt;
+<a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::EdgeSpec;
+<a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::GroundExt;
+<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::LabelSpec;
+<a href=#25 id=25 data-nosnippet>25</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::OuterSpec;
+<a href=#26 id=26 data-nosnippet>26</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::PxPos;
 <a href=#27 id=27 data-nosnippet>27</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::StationSpec;
 <a href=#28 id=28 data-nosnippet>28</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::StyleRenderer;
 <a href=#29 id=29 data-nosnippet>29</a><span class="kw">use </span><span class="kw">crate</span>::ui::style::ToPx;
@@ -42,17 +42,17 @@
 <a href=#42 id=42 data-nosnippet>42</a></span><span class="kw">fn </span>outer_tile() -&gt; <span class="prelude-ty">Option</span>&lt;ImageSurface&gt; {
 <a href=#43 id=43 data-nosnippet>43</a>    <span class="kw">let </span>tile = ImageSurface::create(cairo::Format::ARgb32, <span class="number">24</span>, <span class="number">24</span>).ok()<span class="question-mark">?</span>;
 <a href=#44 id=44 data-nosnippet>44</a>    <span class="kw">let </span>tile_ctx = Context::new(<span class="kw-2">&amp;</span>tile).ok()<span class="question-mark">?</span>;
-<a href=#45 id=45 data-nosnippet>45</a>    PALETTE.paper.apply(<span class="kw-2">&amp;</span>tile_ctx);
+<a href=#45 id=45 data-nosnippet>45</a>    PALETTE.paper().apply(<span class="kw-2">&amp;</span>tile_ctx);
 <a href=#46 id=46 data-nosnippet>46</a>    tile_ctx.paint().ok()<span class="question-mark">?</span>;
 <a href=#47 id=47 data-nosnippet>47</a>    <span class="comment">// Offset halftone dots - coarse enough to read at map-fit zoom.
-<a href=#48 id=48 data-nosnippet>48</a>    </span>PALETTE.ink.apply_alpha(<span class="kw-2">&amp;</span>tile_ctx, Alpha::new(<span class="number">0.22</span>));
+<a href=#48 id=48 data-nosnippet>48</a>    </span>PALETTE.ink().apply_alpha(<span class="kw-2">&amp;</span>tile_ctx, Alpha::new(<span class="number">0.22</span>));
 <a href=#49 id=49 data-nosnippet>49</a>    <span class="kw">for </span>(x, y) <span class="kw">in </span>[(<span class="number">6.0</span>, <span class="number">6.0</span>), (<span class="number">18.0</span>, <span class="number">18.0</span>)] {
 <a href=#50 id=50 data-nosnippet>50</a>        tile_ctx.arc(x, y, <span class="number">2.8</span>, <span class="number">0.0</span>, TAU);
 <a href=#51 id=51 data-nosnippet>51</a>        tile_ctx.fill().ok()<span class="question-mark">?</span>;
 <a href=#52 id=52 data-nosnippet>52</a>    }
 <a href=#53 id=53 data-nosnippet>53</a>    <span class="comment">// Secondary dots in a cooler tone - distinct from the ink
 <a href=#54 id=54 data-nosnippet>54</a>    // dots instead of the same color twice.
-<a href=#55 id=55 data-nosnippet>55</a>    </span>PALETTE.water.apply_alpha(<span class="kw-2">&amp;</span>tile_ctx, Alpha::new(<span class="number">0.16</span>));
+<a href=#55 id=55 data-nosnippet>55</a>    </span>PALETTE.water().apply_alpha(<span class="kw-2">&amp;</span>tile_ctx, Alpha::new(<span class="number">0.16</span>));
 <a href=#56 id=56 data-nosnippet>56</a>    <span class="kw">for </span>(x, y) <span class="kw">in </span>[(<span class="number">6.0</span>, <span class="number">18.0</span>), (<span class="number">18.0</span>, <span class="number">6.0</span>)] {
 <a href=#57 id=57 data-nosnippet>57</a>        tile_ctx.arc(x, y, <span class="number">1.6</span>, <span class="number">0.0</span>, TAU);
 <a href=#58 id=58 data-nosnippet>58</a>        tile_ctx.fill().ok()<span class="question-mark">?</span>;
@@ -61,8 +61,8 @@
 <a href=#61 id=61 data-nosnippet>61</a>}
 <a href=#62 id=62 data-nosnippet>62</a>
 <a href=#63 id=63 data-nosnippet>63</a><span class="kw">impl </span>StyleRenderer <span class="kw">for </span>ComicStyle {
-<a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">fn </span>paper(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; RgbColor {
-<a href=#65 id=65 data-nosnippet>65</a>        PALETTE.paper
+<a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">fn </span>paper(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color&lt;f64&gt; {
+<a href=#65 id=65 data-nosnippet>65</a>        PALETTE.paper()
 <a href=#66 id=66 data-nosnippet>66</a>    }
 <a href=#67 id=67 data-nosnippet>67</a>
 <a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">fn </span>draw_water(<span class="kw-2">&amp;</span><span class="self">self</span>, ctx: <span class="kw-2">&amp;</span>Context, points: <span class="kw-2">&amp;</span>[Vec2&lt;Millimeters&gt;], px_per_mm: PixelsPerMm, to_px: ToPx&lt;<span class="lifetime">'_</span>&gt;) {
@@ -76,11 +76,11 @@
 <a href=#76 id=76 data-nosnippet>76</a>        <span class="kw">let </span>left_bank: Vec&lt;PxPos&gt; = to_px.points(<span class="kw-2">&amp;</span>banks.left);
 <a href=#77 id=77 data-nosnippet>77</a>        <span class="kw">let </span>right_bank: Vec&lt;PxPos&gt; = to_px.points(<span class="kw-2">&amp;</span>banks.right);
 <a href=#78 id=78 data-nosnippet>78</a>        ctx.band_path(<span class="kw-2">&amp;</span>left_bank, <span class="kw-2">&amp;</span>right_bank);
-<a href=#79 id=79 data-nosnippet>79</a>        PALETTE.water_fill.apply(ctx);
+<a href=#79 id=79 data-nosnippet>79</a>        PALETTE.water_fill().apply(ctx);
 <a href=#80 id=80 data-nosnippet>80</a>        ctx.fill().ok();
 <a href=#81 id=81 data-nosnippet>81</a>        ctx.set_line_cap(LineCap::Round);
 <a href=#82 id=82 data-nosnippet>82</a>        ctx.set_line_width(px_per_mm.scale(Millimeters::new(<span class="number">1.2</span>)).max(Pixels::new(<span class="number">0.5</span>)).as_f64());
-<a href=#83 id=83 data-nosnippet>83</a>        PALETTE.water.apply(ctx);
+<a href=#83 id=83 data-nosnippet>83</a>        PALETTE.water().apply(ctx);
 <a href=#84 id=84 data-nosnippet>84</a>        <span class="kw">for </span>bank <span class="kw">in </span>[<span class="kw-2">&amp;</span>left_bank, <span class="kw-2">&amp;</span>right_bank] {
 <a href=#85 id=85 data-nosnippet>85</a>            ctx.px_polyline_path(bank);
 <a href=#86 id=86 data-nosnippet>86</a>            ctx.stroke().ok();
@@ -92,10 +92,10 @@
 <a href=#92 id=92 data-nosnippet>92</a>        ctx.move_to(from.x, from.y);
 <a href=#93 id=93 data-nosnippet>93</a>        ctx.line_to(to.x, to.y);
 <a href=#94 id=94 data-nosnippet>94</a>        ctx.set_line_width(px_per_mm.scale(Millimeters::new(<span class="number">5.0</span>)).max(Pixels::new(<span class="number">0.5</span>)).as_f64());
-<a href=#95 id=95 data-nosnippet>95</a>        PALETTE.paper.apply(ctx);
+<a href=#95 id=95 data-nosnippet>95</a>        PALETTE.paper().apply(ctx);
 <a href=#96 id=96 data-nosnippet>96</a>        ctx.stroke_preserve().ok();
 <a href=#97 id=97 data-nosnippet>97</a>        ctx.set_line_width(px_per_mm.scale(Millimeters::new(<span class="number">2.2</span>)).max(Pixels::new(<span class="number">0.4</span>)).as_f64());
-<a href=#98 id=98 data-nosnippet>98</a>        PALETTE.station.apply(ctx);
+<a href=#98 id=98 data-nosnippet>98</a>        PALETTE.station().apply(ctx);
 <a href=#99 id=99 data-nosnippet>99</a>        ctx.stroke().ok();
 <a href=#100 id=100 data-nosnippet>100</a>    }
 <a href=#101 id=101 data-nosnippet>101</a>
@@ -104,7 +104,7 @@
 <a href=#104 id=104 data-nosnippet>104</a>            <span class="kw">let </span>pin = to_px.pos(spec.pin);
 <a href=#105 id=105 data-nosnippet>105</a>            ctx.tile_fill(<span class="kw-2">&amp;</span>tile, <span class="kw-2">&amp;</span>pin, spec.width.as_f64(), spec.height.as_f64());
 <a href=#106 id=106 data-nosnippet>106</a>        }
-<a href=#107 id=107 data-nosnippet>107</a>        ctx.fill_ground(spec.ground, <span class="kw-2">&amp;</span>PALETTE.paper, to_px);
+<a href=#107 id=107 data-nosnippet>107</a>        ctx.fill_ground(spec.ground, <span class="kw-2">&amp;</span>PALETTE.paper(), to_px);
 <a href=#108 id=108 data-nosnippet>108</a>    }
 <a href=#109 id=109 data-nosnippet>109</a>
 <a href=#110 id=110 data-nosnippet>110</a>    <span class="kw">fn </span>draw_block(<span class="kw-2">&amp;</span><span class="self">self</span>, ctx: <span class="kw-2">&amp;</span>Context, block: <span class="kw-2">&amp;</span>BlockSpec&lt;<span class="lifetime">'_</span>&gt;, to_px: ToPx&lt;<span class="lifetime">'_</span>&gt;) {
@@ -115,9 +115,9 @@
 <a href=#115 id=115 data-nosnippet>115</a>            <span class="kw">let </span>blob: Vec&lt;PxPos&gt; = to_px.points(<span class="kw-2">&amp;</span>park.polygon);
 <a href=#116 id=116 data-nosnippet>116</a>            ctx.px_polyline_path(<span class="kw-2">&amp;</span>blob);
 <a href=#117 id=117 data-nosnippet>117</a>            ctx.close_path();
-<a href=#118 id=118 data-nosnippet>118</a>            PALETTE.park.apply(ctx);
+<a href=#118 id=118 data-nosnippet>118</a>            PALETTE.park().apply(ctx);
 <a href=#119 id=119 data-nosnippet>119</a>            ctx.fill_preserve().ok();
-<a href=#120 id=120 data-nosnippet>120</a>            PALETTE.block.apply_alpha(ctx, Alpha::new(<span class="number">0.4</span>));
+<a href=#120 id=120 data-nosnippet>120</a>            PALETTE.block().apply_alpha(ctx, Alpha::new(<span class="number">0.4</span>));
 <a href=#121 id=121 data-nosnippet>121</a>            ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(<span class="number">0.4</span>)).max(Pixels::new(<span class="number">0.2</span>)).as_f64());
 <a href=#122 id=122 data-nosnippet>122</a>            ctx.stroke().ok();
 <a href=#123 id=123 data-nosnippet>123</a>        }
@@ -131,7 +131,7 @@
 <a href=#131 id=131 data-nosnippet>131</a>        <span class="kw">for </span>street <span class="kw">in </span>block.streets {
 <a href=#132 id=132 data-nosnippet>132</a>            <span class="kw">let </span>path: Vec&lt;PxPos&gt; = to_px.points(street);
 <a href=#133 id=133 data-nosnippet>133</a>            ctx.px_polyline_path(<span class="kw-2">&amp;</span>path);
-<a href=#134 id=134 data-nosnippet>134</a>            PALETTE.street.apply_alpha(ctx, Alpha::new(<span class="number">0.7</span>));
+<a href=#134 id=134 data-nosnippet>134</a>            PALETTE.street().apply_alpha(ctx, Alpha::new(<span class="number">0.7</span>));
 <a href=#135 id=135 data-nosnippet>135</a>            ctx.stroke().ok();
 <a href=#136 id=136 data-nosnippet>136</a>        }
 <a href=#137 id=137 data-nosnippet>137</a>        <span class="comment">// Park names over the streets, then the district caption.
@@ -141,7 +141,7 @@
 <a href=#141 id=141 data-nosnippet>141</a>                park.polygon.centroid(),
 <a href=#142 id=142 data-nosnippet>142</a>                to_px,
 <a href=#143 id=143 data-nosnippet>143</a>                block.px_per_mm,
-<a href=#144 id=144 data-nosnippet>144</a>                <span class="kw-2">&amp;</span>CaptionStyle::park(PALETTE.paper, PALETTE.label, block.park_orientation),
+<a href=#144 id=144 data-nosnippet>144</a>                <span class="kw-2">&amp;</span>CaptionStyle::park(PALETTE.paper(), PALETTE.label(), block.park_orientation),
 <a href=#145 id=145 data-nosnippet>145</a>            );
 <a href=#146 id=146 data-nosnippet>146</a>        }
 <a href=#147 id=147 data-nosnippet>147</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(label) = <span class="kw-2">&amp;</span>block.label {
@@ -149,7 +149,7 @@
 <a href=#149 id=149 data-nosnippet>149</a>                label,
 <a href=#150 id=150 data-nosnippet>150</a>                to_px,
 <a href=#151 id=151 data-nosnippet>151</a>                block.px_per_mm,
-<a href=#152 id=152 data-nosnippet>152</a>                <span class="kw-2">&amp;</span>CaptionStyle::district(PALETTE.paper, PALETTE.label, block.district_orientation),
+<a href=#152 id=152 data-nosnippet>152</a>                <span class="kw-2">&amp;</span>CaptionStyle::district(PALETTE.paper(), PALETTE.label(), block.district_orientation),
 <a href=#153 id=153 data-nosnippet>153</a>            );
 <a href=#154 id=154 data-nosnippet>154</a>        }
 <a href=#155 id=155 data-nosnippet>155</a>        <span class="comment">// Block outline on top.
@@ -158,7 +158,7 @@
 <a href=#158 id=158 data-nosnippet>158</a>            ctx.px_polyline_path(<span class="kw-2">&amp;</span>outline);
 <a href=#159 id=159 data-nosnippet>159</a>            ctx.close_path();
 <a href=#160 id=160 data-nosnippet>160</a>            ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(<span class="number">0.6</span>)).max(Pixels::new(<span class="number">0.3</span>)).as_f64());
-<a href=#161 id=161 data-nosnippet>161</a>            PALETTE.block.apply(ctx);
+<a href=#161 id=161 data-nosnippet>161</a>            PALETTE.block().apply(ctx);
 <a href=#162 id=162 data-nosnippet>162</a>            ctx.stroke().ok();
 <a href=#163 id=163 data-nosnippet>163</a>        }
 <a href=#164 id=164 data-nosnippet>164</a>    }
@@ -172,7 +172,7 @@
 <a href=#172 id=172 data-nosnippet>172</a>        <span class="kw">let </span>color = <span class="kw">if </span>edge.highlight {
 <a href=#173 id=173 data-nosnippet>173</a>            PALETTE.transport_color(edge.transport, edge.line, edge.map)
 <a href=#174 id=174 data-nosnippet>174</a>        } <span class="kw">else </span>{
-<a href=#175 id=175 data-nosnippet>175</a>            PALETTE.edge
+<a href=#175 id=175 data-nosnippet>175</a>            PALETTE.edge()
 <a href=#176 id=176 data-nosnippet>176</a>        };
 <a href=#177 id=177 data-nosnippet>177</a>        color.apply(ctx);
 <a href=#178 id=178 data-nosnippet>178</a>        ctx.set_line_width(px.scale(Millimeters::new(<span class="number">2.4</span>)).max(Pixels::new(<span class="number">0.5</span>)).as_f64());
@@ -180,7 +180,7 @@
 <a href=#180 id=180 data-nosnippet>180</a>        <span class="kw">if </span>edge.wavy {
 <a href=#181 id=181 data-nosnippet>181</a>            <span class="comment">// Boat wake: ink rim under the colored wave.
 <a href=#182 id=182 data-nosnippet>182</a>            </span>ctx.set_line_width(px.scale(Millimeters::new(<span class="number">3.2</span>)).max(Pixels::new(<span class="number">0.7</span>)).as_f64());
-<a href=#183 id=183 data-nosnippet>183</a>            PALETTE.ink.apply(ctx);
+<a href=#183 id=183 data-nosnippet>183</a>            PALETTE.ink().apply(ctx);
 <a href=#184 id=184 data-nosnippet>184</a>            ctx.stroke_preserve().ok();
 <a href=#185 id=185 data-nosnippet>185</a>            ctx.set_line_width(px.scale(Millimeters::new(<span class="number">2.2</span>)).max(Pixels::new(<span class="number">0.5</span>)).as_f64());
 <a href=#186 id=186 data-nosnippet>186</a>            color.apply(ctx);
@@ -191,7 +191,7 @@
 <a href=#191 id=191 data-nosnippet>191</a>            // (M1 vs taxi, M6/M12 vs bus) apart.
 <a href=#192 id=192 data-nosnippet>192</a>            </span>ctx.set_dash(<span class="kw-2">&amp;</span>[px.scale(Millimeters::new(<span class="number">4.0</span>)).as_f64(), px.scale(Millimeters::new(<span class="number">2.5</span>)).as_f64()], <span class="number">0.0</span>);
 <a href=#193 id=193 data-nosnippet>193</a>            ctx.set_line_width(px.scale(Millimeters::new(<span class="number">3.4</span>)).max(Pixels::new(<span class="number">0.7</span>)).as_f64());
-<a href=#194 id=194 data-nosnippet>194</a>            PALETTE.ink.apply(ctx);
+<a href=#194 id=194 data-nosnippet>194</a>            PALETTE.ink().apply(ctx);
 <a href=#195 id=195 data-nosnippet>195</a>            ctx.stroke_preserve().ok();
 <a href=#196 id=196 data-nosnippet>196</a>            ctx.set_line_width(px.scale(Millimeters::new(<span class="number">2.4</span>)).max(Pixels::new(<span class="number">0.5</span>)).as_f64());
 <a href=#197 id=197 data-nosnippet>197</a>            color.with_min_luminance(Luminance::new(<span class="number">0.5</span>)).apply(ctx);
@@ -202,7 +202,7 @@
 <a href=#202 id=202 data-nosnippet>202</a>
 <a href=#203 id=203 data-nosnippet>203</a>    <span class="kw">fn </span>draw_landmark(<span class="kw-2">&amp;</span><span class="self">self</span>, ctx: <span class="kw-2">&amp;</span>Context, pos: PxPos, scale: ScaleFactor, px_per_mm: PixelsPerMm) {
 <a href=#204 id=204 data-nosnippet>204</a>        ctx.new_path();
-<a href=#205 id=205 data-nosnippet>205</a>        PALETTE.dim.apply(ctx);
+<a href=#205 id=205 data-nosnippet>205</a>        PALETTE.dim().apply(ctx);
 <a href=#206 id=206 data-nosnippet>206</a>        ctx.set_line_width(<span class="number">1.5</span>);
 <a href=#207 id=207 data-nosnippet>207</a>        ctx.arc(pos.x, pos.y, px_per_mm.scale(Millimeters::new(<span class="number">2.2 </span>* scale.get())).max(Pixels::new(<span class="number">0.5</span>)).as_f64(), <span class="number">0.0</span>, TAU);
 <a href=#208 id=208 data-nosnippet>208</a>        ctx.stroke().ok();
@@ -237,10 +237,10 @@
 <a href=#237 id=237 data-nosnippet>237</a>            }
 <a href=#238 id=238 data-nosnippet>238</a>        } <span class="kw">else </span>{
 <a href=#239 id=239 data-nosnippet>239</a>            ctx.arc(pos.x, pos.y, radius, <span class="number">0.0</span>, TAU);
-<a href=#240 id=240 data-nosnippet>240</a>            PALETTE.station.apply(ctx);
+<a href=#240 id=240 data-nosnippet>240</a>            PALETTE.station().apply(ctx);
 <a href=#241 id=241 data-nosnippet>241</a>            ctx.fill_preserve().ok();
 <a href=#242 id=242 data-nosnippet>242</a>            ctx.set_line_width(<span class="number">1.4</span>);
-<a href=#243 id=243 data-nosnippet>243</a>            PALETTE.ink.apply(ctx);
+<a href=#243 id=243 data-nosnippet>243</a>            PALETTE.ink().apply(ctx);
 <a href=#244 id=244 data-nosnippet>244</a>            ctx.stroke().ok();
 <a href=#245 id=245 data-nosnippet>245</a>        }
 <a href=#246 id=246 data-nosnippet>246</a>        <span class="comment">// One ring per served transport, outermost first.
@@ -262,7 +262,7 @@
 <a href=#262 id=262 data-nosnippet>262</a>        }
 <a href=#263 id=263 data-nosnippet>263</a>        <span class="kw">if </span>spec.selected {
 <a href=#264 id=264 data-nosnippet>264</a>            ctx.arc(pos.x, pos.y, radius + px_per_mm.scale(Millimeters::new(<span class="number">3.0</span>)).max(Pixels::new(<span class="number">0.4</span>)).as_f64(), <span class="number">0.0</span>, TAU);
-<a href=#265 id=265 data-nosnippet>265</a>            PALETTE.select.apply(ctx);
+<a href=#265 id=265 data-nosnippet>265</a>            PALETTE.select().apply(ctx);
 <a href=#266 id=266 data-nosnippet>266</a>            ctx.set_line_width(<span class="number">2.5</span>);
 <a href=#267 id=267 data-nosnippet>267</a>            ctx.stroke().ok();
 <a href=#268 id=268 data-nosnippet>268</a>        }
@@ -294,9 +294,9 @@
 <a href=#294 id=294 data-nosnippet>294</a>        ctx.move_to(pos.x - extents.width() / <span class="number">2.0</span>, y);
 <a href=#295 id=295 data-nosnippet>295</a>        <span class="comment">// In-disc numbers draw in ink - `label` is paper-colored.
 <a href=#296 id=296 data-nosnippet>296</a>        </span><span class="kw">if </span>spec.inside {
-<a href=#297 id=297 data-nosnippet>297</a>            PALETTE.ink.apply(ctx);
+<a href=#297 id=297 data-nosnippet>297</a>            PALETTE.ink().apply(ctx);
 <a href=#298 id=298 data-nosnippet>298</a>        } <span class="kw">else </span>{
-<a href=#299 id=299 data-nosnippet>299</a>            PALETTE.label.apply(ctx);
+<a href=#299 id=299 data-nosnippet>299</a>            PALETTE.label().apply(ctx);
 <a href=#300 id=300 data-nosnippet>300</a>        }
 <a href=#301 id=301 data-nosnippet>301</a>        ctx.show_text(spec.text).ok();
 <a href=#302 id=302 data-nosnippet>302</a>        <span class="kw">let </span>_restored = ctx.restore();
@@ -307,11 +307,11 @@
 <a href=#307 id=307 data-nosnippet>307</a>        <span class="kw">let </span>radius = px_per_mm.scale(Millimeters::new(<span class="number">6.0</span>)).max(Pixels::new(<span class="number">0.5</span>)).as_f64();
 <a href=#308 id=308 data-nosnippet>308</a>        ctx.arc(pos.x, pos.y, radius, <span class="number">0.0</span>, TAU);
 <a href=#309 id=309 data-nosnippet>309</a>        <span class="kw">if </span>tracked {
-<a href=#310 id=310 data-nosnippet>310</a>            PALETTE.accent.apply(ctx);
+<a href=#310 id=310 data-nosnippet>310</a>            PALETTE.accent().apply(ctx);
 <a href=#311 id=311 data-nosnippet>311</a>            ctx.fill_preserve().ok();
-<a href=#312 id=312 data-nosnippet>312</a>            RgbColor::new(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>).apply(ctx);
+<a href=#312 id=312 data-nosnippet>312</a>            Color::&lt;f64&gt;::new(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>).apply(ctx);
 <a href=#313 id=313 data-nosnippet>313</a>        } <span class="kw">else </span>{
-<a href=#314 id=314 data-nosnippet>314</a>            PALETTE.dim.apply(ctx);
+<a href=#314 id=314 data-nosnippet>314</a>            PALETTE.dim().apply(ctx);
 <a href=#315 id=315 data-nosnippet>315</a>        }
 <a href=#316 id=316 data-nosnippet>316</a>        ctx.set_line_width(<span class="number">1.8</span>);
 <a href=#317 id=317 data-nosnippet>317</a>        ctx.stroke().ok();
@@ -324,10 +324,10 @@
 <a href=#324 id=324 data-nosnippet>324</a>        <span class="kw">let </span>(pad_x, pad_y) = (<span class="number">14.0</span>, <span class="number">10.0</span>);
 <a href=#325 id=325 data-nosnippet>325</a>        <span class="kw">let </span>(box_w, box_h) = (extents.width() + <span class="number">2.0 </span>* pad_x, extents.height() + <span class="number">2.0 </span>* pad_y);
 <a href=#326 id=326 data-nosnippet>326</a>        <span class="kw">let </span>(x, y) = ((width.as_f64() - box_w) / <span class="number">2.0</span>, height.as_f64() - box_h - <span class="number">24.0 </span>- bottom.as_f64());
-<a href=#327 id=327 data-nosnippet>327</a>        PALETTE.panel.apply_alpha(ctx, Alpha::new(<span class="number">0.72</span>));
+<a href=#327 id=327 data-nosnippet>327</a>        PALETTE.panel().apply_alpha(ctx, Alpha::new(<span class="number">0.72</span>));
 <a href=#328 id=328 data-nosnippet>328</a>        ctx.rectangle(x, y, box_w, box_h);
 <a href=#329 id=329 data-nosnippet>329</a>        ctx.fill().ok();
-<a href=#330 id=330 data-nosnippet>330</a>        PALETTE.label.apply(ctx);
+<a href=#330 id=330 data-nosnippet>330</a>        PALETTE.label().apply(ctx);
 <a href=#331 id=331 data-nosnippet>331</a>        ctx.move_to(x + pad_x - extents.x_bearing(), y + pad_y - extents.y_bearing());
 <a href=#332 id=332 data-nosnippet>332</a>        ctx.show_text(text).ok();
 <a href=#333 id=333 data-nosnippet>333</a>    }
