@@ -46,17 +46,17 @@ fn style_preview(style: MapStyle) -> gtk4::DrawingArea {
         .build();
     area.set_draw_func(move |_, ctx, w, h| {
         let (w, h) = (f64::from(w), f64::from(h));
-        palette.paper.apply(ctx);
+        palette.paper().apply(ctx);
         ctx.rectangle(0.0, 0.0, w, h);
         ctx.fill().ok();
         // Houses on the paper field.
-        palette.building.apply(ctx);
+        palette.building().apply(ctx);
         for (x, y, hw, hh) in [(0.10, 0.14, 0.22, 0.26), (0.40, 0.08, 0.26, 0.34), (0.72, 0.18, 0.20, 0.24)] {
             ctx.rectangle(w * x, h * y, w * hw, h * hh);
         }
         ctx.fill().ok();
         // The river band crossing the lower third.
-        palette.water_fill.apply(ctx);
+        palette.water_fill().apply(ctx);
         ctx.move_to(0.0, h * 0.72);
         ctx.line_to(w, h * 0.58);
         ctx.line_to(w, h * 0.86);
@@ -65,15 +65,15 @@ fn style_preview(style: MapStyle) -> gtk4::DrawingArea {
         ctx.fill().ok();
         // An accent route plus a station disc.
         ctx.set_line_width(2.2);
-        palette.accent.apply(ctx);
+        palette.accent().apply(ctx);
         ctx.move_to(w * 0.08, h * 0.62);
         ctx.line_to(w * 0.92, h * 0.30);
         ctx.stroke().ok();
-        palette.station.apply(ctx);
+        palette.station().apply(ctx);
         ctx.arc(w * 0.5, h * 0.46, 4.0, 0.0, TAU);
         ctx.fill().ok();
         ctx.set_line_width(1.4);
-        palette.ink.apply(ctx);
+        palette.ink().apply(ctx);
         ctx.stroke().ok();
     });
     area

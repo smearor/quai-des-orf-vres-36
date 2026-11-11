@@ -42,18 +42,18 @@ pub struct BelleEpoqueStyle;
 fn outer_tile() -> Option<ImageSurface> {
     let tile = ImageSurface::create(cairo::Format::ARgb32, 20, 20).ok()?;
     let tile_ctx = Context::new(&tile).ok()?;
-    PALETTE.paper.apply(&tile_ctx);
+    PALETTE.paper().apply(&tile_ctx);
     tile_ctx.paint().ok()?;
     // Engraved field: diagonal hatching coarse enough to read at
     // map-fit zoom, with a second fainter pass for texture depth.
-    PALETTE.ink.apply_alpha(&tile_ctx, Alpha::new(0.16));
+    PALETTE.ink().apply_alpha(&tile_ctx, Alpha::new(0.16));
     tile_ctx.set_line_width(0.8);
     for offset in [0.0, 10.0, 20.0] {
         tile_ctx.move_to(offset, 0.0);
         tile_ctx.line_to(offset - 20.0, 20.0);
     }
     tile_ctx.stroke().ok()?;
-    PALETTE.ink.apply_alpha(&tile_ctx, Alpha::new(0.07));
+    PALETTE.ink().apply_alpha(&tile_ctx, Alpha::new(0.07));
     tile_ctx.set_line_width(0.5);
     for offset in [5.0, 15.0] {
         tile_ctx.move_to(offset, 0.0);
@@ -65,7 +65,7 @@ fn outer_tile() -> Option<ImageSurface> {
 
 impl StyleRenderer for BelleEpoqueStyle {
     fn paper(&self) -> Color<f64> {
-        PALETTE.paper
+        PALETTE.paper()
     }
 
     fn draw_water(&self, ctx: &Context, points: &[Vec2<Millimeters>], px_per_mm: PixelsPerMm, to_px: ToPx<'_>) {
@@ -80,10 +80,10 @@ impl StyleRenderer for BelleEpoqueStyle {
         let right_bank: Vec<PxPos> = to_px.points(&banks.right);
         ctx.set_line_cap(LineCap::Round);
         ctx.band_path(&left_bank, &right_bank);
-        PALETTE.water_fill.apply(ctx);
+        PALETTE.water_fill().apply(ctx);
         ctx.fill().ok();
         ctx.set_line_width(px_per_mm.scale(Millimeters::new(0.6)).max(Pixels::new(0.3)).as_f64());
-        PALETTE.ink.apply_alpha(ctx, Alpha::new(0.55));
+        PALETTE.ink().apply_alpha(ctx, Alpha::new(0.55));
         for bank in [&left_bank, &right_bank] {
             ctx.px_polyline_path(bank);
             ctx.stroke().ok();
@@ -95,10 +95,10 @@ impl StyleRenderer for BelleEpoqueStyle {
         ctx.move_to(from.x, from.y);
         ctx.line_to(to.x, to.y);
         ctx.set_line_width(px_per_mm.scale(Millimeters::new(5.0)).max(Pixels::new(0.5)).as_f64());
-        PALETTE.paper.apply(ctx);
+        PALETTE.paper().apply(ctx);
         ctx.stroke_preserve().ok();
         ctx.set_line_width(px_per_mm.scale(Millimeters::new(2.2)).max(Pixels::new(0.4)).as_f64());
-        PALETTE.station.apply(ctx);
+        PALETTE.station().apply(ctx);
         ctx.stroke().ok();
     }
 
@@ -107,7 +107,7 @@ impl StyleRenderer for BelleEpoqueStyle {
             let pin = to_px.pos(spec.pin);
             ctx.tile_fill(&tile, &pin, spec.width.as_f64(), spec.height.as_f64());
         }
-        ctx.fill_ground(spec.ground, &PALETTE.paper, to_px);
+        ctx.fill_ground(spec.ground, &PALETTE.paper(), to_px);
     }
 
     fn draw_block(&self, ctx: &Context, block: &BlockSpec<'_>, to_px: ToPx<'_>) {
@@ -118,9 +118,9 @@ impl StyleRenderer for BelleEpoqueStyle {
             let blob: Vec<PxPos> = to_px.points(&park.polygon);
             ctx.px_polyline_path(&blob);
             ctx.close_path();
-            PALETTE.park.apply(ctx);
+            PALETTE.park().apply(ctx);
             ctx.fill_preserve().ok();
-            PALETTE.block.apply_alpha(ctx, Alpha::new(0.4));
+            PALETTE.block().apply_alpha(ctx, Alpha::new(0.4));
             ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(0.4)).max(Pixels::new(0.2)).as_f64());
             ctx.stroke().ok();
         }
@@ -134,7 +134,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         for street in block.streets {
             let path: Vec<PxPos> = to_px.points(street);
             ctx.px_polyline_path(&path);
-            PALETTE.street.apply_alpha(ctx, Alpha::new(0.7));
+            PALETTE.street().apply_alpha(ctx, Alpha::new(0.7));
             ctx.stroke().ok();
         }
         // Park names over the streets, then the district caption -
@@ -145,11 +145,16 @@ impl StyleRenderer for BelleEpoqueStyle {
                 park.polygon.centroid(),
                 to_px,
                 block.px_per_mm,
-                &CaptionStyle::park(PALETTE.paper, PALETTE.ink, block.park_orientation),
+                &CaptionStyle::park(PALETTE.paper(), PALETTE.ink(), block.park_orientation),
             );
         }
         if let Some(label) = &block.label {
-            ctx.district_label(label, to_px, block.px_per_mm, &CaptionStyle::district(PALETTE.paper, PALETTE.ink, block.district_orientation));
+            ctx.district_label(
+                label,
+                to_px,
+                block.px_per_mm,
+                &CaptionStyle::district(PALETTE.paper(), PALETTE.ink(), block.district_orientation),
+            );
         }
         // Block outline on top.
         if block.outline.len() >= 3 {
@@ -157,7 +162,7 @@ impl StyleRenderer for BelleEpoqueStyle {
             ctx.px_polyline_path(&outline);
             ctx.close_path();
             ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(0.5)).max(Pixels::new(0.3)).as_f64());
-            PALETTE.block.apply(ctx);
+            PALETTE.block().apply(ctx);
             ctx.stroke().ok();
         }
     }
@@ -169,7 +174,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         let color = if edge.highlight {
             PALETTE.transport_color(edge.transport, edge.line, edge.map)
         } else {
-            PALETTE.edge
+            PALETTE.edge()
         };
         if edge.transport == Transport::Underground {
             ctx.set_dash(&[px.scale(Millimeters::new(3.2)).as_f64(), px.scale(Millimeters::new(2.4)).as_f64()], 0.0);
@@ -188,7 +193,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         // so every line reads like a plated double-rule - also the
         // boat wake's rim.
         ctx.set_line_width(px.scale(Millimeters::new(if edge.wavy { 2.2 } else { 2.6 })).max(Pixels::new(0.6)).as_f64());
-        PALETTE.ink.apply_alpha(ctx, Alpha::new(if edge.highlight { 0.45 } else { 0.25 }));
+        PALETTE.ink().apply_alpha(ctx, Alpha::new(if edge.highlight { 0.45 } else { 0.25 }));
         ctx.stroke_preserve().ok();
         ctx.set_line_width(px.scale(Millimeters::new(1.6)).max(Pixels::new(0.4)).as_f64());
         color.apply(ctx);
@@ -199,11 +204,11 @@ impl StyleRenderer for BelleEpoqueStyle {
     fn draw_landmark(&self, ctx: &Context, pos: PxPos, scale: ScaleFactor, px_per_mm: PixelsPerMm) {
         ctx.new_path();
         let radius = px_per_mm.scale(Millimeters::new(2.2 * scale.get())).max(Pixels::new(0.5)).as_f64();
-        PALETTE.ink.apply_alpha(ctx, Alpha::new(0.75));
+        PALETTE.ink().apply_alpha(ctx, Alpha::new(0.75));
         ctx.set_line_width(1.0);
         ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
         ctx.stroke().ok();
-        PALETTE.accent.apply_alpha(ctx, Alpha::new(0.6));
+        PALETTE.accent().apply_alpha(ctx, Alpha::new(0.6));
         ctx.arc(pos.x, pos.y, radius * 0.6, 0.0, TAU);
         ctx.stroke().ok();
     }
@@ -234,10 +239,10 @@ impl StyleRenderer for BelleEpoqueStyle {
             }
         } else {
             ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
-            PALETTE.station.apply(ctx);
+            PALETTE.station().apply(ctx);
             ctx.fill_preserve().ok();
             ctx.set_line_width(1.1);
-            PALETTE.ink.apply(ctx);
+            PALETTE.ink().apply(ctx);
             ctx.stroke().ok();
         }
         for (i, transport) in spec.served.iter().enumerate() {
@@ -258,15 +263,15 @@ impl StyleRenderer for BelleEpoqueStyle {
         }
         // Ornamental inner ring, like the plated station badges.
         ctx.arc(pos.x, pos.y, radius * 0.68, 0.0, TAU);
-        PALETTE.accent.apply_alpha(ctx, Alpha::new(0.8));
+        PALETTE.accent().apply_alpha(ctx, Alpha::new(0.8));
         ctx.set_line_width(0.6);
         ctx.stroke().ok();
         if spec.selected {
             ctx.arc(pos.x, pos.y, radius + px_per_mm.scale(Millimeters::new(2.4)).max(Pixels::new(0.4)).as_f64(), 0.0, TAU);
-            PALETTE.select.apply(ctx);
+            PALETTE.select().apply(ctx);
             ctx.set_line_width(1.6);
             ctx.stroke_preserve().ok();
-            PALETTE.ink.apply_alpha(ctx, Alpha::new(0.4));
+            PALETTE.ink().apply_alpha(ctx, Alpha::new(0.4));
             ctx.set_line_width(0.7);
             ctx.stroke().ok();
         }
@@ -298,9 +303,9 @@ impl StyleRenderer for BelleEpoqueStyle {
         ctx.move_to(pos.x - extents.width() / 2.0, y);
         // In-disc numbers draw in ink - `label` is paper-colored.
         if spec.inside {
-            PALETTE.ink.apply(ctx);
+            PALETTE.ink().apply(ctx);
         } else {
-            PALETTE.label.apply(ctx);
+            PALETTE.label().apply(ctx);
         }
         ctx.show_text(spec.text).ok();
         let _restored = ctx.restore();
@@ -311,11 +316,11 @@ impl StyleRenderer for BelleEpoqueStyle {
         let radius = px_per_mm.scale(Millimeters::new(5.5)).max(Pixels::new(0.5)).as_f64();
         ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
         if tracked {
-            PALETTE.ink.apply(ctx);
+            PALETTE.ink().apply(ctx);
             ctx.fill_preserve().ok();
-            PALETTE.accent.apply(ctx);
+            PALETTE.accent().apply(ctx);
         } else {
-            PALETTE.dim.apply_alpha(ctx, Alpha::new(0.7));
+            PALETTE.dim().apply_alpha(ctx, Alpha::new(0.7));
         }
         ctx.set_line_width(1.6);
         ctx.stroke().ok();
@@ -328,17 +333,17 @@ impl StyleRenderer for BelleEpoqueStyle {
         let (pad_x, pad_y) = (16.0, 11.0);
         let (box_w, box_h) = (extents.width() + 2.0 * pad_x, extents.height() + 2.0 * pad_y);
         let (x, y) = ((width.as_f64() - box_w) / 2.0, height.as_f64() - box_h - 24.0 - bottom.as_f64());
-        PALETTE.panel.apply_alpha(ctx, Alpha::new(0.94));
+        PALETTE.panel().apply_alpha(ctx, Alpha::new(0.94));
         ctx.rectangle(x, y, box_w, box_h);
         ctx.fill().ok();
-        PALETTE.accent.apply(ctx);
+        PALETTE.accent().apply(ctx);
         ctx.rectangle(x, y, box_w, box_h);
         ctx.set_line_width(1.5);
         ctx.stroke().ok();
         ctx.rectangle(x + 2.5, y + 2.5, box_w - 5.0, box_h - 5.0);
         ctx.set_line_width(0.7);
         ctx.stroke().ok();
-        PALETTE.label.apply(ctx);
+        PALETTE.label().apply(ctx);
         ctx.move_to(x + pad_x - extents.x_bearing(), y + pad_y - extents.y_bearing());
         ctx.show_text(text).ok();
     }

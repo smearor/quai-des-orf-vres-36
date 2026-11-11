@@ -21,6 +21,7 @@ pub mod path;
 pub mod px_polygon;
 pub mod renderer;
 pub mod station_spec;
+pub mod style_color;
 pub mod to_px;
 
 pub use belle_epoque::BelleEpoqueStyle;
@@ -47,4 +48,5 @@ pub use qdo36_map::WaterBanks;
 pub use renderer::PxPos;
 pub use renderer::StyleRenderer;
 pub use station_spec::StationSpec;
+pub use style_color::StyleColor;
 pub use to_px::ToPx;
