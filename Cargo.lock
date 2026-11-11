@@ -2751,6 +2751,7 @@ dependencies = [
  "serde",
  "serde_json",
  "signal-hook",
+ "smearor-commons-color",
  "smearor-wrot-rotation",
  "tangible-objects-model",
  "thiserror 2.0.21",
@@ -2771,6 +2772,7 @@ dependencies = [
  "miette",
  "rustybuzz",
  "serde",
+ "smearor-commons-color",
  "thiserror 2.0.21",
  "toml 1.2.1+spec-1.1.0",
 ]
@@ -2808,6 +2810,7 @@ dependencies = [
  "qdo36-material",
  "serde",
  "serde_json",
+ "smearor-commons-color",
  "tangible-objects-model",
  "thiserror 2.0.21",
  "toml 1.2.1+spec-1.1.0",
@@ -3653,6 +3656,15 @@ name = "smallvec"
 version = "1.16.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "149309498a5f7334b12ddae0cad8aba81ce785fe91755068867e017cf98fee46"
+
+[[package]]
+name = "smearor-commons-color"
+version = "0.1.0"
+dependencies = [
+ "cairo-rs",
+ "serde",
+ "thiserror 2.0.21",
+]
 
 [[package]]
 name = "smearor-wrot-rotation"

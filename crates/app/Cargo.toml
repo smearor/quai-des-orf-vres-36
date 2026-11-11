@@ -39,6 +39,7 @@ rand.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 signal-hook.workspace = true
+smearor-commons-color = { workspace = true, features = ["cairo"] }
 smearor-wrot-rotation.workspace = true
 tangible-objects-model.workspace = true
 thiserror.workspace = true

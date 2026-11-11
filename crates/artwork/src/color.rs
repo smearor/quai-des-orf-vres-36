@@ -1,31 +1,28 @@
 //! Colour helpers for luminance-based text brightening.
 
 use crate::error::ArtworkError;
+use smearor_commons_color::Color;
+use std::str::FromStr;
 
-/// Parses a `#rrggbb` hex colour literal into its RGB channels.
-fn parse_hex_colour(value: &str) -> Result<(u8, u8, u8), ArtworkError> {
+/// Parses a `#rrggbb` hex colour literal.
+fn parse_hex_colour(value: &str) -> Result<Color<u8>, ArtworkError> {
     let hex = value.strip_prefix('#').ok_or_else(|| ArtworkError::InvalidColour(value.to_owned()))?;
     if hex.len() != 6 {
         return Err(ArtworkError::InvalidColour(value.to_owned()));
     }
-    let channel = |index: usize| u8::from_str_radix(&hex[index..index + 2], 16).map_err(|_| ArtworkError::InvalidColour(value.to_owned()));
-    Ok((channel(0)?, channel(2)?, channel(4)?))
+    Color::from_str(value).map_err(|_| ArtworkError::InvalidColour(value.to_owned()))
 }
 
 /// Computes the perceived luminance (Rec. 601) of a `#rrggbb` colour.
 pub(crate) fn luminance(value: &str) -> Result<f64, ArtworkError> {
-    let (red, green, blue) = parse_hex_colour(value)?;
-    Ok(0.299 * f64::from(red) + 0.587 * f64::from(green) + 0.114 * f64::from(blue))
+    let color = parse_hex_colour(value)?;
+    Ok(Color::<f64>::from(color).luminance_601() * 255.0)
 }
 
 /// Lightens a `#rrggbb` colour by blending each channel toward white.
 pub(crate) fn lighten(value: &str, factor: f64) -> Result<String, ArtworkError> {
-    let (red, green, blue) = parse_hex_colour(value)?;
-    let blend = |channel: u8| -> String {
-        let channel = f64::from(channel);
-        format!("{:02X}", (channel + (255.0 - channel) * factor).round().min(255.0) as u8)
-    };
-    Ok(format!("#{}{}{}", blend(red), blend(green), blend(blue)))
+    let color = parse_hex_colour(value)?;
+    Ok(Color::<u8>::from(Color::<f64>::from(color).lighten(factor)).to_string())
 }
 
 #[cfg(test)]

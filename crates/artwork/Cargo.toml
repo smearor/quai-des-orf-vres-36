@@ -15,6 +15,7 @@ outline = ["dep:fontdb", "dep:rustybuzz"]
 
 [dependencies]
 serde.workspace = true
+smearor-commons-color.workspace = true
 thiserror.workspace = true
 toml.workspace = true
 clap = { workspace = true, optional = true }

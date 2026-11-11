@@ -11,6 +11,7 @@ description = "Paris map domain for Quai des Orfèvres 36: the station graph, da
 [dependencies]
 qdo36-material.workspace = true
 serde.workspace = true
+smearor-commons-color.workspace = true
 tangible-objects-model.workspace = true
 thiserror.workspace = true
 toml.workspace = true
