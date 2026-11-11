@@ -9,6 +9,7 @@
 
 use qdo36_tangibles::AnchorPose;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::SmoothingAlpha;
 use std::f64::consts::PI;
 use std::time::Duration;
 use std::time::Instant;
@@ -86,11 +87,11 @@ impl PoseAnimator {
                     self.transition = None;
                     self.rendered = self.target;
                 } else {
-                    self.rendered = from.lerp(self.target, ease_out_cubic(progress));
+                    self.rendered = from.lerp(self.target, SmoothingAlpha::new(ease_out_cubic(progress)));
                 }
             }
             None => {
-                let alpha = 1.0 - (-now.saturating_duration_since(self.last_frame).as_secs_f64() / TRACKING_TAU.as_secs_f64()).exp();
+                let alpha = SmoothingAlpha::from_frame_time(now.saturating_duration_since(self.last_frame), TRACKING_TAU);
                 self.rendered = self.rendered.lerp(self.target, alpha);
                 if self.settled() {
                     self.rendered = self.target;

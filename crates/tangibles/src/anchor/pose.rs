@@ -26,12 +26,12 @@ impl AnchorPose {
         rotation_rad: RotationRad::ZERO,
     };
 
-    /// Interpolates toward `to` by `factor` (`0.0` = `self`, `1.0` =
+    /// Interpolates toward `to` by `alpha` (`0.0` = `self`, `1.0` =
     /// `to`): linear in position, shortest-arc in rotation.
-    pub fn lerp(self, to: AnchorPose, factor: f64) -> AnchorPose {
+    pub fn lerp(self, to: AnchorPose, alpha: SmoothingAlpha) -> AnchorPose {
         Self {
-            center: Vec2::new(self.center.x + factor * (to.center.x - self.center.x), self.center.y + factor * (to.center.y - self.center.y)),
-            rotation_rad: RotationRad::ema(self.rotation_rad, to.rotation_rad, SmoothingAlpha::new(factor)),
+            center: self.center + (to.center - self.center) * alpha,
+            rotation_rad: RotationRad::ema(self.rotation_rad, to.rotation_rad, alpha),
         }
     }
 }
