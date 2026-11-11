@@ -23,8 +23,8 @@
 <a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Variant;
 <a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::noise::noise;
 <a href=#25 id=25 data-nosnippet>25</a>
-<a href=#26 id=26 data-nosnippet>26</a><span class="kw">use </span>std::f64::consts::TAU;
-<a href=#27 id=27 data-nosnippet>27</a><span class="kw">use </span>tangible_objects_model::Millimeters;
+<a href=#26 id=26 data-nosnippet>26</a><span class="kw">use </span>smearor_commons_geometry::Millimeters;
+<a href=#27 id=27 data-nosnippet>27</a><span class="kw">use </span>std::f64::consts::TAU;
 <a href=#28 id=28 data-nosnippet>28</a>
 <a href=#29 id=29 data-nosnippet>29</a><span class="kw">mod </span>corner_footprint;
 <a href=#30 id=30 data-nosnippet>30</a><span class="kw">mod </span>corner_house;
@@ -289,7 +289,7 @@
 <a href=#289 id=289 data-nosnippet>289</a></span><span class="kw">mod </span>tests {
 <a href=#290 id=290 data-nosnippet>290</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#291 id=291 data-nosnippet>291</a>    <span class="kw">use </span><span class="kw">crate</span>::Segment;
-<a href=#292 id=292 data-nosnippet>292</a>    <span class="kw">use </span>tangible_objects_model::Vec2;
+<a href=#292 id=292 data-nosnippet>292</a>    <span class="kw">use </span>smearor_commons_geometry::Vec2;
 <a href=#293 id=293 data-nosnippet>293</a>
 <a href=#294 id=294 data-nosnippet>294</a>    <span class="kw">fn </span>square() -&gt; Vec&lt;Vec2&lt;Millimeters&gt;&gt; {
 <a href=#295 id=295 data-nosnippet>295</a>        <span class="macro">vec!</span>[Vec2::new(<span class="number">0.0</span>, <span class="number">0.0</span>), Vec2::new(<span class="number">40.0</span>, <span class="number">0.0</span>), Vec2::new(<span class="number">40.0</span>, <span class="number">40.0</span>), Vec2::new(<span class="number">0.0</span>, <span class="number">40.0</span>)]
