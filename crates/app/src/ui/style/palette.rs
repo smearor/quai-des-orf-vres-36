@@ -161,10 +161,7 @@ impl StylePalette {
         match transport {
             Transport::Metro => line
                 .and_then(|name| map.meta().lines.get(name))
-                .map(|color| {
-                    let [r, g, b] = color.rgb_u8();
-                    Color::<u8>::new(r, g, b).into()
-                })
+                .map(|color| color.color().into())
                 .unwrap_or(self.metro()),
             other => self.base_color(other),
         }
