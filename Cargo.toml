@@ -54,7 +54,7 @@ fonts-rs-tabler = { git = "https://github.com/smearor/fonts-rs.git" }
 phf = "0.14"
 # i18n
 fluent = "0.17"
-fluent-langneg = "0.13"
+fluent-langneg = "0.14"
 unic-langid = "0.9"
 # tangible-objects daemon (typed GraphQL client, upstream)
 tangible-objects-client = { git = "https://github.com/smearor/tangible-objects-rs.git" }
