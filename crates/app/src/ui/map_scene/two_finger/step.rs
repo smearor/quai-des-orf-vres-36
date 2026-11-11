@@ -2,7 +2,7 @@
 
 use crate::ui::style::PxPos;
 use qdo36_tangibles::ScaleFactor;
-use tangible_objects_model::RotationRad;
+use smearor_commons_geometry::RotationRad;
 
 /// One applied two-finger step, emitted per moved touch point once
 /// the session mode locked.

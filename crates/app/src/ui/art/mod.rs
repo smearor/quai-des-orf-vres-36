@@ -29,9 +29,9 @@ mod tests {
     use cairo::Format;
     use cairo::ImageSurface;
     use smearor_commons_color::Alpha;
-    use tangible_objects_model::Millimeters;
-    use tangible_objects_model::PixelsPerMm;
-    use tangible_objects_model::RotationRad;
+    use smearor_commons_geometry::Millimeters;
+    use smearor_commons_geometry::PixelsPerMm;
+    use smearor_commons_geometry::RotationRad;
 
     #[test]
     fn draws_existing_assets_and_falls_back() {

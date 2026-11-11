@@ -7,9 +7,9 @@ use crate::ui::style::ParkSpot;
 use crate::ui::style::PxPos;
 use crate::ui::style::ToPx;
 use qdo36_map::House;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::PixelsPerMm;
 use std::f64::consts::FRAC_1_SQRT_2;
-use tangible_objects_model::Pixels;
-use tangible_objects_model::PixelsPerMm;
 
 /// One city block: its inset outline plus the procedural houses
 /// inside, all in map mm.

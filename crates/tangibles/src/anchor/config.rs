@@ -1,10 +1,10 @@
 use crate::MapScale;
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::Millimeters;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::RotationRad;
+use smearor_commons_geometry::Vec2;
 use tangible_objects_model::Region;
-use tangible_objects_model::RotationRad;
-use tangible_objects_model::Vec2;
 
 /// Calibration of the map anchor: which map point the tower pins down,
 /// how the map is oriented, and the resting zoom.

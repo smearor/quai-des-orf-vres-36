@@ -8,8 +8,8 @@ use crate::map::blocks::buildings::arc_sweep;
 use crate::map::blocks::buildings::corner_nose::CornerNose;
 use crate::map::blocks::buildings::edge_frame::EdgeFrame;
 use crate::map::geometry::Line;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 /// The flatiron wedge at a ring vertex: the corner position, the
 /// edge frames entering (`prev`) and leaving (`next`) it, and

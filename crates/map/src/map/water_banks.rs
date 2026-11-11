@@ -1,8 +1,8 @@
 //! `WaterBanks` - the two bank lines of a water body.
 
 use crate::map::Polyline;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 /// Half the channel a water course claims on each side (mm) -
 /// the setback water `BlockCut`s keep from the course centerline.
@@ -50,8 +50,8 @@ impl WaterBanks {
 #[cfg(test)]
 mod tests {
     use crate::map::Polyline;
-    use tangible_objects_model::Millimeters;
-    use tangible_objects_model::Vec2;
+    use smearor_commons_geometry::Millimeters;
+    use smearor_commons_geometry::Vec2;
 
     #[test]
     fn offsets_straight_line_perpendicular() {

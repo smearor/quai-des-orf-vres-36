@@ -26,9 +26,9 @@ use rmcp::model::CallToolResult;
 use rmcp::model::ContentBlock;
 use rmcp::tool;
 use rmcp::tool_router;
+use smearor_commons_geometry::RotationRad;
+use smearor_commons_geometry::Vec2;
 use tangible_objects_model::DisplayRotation;
-use tangible_objects_model::RotationRad;
-use tangible_objects_model::Vec2;
 
 #[tool_router(vis = "pub(super)")]
 impl QdoMcp {

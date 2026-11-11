@@ -3,8 +3,8 @@
 use crate::ui::style::LabelOrientation;
 use crate::ui::style::PxPos;
 use qdo36_tangibles::ScaleFactor;
-use tangible_objects_model::Pixels;
-use tangible_objects_model::PixelsPerMm;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::PixelsPerMm;
 
 /// A text label attached to a station - name below the disc, number
 /// inside it, score further out.

@@ -1,7 +1,7 @@
 //! `NearestStation` - the station nearest to a queried position.
 
 use crate::StationId;
-use tangible_objects_model::Millimeters;
+use smearor_commons_geometry::Millimeters;
 
 /// The station nearest to a queried map position, with its
 /// distance - the [`crate::GameMap::nearest_station`] result (tap

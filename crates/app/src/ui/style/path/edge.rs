@@ -1,8 +1,8 @@
 //! Edge paths: lane-offset polylines, waves and splines in widget px.
 
 use cairo::Context;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Pixels;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Pixels;
 
 use crate::ui::style::EdgeSpec;
 use crate::ui::style::PxPos;

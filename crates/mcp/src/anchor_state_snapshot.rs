@@ -5,8 +5,8 @@ use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::SurfaceMm;
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 use crate::rotation_deg::RotationDeg;
 

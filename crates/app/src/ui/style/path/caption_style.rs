@@ -3,7 +3,7 @@
 
 use crate::ui::style::LabelOrientation;
 use smearor_commons_color::Color;
-use tangible_objects_model::Millimeters;
+use smearor_commons_geometry::Millimeters;
 
 /// Caption look for the place labels: glyph height, the halo
 /// and ink colors, and the tabletop orientation.

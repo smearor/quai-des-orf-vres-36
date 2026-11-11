@@ -6,7 +6,7 @@ use qdo36_map::ImportanceClass;
 use qdo36_map::LineName;
 use qdo36_map::Transport;
 use qdo36_tangibles::ScaleFactor;
-use tangible_objects_model::PixelsPerMm;
+use smearor_commons_geometry::PixelsPerMm;
 
 /// A station node under the current view: base disc, one ring per
 /// served transport and - inside the metro overlay - a pie-split

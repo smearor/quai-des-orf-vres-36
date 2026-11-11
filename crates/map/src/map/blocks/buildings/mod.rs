@@ -23,8 +23,8 @@ use crate::map::blocks::Units;
 use crate::map::blocks::Variant;
 use crate::map::blocks::noise::noise;
 
+use smearor_commons_geometry::Millimeters;
 use std::f64::consts::TAU;
-use tangible_objects_model::Millimeters;
 
 mod corner_footprint;
 mod corner_house;
@@ -289,7 +289,7 @@ impl BuildingParams {
 mod tests {
     use super::*;
     use crate::Segment;
-    use tangible_objects_model::Vec2;
+    use smearor_commons_geometry::Vec2;
 
     fn square() -> Vec<Vec2<Millimeters>> {
         vec![Vec2::new(0.0, 0.0), Vec2::new(40.0, 0.0), Vec2::new(40.0, 40.0), Vec2::new(0.0, 40.0)]

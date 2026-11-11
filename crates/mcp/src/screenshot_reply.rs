@@ -3,7 +3,7 @@
 
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::Pixels;
+use smearor_commons_geometry::Pixels;
 
 /// A rendered app-window frame (`screenshot` tool/command).
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -23,7 +23,7 @@ mod pixels_wire {
     use serde::Deserialize;
     use serde::Deserializer;
     use serde::Serializer;
-    use tangible_objects_model::Pixels;
+    use smearor_commons_geometry::Pixels;
 
     /// Pixel value as a plain JSON number.
     pub fn serialize<S: Serializer>(pixels: &Pixels, serializer: S) -> Result<S::Ok, S::Error> {

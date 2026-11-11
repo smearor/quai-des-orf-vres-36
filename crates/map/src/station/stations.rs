@@ -8,13 +8,13 @@ use crate::station::Station;
 use crate::station::StationId;
 use crate::station::StationKind;
 use crate::station::neighbors::EMPTY as EMPTY_NEIGHBORS;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::collections::HashMap;
 use std::ops::Deref;
 use std::ops::DerefMut;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// Stations indexed by their station number (ordered by id).
 /// Derefs to the `BTreeMap`.

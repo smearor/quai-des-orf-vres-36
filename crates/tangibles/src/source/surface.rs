@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::Millimeters;
+use smearor_commons_geometry::Millimeters;
 
 /// The touch surface's size in millimeters (from `deviceInfo`).
 ///

@@ -5,10 +5,10 @@ use crate::map::DistrictName;
 use crate::map::Park;
 use crate::map::backdrop::Landmark;
 use crate::map::blocks::BlockFace;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::ops::Deref;
 use std::ops::DerefMut;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// The faces of a block layout as a set: tunnels attach, and
 /// district names pin and fill, on the whole collection.

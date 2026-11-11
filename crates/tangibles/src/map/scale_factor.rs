@@ -2,7 +2,7 @@
 
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::Pixels;
+use smearor_commons_geometry::Pixels;
 
 /// A positive render scaling factor shared by all render-param
 /// knobs and the spec structs they feed.

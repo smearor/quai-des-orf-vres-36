@@ -1,8 +1,8 @@
 //! `PxPolygon` - a px-space polygon view over a position slice.
 
 use crate::ui::style::renderer::PxPos;
+use smearor_commons_geometry::Vec2;
 use std::ops::Deref;
-use tangible_objects_model::Vec2;
 
 /// A px-space closed ring over a borrowed `PxPos` slice - the
 /// render counterpart of `Polygon`'s ring queries (`segments`,

@@ -2,8 +2,8 @@
 
 use crate::ui::map_scene::lane::SideRelation;
 use qdo36_map::StationPair;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 /// A lane-continuity constraint between two hops sharing a vertex:
 /// `relation` is the sign `side(to)` should take relative to

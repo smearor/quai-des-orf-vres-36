@@ -1,7 +1,7 @@
 //! `Line` - a parametric point + direction line in map mm.
 
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 /// A parametric line `origin + t * direction` in map mm - the
 /// shape two offset edges intersect along.

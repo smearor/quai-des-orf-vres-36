@@ -2,10 +2,10 @@
 
 use crate::map::District;
 use crate::map::DistrictName;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::ops::Deref;
 use std::ops::DerefMut;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// The map's named city quarters. Derefs to the `[District]`
 /// slice.

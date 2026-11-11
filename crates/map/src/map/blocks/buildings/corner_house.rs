@@ -2,7 +2,7 @@
 //! its edge frontage.
 
 use crate::map::blocks::House;
-use tangible_objects_model::Millimeters;
+use smearor_commons_geometry::Millimeters;
 
 /// A flatiron house at a ring vertex plus the frontage it
 /// consumes on the adjacent edges - the row-house pass starts

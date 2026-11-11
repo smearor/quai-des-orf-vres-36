@@ -6,8 +6,8 @@
 
 use serde::Deserialize;
 use serde::Serialize;
+use smearor_commons_geometry::RotationRad;
 use std::str::FromStr;
-use tangible_objects_model::RotationRad;
 
 /// The offset between the Eiffel tower profile's pin frame and map
 /// north, in degrees.

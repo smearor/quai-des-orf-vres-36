@@ -40,7 +40,7 @@ pub use lane_map::LaneMap;
 pub use lanes::HopLanes;
 pub use layout::BlockLayout;
 pub use obstacles::Obstacles;
+pub use smearor_commons_geometry::SquareMillimeters;
 pub use steps::Steps;
-pub use tangible_objects_model::SquareMillimeters;
 pub use units::Units;
 pub use variant::Variant;

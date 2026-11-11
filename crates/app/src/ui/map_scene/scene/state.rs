@@ -16,9 +16,9 @@ use qdo36_tangibles::AnchorConfig;
 use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::MapScale;
 use qdo36_tangibles::SurfaceMm;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use tangible_objects_model::DisplayRotation;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 use crate::ui::art::ArtAssets;
 use crate::ui::map_scene::RenderParams;

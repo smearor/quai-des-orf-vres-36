@@ -1,8 +1,8 @@
 //! `WaterRoute` - a route drawn along a water course.
 
 use qdo36_map::Polyline;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 /// A boat route along a water course: the drawn route polyline
 /// and the arc length at which it enters the course - the entry

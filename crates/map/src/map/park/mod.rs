@@ -16,9 +16,9 @@ use crate::map::Polygon;
 use crate::map::blocks::Steps;
 use serde::Deserialize;
 use serde::Serialize;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::f64::consts::TAU;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// Smallest park clearance worth drawing (mm).
 const PARK_MIN_RADIUS: Millimeters = Millimeters::new(4.5);
@@ -35,7 +35,7 @@ pub struct Park {
     /// Park name (proper noun, not localized).
     pub name: ParkName,
     /// Park center in map millimeters; TOML shape `pos_mm = [x, y]`.
-    #[serde(rename = "pos_mm", with = "tangible_objects_model::serde_pair")]
+    #[serde(rename = "pos_mm", with = "smearor_commons_geometry::serde_pair")]
     pub pos: Vec2<Millimeters>,
 }
 

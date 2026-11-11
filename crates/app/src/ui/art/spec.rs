@@ -2,8 +2,8 @@
 //! artwork).
 
 use smearor_commons_color::Alpha;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::RotationRad;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::RotationRad;
 
 use crate::ui::art::AnchorFrac;
 use crate::ui::art::ArtFamily;

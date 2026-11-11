@@ -7,9 +7,9 @@ use qdo36_map::GameMap;
 use qdo36_map::StationCount;
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::Millimeters;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use tangible_objects_model::Region;
-use tangible_objects_model::Vec2;
 
 /// Static facts about the loaded city map.
 #[derive(Debug, Clone, Serialize, Deserialize)]

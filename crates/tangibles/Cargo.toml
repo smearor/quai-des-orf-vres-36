@@ -13,6 +13,7 @@ qdo36-map.workspace = true
 qdo36-material.workspace = true
 tangible-objects-client.workspace = true
 tangible-objects-model.workspace = true
+smearor-commons-geometry.workspace = true
 async-channel.workspace = true
 futures-lite.workspace = true
 serde.workspace = true

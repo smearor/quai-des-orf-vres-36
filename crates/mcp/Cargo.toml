@@ -15,6 +15,7 @@ qdo36-moves.workspace = true
 qdo36-session.workspace = true
 qdo36-tangibles.workspace = true
 tangible-objects-model.workspace = true
+smearor-commons-geometry.workspace = true
 async-channel.workspace = true
 axum.workspace = true
 rmcp.workspace = true

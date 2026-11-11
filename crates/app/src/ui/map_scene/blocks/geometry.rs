@@ -14,9 +14,9 @@ use qdo36_map::Segment;
 use qdo36_map::Street;
 use qdo36_map::Units;
 use qdo36_map::Variant;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::PixelsPerMm;
 use std::rc::Rc;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::PixelsPerMm;
 
 use crate::ui::map_scene::SceneLayers;
 use crate::ui::map_scene::blocks::BlockShapes;

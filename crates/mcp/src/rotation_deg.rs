@@ -3,7 +3,7 @@
 
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::RotationRad;
+use smearor_commons_geometry::RotationRad;
 
 /// An orientation in degrees - the wire-friendly unit for tool
 /// replies.

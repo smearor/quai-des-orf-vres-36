@@ -28,13 +28,13 @@ use crate::map::blocks::CutSegment;
 use crate::map::blocks::LaneMap;
 use crate::map::bridge::BridgeDeck;
 use crate::map::cost::Cost;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::collections::BTreeSet;
 use std::collections::HashMap;
 use std::collections::binary_heap::BinaryHeap;
 use std::str::FromStr;
-use tangible_objects_model::Millimeters;
 use tangible_objects_model::Region;
-use tangible_objects_model::Vec2;
 
 /// The validated Paris game graph.
 ///

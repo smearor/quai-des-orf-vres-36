@@ -1,7 +1,7 @@
 //! `Cost` - an accumulated path cost for the min-heap search.
 
+use smearor_commons_geometry::Millimeters;
 use std::cmp::Ordering;
-use tangible_objects_model::Millimeters;
 
 /// A routing cost (distance sum) with reversed `Ord` so the
 /// `BinaryHeap` pops the cheapest path first.

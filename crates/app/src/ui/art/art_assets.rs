@@ -10,12 +10,12 @@ use cairo::Context;
 use cairo::Rectangle;
 use rsvg::CairoRenderer;
 use rsvg::SvgHandle;
+use smearor_commons_geometry::PixelsPerMm;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::path::PathBuf;
 use std::rc::Rc;
-use tangible_objects_model::PixelsPerMm;
 use tracing::debug;
 use tracing::warn;
 

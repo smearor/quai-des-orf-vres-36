@@ -4,10 +4,10 @@ use cairo::Context;
 use cairo::FontSlant;
 use cairo::FontWeight;
 use qdo36_map::Units;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Pixels;
-use tangible_objects_model::PixelsPerMm;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::PixelsPerMm;
+use smearor_commons_geometry::Vec2;
 
 use crate::ui::style::BlockSpec;
 use crate::ui::style::CaptionStyle;

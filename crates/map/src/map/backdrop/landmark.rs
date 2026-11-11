@@ -4,10 +4,10 @@ use crate::map::backdrop::LandmarkName;
 use crate::map::blocks::Steps;
 use serde::Deserialize;
 use serde::Serialize;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
+use smearor_commons_geometry::serde_pair;
 use std::f64::consts::TAU;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
-use tangible_objects_model::serde_pair;
 
 /// A decorative landmark marker on the map (Tour Eiffel,
 /// Fernsehturm, Brandenburger Tor, ...).

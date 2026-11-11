@@ -5,11 +5,11 @@ use crate::ui::map_scene::two_finger::TwoFingerMode;
 use crate::ui::map_scene::two_finger::TwoFingerStep;
 use crate::ui::style::PxPos;
 use qdo36_tangibles::ScaleFactor;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::RotationRad;
+use smearor_commons_geometry::Vec2;
 use std::f64::consts::FRAC_PI_2;
 use std::f64::consts::PI;
-use tangible_objects_model::Pixels;
-use tangible_objects_model::RotationRad;
-use tangible_objects_model::Vec2;
 
 /// Centroid travel locking the session into move mode.
 const MOVE_LOCK: Pixels = Pixels::new(8.0);

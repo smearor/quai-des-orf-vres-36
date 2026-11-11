@@ -7,10 +7,10 @@ use crate::map::blocks::Angle;
 use crate::map::blocks::SquareMillimeters;
 use crate::map::blocks::Steps;
 use crate::map::blocks::decoration::Streets;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::f64::consts::PI;
 use std::ops::Deref;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// Smallest block area that gets a decorative street (mm²).
 const STREET_MIN_AREA: SquareMillimeters = SquareMillimeters::new(1100.0);

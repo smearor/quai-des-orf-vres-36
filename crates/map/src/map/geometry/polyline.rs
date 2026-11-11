@@ -5,9 +5,9 @@ use crate::map::Projection;
 use serde::Deserialize;
 use serde::Serialize;
 use serde::de::Error as _;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::ops::Deref;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// An open line of points: river courses, streets, decorative
 /// chords, edge routes - the last point does not connect back to

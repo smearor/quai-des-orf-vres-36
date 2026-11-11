@@ -75,13 +75,13 @@ impl AnchorTracker {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use smearor_commons_geometry::RotationRad;
+    use smearor_commons_geometry::Vec2;
     use tangible_objects_model::FrameCount;
     use tangible_objects_model::PatternId;
     use tangible_objects_model::PatternName;
-    use tangible_objects_model::RotationRad;
     use tangible_objects_model::TangibleId;
     use tangible_objects_model::TrackedTangible;
-    use tangible_objects_model::Vec2;
 
     /// A tracked tangible at (`x`, `y`) millimeters - only the pose
     /// matters to the tracker.

@@ -2,7 +2,7 @@
 //! frontage.
 
 use crate::map::Polygon;
-use tangible_objects_model::Millimeters;
+use smearor_commons_geometry::Millimeters;
 
 /// A flatiron footprint at a ring vertex plus the frontage it
 /// consumes on the adjacent edges - the row-house pass starts

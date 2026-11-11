@@ -18,8 +18,8 @@ use qdo36_map::Segment;
 use qdo36_map::StationId;
 use qdo36_map::Street;
 use qdo36_map::Transport;
+use smearor_commons_geometry::Millimeters;
 use std::fmt::Write;
-use tangible_objects_model::Millimeters;
 
 /// The drawn river band's half width (matches the app's
 /// `WATER_HALF_WIDTH`).

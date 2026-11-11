@@ -11,9 +11,9 @@ use crate::map::DeckSide;
 use crate::map::WaterBanks;
 use crate::map::bridge::RoadRoute;
 use crate::map::bridge::near_point::NearPoint;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::collections::HashMap;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// How far a deck reaches across its water course, in river
 /// half-widths: stations further out count as off-water, and a

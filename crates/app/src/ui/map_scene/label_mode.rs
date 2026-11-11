@@ -4,9 +4,9 @@ use crate::ui::style::LabelOrientation;
 use crate::ui::style::PxPos;
 use serde::Deserialize;
 use serde::Serialize;
+use smearor_commons_geometry::RotationRad;
 use std::f64::consts::FRAC_PI_2;
 use std::str::FromStr;
-use tangible_objects_model::RotationRad;
 
 /// Label orientation on the tabletop.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]

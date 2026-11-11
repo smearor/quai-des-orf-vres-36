@@ -1,13 +1,13 @@
 //! `serde_pair_option` - `[x, y]` pair serde for `Option<Vec2>`.
 //!
-//! Same flat pair shape as `tangible_objects_model::serde_pair`,
+//! Same flat pair shape as `smearor_commons_geometry::serde_pair`,
 //! but tolerant of an absent position (`pos_mm` missing or `null`).
 
 use serde::Deserialize;
 use serde::Deserializer;
 use serde::Serialize;
 use serde::Serializer;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Vec2;
 
 /// Serializes `Some(p)` as `[p.x, p.y]`, `None` as nothing.
 pub fn serialize<U, S: Serializer>(pos: &Option<Vec2<U>>, serializer: S) -> Result<S::Ok, S::Error> {

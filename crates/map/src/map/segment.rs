@@ -4,9 +4,9 @@ use crate::map::Polygon;
 use crate::map::Polyline;
 use crate::map::Projection;
 use crate::map::blocks::Angle;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::f64::consts::PI;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// A straight segment in unit `U` (`Vec2<Millimeters>` on the map,
 /// `Vec2<Pixels>` on screen) - the geometry an edge draws between

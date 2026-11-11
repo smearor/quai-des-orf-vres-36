@@ -2,7 +2,7 @@
 
 use crate::ui::style::PxPos;
 use qdo36_map::Polyline;
-use tangible_objects_model::Pixels;
+use smearor_commons_geometry::Pixels;
 
 /// An edge's drawn polyline in px, its per-hop lane offsets and
 /// the same polyline in map mm (for region tests).

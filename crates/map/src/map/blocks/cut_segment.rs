@@ -2,8 +2,8 @@
 
 use crate::Segment;
 use crate::map::blocks::BlockCut;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 /// One raw cut line of the block subdivision: a street hop, a river
 /// course piece or a border edge.

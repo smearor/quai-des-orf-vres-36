@@ -1,8 +1,8 @@
 //! `DistrictLabel` - the quarter name a block carries.
 
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::rc::Rc;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// The district name a block shows at its visual center: an
 /// organizational unit the players can use to talk about map

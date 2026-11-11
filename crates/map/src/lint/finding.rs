@@ -14,7 +14,7 @@ use crate::lint::LinearityCause;
 use crate::lint::MissingService;
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::Millimeters;
+use smearor_commons_geometry::Millimeters;
 use thiserror::Error;
 
 /// A dataset quality violation.

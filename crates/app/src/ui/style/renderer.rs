@@ -9,10 +9,10 @@ use crate::ui::style::ToPx;
 use cairo::Context;
 use qdo36_tangibles::ScaleFactor;
 use smearor_commons_color::Color;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Pixels;
-use tangible_objects_model::PixelsPerMm;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::PixelsPerMm;
+use smearor_commons_geometry::Vec2;
 
 /// A position in widget pixels - `to_px` produces these, the style
 /// draws them.

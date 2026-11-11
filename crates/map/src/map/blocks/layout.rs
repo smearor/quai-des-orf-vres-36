@@ -4,7 +4,7 @@ use crate::map::WATER_HALF_WIDTH;
 use crate::map::blocks::BlockCut;
 use crate::map::blocks::BlockFaces;
 use crate::map::blocks::LaneMap;
-use tangible_objects_model::Millimeters;
+use smearor_commons_geometry::Millimeters;
 
 /// The city-block division of the map: the free faces enclosed by
 /// streets, river and border plus the lane occupancy of each street

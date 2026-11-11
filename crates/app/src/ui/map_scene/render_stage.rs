@@ -3,10 +3,10 @@
 use qdo36_tangibles::AnchorPose;
 use qdo36_tangibles::MapTransform;
 use qdo36_tangibles::SurfaceMm;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Pixels;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::Vec2;
 use tangible_objects_model::SurfaceFit;
-use tangible_objects_model::Vec2;
 
 use crate::ui::map_scene::SceneState;
 use crate::ui::style::PxPos;

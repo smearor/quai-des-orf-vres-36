@@ -1,9 +1,9 @@
 use crate::AnchorConfig;
 use crate::AnchorPose;
 use crate::MapScale;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::RotationRad;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::RotationRad;
+use smearor_commons_geometry::Vec2;
 
 /// Affine transform between map millimeters and surface millimeters,
 /// driven by the anchor pose.

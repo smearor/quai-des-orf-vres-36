@@ -10,10 +10,10 @@ use crate::map::blocks::BlockFaces;
 use crate::map::blocks::SquareMillimeters;
 use crate::map::blocks::cut_segment::CutSegment;
 use crate::map::blocks::splits::Splits;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::collections::HashMap;
 use std::collections::HashSet;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// Snap radius for sealing T-junctions and floating-point noise, in
 /// mm: a segment endpoint within this distance of another segment's

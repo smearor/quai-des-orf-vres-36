@@ -1,8 +1,8 @@
 //! `ToPx` - the map-mm to widget-px projection.
 
 use crate::ui::style::renderer::PxPos;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 /// The scene's mm → widget-px projection: the stage transform
 /// (`MapTransform` + px/mm) the styles draw through. `points`

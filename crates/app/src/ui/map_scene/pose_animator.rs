@@ -8,10 +8,10 @@
 //! visibly slides and rotates into place.
 
 use qdo36_tangibles::AnchorPose;
+use smearor_commons_geometry::Millimeters;
 use std::f64::consts::PI;
 use std::time::Duration;
 use std::time::Instant;
-use tangible_objects_model::Millimeters;
 
 /// Duration of the visible ease for teleport jumps.
 const TRANSITION_DURATION: Duration = Duration::from_millis(300);
@@ -123,8 +123,8 @@ fn ease_out_cubic(t: f64) -> f64 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tangible_objects_model::RotationRad;
-    use tangible_objects_model::Vec2;
+    use smearor_commons_geometry::RotationRad;
+    use smearor_commons_geometry::Vec2;
 
     fn pose(x: f64, y: f64, rotation_rad: f64) -> AnchorPose {
         AnchorPose {

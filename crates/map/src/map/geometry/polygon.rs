@@ -3,9 +3,9 @@
 use crate::Segment;
 use crate::map::blocks::SquareMillimeters;
 use crate::map::geometry::line::Line;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::ops::Deref;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 /// The miter cap for [`Polygon::offset`] corners - acute corners
 /// may extend at most this many edge distances.

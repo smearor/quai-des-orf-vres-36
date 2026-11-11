@@ -3,9 +3,9 @@
 use qdo36_map::GameMap;
 use qdo36_map::LineName;
 use qdo36_map::Transport;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Pixels;
-use tangible_objects_model::PixelsPerMm;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::PixelsPerMm;
 
 use crate::ui::style::PxPos;
 

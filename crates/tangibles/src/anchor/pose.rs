@@ -1,10 +1,10 @@
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::RotationRad;
-use tangible_objects_model::SmoothingAlpha;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::RotationRad;
+use smearor_commons_geometry::SmoothingAlpha;
+use smearor_commons_geometry::Vec2;
 use tangible_objects_model::TrackedTangible;
-use tangible_objects_model::Vec2;
 
 /// The Eiffel tower's measured pose on the surface.
 ///

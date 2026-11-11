@@ -4,9 +4,9 @@
 use qdo36_map::StationId;
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Pixels;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::Vec2;
 
 /// What kind of drawable an entity is.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

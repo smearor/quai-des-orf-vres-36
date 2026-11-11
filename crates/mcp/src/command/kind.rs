@@ -14,10 +14,10 @@ use qdo36_tangibles::MapScale;
 use qdo36_tangibles::ScaleFactor;
 use serde::Deserialize;
 use serde::Serialize;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::RotationRad;
+use smearor_commons_geometry::Vec2;
 use tangible_objects_model::DisplayRotation;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::RotationRad;
-use tangible_objects_model::Vec2;
 
 /// One command for the game host.
 ///

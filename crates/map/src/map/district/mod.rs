@@ -14,8 +14,8 @@ pub use name::DistrictName;
 
 use serde::Deserialize;
 use serde::Serialize;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 /// A named city quarter, optionally pinned to a map position.
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]

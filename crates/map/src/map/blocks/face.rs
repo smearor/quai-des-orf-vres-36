@@ -7,8 +7,8 @@ use crate::map::Polygon;
 use crate::map::backdrop::Landmark;
 use crate::map::blocks::BlockCut;
 use crate::map::blocks::SquareMillimeters;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 /// The smallest face area worth drawing (mm²) - slivers from
 /// snapped T-junctions and dead ends drop below it.

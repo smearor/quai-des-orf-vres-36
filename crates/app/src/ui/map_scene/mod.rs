@@ -67,10 +67,10 @@ use qdo36_tangibles::AnchorPose;
 use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::ScaleFactor;
 use smearor_commons_color::Alpha;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Pixels;
-use tangible_objects_model::RotationRad;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::RotationRad;
+use smearor_commons_geometry::Vec2;
 
 /// The station disc's nominal radius - labels and the
 /// landmark-obstacle rings size off it (obstacles pad ~10 %).

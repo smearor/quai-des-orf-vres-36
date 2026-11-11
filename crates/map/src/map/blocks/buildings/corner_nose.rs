@@ -2,8 +2,8 @@
 //! facade data it consumes.
 
 use crate::map::Polyline;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 
 /// The flatiron's street nose: the facade endpoints on both
 /// adjacent edges, the tangent arc points between them, and the

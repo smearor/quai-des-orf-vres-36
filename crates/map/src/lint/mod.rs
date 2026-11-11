@@ -33,10 +33,10 @@ use crate::Segment;
 use crate::StationCount;
 use crate::StationId;
 use crate::Transport;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Vec2;
 use std::collections::BTreeMap;
 use std::collections::HashSet;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Vec2;
 
 impl GameMap {
     /// Station clearance (Q14): an edge passing within this distance

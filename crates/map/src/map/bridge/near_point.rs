@@ -1,6 +1,6 @@
 //! `NearPoint` - the nearest point on any water course.
 
-use tangible_objects_model::Millimeters;
+use smearor_commons_geometry::Millimeters;
 
 /// The nearest point on any water course to a candidate position:
 /// its distance and where it lands (course, segment, fraction).

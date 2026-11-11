@@ -7,11 +7,11 @@ use qdo36_map::ImportanceClass;
 use qdo36_map::Transport;
 use smearor_commons_color::Alpha;
 use smearor_commons_color::Color;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::PixelsPerMm;
+use smearor_commons_geometry::Vec2;
 use std::f64::consts::TAU;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Pixels;
-use tangible_objects_model::PixelsPerMm;
-use tangible_objects_model::Vec2;
 
 use super::palette::PALETTE;
 use crate::ui::style::BlockSpec;

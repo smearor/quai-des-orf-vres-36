@@ -1,7 +1,7 @@
 //! `Projection` - a point's orthogonal projection onto a
 //! segment.
 
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Vec2;
 
 /// The orthogonal projection of a point onto a segment interior:
 /// where along the segment it lands and at which point.

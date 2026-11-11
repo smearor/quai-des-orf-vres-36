@@ -1,10 +1,10 @@
 //! `OuterSpec` - the countryside outside the city the scene draws.
 
 use qdo36_map::Ground;
-use tangible_objects_model::Millimeters;
-use tangible_objects_model::Pixels;
-use tangible_objects_model::PixelsPerMm;
-use tangible_objects_model::Vec2;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::PixelsPerMm;
+use smearor_commons_geometry::Vec2;
 
 /// Everything the outer-texture pass needs: the ground polygons
 /// covering the city (everywhere else gets the style's infinite
