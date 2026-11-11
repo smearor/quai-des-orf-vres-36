@@ -5,6 +5,7 @@ use cairo::ImageSurface;
 use cairo::LineCap;
 use qdo36_map::ImportanceClass;
 use qdo36_map::Transport;
+use smearor_commons_color::Color;
 use std::f64::consts::TAU;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Pixels;
@@ -23,7 +24,6 @@ use crate::ui::style::LabelSpec;
 use crate::ui::style::Luminance;
 use crate::ui::style::OuterSpec;
 use crate::ui::style::PxPos;
-use crate::ui::style::RgbColor;
 use crate::ui::style::StationSpec;
 use crate::ui::style::StyleRenderer;
 use crate::ui::style::ToPx;
@@ -61,7 +61,7 @@ fn outer_tile() -> Option<ImageSurface> {
 }
 
 impl StyleRenderer for ComicStyle {
-    fn paper(&self) -> RgbColor {
+    fn paper(&self) -> Color<f64> {
         PALETTE.paper
     }
 
@@ -309,7 +309,7 @@ impl StyleRenderer for ComicStyle {
         if tracked {
             PALETTE.accent.apply(ctx);
             ctx.fill_preserve().ok();
-            RgbColor::new(1.0, 1.0, 1.0).apply(ctx);
+            Color::<f64>::new(1.0, 1.0, 1.0).apply(ctx);
         } else {
             PALETTE.dim.apply(ctx);
         }

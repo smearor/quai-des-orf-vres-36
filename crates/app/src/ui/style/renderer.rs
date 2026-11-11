@@ -4,11 +4,11 @@ use crate::ui::style::BlockSpec;
 use crate::ui::style::EdgeSpec;
 use crate::ui::style::LabelSpec;
 use crate::ui::style::OuterSpec;
-use crate::ui::style::RgbColor;
 use crate::ui::style::StationSpec;
 use crate::ui::style::ToPx;
 use cairo::Context;
 use qdo36_tangibles::ScaleFactor;
+use smearor_commons_color::Color;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Pixels;
 use tangible_objects_model::PixelsPerMm;
@@ -24,7 +24,7 @@ pub type PxPos = Vec2<Pixels>;
 /// px/mm) already applied. `px_per_mm` scales stroke widths.
 pub trait StyleRenderer {
     /// The paper color the scene is painted on.
-    fn paper(&self) -> RgbColor;
+    fn paper(&self) -> Color<f64>;
 
     /// The countryside outside the city: the style's infinitely
     /// repeated texture everywhere the ground polygons don't

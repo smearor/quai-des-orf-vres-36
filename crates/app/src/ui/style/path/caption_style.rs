@@ -1,10 +1,9 @@
 //! `CaptionStyle` - the place-label look shared by the style
 //! renderers.
 
-use tangible_objects_model::Millimeters;
-
 use crate::ui::style::LabelOrientation;
-use crate::ui::style::RgbColor;
+use smearor_commons_color::Color;
+use tangible_objects_model::Millimeters;
 
 /// Caption look for the place labels: glyph height, the halo
 /// and ink colors, and the tabletop orientation.
@@ -13,9 +12,9 @@ pub struct CaptionStyle {
     pub font: Millimeters,
     /// The wide outline stroke lifting the text off its
     /// background.
-    pub halo: RgbColor,
+    pub halo: Color<f64>,
     /// The glyph fill.
-    pub ink: RgbColor,
+    pub ink: Color<f64>,
     /// Tabletop orientation (`Radial` faces the nearest edge,
     /// `Screen` stays upright).
     pub orientation: LabelOrientation,
@@ -23,7 +22,7 @@ pub struct CaptionStyle {
 
 impl CaptionStyle {
     /// The district caption look.
-    pub fn district(halo: RgbColor, ink: RgbColor, orientation: LabelOrientation) -> Self {
+    pub fn district(halo: Color<f64>, ink: Color<f64>, orientation: LabelOrientation) -> Self {
         Self {
             font: Millimeters::new(3.4),
             halo,
@@ -33,7 +32,7 @@ impl CaptionStyle {
     }
 
     /// The park caption look (smaller than the district name).
-    pub fn park(halo: RgbColor, ink: RgbColor, orientation: LabelOrientation) -> Self {
+    pub fn park(halo: Color<f64>, ink: Color<f64>, orientation: LabelOrientation) -> Self {
         Self {
             font: Millimeters::new(2.4),
             halo,

@@ -7,7 +7,6 @@
 pub mod alpha;
 pub mod belle_epoque;
 pub mod block_spec;
-pub mod color;
 pub mod comic;
 pub mod district_label;
 pub mod edge_spec;
@@ -29,7 +28,6 @@ pub mod to_px;
 pub use alpha::Alpha;
 pub use belle_epoque::BelleEpoqueStyle;
 pub use block_spec::BlockSpec;
-pub use color::RgbColor;
 pub use comic::ComicStyle;
 pub use district_label::DistrictLabel;
 pub use edge_spec::EdgeSpec;

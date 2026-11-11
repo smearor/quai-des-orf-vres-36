@@ -5,6 +5,7 @@ use cairo::ImageSurface;
 use cairo::LineCap;
 use qdo36_map::ImportanceClass;
 use qdo36_map::Transport;
+use smearor_commons_color::Color;
 use std::f64::consts::TAU;
 use tangible_objects_model::Millimeters;
 use tangible_objects_model::Pixels;
@@ -22,7 +23,6 @@ use crate::ui::style::GroundExt;
 use crate::ui::style::LabelSpec;
 use crate::ui::style::OuterSpec;
 use crate::ui::style::PxPos;
-use crate::ui::style::RgbColor;
 use crate::ui::style::StationSpec;
 use crate::ui::style::StyleRenderer;
 use crate::ui::style::ToPx;
@@ -64,7 +64,7 @@ fn outer_tile() -> Option<ImageSurface> {
 }
 
 impl StyleRenderer for BelleEpoqueStyle {
-    fn paper(&self) -> RgbColor {
+    fn paper(&self) -> Color<f64> {
         PALETTE.paper
     }
 

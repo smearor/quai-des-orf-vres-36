@@ -1,19 +1,19 @@
 //! Ground and texture helpers shared by the style renderers.
 
 use crate::ui::style::PxPos;
-use crate::ui::style::RgbColor;
 use crate::ui::style::ToPx;
 use crate::ui::style::path::edge::EdgePathExt;
 use cairo::Context;
 use cairo::ImageSurface;
 use qdo36_map::Ground;
+use smearor_commons_color::Color;
 
 /// Cairo ground fills: `ctx.fill_ground(..)` floods the city's
 /// ground mask, `ctx.tile_fill(..)` repeats the outer texture.
 pub trait GroundExt {
     /// Fills every ground polygon with `color` - the city rests
     /// on plain paper while the countryside keeps its texture.
-    fn fill_ground(&self, ground: &Ground, color: &RgbColor, to_px: ToPx<'_>);
+    fn fill_ground(&self, ground: &Ground, color: &Color<f64>, to_px: ToPx<'_>);
     /// Fills the whole widget with `tile` repeated, anchored so
     /// the tile origin sits at `pin` - the texture repeats
     /// infinitely and pans with the map.
@@ -21,7 +21,7 @@ pub trait GroundExt {
 }
 
 impl GroundExt for Context {
-    fn fill_ground(&self, ground: &Ground, color: &RgbColor, to_px: ToPx<'_>) {
+    fn fill_ground(&self, ground: &Ground, color: &Color<f64>, to_px: ToPx<'_>) {
         color.apply(self);
         for polygon in ground {
             if polygon.len() < 3 {
