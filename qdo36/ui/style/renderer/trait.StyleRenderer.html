@@ -22,7 +22,7 @@
         &amp;self,
         ctx: &amp;Context,
         pos: Vec2&lt;Pixels&gt;,
-        scale: <a class="struct" href="../../../../qdo36_tangibles/map/scale_factor/struct.ScaleFactor.html" title="struct qdo36_tangibles::map::scale_factor::ScaleFactor">ScaleFactor</a>,
+        scale: ScaleFactor,
         px_per_mm: PixelsPerMm,
     );
 <span class="item-spacer"></span>    fn <a href="#tymethod.draw_station" class="fn">draw_station</a>(&amp;self, ctx: &amp;Context, spec: &amp;<a class="struct" href="../station_spec/struct.StationSpec.html" title="struct qdo36::ui::style::station_spec::StationSpec">StationSpec</a>&lt;'_&gt;);
@@ -72,7 +72,7 @@ streets, river and border plus its procedural buildings.</p>
     &amp;self,
     ctx: &amp;Context,
     pos: Vec2&lt;Pixels&gt;,
-    scale: <a class="struct" href="../../../../qdo36_tangibles/map/scale_factor/struct.ScaleFactor.html" title="struct qdo36_tangibles::map::scale_factor::ScaleFactor">ScaleFactor</a>,
+    scale: ScaleFactor,
     px_per_mm: PixelsPerMm,
 )</h4></section></summary><div class="docblock"><p>A backdrop landmark marker.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="tymethod.draw_station" class="method"><a class="src rightside" href="../../../../src/qdo36/ui/style/renderer.rs.html#55">Source</a><h4 class="code-header">fn <a href="#tymethod.draw_station" class="fn">draw_station</a>(&amp;self, ctx: &amp;Context, spec: &amp;<a class="struct" href="../station_spec/struct.StationSpec.html" title="struct qdo36::ui::style::station_spec::StationSpec">StationSpec</a>&lt;'_&gt;)</h4></section></summary><div class="docblock"><p>A station node (fill + outline + one ring per served

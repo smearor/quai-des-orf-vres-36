@@ -2,7 +2,7 @@
     Move {
         centroid_before: Vec2&lt;Pixels&gt;,
         centroid_after: Vec2&lt;Pixels&gt;,
-        span_factor: <a class="struct" href="../../../../../qdo36_tangibles/map/scale_factor/struct.ScaleFactor.html" title="struct qdo36_tangibles::map::scale_factor::ScaleFactor">ScaleFactor</a>,
+        span_factor: ScaleFactor,
     },
     Rotate {
         pivot: Vec2&lt;Pixels&gt;,
@@ -14,7 +14,7 @@ the session mode locked.</p>
 span factor.</p>
 </div><div class="sub-variant" id="variant.Move.fields"><h4>Fields</h4><div class="sub-variant-field"><span id="variant.Move.field.centroid_before" class="section-header"><a href="#variant.Move.field.centroid_before" class="anchor field">§</a><code>centroid_before: Vec2&lt;Pixels&gt;</code></span><div class="docblock"><p>Pair midpoint before the move (widget px).</p>
 </div></div><div class="sub-variant-field"><span id="variant.Move.field.centroid_after" class="section-header"><a href="#variant.Move.field.centroid_after" class="anchor field">§</a><code>centroid_after: Vec2&lt;Pixels&gt;</code></span><div class="docblock"><p>Pair midpoint after the move (widget px).</p>
-</div></div><div class="sub-variant-field"><span id="variant.Move.field.span_factor" class="section-header"><a href="#variant.Move.field.span_factor" class="anchor field">§</a><code>span_factor: <a class="struct" href="../../../../../qdo36_tangibles/map/scale_factor/struct.ScaleFactor.html" title="struct qdo36_tangibles::map::scale_factor::ScaleFactor">ScaleFactor</a></code></span><div class="docblock"><p><code>span_after / span_before</code> pinch factor (ONE = no zoom).</p>
+</div></div><div class="sub-variant-field"><span id="variant.Move.field.span_factor" class="section-header"><a href="#variant.Move.field.span_factor" class="anchor field">§</a><code>span_factor: ScaleFactor</code></span><div class="docblock"><p><code>span_after / span_before</code> pinch factor (ONE = no zoom).</p>
 </div></div></div><section id="variant.Rotate" class="variant"><a href="#variant.Rotate" class="anchor">§</a><h3 class="code-header">Rotate</h3></section><div class="docblock"><p>Rotate: turn the anchor pose around the current pair centroid.</p>
 </div><div class="sub-variant" id="variant.Rotate.fields"><h4>Fields</h4><div class="sub-variant-field"><span id="variant.Rotate.field.pivot" class="section-header"><a href="#variant.Rotate.field.pivot" class="anchor field">§</a><code>pivot: Vec2&lt;Pixels&gt;</code></span><div class="docblock"><p>Rotation pivot (widget px) - the current pair midpoint; a
 zero delta re-pins the same point and pans nothing.</p>

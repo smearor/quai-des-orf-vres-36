@@ -10,14 +10,14 @@ queues a redraw.</p>
     &amp;self,
     state: &amp;<a class="struct" href="../scene/state/struct.SceneState.html" title="struct qdo36::ui::map_scene::scene::state::SceneState">SceneState</a>,
     pos: Vec2&lt;Pixels&gt;,
-) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.99.1/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../../../../qdo36_map/station/id/struct.StationId.html" title="struct qdo36_map::station::id::StationId">StationId</a>&gt;</h4></section></summary><div class="docblock"><p>The station nearest to a widget-px tap (snap radius ~12 mm).</p>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.99.1/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;StationId&gt;</h4></section></summary><div class="docblock"><p>The station nearest to a widget-px tap (snap radius ~12 mm).</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.anchored_pan" class="method"><a class="src rightside" href="../../../../src/qdo36/ui/map_scene/widget.rs.html#130-140">Source</a><h4 class="code-header">pub fn <a href="#method.anchored_pan" class="fn">anchored_pan</a>(
     &amp;self,
     state: &amp;<a class="struct" href="../scene/state/struct.SceneState.html" title="struct qdo36::ui::map_scene::scene::state::SceneState">SceneState</a>,
     from: Vec2&lt;Pixels&gt;,
     to: Vec2&lt;Pixels&gt;,
-    pose: <a class="struct" href="../../../../qdo36_tangibles/anchor/pose/struct.AnchorPose.html" title="struct qdo36_tangibles::anchor::pose::AnchorPose">AnchorPose</a>,
-    scale: <a class="struct" href="../../../../qdo36_tangibles/map/scale/struct.MapScale.html" title="struct qdo36_tangibles::map::scale::MapScale">MapScale</a>,
+    pose: AnchorPose,
+    scale: MapScale,
 ) -&gt; Vec2&lt;Millimeters&gt;</h4></section></summary><div class="docblock"><p>The view pan keeping the map point under <code>from</code> (widget px)
 beneath <code>to</code> (widget px) once the map transform becomes
 <code>pose</code>/<code>scale</code> - the centroid anchor for the two-finger
