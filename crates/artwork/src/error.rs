@@ -34,9 +34,6 @@ pub enum ArtworkError {
         /// The attribute that was not found on the element.
         attribute: String,
     },
-    /// A colour value is not a `#rrggbb` hex literal.
-    #[error("invalid colour value `{0}` (expected `#rrggbb`)")]
-    InvalidColour(String),
     /// Text outlining is enabled but no `fonts_dir` is configured.
     #[error("`outline` enabled but no `fonts_dir` configured in variants.toml")]
     MissingFontsDir,

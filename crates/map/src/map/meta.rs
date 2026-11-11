@@ -1,7 +1,6 @@
 use crate::AnchorSpec;
 use crate::CityName;
 use crate::FugitiveSpec;
-use crate::LineColor;
 use crate::LineName;
 use crate::MapSlogan;
 use crate::MapStory;
@@ -11,6 +10,7 @@ use qdo36_material::RoundNumber;
 use qdo36_material::TicketCounts;
 use serde::Deserialize;
 use serde::Serialize;
+use smearor_commons_color::Palette;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use tangible_objects_model::Region;
@@ -46,7 +46,7 @@ pub struct MapMeta {
     /// (`[map.lines]` - "U1" = "#7DAD4C" in Berlin, "M1" = "#FFCD00" in
     /// Paris); referenced by metro edges.
     #[serde(default)]
-    pub lines: BTreeMap<LineName, LineColor>,
+    pub lines: Palette<LineName, u8>,
     /// Map coordinate bounds, TOML shape `bounds_mm = [x_min, y_min, x_max, y_max]`.
     #[serde(rename = "bounds_mm", with = "serde_quad")]
     pub bounds: Region,

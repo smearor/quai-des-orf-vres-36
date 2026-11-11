@@ -58,7 +58,6 @@ pub use fugitive::FugitiveSpec;
 pub use game_map::GameMap;
 pub use geometry::Polygon;
 pub use geometry::Polyline;
-pub use line::LineColor;
 pub use line::LineName;
 pub use meta::MapMeta;
 pub use park::Park;

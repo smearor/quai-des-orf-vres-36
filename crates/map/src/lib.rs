@@ -52,7 +52,6 @@ pub use map::Landmark;
 pub use map::LandmarkKind;
 pub use map::LandmarkName;
 pub use map::LaneMap;
-pub use map::LineColor;
 pub use map::LineName;
 pub use map::MapError;
 pub use map::MapMeta;

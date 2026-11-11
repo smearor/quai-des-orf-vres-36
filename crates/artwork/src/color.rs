@@ -1,28 +1,15 @@
 //! Colour helpers for luminance-based text brightening.
 
-use crate::error::ArtworkError;
 use smearor_commons_color::Color;
-use std::str::FromStr;
 
-/// Parses a `#rrggbb` hex colour literal.
-fn parse_hex_colour(value: &str) -> Result<Color<u8>, ArtworkError> {
-    let hex = value.strip_prefix('#').ok_or_else(|| ArtworkError::InvalidColour(value.to_owned()))?;
-    if hex.len() != 6 {
-        return Err(ArtworkError::InvalidColour(value.to_owned()));
-    }
-    Color::from_str(value).map_err(|_| ArtworkError::InvalidColour(value.to_owned()))
+/// Computes the perceived luminance (Rec. 601) of a colour in 0..=255.
+pub(crate) fn luminance(color: &Color<u8>) -> f64 {
+    Color::<f64>::from(*color).luminance_601().as_f64() * 255.0
 }
 
-/// Computes the perceived luminance (Rec. 601) of a `#rrggbb` colour.
-pub(crate) fn luminance(value: &str) -> Result<f64, ArtworkError> {
-    let color = parse_hex_colour(value)?;
-    Ok(Color::<f64>::from(color).luminance_601().as_f64() * 255.0)
-}
-
-/// Lightens a `#rrggbb` colour by blending each channel toward white.
-pub(crate) fn lighten(value: &str, factor: f64) -> Result<String, ArtworkError> {
-    let color = parse_hex_colour(value)?;
-    Ok(Color::<u8>::from(Color::<f64>::from(color).lighten(factor)).to_string())
+/// Lightens a colour by blending each channel toward white.
+pub(crate) fn lighten(color: &Color<u8>, factor: f64) -> Color<u8> {
+    Color::<u8>::from(Color::<f64>::from(*color).lighten(factor))
 }
 
 #[cfg(test)]
@@ -31,22 +18,18 @@ mod tests {
 
     #[test]
     fn luminance_of_black_is_zero() {
-        assert_eq!(luminance("#000000").unwrap_or(-1.0), 0.0);
+        assert_eq!(luminance(&Color::<u8>::BLACK), 0.0);
     }
 
     #[test]
     fn luminance_of_white_is_255() {
-        let result = luminance("#FFFFFF").unwrap_or(-1.0);
+        let result = luminance(&Color::<u8>::WHITE);
         assert!((result - 255.0).abs() < 1e-9);
     }
 
     #[test]
     fn lighten_brightens_dark_colour() {
-        assert_eq!(lighten("#704B1C", 0.45).unwrap_or_default(), "#B09C82");
-    }
-
-    #[test]
-    fn lighten_rejects_invalid_colour() {
-        assert!(matches!(lighten("704B1C", 0.45), Err(ArtworkError::InvalidColour(_))));
+        let brown: Color<u8> = "#704B1C".parse().unwrap_or(Color::<u8>::BLACK);
+        assert_eq!(lighten(&brown, 0.45).to_string(), "#B09C82");
     }
 }

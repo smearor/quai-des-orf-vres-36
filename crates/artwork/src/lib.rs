@@ -77,7 +77,7 @@ pub fn generate(config_path: &Path, out_dir: &Path) -> Result<Vec<PathBuf>, Artw
         for variant in &asset.variants {
             let mut svg = master_source.clone();
             for substitution in &variant.substitutions {
-                let value = substitution.resolve()?;
+                let value = substitution.resolve().to_string();
                 svg = engine::set_attribute(&svg, &asset.master, &substitution.id, &substitution.attribute, &value)?;
             }
             for inner_fill in &variant.fills {

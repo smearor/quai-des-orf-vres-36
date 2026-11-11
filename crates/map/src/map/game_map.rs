@@ -399,6 +399,11 @@ impl TryFrom<MapToml> for GameMap {
         if dataset.stations.is_empty() {
             return Err(MapError::EmptyMap);
         }
+        for (name, color) in dataset.map.lines.iter() {
+            if color.a != 255 {
+                return Err(MapError::TranslucentLineColor(name.clone()));
+            }
+        }
 
         let mut stations = Stations::default();
         for station in &dataset.stations {
@@ -456,7 +461,7 @@ impl TryFrom<MapToml> for GameMap {
                         line: line.clone(),
                     });
                 }
-                if !dataset.map.lines.contains_key(line) {
+                if !dataset.map.lines.contains(line) {
                     return Err(MapError::UnknownLine(line.clone()));
                 }
             }

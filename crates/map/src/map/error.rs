@@ -60,6 +60,10 @@ pub enum MapError {
     /// An edge references a line not declared in `[map.lines]`.
     #[error("edge references unknown line {0}")]
     UnknownLine(LineName),
+    /// A `[map.lines]` color carries an alpha channel - brand colors
+    /// are opaque `#rrggbb` literals.
+    #[error("line {0} color must be opaque (#rrggbb, no alpha channel)")]
+    TranslucentLineColor(LineName),
     /// A non-metro edge carries a line (lines belong to metro routes).
     #[error("edge between {from} and {to} carries line {line} but is not a metro route")]
     LineOnNonMetro {
