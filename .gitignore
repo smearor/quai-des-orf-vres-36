@@ -16,3 +16,6 @@ logs
 .devin
 
 concepts
+concepts/done/**
+concepts/planned/**
+
