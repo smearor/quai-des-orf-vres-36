@@ -144,7 +144,7 @@ mod tests {
     fn span_change_locks_move_with_the_pinch_factor() {
         let (mut gesture, first, second) = pair();
         let step = gesture.update(first, Vec2::new(120.0, 100.0), second);
-        assert!(matches!(step, Some(TwoFingerStep::Move { span_factor, .. }) if (span_factor.get() - 0.8).abs() < 1e-9));
+        assert!(matches!(step, Some(TwoFingerStep::Move { span_factor, .. }) if (span_factor.as_f64() - 0.8).abs() < 1e-9));
     }
 
     #[test]

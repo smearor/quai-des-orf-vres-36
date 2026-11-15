@@ -1,6 +1,5 @@
 //! Attribute substitution declaration.
 
-use crate::color;
 use serde::Deserialize;
 use smearor_commons_color::Color;
 
@@ -36,7 +35,7 @@ impl Substitution {
     /// luminance-based lightening for dark colours.
     pub fn resolve(&self) -> Color<u8> {
         match self.lighten_if_below {
-            Some(threshold) if color::luminance(&self.value) < threshold => color::lighten(&self.value, self.lighten_factor),
+            Some(threshold) if self.value.luminance_601().as_f64() * 255.0 < threshold => self.value.lighten(self.lighten_factor),
             _ => self.value,
         }
     }

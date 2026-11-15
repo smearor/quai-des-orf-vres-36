@@ -184,13 +184,13 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
             .collect();
         for landmark in &backdrop.landmarks {
             let pos = to_px(landmark.pos);
-            let height_mm = 14.0 * state.params.landmark_scale.get();
+            let height_mm = Millimeters::new(14.0) * state.params.landmark_scale;
             let preferred = state.layers.landmark_mode.preferred(pos, center);
             let angle = landmark_rotation(
                 pos,
                 preferred,
-                px_per_mm.scale(Millimeters::new(height_mm * 0.5)).as_f64(),
-                px_per_mm.scale(Millimeters::new(height_mm * 0.4)).as_f64(),
+                px_per_mm.scale(height_mm * 0.5).as_f64(),
+                px_per_mm.scale(height_mm * 0.4).as_f64(),
                 &station_discs,
                 &edge_segments,
             );
@@ -198,7 +198,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                 family: ArtFamily::Landmarks,
                 stem: AssetStem::for_landmark(landmark.name.as_str()),
                 pos,
-                height: Millimeters::new(height_mm),
+                height: height_mm,
                 anchor: AnchorFrac::PIN_TIP,
                 rotation: angle + RotationRad::new(FRAC_PI_2),
                 alpha: Alpha::OPAQUE,
@@ -443,7 +443,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
             ctx.close_path();
             ctx.clip();
             renderer.paper().apply_alpha(ctx, Alpha::new(0.55));
-            ctx.set_line_width(px_per_mm.scale(Millimeters::new(2.6)).max(Pixels::new(0.5)).as_f64());
+            ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(2.6), Pixels::new(0.5)).as_f64());
             ctx.px_polyline_path(&route);
             ctx.stroke().ok();
             ctx.restore().ok();
@@ -633,7 +633,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                     family: ArtFamily::Ligne,
                     stem: AssetStem::for_line(line),
                     pos: mid,
-                    height: LIGNE_BADGE_HEIGHT * state.params.metro_scale.get(),
+                    height: LIGNE_BADGE_HEIGHT * state.params.metro_scale,
                     anchor: AnchorFrac::CENTER,
                     rotation: RotationRad::new(0.0),
                     alpha: Alpha::OPAQUE,
@@ -648,7 +648,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
     // viewport) - the same `center` the radial landmarks use.
     let importance = map.importance();
     let orientation = state.layers.label_mode.orientation(center);
-    let radius = px_per_mm.scale(STATION_RADIUS_MM).max(Pixels::new(0.4));
+    let radius = px_per_mm.scale_at_least(STATION_RADIUS_MM, Pixels::new(0.4));
     for station in map.stations() {
         let pos = to_px(station.pos);
         let station_importance = importance.get(&station.id);
@@ -770,7 +770,7 @@ fn station_discs(state: &SceneState, stage: &RenderStage) -> Vec<(PxPos, Pixels)
         .map
         .stations()
         .map(|station| {
-            let radius = STATION_RADIUS_MM * (1.1 * state.params.station_scale.get());
+            let radius = STATION_RADIUS_MM * 1.1 * state.params.station_scale;
             (stage.to_px(station.pos), stage.fit.scale.scale(radius))
         })
         .collect()

@@ -79,7 +79,7 @@ impl StyleRenderer for ComicStyle {
         PALETTE.water_fill().apply(ctx);
         ctx.fill().ok();
         ctx.set_line_cap(LineCap::Round);
-        ctx.set_line_width(px_per_mm.scale(Millimeters::new(1.2)).max(Pixels::new(0.5)).as_f64());
+        ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(1.2), Pixels::new(0.5)).as_f64());
         PALETTE.water().apply(ctx);
         for bank in [&left_bank, &right_bank] {
             ctx.px_polyline_path(bank);
@@ -91,10 +91,10 @@ impl StyleRenderer for ComicStyle {
         ctx.set_line_cap(LineCap::Round);
         ctx.move_to(from.x, from.y);
         ctx.line_to(to.x, to.y);
-        ctx.set_line_width(px_per_mm.scale(Millimeters::new(5.0)).max(Pixels::new(0.5)).as_f64());
+        ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(5.0), Pixels::new(0.5)).as_f64());
         PALETTE.paper().apply(ctx);
         ctx.stroke_preserve().ok();
-        ctx.set_line_width(px_per_mm.scale(Millimeters::new(2.2)).max(Pixels::new(0.4)).as_f64());
+        ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(2.2), Pixels::new(0.4)).as_f64());
         PALETTE.station().apply(ctx);
         ctx.stroke().ok();
     }
@@ -118,7 +118,7 @@ impl StyleRenderer for ComicStyle {
             PALETTE.park().apply(ctx);
             ctx.fill_preserve().ok();
             PALETTE.block().apply_alpha(ctx, Alpha::new(0.4));
-            ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(0.4)).max(Pixels::new(0.2)).as_f64());
+            ctx.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(0.4), Pixels::new(0.2)).as_f64());
             ctx.stroke().ok();
         }
         // Houses: raised fill over the paper, roof details in the
@@ -127,7 +127,7 @@ impl StyleRenderer for ComicStyle {
         ctx.draw_houses(block, &PALETTE, to_px);
         // Decorative streets crossing the block interior - muted,
         // under the captions.
-        ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(1.0)).max(Pixels::new(0.3)).as_f64());
+        ctx.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(1.0), Pixels::new(0.3)).as_f64());
         for street in block.streets {
             let path: Vec<PxPos> = to_px.points(street);
             ctx.px_polyline_path(&path);
@@ -157,7 +157,7 @@ impl StyleRenderer for ComicStyle {
             let outline: Vec<PxPos> = to_px.points(block.outline);
             ctx.px_polyline_path(&outline);
             ctx.close_path();
-            ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(0.6)).max(Pixels::new(0.3)).as_f64());
+            ctx.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(0.6), Pixels::new(0.3)).as_f64());
             PALETTE.block().apply(ctx);
             ctx.stroke().ok();
         }
@@ -175,14 +175,14 @@ impl StyleRenderer for ComicStyle {
             PALETTE.edge()
         };
         color.apply(ctx);
-        ctx.set_line_width(px.scale(Millimeters::new(2.4)).max(Pixels::new(0.5)).as_f64());
+        ctx.set_line_width(px.scale_at_least(Millimeters::new(2.4), Pixels::new(0.5)).as_f64());
         ctx.edge_path(edge);
         if edge.wavy {
             // Boat wake: ink rim under the colored wave.
-            ctx.set_line_width(px.scale(Millimeters::new(3.2)).max(Pixels::new(0.7)).as_f64());
+            ctx.set_line_width(px.scale_at_least(Millimeters::new(3.2), Pixels::new(0.7)).as_f64());
             PALETTE.ink().apply(ctx);
             ctx.stroke_preserve().ok();
-            ctx.set_line_width(px.scale(Millimeters::new(2.2)).max(Pixels::new(0.5)).as_f64());
+            ctx.set_line_width(px.scale_at_least(Millimeters::new(2.2), Pixels::new(0.5)).as_f64());
             color.apply(ctx);
         }
         if edge.dashed {
@@ -190,10 +190,10 @@ impl StyleRenderer for ComicStyle {
             // the dashed color stroke keeps lookalike colors
             // (M1 vs taxi, M6/M12 vs bus) apart.
             ctx.set_dash(&[px.scale(Millimeters::new(4.0)).as_f64(), px.scale(Millimeters::new(2.5)).as_f64()], 0.0);
-            ctx.set_line_width(px.scale(Millimeters::new(3.4)).max(Pixels::new(0.7)).as_f64());
+            ctx.set_line_width(px.scale_at_least(Millimeters::new(3.4), Pixels::new(0.7)).as_f64());
             PALETTE.ink().apply(ctx);
             ctx.stroke_preserve().ok();
-            ctx.set_line_width(px.scale(Millimeters::new(2.4)).max(Pixels::new(0.5)).as_f64());
+            ctx.set_line_width(px.scale_at_least(Millimeters::new(2.4), Pixels::new(0.5)).as_f64());
             color.with_min_luminance(Luminance::new(0.5)).apply(ctx);
         }
         ctx.stroke().ok();
@@ -204,7 +204,7 @@ impl StyleRenderer for ComicStyle {
         ctx.new_path();
         PALETTE.dim().apply(ctx);
         ctx.set_line_width(1.5);
-        ctx.arc(pos.x, pos.y, px_per_mm.scale(Millimeters::new(2.2 * scale.get())).max(Pixels::new(0.5)).as_f64(), 0.0, TAU);
+        ctx.arc(pos.x, pos.y, px_per_mm.scale_at_least(Millimeters::new(2.2) * scale, Pixels::new(0.5)).as_f64(), 0.0, TAU);
         ctx.stroke().ok();
     }
 
@@ -220,8 +220,7 @@ impl StyleRenderer for ComicStyle {
             _ => 1.0,
         };
         let radius = px_per_mm
-            .scale(Millimeters::new(3.0 * size * spec.station_scale.get()))
-            .max(Pixels::new(0.4))
+            .scale_at_least(Millimeters::new(3.0 * size) * spec.station_scale, Pixels::new(0.4))
             .as_f64();
         // Fill: inside the metro overlay the disc splits into line
         // color sectors (1 = full disc, 2 = halves, 3 = thirds...).
@@ -250,18 +249,17 @@ impl StyleRenderer for ComicStyle {
                 pos.y,
                 radius
                     + px_per_mm
-                        .scale(Millimeters::new(1.1 * spec.ring_width.get() * (spec.served.len() - i) as f64))
-                        .max(Pixels::new(0.4))
+                        .scale_at_least(Millimeters::new(1.1 * (spec.served.len() - i) as f64) * spec.ring_width, Pixels::new(0.4))
                         .as_f64(),
                 0.0,
                 TAU,
             );
             PALETTE.base_color(*transport).apply(ctx);
-            ctx.set_line_width(0.9 * spec.ring_width.get());
+            ctx.set_line_width(0.9 * spec.ring_width.as_f64());
             ctx.stroke().ok();
         }
         if spec.selected {
-            ctx.arc(pos.x, pos.y, radius + px_per_mm.scale(Millimeters::new(3.0)).max(Pixels::new(0.4)).as_f64(), 0.0, TAU);
+            ctx.arc(pos.x, pos.y, radius + px_per_mm.scale_at_least(Millimeters::new(3.0), Pixels::new(0.4)).as_f64(), 0.0, TAU);
             PALETTE.select().apply(ctx);
             ctx.set_line_width(2.5);
             ctx.stroke().ok();
@@ -273,8 +271,7 @@ impl StyleRenderer for ComicStyle {
         ctx.select_font_face("sans-serif", FontSlant::Normal, FontWeight::Bold);
         ctx.set_font_size(
             spec.px_per_mm
-                .scale(Millimeters::new(if spec.inside { 3.4 } else { 4.0 } * spec.label_scale.get()))
-                .max(Pixels::new(8.0))
+                .scale_at_least(Millimeters::new(if spec.inside { 3.4 } else { 4.0 }) * spec.label_scale, Pixels::new(8.0))
                 .as_f64(),
         );
         let Ok(extents) = ctx.text_extents(spec.text) else { return };
@@ -288,7 +285,7 @@ impl StyleRenderer for ComicStyle {
         let y = if spec.inside {
             pos.y + extents.height() / 2.0
         } else {
-            pos.y + spec.radius.as_f64() + spec.px_per_mm.scale(Millimeters::new(5.5)).max(Pixels::new(10.0)).as_f64()
+            pos.y + spec.radius.as_f64() + spec.px_per_mm.scale_at_least(Millimeters::new(5.5), Pixels::new(10.0)).as_f64()
         };
         ctx.new_path();
         ctx.move_to(pos.x - extents.width() / 2.0, y);
@@ -304,7 +301,7 @@ impl StyleRenderer for ComicStyle {
 
     fn draw_anchor(&self, ctx: &Context, pos: PxPos, tracked: bool, px_per_mm: PixelsPerMm) {
         ctx.new_path();
-        let radius = px_per_mm.scale(Millimeters::new(6.0)).max(Pixels::new(0.5)).as_f64();
+        let radius = px_per_mm.scale_at_least(Millimeters::new(6.0), Pixels::new(0.5)).as_f64();
         ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
         if tracked {
             PALETTE.accent().apply(ctx);

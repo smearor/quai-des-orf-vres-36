@@ -351,7 +351,7 @@ impl AppWindow {
                                     centroid_after,
                                     span_factor,
                                 } => {
-                                    let zoom = (state.scale.factor() * span_factor.get()).clamp(MapScale::MIN.factor(), MapScale::MAX.factor());
+                                    let zoom = (state.scale.factor() * span_factor.as_f64()).clamp(MapScale::MIN.factor(), MapScale::MAX.factor());
                                     let Ok(scale) = MapScale::try_new(zoom) else {
                                         return Propagation::Proceed;
                                     };

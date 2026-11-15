@@ -6,7 +6,6 @@
 //! the `qdo36-artwork` binary and as a build dependency of other workspace
 //! crates (for example inside `crates/app/build.rs`).
 
-mod color;
 mod engine;
 mod error;
 #[cfg(feature = "outline")]

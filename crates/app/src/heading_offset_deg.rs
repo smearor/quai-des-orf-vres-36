@@ -6,24 +6,32 @@
 
 use serde::Deserialize;
 use serde::Serialize;
+use smearor_commons_geometry::Degrees;
 use smearor_commons_geometry::RotationRad;
 use std::str::FromStr;
 
 /// The offset between the Eiffel tower profile's pin frame and map
 /// north, in degrees.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 #[serde(transparent)]
-pub struct HeadingOffsetDeg(f64);
+pub struct HeadingOffsetDeg(Degrees);
 
 impl HeadingOffsetDeg {
     /// An offset in degrees.
     pub const fn new(degrees: f64) -> Self {
-        Self(degrees)
+        Self(Degrees::new(degrees))
     }
 
     /// The same offset in radians, for `AnchorConfig`.
     pub fn to_rotation_rad(self) -> RotationRad {
-        RotationRad::new(self.0.to_radians())
+        RotationRad::from(self.0)
+    }
+}
+
+impl Default for HeadingOffsetDeg {
+    /// No calibration offset.
+    fn default() -> Self {
+        Self(Degrees::ZERO)
     }
 }
 

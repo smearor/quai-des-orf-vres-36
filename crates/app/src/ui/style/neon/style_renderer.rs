@@ -82,10 +82,10 @@ impl StyleRenderer for NeonStyle {
         ctx.fill().ok();
         for bank in [&left_bank, &right_bank] {
             ctx.px_polyline_path(bank);
-            ctx.set_line_width(px_per_mm.scale(Millimeters::new(1.8)).max(Pixels::new(0.5)).as_f64());
+            ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(1.8), Pixels::new(0.5)).as_f64());
             PALETTE.water().apply_alpha(ctx, Alpha::new(0.25));
             ctx.stroke_preserve().ok();
-            ctx.set_line_width(px_per_mm.scale(Millimeters::new(0.9)).max(Pixels::new(0.4)).as_f64());
+            ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(0.9), Pixels::new(0.4)).as_f64());
             PALETTE.water().apply(ctx);
             ctx.stroke().ok();
         }
@@ -95,10 +95,10 @@ impl StyleRenderer for NeonStyle {
         ctx.set_line_cap(LineCap::Round);
         ctx.move_to(from.x, from.y);
         ctx.line_to(to.x, to.y);
-        ctx.set_line_width(px_per_mm.scale(Millimeters::new(5.0)).max(Pixels::new(0.5)).as_f64());
+        ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(5.0), Pixels::new(0.5)).as_f64());
         PALETTE.paper().apply(ctx);
         ctx.stroke_preserve().ok();
-        ctx.set_line_width(px_per_mm.scale(Millimeters::new(2.2)).max(Pixels::new(0.4)).as_f64());
+        ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(2.2), Pixels::new(0.4)).as_f64());
         PALETTE.station().apply(ctx);
         ctx.stroke().ok();
     }
@@ -122,7 +122,7 @@ impl StyleRenderer for NeonStyle {
             PALETTE.park().apply(ctx);
             ctx.fill_preserve().ok();
             PALETTE.block().apply_alpha(ctx, Alpha::new(0.4));
-            ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(0.4)).max(Pixels::new(0.2)).as_f64());
+            ctx.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(0.4), Pixels::new(0.2)).as_f64());
             ctx.stroke().ok();
         }
         // Houses: raised fill over the paper, roof details in the
@@ -132,7 +132,7 @@ impl StyleRenderer for NeonStyle {
         // Decorative streets crossing the block interior - muted
         // slate, distinct from the underground orange, under the
         // captions.
-        ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(1.0)).max(Pixels::new(0.3)).as_f64());
+        ctx.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(1.0), Pixels::new(0.3)).as_f64());
         for street in block.streets {
             let path: Vec<PxPos> = to_px.points(street);
             ctx.px_polyline_path(&path);
@@ -162,7 +162,7 @@ impl StyleRenderer for NeonStyle {
             let outline: Vec<PxPos> = to_px.points(block.outline);
             ctx.px_polyline_path(&outline);
             ctx.close_path();
-            ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(0.6)).max(Pixels::new(0.3)).as_f64());
+            ctx.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(0.6), Pixels::new(0.3)).as_f64());
             PALETTE.block().apply(ctx);
             ctx.stroke().ok();
         }
@@ -180,10 +180,10 @@ impl StyleRenderer for NeonStyle {
             // Boat wake: a dark rim under the wave keeps the cyan
             // swell readable over the water band.
             ctx.edge_path(edge);
-            ctx.set_line_width(px.scale(Millimeters::new(2.2)).max(Pixels::new(0.5)).as_f64());
+            ctx.set_line_width(px.scale_at_least(Millimeters::new(2.2), Pixels::new(0.5)).as_f64());
             PALETTE.paper().apply(ctx);
             ctx.stroke_preserve().ok();
-            ctx.set_line_width(px.scale(Millimeters::new(1.3)).max(Pixels::new(0.4)).as_f64());
+            ctx.set_line_width(px.scale_at_least(Millimeters::new(1.3), Pixels::new(0.4)).as_f64());
             color.apply(ctx);
             ctx.stroke().ok();
             return;
@@ -196,24 +196,23 @@ impl StyleRenderer for NeonStyle {
             let color = color.with_min_luminance(Luminance::new(0.5));
             ctx.set_dash(&[px.scale(Millimeters::new(4.0)).as_f64(), px.scale(Millimeters::new(2.5)).as_f64()], 0.0);
             ctx.edge_path(edge);
-            ctx.set_line_width(px.scale(Millimeters::new(2.4)).max(Pixels::new(0.5)).as_f64());
+            ctx.set_line_width(px.scale_at_least(Millimeters::new(2.4), Pixels::new(0.5)).as_f64());
             PALETTE.paper().apply(ctx);
             ctx.stroke_preserve().ok();
-            ctx.set_line_width(px.scale(Millimeters::new(1.4)).max(Pixels::new(0.4)).as_f64());
+            ctx.set_line_width(px.scale_at_least(Millimeters::new(1.4), Pixels::new(0.4)).as_f64());
             color.apply(ctx);
             ctx.stroke().ok();
             ctx.set_dash(&[], 0.0);
             return;
         }
         ctx.set_line_width(
-            px.scale(Millimeters::new(if edge.highlight { 3.6 } else { 1.6 }))
-                .max(Pixels::new(0.5))
+            px.scale_at_least(Millimeters::new(if edge.highlight { 3.6 } else { 1.6 }), Pixels::new(0.5))
                 .as_f64(),
         );
         color.apply_alpha(ctx, Alpha::new(if edge.highlight { 0.28 } else { 0.9 }));
         ctx.edge_path(edge);
         ctx.stroke_preserve().ok();
-        ctx.set_line_width(px.scale(Millimeters::new(1.2)).max(Pixels::new(0.4)).as_f64());
+        ctx.set_line_width(px.scale_at_least(Millimeters::new(1.2), Pixels::new(0.4)).as_f64());
         color.apply(ctx);
         ctx.stroke().ok();
     }
@@ -222,7 +221,7 @@ impl StyleRenderer for NeonStyle {
         ctx.new_path();
         PALETTE.accent().apply_alpha(ctx, Alpha::new(0.5));
         ctx.set_line_width(1.0);
-        ctx.arc(pos.x, pos.y, px_per_mm.scale(Millimeters::new(2.0 * scale.get())).max(Pixels::new(0.5)).as_f64(), 0.0, TAU);
+        ctx.arc(pos.x, pos.y, px_per_mm.scale_at_least(Millimeters::new(2.0) * scale, Pixels::new(0.5)).as_f64(), 0.0, TAU);
         ctx.stroke().ok();
     }
 
@@ -237,8 +236,7 @@ impl StyleRenderer for NeonStyle {
             _ => 1.0,
         };
         let radius = px_per_mm
-            .scale(Millimeters::new(2.4 * size * spec.station_scale.get()))
-            .max(Pixels::new(0.4))
+            .scale_at_least(Millimeters::new(2.4 * size) * spec.station_scale, Pixels::new(0.4))
             .as_f64();
         if spec.metro_overlay && !spec.lines.is_empty() {
             let sectors = spec.lines.len() as f64;
@@ -264,18 +262,17 @@ impl StyleRenderer for NeonStyle {
                 pos.y,
                 radius
                     + px_per_mm
-                        .scale(Millimeters::new(0.9 * spec.ring_width.get() * (spec.served.len() - i) as f64))
-                        .max(Pixels::new(0.4))
+                        .scale_at_least(Millimeters::new(0.9 * (spec.served.len() - i) as f64) * spec.ring_width, Pixels::new(0.4))
                         .as_f64(),
                 0.0,
                 TAU,
             );
             PALETTE.base_color(*transport).apply(ctx);
-            ctx.set_line_width(0.8 * spec.ring_width.get());
+            ctx.set_line_width(0.8 * spec.ring_width.as_f64());
             ctx.stroke().ok();
         }
         if spec.selected {
-            ctx.arc(pos.x, pos.y, radius + px_per_mm.scale(Millimeters::new(2.6)).max(Pixels::new(0.4)).as_f64(), 0.0, TAU);
+            ctx.arc(pos.x, pos.y, radius + px_per_mm.scale_at_least(Millimeters::new(2.6), Pixels::new(0.4)).as_f64(), 0.0, TAU);
             PALETTE.select().apply(ctx);
             ctx.set_line_width(1.6);
             ctx.stroke().ok();
@@ -287,8 +284,7 @@ impl StyleRenderer for NeonStyle {
         ctx.select_font_face("monospace", FontSlant::Normal, FontWeight::Normal);
         ctx.set_font_size(
             spec.px_per_mm
-                .scale(Millimeters::new(if spec.inside { 3.0 } else { 3.4 } * spec.label_scale.get()))
-                .max(Pixels::new(7.0))
+                .scale_at_least(Millimeters::new(if spec.inside { 3.0 } else { 3.4 }) * spec.label_scale, Pixels::new(7.0))
                 .as_f64(),
         );
         let Ok(extents) = ctx.text_extents(spec.text) else { return };
@@ -302,7 +298,7 @@ impl StyleRenderer for NeonStyle {
         let y = if spec.inside {
             pos.y + extents.height() / 2.0
         } else {
-            pos.y + spec.radius.as_f64() + spec.px_per_mm.scale(Millimeters::new(5.0)).max(Pixels::new(9.0)).as_f64()
+            pos.y + spec.radius.as_f64() + spec.px_per_mm.scale_at_least(Millimeters::new(5.0), Pixels::new(9.0)).as_f64()
         };
         ctx.new_path();
         ctx.move_to(pos.x - extents.width() / 2.0, y);
@@ -318,7 +314,7 @@ impl StyleRenderer for NeonStyle {
 
     fn draw_anchor(&self, ctx: &Context, pos: PxPos, tracked: bool, px_per_mm: PixelsPerMm) {
         ctx.new_path();
-        let radius = px_per_mm.scale(Millimeters::new(5.0)).max(Pixels::new(0.5)).as_f64();
+        let radius = px_per_mm.scale_at_least(Millimeters::new(5.0), Pixels::new(0.5)).as_f64();
         let color = if tracked { PALETTE.accent() } else { PALETTE.dim() };
         ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
         color.apply_alpha(ctx, Alpha::new(0.35));

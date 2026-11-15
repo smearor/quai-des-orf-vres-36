@@ -146,11 +146,11 @@ impl BuildingPathExt for Context {
             palette.building().lerp(&palette.paper(), shade).apply(self);
             self.fill_preserve().ok();
             palette.block().apply(self);
-            self.set_line_width(block.px_per_mm.scale(Millimeters::new(0.4)).max(Pixels::new(0.2)).as_f64());
+            self.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(0.4), Pixels::new(0.2)).as_f64());
             self.stroke().ok();
             self.house_detail_path(&PxPolygon(&roof), house.units);
             palette.roof().apply(self);
-            self.set_line_width(block.px_per_mm.scale(Millimeters::new(0.28)).max(Pixels::new(0.15)).as_f64());
+            self.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(0.28), Pixels::new(0.15)).as_f64());
             self.stroke().ok();
         }
         self.restore().ok();

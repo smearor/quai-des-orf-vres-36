@@ -82,7 +82,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         ctx.band_path(&left_bank, &right_bank);
         PALETTE.water_fill().apply(ctx);
         ctx.fill().ok();
-        ctx.set_line_width(px_per_mm.scale(Millimeters::new(0.6)).max(Pixels::new(0.3)).as_f64());
+        ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(0.6), Pixels::new(0.3)).as_f64());
         PALETTE.ink().apply_alpha(ctx, Alpha::new(0.55));
         for bank in [&left_bank, &right_bank] {
             ctx.px_polyline_path(bank);
@@ -94,10 +94,10 @@ impl StyleRenderer for BelleEpoqueStyle {
         ctx.set_line_cap(LineCap::Round);
         ctx.move_to(from.x, from.y);
         ctx.line_to(to.x, to.y);
-        ctx.set_line_width(px_per_mm.scale(Millimeters::new(5.0)).max(Pixels::new(0.5)).as_f64());
+        ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(5.0), Pixels::new(0.5)).as_f64());
         PALETTE.paper().apply(ctx);
         ctx.stroke_preserve().ok();
-        ctx.set_line_width(px_per_mm.scale(Millimeters::new(2.2)).max(Pixels::new(0.4)).as_f64());
+        ctx.set_line_width(px_per_mm.scale_at_least(Millimeters::new(2.2), Pixels::new(0.4)).as_f64());
         PALETTE.station().apply(ctx);
         ctx.stroke().ok();
     }
@@ -121,7 +121,7 @@ impl StyleRenderer for BelleEpoqueStyle {
             PALETTE.park().apply(ctx);
             ctx.fill_preserve().ok();
             PALETTE.block().apply_alpha(ctx, Alpha::new(0.4));
-            ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(0.4)).max(Pixels::new(0.2)).as_f64());
+            ctx.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(0.4), Pixels::new(0.2)).as_f64());
             ctx.stroke().ok();
         }
         // Houses: raised fill over the paper, roof details in the
@@ -130,7 +130,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         ctx.draw_houses(block, &PALETTE, to_px);
         // Decorative streets crossing the block interior - muted,
         // under the captions.
-        ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(1.0)).max(Pixels::new(0.3)).as_f64());
+        ctx.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(1.0), Pixels::new(0.3)).as_f64());
         for street in block.streets {
             let path: Vec<PxPos> = to_px.points(street);
             ctx.px_polyline_path(&path);
@@ -161,7 +161,7 @@ impl StyleRenderer for BelleEpoqueStyle {
             let outline: Vec<PxPos> = to_px.points(block.outline);
             ctx.px_polyline_path(&outline);
             ctx.close_path();
-            ctx.set_line_width(block.px_per_mm.scale(Millimeters::new(0.5)).max(Pixels::new(0.3)).as_f64());
+            ctx.set_line_width(block.px_per_mm.scale_at_least(Millimeters::new(0.5), Pixels::new(0.3)).as_f64());
             PALETTE.block().apply(ctx);
             ctx.stroke().ok();
         }
@@ -178,7 +178,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         };
         if edge.transport == Transport::Underground {
             ctx.set_dash(&[px.scale(Millimeters::new(3.2)).as_f64(), px.scale(Millimeters::new(2.4)).as_f64()], 0.0);
-            ctx.set_line_width(px.scale(Millimeters::new(1.2)).max(Pixels::new(0.4)).as_f64());
+            ctx.set_line_width(px.scale_at_least(Millimeters::new(1.2), Pixels::new(0.4)).as_f64());
             color.apply_alpha(ctx, Alpha::new(if edge.highlight { 0.6 } else { 0.9 }));
             ctx.stroke().ok();
             ctx.set_dash(&[], 0.0);
@@ -192,10 +192,13 @@ impl StyleRenderer for BelleEpoqueStyle {
         // Engraving frame: a fine sepia hairline under the route color,
         // so every line reads like a plated double-rule - also the
         // boat wake's rim.
-        ctx.set_line_width(px.scale(Millimeters::new(if edge.wavy { 2.2 } else { 2.6 })).max(Pixels::new(0.6)).as_f64());
+        ctx.set_line_width(
+            px.scale_at_least(Millimeters::new(if edge.wavy { 2.2 } else { 2.6 }), Pixels::new(0.6))
+                .as_f64(),
+        );
         PALETTE.ink().apply_alpha(ctx, Alpha::new(if edge.highlight { 0.45 } else { 0.25 }));
         ctx.stroke_preserve().ok();
-        ctx.set_line_width(px.scale(Millimeters::new(1.6)).max(Pixels::new(0.4)).as_f64());
+        ctx.set_line_width(px.scale_at_least(Millimeters::new(1.6), Pixels::new(0.4)).as_f64());
         color.apply(ctx);
         ctx.stroke().ok();
         ctx.set_dash(&[], 0.0);
@@ -203,7 +206,7 @@ impl StyleRenderer for BelleEpoqueStyle {
 
     fn draw_landmark(&self, ctx: &Context, pos: PxPos, scale: ScaleFactor, px_per_mm: PixelsPerMm) {
         ctx.new_path();
-        let radius = px_per_mm.scale(Millimeters::new(2.2 * scale.get())).max(Pixels::new(0.5)).as_f64();
+        let radius = px_per_mm.scale_at_least(Millimeters::new(2.2) * scale, Pixels::new(0.5)).as_f64();
         PALETTE.ink().apply_alpha(ctx, Alpha::new(0.75));
         ctx.set_line_width(1.0);
         ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
@@ -224,8 +227,7 @@ impl StyleRenderer for BelleEpoqueStyle {
             _ => 1.0,
         };
         let radius = px_per_mm
-            .scale(Millimeters::new(2.6 * size * spec.station_scale.get()))
-            .max(Pixels::new(0.4))
+            .scale_at_least(Millimeters::new(2.6 * size) * spec.station_scale, Pixels::new(0.4))
             .as_f64();
         if spec.metro_overlay && !spec.lines.is_empty() {
             let sectors = spec.lines.len() as f64;
@@ -251,14 +253,13 @@ impl StyleRenderer for BelleEpoqueStyle {
                 pos.y,
                 radius
                     + px_per_mm
-                        .scale(Millimeters::new(0.8 * spec.ring_width.get() * (spec.served.len() - i) as f64))
-                        .max(Pixels::new(0.4))
+                        .scale_at_least(Millimeters::new(0.8 * (spec.served.len() - i) as f64) * spec.ring_width, Pixels::new(0.4))
                         .as_f64(),
                 0.0,
                 TAU,
             );
             PALETTE.base_color(*transport).apply(ctx);
-            ctx.set_line_width(0.7 * spec.ring_width.get());
+            ctx.set_line_width(0.7 * spec.ring_width.as_f64());
             ctx.stroke().ok();
         }
         // Ornamental inner ring, like the plated station badges.
@@ -267,7 +268,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         ctx.set_line_width(0.6);
         ctx.stroke().ok();
         if spec.selected {
-            ctx.arc(pos.x, pos.y, radius + px_per_mm.scale(Millimeters::new(2.4)).max(Pixels::new(0.4)).as_f64(), 0.0, TAU);
+            ctx.arc(pos.x, pos.y, radius + px_per_mm.scale_at_least(Millimeters::new(2.4), Pixels::new(0.4)).as_f64(), 0.0, TAU);
             PALETTE.select().apply(ctx);
             ctx.set_line_width(1.6);
             ctx.stroke_preserve().ok();
@@ -282,8 +283,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         ctx.select_font_face("Cormorant Garamond", FontSlant::Normal, FontWeight::Bold);
         ctx.set_font_size(
             spec.px_per_mm
-                .scale(Millimeters::new(if spec.inside { 3.2 } else { 3.6 } * spec.label_scale.get()))
-                .max(Pixels::new(8.0))
+                .scale_at_least(Millimeters::new(if spec.inside { 3.2 } else { 3.6 }) * spec.label_scale, Pixels::new(8.0))
                 .as_f64(),
         );
         let Ok(extents) = ctx.text_extents(spec.text) else { return };
@@ -297,7 +297,7 @@ impl StyleRenderer for BelleEpoqueStyle {
         let y = if spec.inside {
             pos.y + extents.height() / 2.0
         } else {
-            pos.y + spec.radius.as_f64() + spec.px_per_mm.scale(Millimeters::new(5.2)).max(Pixels::new(9.5)).as_f64()
+            pos.y + spec.radius.as_f64() + spec.px_per_mm.scale_at_least(Millimeters::new(5.2), Pixels::new(9.5)).as_f64()
         };
         ctx.new_path();
         ctx.move_to(pos.x - extents.width() / 2.0, y);
@@ -313,7 +313,7 @@ impl StyleRenderer for BelleEpoqueStyle {
 
     fn draw_anchor(&self, ctx: &Context, pos: PxPos, tracked: bool, px_per_mm: PixelsPerMm) {
         ctx.new_path();
-        let radius = px_per_mm.scale(Millimeters::new(5.5)).max(Pixels::new(0.5)).as_f64();
+        let radius = px_per_mm.scale_at_least(Millimeters::new(5.5), Pixels::new(0.5)).as_f64();
         ctx.arc(pos.x, pos.y, radius, 0.0, TAU);
         if tracked {
             PALETTE.ink().apply(ctx);
