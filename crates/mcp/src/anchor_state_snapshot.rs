@@ -5,10 +5,9 @@ use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::SurfaceMm;
 use serde::Deserialize;
 use serde::Serialize;
+use smearor_commons_geometry::Degrees;
 use smearor_commons_geometry::Millimeters;
 use smearor_commons_geometry::Vec2;
-
-use crate::rotation_deg::RotationDeg;
 
 /// The published anchor snapshot - `Option` fields are `None` while
 /// the tower is not detected.
@@ -19,7 +18,7 @@ pub struct AnchorStateSnapshot {
     /// Tangible centroid in device millimeters (tracked only).
     pub center_mm: Option<Vec2<Millimeters>>,
     /// Tangible orientation in degrees (tracked only).
-    pub rotation_deg: Option<RotationDeg>,
+    pub rotation_deg: Option<Degrees>,
     /// Touch surface size in millimeters.
     pub screen_mm: Option<SurfaceMm>,
 }
@@ -33,7 +32,7 @@ impl AnchorStateSnapshot {
         Self {
             detected: tracked,
             center_mm: tracked.then_some(pose.center),
-            rotation_deg: tracked.then(|| pose.rotation_rad.into()),
+            rotation_deg: tracked.then(|| pose.rotation_rad.degrees()),
             screen_mm: surface.copied(),
         }
     }
