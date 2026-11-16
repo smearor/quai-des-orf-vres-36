@@ -29,7 +29,7 @@
 <a href=#29 id=29 data-nosnippet>29</a>        </span><span class="kw">let </span>closest = |points: <span class="kw-2">&amp;</span>Polyline, pos: Vec2&lt;Millimeters&gt;| {
 <a href=#30 id=30 data-nosnippet>30</a>            points
 <a href=#31 id=31 data-nosnippet>31</a>                .nearest_segment(<span class="kw-2">&amp;</span>pos)
-<a href=#32 id=32 data-nosnippet>32</a>                .map(|(index, projection)| (index <span class="kw">as </span>f64 + projection.fraction, projection.point, pos.distance(<span class="kw-2">&amp;</span>projection.point)))
+<a href=#32 id=32 data-nosnippet>32</a>                .map(|(index, projection)| (index <span class="kw">as </span>f64 + projection.fraction.as_f64(), projection.point, pos.distance(<span class="kw-2">&amp;</span>projection.point)))
 <a href=#33 id=33 data-nosnippet>33</a>        };
 <a href=#34 id=34 data-nosnippet>34</a>        <span class="kw">let </span><span class="prelude-val">Some</span>((points, entry, exit)) = water
 <a href=#35 id=35 data-nosnippet>35</a>            .iter()

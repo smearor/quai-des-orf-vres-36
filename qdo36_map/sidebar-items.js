@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["anchor","city","importance","lint","map","station"],"struct":["Millimeters","Region","SquareMillimeters","Vec2"]};
+window.SIDEBAR_ITEMS = {"mod":["anchor","city","importance","lint","map","station"],"struct":["Millimeters","Region","Segment","SquareMillimeters","Vec2"]};
