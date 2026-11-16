@@ -37,6 +37,7 @@ librsvg = "2.63"
 rustybuzz = "0.20"
 signal-hook = "0.4"
 rand = "0.10"
+smearor-commons-animation = { git = "https://github.com/smearor/smearor-commons.git" }
 smearor-commons-color = { git = "https://github.com/smearor/smearor-commons.git" }
 smearor-commons-geometry = { git = "https://github.com/smearor/smearor-commons.git" }
 # gtk
