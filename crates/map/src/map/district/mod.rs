@@ -24,7 +24,7 @@ pub struct District {
     pub name: DistrictName,
     /// Position in map millimeters the quarter sits at; absent for
     /// names the layout assigns freely.
-    #[serde(rename = "pos_mm", default, with = "crate::map::serde_pair_option")]
+    #[serde(rename = "pos_mm", default, with = "smearor_commons_geometry::serde_pair_option")]
     pub pos: Option<Vec2<Millimeters>>,
 }
 

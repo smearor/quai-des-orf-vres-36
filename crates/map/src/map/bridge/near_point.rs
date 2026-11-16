@@ -1,5 +1,6 @@
 //! `NearPoint` - the nearest point on any water course.
 
+use smearor_commons_geometry::Fraction;
 use smearor_commons_geometry::Millimeters;
 
 /// The nearest point on any water course to a candidate position:
@@ -12,5 +13,5 @@ pub(super) struct NearPoint {
     /// Index of the course segment the point projects onto.
     pub segment: usize,
     /// Fraction along that segment (0 = start, 1 = end).
-    pub fraction: f64,
+    pub fraction: Fraction,
 }

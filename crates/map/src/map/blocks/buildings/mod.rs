@@ -289,6 +289,7 @@ impl BuildingParams {
 mod tests {
     use super::*;
     use crate::Segment;
+    use crate::SegmentExt;
     use smearor_commons_geometry::Vec2;
 
     fn square() -> Vec<Vec2<Millimeters>> {

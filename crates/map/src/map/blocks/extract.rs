@@ -62,7 +62,7 @@ impl BlockFace {
                     if let Some(projection) = a.interior_projection(&endpoint)
                         && projection.point.distance(&endpoint) < SNAP
                     {
-                        splits[i].push(projection.fraction);
+                        splits[i].push(projection.fraction.as_f64());
                     }
                 }
             }

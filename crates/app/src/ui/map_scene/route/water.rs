@@ -29,7 +29,7 @@ impl WaterRoute {
         let closest = |points: &Polyline, pos: Vec2<Millimeters>| {
             points
                 .nearest_segment(&pos)
-                .map(|(index, projection)| (index as f64 + projection.fraction, projection.point, pos.distance(&projection.point)))
+                .map(|(index, projection)| (index as f64 + projection.fraction.as_f64(), projection.point, pos.distance(&projection.point)))
         };
         let Some((points, entry, exit)) = water
             .iter()

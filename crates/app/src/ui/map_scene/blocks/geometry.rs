@@ -11,6 +11,7 @@ use qdo36_map::House;
 use qdo36_map::Obstacles;
 use qdo36_map::Polygon;
 use qdo36_map::Segment;
+use qdo36_map::SegmentExt;
 use qdo36_map::Street;
 use qdo36_map::Units;
 use qdo36_map::Variant;

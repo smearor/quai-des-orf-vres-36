@@ -64,6 +64,7 @@ pub use map::Polygon;
 pub use map::Polyline;
 pub use map::RoadRoute;
 pub use map::Segment;
+pub use map::SegmentExt;
 pub use map::SquareMillimeters;
 pub use map::Street;
 pub use map::Transport;

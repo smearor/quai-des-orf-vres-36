@@ -15,6 +15,7 @@ use qdo36_map::GameMap;
 use qdo36_map::Obstacles;
 use qdo36_map::Polygon;
 use qdo36_map::Segment;
+use qdo36_map::SegmentExt;
 use qdo36_map::StationId;
 use qdo36_map::Street;
 use qdo36_map::Transport;

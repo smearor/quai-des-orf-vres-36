@@ -2,6 +2,7 @@
 
 use crate::Polyline;
 use crate::Segment;
+use crate::SegmentExt;
 use crate::map::Polygon;
 use crate::map::blocks::Angle;
 use crate::map::blocks::SquareMillimeters;
