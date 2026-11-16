@@ -1,10 +1,15 @@
-//! Geometric shell types: point sequences in map mm, tagged by
-//! whether the line closes back on itself.
+//! Geometric shell types in map mm: aliases pinning the generic
+//! `smearor-commons-geometry` shells to millimeters.
 
-pub mod line;
-pub mod polygon;
-pub mod polyline;
+use smearor_commons_geometry::Millimeters;
 
-pub(crate) use line::Line;
-pub use polygon::Polygon;
-pub use polyline::Polyline;
+/// A parametric line `origin + t * direction` in map mm.
+pub(crate) type Line = smearor_commons_geometry::Line<Millimeters>;
+
+/// A closed ring of points in map mm: footprints, block outlines,
+/// park blobs.
+pub type Polygon = smearor_commons_geometry::Polygon<Millimeters>;
+
+/// An open line of points in map mm: river courses, streets,
+/// decorative chords, edge routes.
+pub type Polyline = smearor_commons_geometry::Polyline<Millimeters>;

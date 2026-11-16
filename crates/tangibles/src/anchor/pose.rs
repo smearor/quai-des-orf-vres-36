@@ -1,5 +1,7 @@
 use serde::Deserialize;
 use serde::Serialize;
+use smearor_commons_animation::Interpolate;
+use smearor_commons_geometry::Fraction;
 use smearor_commons_geometry::Millimeters;
 use smearor_commons_geometry::RotationRad;
 use smearor_commons_geometry::SmoothingAlpha;
@@ -33,6 +35,14 @@ impl AnchorPose {
             center: self.center + (to.center - self.center) * alpha,
             rotation_rad: RotationRad::ema(self.rotation_rad, to.rotation_rad, alpha),
         }
+    }
+}
+
+/// Trajectory interpolation delegates to [`AnchorPose::lerp`] -
+/// linear in position, shortest-arc in rotation.
+impl Interpolate for AnchorPose {
+    fn interpolate(self, target: Self, t: Fraction) -> Self {
+        self.lerp(target, t.into())
     }
 }
 

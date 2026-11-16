@@ -8,6 +8,9 @@
 //! visibly slides and rotates into place.
 
 use qdo36_tangibles::AnchorPose;
+use smearor_commons_animation::EasingFunction;
+use smearor_commons_animation::Span;
+use smearor_commons_animation::TimedAnimation;
 use smearor_commons_geometry::Millimeters;
 use smearor_commons_geometry::SmoothingAlpha;
 use std::f64::consts::PI;
@@ -44,9 +47,9 @@ pub struct PoseAnimator {
     rendered: AnchorPose,
     /// The latest pose reported by the tangible stream.
     target: AnchorPose,
-    /// Timed teleport ease: start pose and start instant; `target` is
-    /// the destination. `None` in tracking mode.
-    transition: Option<(AnchorPose, Instant)>,
+    /// Timed teleport ease from the rendered pose to `target`;
+    /// `None` in tracking mode.
+    transition: Option<TimedAnimation<Span<AnchorPose>>>,
     /// When `pose_at` last ran - the tracking follow's frame delta.
     last_frame: Instant,
 }
@@ -72,7 +75,9 @@ impl PoseAnimator {
         let teleported = self.target.center.distance(&target.center) >= Millimeters::new(TELEPORT_DISTANCE_MILLIMETERS)
             || self.target.rotation_rad.signed_delta_to(target.rotation_rad).as_f64().abs() >= TELEPORT_ROTATION_RAD;
         if teleported {
-            self.transition = Some((self.rendered, now));
+            let mut transition = TimedAnimation::new(Span::new(self.rendered, target), TRANSITION_DURATION, EasingFunction::EaseOutCubic);
+            transition.start_at(now);
+            self.transition = Some(transition);
         }
         self.target = target;
     }
@@ -80,15 +85,13 @@ impl PoseAnimator {
     /// The pose to render at `now` - advances the teleport ease or the
     /// tracking follow toward the target.
     pub fn pose_at(&mut self, now: Instant) -> AnchorPose {
-        match self.transition {
-            Some((from, started)) => {
-                let progress = (now.saturating_duration_since(started).as_secs_f64() / TRANSITION_DURATION.as_secs_f64()).min(1.0);
-                if progress >= 1.0 {
-                    self.transition = None;
-                    self.rendered = self.target;
-                } else {
-                    self.rendered = from.lerp(self.target, SmoothingAlpha::new(ease_out_cubic(progress)));
-                }
+        match &self.transition {
+            Some(transition) if transition.is_complete_at(now) => {
+                self.transition = None;
+                self.rendered = self.target;
+            }
+            Some(transition) => {
+                self.rendered = transition.value_at(now).unwrap_or(self.rendered);
             }
             None => {
                 let alpha = SmoothingAlpha::from_frame_time(now.saturating_duration_since(self.last_frame), TRACKING_TAU);
@@ -114,11 +117,6 @@ impl PoseAnimator {
         self.rendered.center.distance(&self.target.center) <= Millimeters::new(SETTLE_DISTANCE_MILLIMETERS)
             && self.rendered.rotation_rad.signed_delta_to(self.target.rotation_rad).as_f64().abs() <= SETTLE_ROTATION_RAD
     }
-}
-
-/// Cubic ease-out: fast start, gentle settle.
-fn ease_out_cubic(t: f64) -> f64 {
-    1.0 - (1.0 - t).powi(3)
 }
 
 #[cfg(test)]
