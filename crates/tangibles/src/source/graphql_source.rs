@@ -83,19 +83,21 @@ impl TangibleSource for GraphQlSource {
                         info!("claimProfile: claimed profile '{}' (id {}, enabled: {})", claimed.name, claimed.pattern_id, claimed.enabled);
                         Ok(claimed.pattern_id)
                     }
-                    ClaimProfileResult::Rejected(claim_rejected) => Err(DaemonError::Registration(format!(
-                        "claimProfile rejected '{}': {}",
-                        matching.name, claim_rejected.reason
-                    ))),
+                    ClaimProfileResult::Rejected(claim_rejected) => {
+                        Err(DaemonError::Registration(format!("claimProfile rejected '{}': {}", matching.name, claim_rejected.reason)))
+                    }
                 },
             },
             Some(matching) => Err(DaemonError::Registration(format!(
                 "registerPattern rejected '{}': {} (collides with '{}', different geometry)",
-                profile.profile().name, rejected.reason, matching.name
+                profile.profile().name,
+                rejected.reason,
+                matching.name
             ))),
             None => Err(DaemonError::Registration(format!(
                 "registerPattern rejected '{}': {}",
-                profile.profile().name, rejected.reason
+                profile.profile().name,
+                rejected.reason
             ))),
         }
     }
