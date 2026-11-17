@@ -1,7 +1,7 @@
 //! `WaterBanks` - the two bank lines of a water body.
 
-use crate::map::Polyline;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polyline;
 use smearor_commons_geometry::Vec2;
 
 /// Half the channel a water course claims on each side (mm) -
@@ -12,9 +12,9 @@ pub const WATER_HALF_WIDTH: Millimeters = Millimeters::new(3.5);
 /// seen along the course direction.
 pub struct WaterBanks {
     /// The bank left of the course direction.
-    pub left: Polyline,
+    pub left: Polyline<Millimeters>,
     /// The bank right of the course direction.
-    pub right: Polyline,
+    pub right: Polyline<Millimeters>,
 }
 
 impl WaterBanks {
@@ -49,8 +49,8 @@ impl WaterBanks {
 
 #[cfg(test)]
 mod tests {
-    use crate::map::Polyline;
     use smearor_commons_geometry::Millimeters;
+    use smearor_commons_geometry::Polyline;
     use smearor_commons_geometry::Vec2;
 
     #[test]

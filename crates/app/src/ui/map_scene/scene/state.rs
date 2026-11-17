@@ -9,7 +9,6 @@ use std::sync::LazyLock;
 use qdo36_map::BlockLayout;
 use qdo36_map::BridgeDeck;
 use qdo36_map::GameMap;
-use qdo36_map::Polyline;
 use qdo36_map::Segment;
 use qdo36_map::StationId;
 use qdo36_tangibles::AnchorConfig;
@@ -17,6 +16,7 @@ use qdo36_tangibles::AnchorState;
 use qdo36_tangibles::MapScale;
 use qdo36_tangibles::SurfaceMm;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polyline;
 use smearor_commons_geometry::Vec2;
 use tangible_objects_model::DisplayRotation;
 
@@ -74,7 +74,7 @@ pub struct SceneState {
     pub decks: OnceCell<HashMap<StationId, BridgeDeck>>,
     /// The smoothed water courses - computed once on first use;
     /// the map is immutable so they never go stale.
-    pub water_courses: OnceCell<Vec<Polyline>>,
+    pub water_courses: OnceCell<Vec<Polyline<Millimeters>>>,
     /// The water courses' segments for bridge crossing tests -
     /// computed once on first use.
     pub water_segments: OnceCell<Vec<Segment<Millimeters>>>,
@@ -103,7 +103,7 @@ impl SceneState {
     /// The Chaikin-smoothed water courses - the same courses feed
     /// the river bands, the Batobus routes and the bridge decks
     /// (lazily computed).
-    pub fn water_courses(&self) -> &[Polyline] {
+    pub fn water_courses(&self) -> &[Polyline<Millimeters>] {
         self.water_courses.get_or_init(|| self.map.smoothed_water())
     }
 

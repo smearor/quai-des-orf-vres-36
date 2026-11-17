@@ -1,6 +1,7 @@
 //! `House` - one procedural building footprint inside a block.
 
-use crate::map::Polygon;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polygon;
 
 use crate::map::blocks::Depth;
 use crate::map::blocks::Height;
@@ -15,7 +16,7 @@ use crate::map::blocks::Variant;
 #[derive(Debug, Clone, PartialEq)]
 pub struct House {
     /// Footprint polygon in map mm (≥3 vertices, closed implicitly).
-    pub footprint: Polygon,
+    pub footprint: Polygon<Millimeters>,
     /// Frontage width in units (1-4 for row houses, 1-2 per side
     /// for corner houses) - drives the unit split lines and the
     /// per-width texture variants.

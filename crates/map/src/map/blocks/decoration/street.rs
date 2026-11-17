@@ -1,14 +1,14 @@
 //! `Street` - a decorative street drawn inside a block.
 
-use crate::Polyline;
 use crate::Segment;
 use crate::SegmentExt;
-use crate::map::Polygon;
 use crate::map::blocks::Angle;
 use crate::map::blocks::SquareMillimeters;
 use crate::map::blocks::Steps;
 use crate::map::blocks::decoration::Streets;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polygon;
+use smearor_commons_geometry::Polyline;
 use smearor_commons_geometry::Vec2;
 use std::f64::consts::PI;
 use std::ops::Deref;
@@ -33,7 +33,7 @@ const BEND_STEPS: Steps = Steps::new(5);
 /// the houses keep clear of (a corridor obstacle), not a block
 /// boundary.
 #[derive(Debug, Clone)]
-pub struct Street(pub Polyline);
+pub struct Street(pub Polyline<Millimeters>);
 
 impl Street {
     /// The street's end-to-end chord: first to last waypoint -
@@ -47,7 +47,7 @@ impl Street {
     /// clipped to the outline and shortened at their ends.
     /// Streets in the same block never cross; empty for blocks
     /// too small to host one.
-    pub fn of_block(outline: &Polygon, seed: u64) -> Streets {
+    pub fn of_block(outline: &Polygon<Millimeters>, seed: u64) -> Streets {
         let area = outline.signed_area();
         if area < STREET_MIN_AREA {
             return Streets::default();
@@ -100,7 +100,7 @@ impl Street {
     /// by a seeded sine amplitude. Falls back to progressively
     /// flatter bends until the whole curve stays inside the
     /// outline (the straight chord always does).
-    pub fn bend(outline: &Polygon, chord: &Segment<Millimeters>, seed: u64, slot: u64) -> Street {
+    pub fn bend(outline: &Polygon<Millimeters>, chord: &Segment<Millimeters>, seed: u64, slot: u64) -> Street {
         let side = if noise(seed, slot, 7) < 0.5 { 1.0 } else { -1.0 };
         let mut amplitude = chord.from.distance(&chord.to) * (0.05 + 0.09 * noise(seed, slot, 8)) * side;
         for _ in 0..4 {
@@ -115,7 +115,7 @@ impl Street {
 }
 
 impl Deref for Street {
-    type Target = Polyline;
+    type Target = Polyline<Millimeters>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
@@ -125,7 +125,7 @@ impl Deref for Street {
 /// The chord of `outline` through `anchor` along `angle`: the two
 /// outline crossings bracketing the anchor, shortened by
 /// `STREET_END_GAP` at each end.
-fn chord_through(outline: &Polygon, anchor: &Vec2<Millimeters>, angle: Angle) -> Option<Segment<Millimeters>> {
+fn chord_through(outline: &Polygon<Millimeters>, anchor: &Vec2<Millimeters>, angle: Angle) -> Option<Segment<Millimeters>> {
     let axis = Vec2::new(angle.as_f64().cos(), angle.as_f64().sin());
     let chord = outline.chord(anchor, &axis)?;
     let direction = chord.to - chord.from;
@@ -151,7 +151,7 @@ fn noise(seed: u64, slot: u64, channel: u64) -> f64 {
 mod tests {
     use super::*;
 
-    fn big_square() -> Polygon {
+    fn big_square() -> Polygon<Millimeters> {
         Polygon::new(vec![Vec2::new(0.0, 0.0), Vec2::new(60.0, 0.0), Vec2::new(60.0, 60.0), Vec2::new(0.0, 60.0)])
     }
 

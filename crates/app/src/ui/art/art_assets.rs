@@ -10,7 +10,10 @@ use cairo::Context;
 use cairo::Rectangle;
 use rsvg::CairoRenderer;
 use rsvg::SvgHandle;
+use smearor_commons_geometry::Pixels;
 use smearor_commons_geometry::PixelsPerMm;
+use smearor_commons_geometry::Rect;
+use smearor_commons_geometry::Vec2;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -70,12 +73,12 @@ impl ArtAssets {
         let Some(handle) = self.handle(spec.family, style, spec.stem.as_str()) else {
             return false;
         };
-        let height = px_per_mm.scale(spec.height).as_f64();
+        let height = px_per_mm.scale(spec.height);
         let Some(aspect) = self.intrinsic_size(&handle).and_then(|size| size.aspect()) else {
             return false;
         };
-        let width = height * aspect;
-        let rect = Rectangle::new(spec.pos.x - spec.anchor.x * width, spec.pos.y - spec.anchor.y * height, width, height);
+        let size = Vec2::<Pixels>::new((height * aspect).as_f64(), height.as_f64());
+        let rect: Rectangle = Rect::anchored(spec.pos, size, spec.anchor).into();
         // The anchor point is the rotation pivot: the pin tip stays
         // on its position, the body swings.
         ctx.save().ok();

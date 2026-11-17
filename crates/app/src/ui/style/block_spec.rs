@@ -7,8 +7,11 @@ use crate::ui::style::ParkSpot;
 use crate::ui::style::PxPos;
 use crate::ui::style::ToPx;
 use qdo36_map::House;
+use smearor_commons_geometry::Millimeters;
 use smearor_commons_geometry::Pixels;
 use smearor_commons_geometry::PixelsPerMm;
+use smearor_commons_geometry::Polygon;
+use smearor_commons_geometry::Polyline;
 use std::f64::consts::FRAC_1_SQRT_2;
 
 /// One city block: its inset outline plus the procedural houses
@@ -16,13 +19,13 @@ use std::f64::consts::FRAC_1_SQRT_2;
 pub struct BlockSpec<'a> {
     /// The block outline, already inset from its bounding streets,
     /// river and border.
-    pub outline: &'a qdo36_map::Polygon,
+    pub outline: &'a Polygon<Millimeters>,
     /// Houses inside the block - quads fronting the outline ring
     /// plus rounded corner footprints.
     pub buildings: &'a [House],
     /// Decorative streets crossing the block interior (visual
     /// only - the houses stay out of their corridors).
-    pub streets: &'a [qdo36_map::Polyline],
+    pub streets: &'a [Polyline<Millimeters>],
     /// Park blobs inside the block, kept free of houses.
     pub parks: &'a [ParkSpot],
     /// The district name the block carries, drawn at the deepest

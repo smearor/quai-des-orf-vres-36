@@ -1,7 +1,7 @@
 //! `WaterRoute` - a route drawn along a water course.
 
-use qdo36_map::Polyline;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polyline;
 use smearor_commons_geometry::Vec2;
 
 /// A boat route along a water course: the drawn route polyline
@@ -10,7 +10,7 @@ use smearor_commons_geometry::Vec2;
 /// trace matching waves.
 pub struct WaterRoute {
     /// The drawn route polyline in map mm.
-    pub route: Polyline,
+    pub route: Polyline<Millimeters>,
     /// The entry point's arc length along the course in map mm.
     pub entry_arc: Millimeters,
 }
@@ -22,11 +22,11 @@ impl WaterRoute {
     /// points - the boat hugs the river instead of cutting corners
     /// over land. `water` carries the same smoothed courses the
     /// bands draw from. Empty when the map ships no water.
-    pub fn along(water: &[Polyline], from: Vec2<Millimeters>, to: Vec2<Millimeters>) -> Self {
+    pub fn along(water: &[Polyline<Millimeters>], from: Vec2<Millimeters>, to: Vec2<Millimeters>) -> Self {
         // The closest point on a polyline: (position along the line
         // as segment index + fraction, projected point, approach
         // distance).
-        let closest = |points: &Polyline, pos: Vec2<Millimeters>| {
+        let closest = |points: &Polyline<Millimeters>, pos: Vec2<Millimeters>| {
             points
                 .nearest_segment(&pos)
                 .map(|(index, projection)| (index as f64 + projection.fraction.as_f64(), projection.point, pos.distance(&projection.point)))

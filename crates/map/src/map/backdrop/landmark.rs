@@ -1,10 +1,10 @@
-use crate::map::Polygon;
 use crate::map::backdrop::LandmarkKind;
 use crate::map::backdrop::LandmarkName;
 use crate::map::blocks::Steps;
 use serde::Deserialize;
 use serde::Serialize;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polygon;
 use smearor_commons_geometry::Vec2;
 use smearor_commons_geometry::serde_pair;
 use std::f64::consts::TAU;
@@ -27,7 +27,7 @@ impl Landmark {
     /// regular octagon around its position, shrinking until it
     /// fits; `None` when the block has no room - the landmark
     /// stays a pin.
-    pub fn footprint(&self, outline: &Polygon) -> Option<Polygon> {
+    pub fn footprint(&self, outline: &Polygon<Millimeters>) -> Option<Polygon<Millimeters>> {
         let pos = &self.pos;
         if !outline.contains(pos) {
             return None;

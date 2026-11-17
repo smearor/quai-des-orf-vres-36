@@ -13,13 +13,13 @@ use qdo36_map::BlockCut;
 use qdo36_map::BlockLayout;
 use qdo36_map::GameMap;
 use qdo36_map::Obstacles;
-use qdo36_map::Polygon;
 use qdo36_map::Segment;
 use qdo36_map::SegmentExt;
 use qdo36_map::StationId;
 use qdo36_map::Street;
 use qdo36_map::Transport;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polygon;
 use std::fmt::Write;
 
 /// The drawn river band's half width (matches the app's
@@ -112,14 +112,14 @@ fn write_svg(map: &GameMap, layout: &BlockLayout, path: &str, focus: &[StationId
         if let Some(outline) = face.inset(&margin) {
             // obstacles: tunnel corridors, decorative street
             // corridors, park blobs - the same pipeline the app runs.
-            let mut obstacles_vec: Vec<Polygon> = face.tunnels.iter().map(|tunnel| tunnel.corridor(Millimeters::new(0.8))).collect();
+            let mut obstacles_vec: Vec<Polygon<Millimeters>> = face.tunnels.iter().map(|tunnel| tunnel.corridor(Millimeters::new(0.8))).collect();
             let streets = Street::of_block(&outline, index as u64);
             for street in &streets {
                 for pair in street.windows(2) {
                     obstacles_vec.push(Segment::new(pair[0], pair[1]).corridor(Millimeters::new(1.6)));
                 }
             }
-            let park_blobs: Vec<(String, Polygon)> = face
+            let park_blobs: Vec<(String, Polygon<Millimeters>)> = face
                 .parks
                 .iter()
                 .filter_map(|park| park.polygon(&outline, index as u64).map(|blob| (park.name.to_string(), blob)))

@@ -1,7 +1,7 @@
 //! `EdgeFrame` - one edge's direction data for house placement.
 
-use crate::map::Polygon;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polygon;
 use smearor_commons_geometry::Vec2;
 
 use crate::map::blocks::Angle;
@@ -31,7 +31,7 @@ impl EdgeFrame {
     }
 
     /// The edge frames of a ring polygon (one per edge).
-    pub(super) fn of_ring(ring: &Polygon) -> Vec<Self> {
+    pub(super) fn of_ring(ring: &Polygon<Millimeters>) -> Vec<Self> {
         ring.segments().map(|edge| Self::new(edge.from, edge.to)).collect()
     }
 

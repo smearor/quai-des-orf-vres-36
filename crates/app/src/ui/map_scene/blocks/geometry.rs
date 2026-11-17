@@ -9,7 +9,6 @@ use qdo36_map::Ground;
 use qdo36_map::Height;
 use qdo36_map::House;
 use qdo36_map::Obstacles;
-use qdo36_map::Polygon;
 use qdo36_map::Segment;
 use qdo36_map::SegmentExt;
 use qdo36_map::Street;
@@ -17,6 +16,7 @@ use qdo36_map::Units;
 use qdo36_map::Variant;
 use smearor_commons_geometry::Millimeters;
 use smearor_commons_geometry::PixelsPerMm;
+use smearor_commons_geometry::Polygon;
 use std::rc::Rc;
 
 use crate::ui::map_scene::SceneLayers;
@@ -85,11 +85,11 @@ impl BlocksGeometry {
                 }
                 // Landmark volumes: a landmark inside the block becomes
                 // a tall octagonal house - its pin stays the roof plate.
-                let landmark_footprints: Vec<Polygon> = face.landmarks.iter().filter_map(|landmark| landmark.footprint(&outline)).collect();
+                let landmark_footprints: Vec<Polygon<Millimeters>> = face.landmarks.iter().filter_map(|landmark| landmark.footprint(&outline)).collect();
                 obstacles.0.extend(landmark_footprints.iter().cloned());
                 // The district caption dodges the park blobs so it
                 // never lands on a park name.
-                let avoid: Vec<Polygon> = parks.iter().map(|park| park.polygon.clone()).collect();
+                let avoid: Vec<Polygon<Millimeters>> = parks.iter().map(|park| park.polygon.clone()).collect();
                 let label = face.district.as_ref().and_then(|name| {
                     outline.deepest_point_avoiding(&avoid).map(|pos| DistrictLabel {
                         name: Rc::from(name.as_str()),

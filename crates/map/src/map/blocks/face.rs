@@ -3,11 +3,11 @@
 use crate::Segment;
 use crate::map::DistrictName;
 use crate::map::Park;
-use crate::map::Polygon;
 use crate::map::backdrop::Landmark;
 use crate::map::blocks::BlockCut;
 use crate::map::blocks::SquareMillimeters;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polygon;
 use smearor_commons_geometry::Vec2;
 
 /// The smallest face area worth drawing (mm²) - slivers from
@@ -20,7 +20,7 @@ const MIN_AREA: SquareMillimeters = SquareMillimeters::new(4.0);
 pub struct BlockFace {
     /// Outline in map mm with positive signed area (the interior
     /// lies left of each edge's direction).
-    pub outline: Polygon,
+    pub outline: Polygon<Millimeters>,
     /// What cuts each outline edge: `cuts[i]` is the feature
     /// bounding `outline[i] -> outline[i+1]` (same length as
     /// `outline`).
@@ -87,7 +87,7 @@ impl BlockFace {
     /// `None` when the face cannot take the margins (the inset
     /// collapses or leaves the face) - after one retry at half
     /// margins the face is left out entirely.
-    pub fn inset(&self, margin: &dyn Fn(&BlockCut) -> f64) -> Option<Polygon> {
+    pub fn inset(&self, margin: &dyn Fn(&BlockCut) -> f64) -> Option<Polygon<Millimeters>> {
         for scale in [1.0, 0.5] {
             let outline = self.offset(scale, margin);
             let valid = outline.len() >= 3 && outline.signed_area() > MIN_AREA && outline.iter().all(|point| self.contains(point)) && outline.is_simple();
@@ -108,13 +108,13 @@ impl BlockFace {
     /// edge - the ground fill grows to the neighboring faces'
     /// inset edges this way, so streets and corridors always rest
     /// on city ground.
-    pub fn outset(&self, margin: &dyn Fn(&BlockCut) -> f64) -> Polygon {
+    pub fn outset(&self, margin: &dyn Fn(&BlockCut) -> f64) -> Polygon<Millimeters> {
         let distances: Vec<f64> = self.cuts.iter().map(|cut| -margin(cut)).collect();
         self.outline.offset(&distances)
     }
 
     /// One inset attempt at `scale` times the per-edge margins.
-    fn offset(&self, scale: f64, margin: &dyn Fn(&BlockCut) -> f64) -> Polygon {
+    fn offset(&self, scale: f64, margin: &dyn Fn(&BlockCut) -> f64) -> Polygon<Millimeters> {
         let distances: Vec<f64> = self.cuts.iter().map(|cut| margin(cut) * scale).collect();
         self.outline.offset(&distances)
     }

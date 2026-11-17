@@ -11,7 +11,6 @@
 //! Placement is deterministic per seed - the same face always
 //! grows the same houses.
 
-use crate::map::Polygon;
 use crate::map::blocks::Angle;
 use crate::map::blocks::Depth;
 use crate::map::blocks::Height;
@@ -22,6 +21,7 @@ use crate::map::blocks::Steps;
 use crate::map::blocks::Units;
 use crate::map::blocks::Variant;
 use crate::map::blocks::noise::noise;
+use smearor_commons_geometry::Polygon;
 
 use smearor_commons_geometry::Millimeters;
 use std::f64::consts::TAU;
@@ -104,7 +104,7 @@ impl BuildingParams {
     /// `seed`. `obstacles` are the convex polygons carving the
     /// block (tunnel corridors, decorative streets, parks) -
     /// houses in their way stay out.
-    pub fn houses(&self, outline: &Polygon, seed: u64, obstacles: &Obstacles) -> Vec<House> {
+    pub fn houses(&self, outline: &Polygon<Millimeters>, seed: u64, obstacles: &Obstacles) -> Vec<House> {
         let mut placed: Vec<House> = Vec::new();
         let mut ring = outline.clone();
         for ring_index in 0..self.max_rings {
@@ -173,7 +173,7 @@ impl BuildingParams {
     /// Row houses along edge `edge` of the ring, between `head`
     /// and `tail` clearance - widths roll 1-4 units, shrinking to
     /// fit.
-    fn row_houses(&self, ctx: &mut Placement<'_>, ring: &Polygon, frames: &[EdgeFrame], edge: usize, head: Millimeters, tail: Millimeters) {
+    fn row_houses(&self, ctx: &mut Placement<'_>, ring: &Polygon<Millimeters>, frames: &[EdgeFrame], edge: usize, head: Millimeters, tail: Millimeters) {
         let (start, frame) = (ring[edge], &frames[edge]);
         let end = frame.length - tail;
         let mut offset = head;
@@ -214,7 +214,7 @@ impl BuildingParams {
     /// deep; when an obstacle (a tunnel) or a narrow wedge cuts
     /// that build, a smaller variant is allowed. Returns the house
     /// plus the frontage consumed on the previous and next edge.
-    fn corner_house(&self, ctx: &Placement<'_>, ring: &Polygon, frames: &[EdgeFrame], vertex: usize) -> Option<CornerHouse> {
+    fn corner_house(&self, ctx: &Placement<'_>, ring: &Polygon<Millimeters>, frames: &[EdgeFrame], vertex: usize) -> Option<CornerHouse> {
         let units_roll = noise(ctx.seed, ctx.ring_index, vertex, 0, 3);
         let candidates = [
             // Preferred flatiron: at least 2 units, at least 2 mm.
@@ -255,7 +255,7 @@ impl BuildingParams {
     /// `depth`: facade along both edges, tangent nose arc at the
     /// vertex, back wall at `depth`. `None` when the wedge
     /// geometry degenerates.
-    fn corner_footprint(&self, ring: &Polygon, frames: &[EdgeFrame], vertex: usize, units: Units, depth: Depth) -> Option<CornerFootprint> {
+    fn corner_footprint(&self, ring: &Polygon<Millimeters>, frames: &[EdgeFrame], vertex: usize, units: Units, depth: Depth) -> Option<CornerFootprint> {
         let count = ring.len();
         let previous_edge = (vertex + count - 1) % count;
         let wedge = CornerWedge {

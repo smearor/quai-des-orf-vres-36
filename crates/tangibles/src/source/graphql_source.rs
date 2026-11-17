@@ -10,7 +10,7 @@ use smearor_commons_geometry::Millimeters;
 use smearor_commons_geometry::UnitsPerMm;
 use tangible_objects_client::Endpoint;
 use tangible_objects_client::GraphQLClient;
-use tangible_objects_client::ProfileQuery;
+use tangible_objects_model::ClaimProfileResult;
 use tangible_objects_model::Lifetime;
 use tangible_objects_model::Owner;
 use tangible_objects_model::PatternId;
@@ -59,33 +59,44 @@ impl GraphQlSource {
 impl TangibleSource for GraphQlSource {
     async fn register_anchor_profile(&mut self, profile: &AnchorPattern) -> Result<PatternId, DaemonError> {
         let result = self.client.register_pattern(profile.profile(), Some(&self.owner), Lifetime::Session).await?;
-        match result {
-            RegisterPatternResult::Registered(registered) => Ok(registered.pattern_id),
-            RegisterPatternResult::Rejected(rejected) => {
-                // A stale registration from a crashed or restarted run:
-                // when the daemon still holds the identical profile
-                // under our owner, adopt it instead of failing.
-                let Ok(profiles) = self
-                    .client
-                    .profiles(&ProfileQuery {
-                        owner: Some(self.owner.clone()),
-                        static_only: None,
-                    })
-                    .await
-                else {
-                    return Err(DaemonError::Registration(format!("registerPattern rejected {}: {}", profile.profile().name, rejected.reason)));
-                };
-                let identical = profiles
-                    .iter()
-                    .find(|candidate| candidate.name == profile.profile().name && candidate.num_points.as_usize() == profile.profile().points.len());
-                match identical {
-                    Some(existing) => {
-                        info!("registerPattern: adopting existing identical profile '{}' (id {})", existing.name, existing.pattern_id);
-                        Ok(existing.pattern_id)
+        let rejected = match result {
+            RegisterPatternResult::Registered(registered) => return Ok(registered.pattern_id),
+            RegisterPatternResult::Rejected(rejected) => rejected,
+        };
+        // The daemon may already hold the identical profile - a
+        // statically loaded one, or a stale registration from a crashed
+        // run. Verify the collision via profileLookup, then adopt or
+        // claim the match.
+        let lookup = self.client.lookup_profile(profile.profile()).await?;
+        match lookup.matching {
+            Some(matching) if matching.identical => match matching.owner {
+                Some(owner) if owner != self.owner => Err(DaemonError::Registration(format!(
+                    "profile '{}' (id {}) is owned by '{owner}'",
+                    matching.name, matching.pattern_id
+                ))),
+                // Owner-less static profile or still ours from a
+                // crashed run: claim binds it to us and enables it -
+                // the anchor profile is inactive by default and only
+                // needed while qdo36 runs. Owner cleanup reverts both.
+                _ => match self.client.claim_profile(matching.pattern_id, &self.owner, true).await? {
+                    ClaimProfileResult::Claimed(claimed) => {
+                        info!("claimProfile: claimed profile '{}' (id {}, enabled: {})", claimed.name, claimed.pattern_id, claimed.enabled);
+                        Ok(claimed.pattern_id)
                     }
-                    None => Err(DaemonError::Registration(format!("registerPattern rejected {}: {}", profile.profile().name, rejected.reason))),
-                }
-            }
+                    ClaimProfileResult::Rejected(claim_rejected) => Err(DaemonError::Registration(format!(
+                        "claimProfile rejected '{}': {}",
+                        matching.name, claim_rejected.reason
+                    ))),
+                },
+            },
+            Some(matching) => Err(DaemonError::Registration(format!(
+                "registerPattern rejected '{}': {} (collides with '{}', different geometry)",
+                profile.profile().name, rejected.reason, matching.name
+            ))),
+            None => Err(DaemonError::Registration(format!(
+                "registerPattern rejected '{}': {}",
+                profile.profile().name, rejected.reason
+            ))),
         }
     }
 

@@ -7,8 +7,6 @@ use crate::LineName;
 use crate::MapError;
 use crate::NearestStation;
 use crate::Neighbors;
-use crate::Polygon;
-use crate::Polyline;
 use crate::Segment;
 use crate::Station;
 use crate::StationCount;
@@ -29,6 +27,8 @@ use crate::map::blocks::LaneMap;
 use crate::map::bridge::BridgeDeck;
 use crate::map::cost::Cost;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polygon;
+use smearor_commons_geometry::Polyline;
 use smearor_commons_geometry::Vec2;
 use std::collections::BTreeSet;
 use std::collections::HashMap;
@@ -134,7 +134,7 @@ impl GameMap {
     /// pinned so the river keeps flowing right under those markers.
     /// Feeds the river bands, the Batobus routes and the city-block
     /// cuts alike, so all of them share the same waterline.
-    pub fn smoothed_water(&self) -> Vec<Polyline> {
+    pub fn smoothed_water(&self) -> Vec<Polyline<Millimeters>> {
         let bridge_positions: Vec<Vec2<Millimeters>> = self.stations.positions_of_kind(StationKind::Bridge).collect();
         self.backdrop
             .water
@@ -237,7 +237,7 @@ impl GameMap {
 
     /// The edge's drawn route in map mm: its station path resolved
     /// to positions (missing stations skipped).
-    pub fn edge_polyline(&self, edge: &Edge) -> Polyline {
+    pub fn edge_polyline(&self, edge: &Edge) -> Polyline<Millimeters> {
         self.edge_path(edge)
             .iter()
             .filter_map(|id| self.station(*id))

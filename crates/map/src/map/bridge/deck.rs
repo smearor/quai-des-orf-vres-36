@@ -1,7 +1,6 @@
 //! `BridgeDeck` - the drawn bridge of a `bridge`-kind station.
 
 use crate::GameMap;
-use crate::Polyline;
 use crate::Segment;
 use crate::Station;
 use crate::StationId;
@@ -12,6 +11,7 @@ use crate::map::WaterBanks;
 use crate::map::bridge::RoadRoute;
 use crate::map::bridge::near_point::NearPoint;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polyline;
 use smearor_commons_geometry::Vec2;
 use std::collections::HashMap;
 
@@ -49,7 +49,7 @@ impl BridgeDeck {
     /// segment, centered on `station` when it sits on the water,
     /// spanning bank to bank plus the apron. `None` on a
     /// degenerate course segment.
-    pub(super) fn at(station: &Station, near: &NearPoint, course: &Polyline, river_half_width: Millimeters) -> Option<Self> {
+    pub(super) fn at(station: &Station, near: &NearPoint, course: &Polyline<Millimeters>, river_half_width: Millimeters) -> Option<Self> {
         let course_segment = Segment::new(course[near.segment], course[near.segment + 1]);
         let direction = course_segment.to - course_segment.from;
         if direction.magnitude() <= Millimeters::new(1e-9) {
@@ -106,19 +106,19 @@ impl BridgeDeck {
     /// back - a hairpin), then splices two waypoints upstream of
     /// the deck center along the river tangent, part way toward
     /// the bank-side dock end.
-    pub fn dock_start(&self, route: &mut Polyline) {
+    pub fn dock_start(&self, route: &mut Polyline<Millimeters>) {
         self.dock(route, true);
     }
 
     /// Docks a batobus route's last point onto this deck - the
     /// end counterpart of [`Self::dock_start`].
-    pub fn dock_end(&self, route: &mut Polyline) {
+    pub fn dock_end(&self, route: &mut Polyline<Millimeters>) {
         self.dock(route, false);
     }
 
     /// The docking bend: `at_start` docks the route's first
     /// point, `false` its last.
-    fn dock(&self, route: &mut Polyline, at_start: bool) {
+    fn dock(&self, route: &mut Polyline<Millimeters>, at_start: bool) {
         const FAR: Millimeters = Millimeters::new(5.5);
         let deck = self;
         let tangent: Vec2<Millimeters> = deck.axis.perpendicular();

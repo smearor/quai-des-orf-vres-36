@@ -47,7 +47,7 @@ mod tests {
             stem: AssetStem::new("louvre"),
             pos,
             height: Millimeters::new(12.0),
-            anchor: AnchorFrac::PIN_TIP,
+            anchor: anchor::PIN_TIP,
             rotation: RotationRad::ZERO,
             alpha: Alpha::OPAQUE,
         };
@@ -58,7 +58,7 @@ mod tests {
             stem: AssetStem::new("does-not-exist"),
             pos,
             height: Millimeters::new(12.0),
-            anchor: AnchorFrac::PIN_TIP,
+            anchor: anchor::PIN_TIP,
             rotation: RotationRad::ZERO,
             alpha: Alpha::OPAQUE,
         };

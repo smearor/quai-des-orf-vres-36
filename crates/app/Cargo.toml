@@ -43,7 +43,7 @@ smearor-commons-animation.workspace = true
 smearor-commons-color = { workspace = true, features = ["cairo"] }
 smearor-wrot-rotation.workspace = true
 tangible-objects-model.workspace = true
-smearor-commons-geometry.workspace = true
+smearor-commons-geometry = { workspace = true, features = ["cairo"] }
 thiserror.workspace = true
 tokio.workspace = true
 toml.workspace = true

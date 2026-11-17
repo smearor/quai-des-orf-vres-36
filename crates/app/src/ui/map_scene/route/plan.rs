@@ -1,8 +1,9 @@
 //! `RoutePlan` - an edge's drawn route plus its lane offsets.
 
 use crate::ui::style::PxPos;
-use qdo36_map::Polyline;
+use smearor_commons_geometry::Millimeters;
 use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::Polyline;
 
 /// An edge's drawn polyline in px, its per-hop lane offsets and
 /// the same polyline in map mm (for region tests).
@@ -14,5 +15,5 @@ pub struct RoutePlan {
     pub offsets: Vec<Pixels>,
     /// The same route in map mm - the region tests run in map
     /// space.
-    pub route_mm: Polyline,
+    pub route_mm: Polyline<Millimeters>,
 }

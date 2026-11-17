@@ -41,10 +41,10 @@ pub use two_finger::TwoFingerGesture;
 pub use two_finger::TwoFingerStep;
 pub use widget::MapScene;
 
-use crate::ui::art::AnchorFrac;
 use crate::ui::art::ArtFamily;
 use crate::ui::art::ArtSpec;
 use crate::ui::art::AssetStem;
+use crate::ui::art::anchor;
 use crate::ui::style::EdgePathExt;
 use crate::ui::style::EdgeSpec;
 use crate::ui::style::LabelSpec;
@@ -56,8 +56,6 @@ use crate::ui::style::WATER_HALF_WIDTH;
 use qdo36_map::Edge;
 use qdo36_map::EdgePath;
 use qdo36_map::LineName;
-use qdo36_map::Polygon;
-use qdo36_map::Polyline;
 use qdo36_map::Segment;
 use qdo36_map::StationId;
 use qdo36_map::StationKind;
@@ -69,6 +67,8 @@ use qdo36_tangibles::ScaleFactor;
 use smearor_commons_color::Alpha;
 use smearor_commons_geometry::Millimeters;
 use smearor_commons_geometry::Pixels;
+use smearor_commons_geometry::Polygon;
+use smearor_commons_geometry::Polyline;
 use smearor_commons_geometry::RotationRad;
 use smearor_commons_geometry::Vec2;
 
@@ -199,7 +199,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                 stem: AssetStem::for_landmark(landmark.name.as_str()),
                 pos,
                 height: height_mm,
-                anchor: AnchorFrac::PIN_TIP,
+                anchor: anchor::PIN_TIP,
                 rotation: angle + RotationRad::new(FRAC_PI_2),
                 alpha: Alpha::OPAQUE,
             };
@@ -339,7 +339,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                     })
                     .collect()
             };
-            let route_mm: Polyline = path.iter().filter_map(|id| map.station(*id)).map(|s| s.pos).collect();
+            let route_mm: Polyline<Millimeters> = path.iter().filter_map(|id| map.station(*id)).map(|s| s.pos).collect();
             let route: Vec<PxPos> = route_mm.iter().map(|pos| to_px(*pos)).collect();
             Some(RoutePlan { route, offsets, route_mm })
         } else {
@@ -407,7 +407,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
     // Dim regions for the tunnel lines: the river bands and every
     // park blob - where a metro/underground line crosses one, it
     // fades under a paper wash.
-    let mut dim_regions: Vec<Polygon> = Vec::new();
+    let mut dim_regions: Vec<Polygon<Millimeters>> = Vec::new();
     for course in water_courses {
         let banks = qdo36_map::WaterBanks::new(course, WATER_HALF_WIDTH);
         if banks.left.len() >= 2 {
@@ -634,7 +634,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
                     stem: AssetStem::for_line(line),
                     pos: mid,
                     height: LIGNE_BADGE_HEIGHT * state.params.metro_scale,
-                    anchor: AnchorFrac::CENTER,
+                    anchor: anchor::CENTER,
                     rotation: RotationRad::new(0.0),
                     alpha: Alpha::OPAQUE,
                 };
@@ -732,7 +732,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
         stem: AssetStem::new("eiffel-anchor"),
         pos: anchor_pos,
         height: ANCHOR_HEIGHT,
-        anchor: AnchorFrac::PIN_TIP,
+        anchor: anchor::PIN_TIP,
         rotation: RotationRad::new(0.0),
         alpha: if tracked { Alpha::OPAQUE } else { Alpha::new(0.4) },
     };
@@ -748,7 +748,7 @@ pub fn render(ctx: &Context, state: &SceneState, pose: AnchorPose, width: Pixels
             stem: AssetStem::new("compass"),
             pos: compass_pos,
             height: COMPASS_HEIGHT,
-            anchor: AnchorFrac::CENTER,
+            anchor: anchor::CENTER,
             rotation: RotationRad::new(0.0),
             alpha: Alpha::new(0.9),
         };

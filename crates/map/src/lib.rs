@@ -60,8 +60,6 @@ pub use map::MapStory;
 pub use map::Obstacles;
 pub use map::Park;
 pub use map::ParkName;
-pub use map::Polygon;
-pub use map::Polyline;
 pub use map::RoadRoute;
 pub use map::Segment;
 pub use map::SegmentExt;

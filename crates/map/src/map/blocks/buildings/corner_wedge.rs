@@ -1,14 +1,14 @@
 //! `CornerWedge` - the flatiron wedge at a ring vertex: the two
 //! edge frames plus the rolled dimensions.
 
-use crate::map::Polyline;
 use crate::map::blocks::Depth;
 use crate::map::blocks::buildings::CORNER_ARC_STEPS;
 use crate::map::blocks::buildings::arc_sweep;
 use crate::map::blocks::buildings::corner_nose::CornerNose;
 use crate::map::blocks::buildings::edge_frame::EdgeFrame;
-use crate::map::geometry::Line;
+use smearor_commons_geometry::Line;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polyline;
 use smearor_commons_geometry::Vec2;
 
 /// The flatiron wedge at a ring vertex: the corner position, the

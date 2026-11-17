@@ -12,11 +12,11 @@ pub mod name;
 
 pub use name::ParkName;
 
-use crate::map::Polygon;
 use crate::map::blocks::Steps;
 use serde::Deserialize;
 use serde::Serialize;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polygon;
 use smearor_commons_geometry::Vec2;
 use std::f64::consts::TAU;
 
@@ -45,7 +45,7 @@ impl Park {
     /// when the park's position is outside the outline or the
     /// available clearance is too small - the block then keeps
     /// its houses instead.
-    pub fn polygon(&self, outline: &Polygon, seed: u64) -> Option<Polygon> {
+    pub fn polygon(&self, outline: &Polygon<Millimeters>, seed: u64) -> Option<Polygon<Millimeters>> {
         let pos = &self.pos;
         if !outline.contains(pos) {
             return None;
@@ -85,7 +85,7 @@ fn noise(seed: u64, slot: u64, channel: u64) -> f64 {
 mod tests {
     use super::*;
 
-    fn big_square() -> Polygon {
+    fn big_square() -> Polygon<Millimeters> {
         Polygon::new(vec![Vec2::new(10.0, 10.0), Vec2::new(60.0, 10.0), Vec2::new(60.0, 60.0), Vec2::new(10.0, 60.0)])
     }
 

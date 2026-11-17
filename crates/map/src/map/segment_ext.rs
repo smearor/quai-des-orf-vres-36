@@ -1,9 +1,9 @@
 //! `SegmentExt` - millimeter-specific segment derivations on top
 //! of the generic `smearor_commons_geometry::Segment`.
 
-use crate::map::Polygon;
-use crate::map::Polyline;
 use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polygon;
+use smearor_commons_geometry::Polyline;
 use smearor_commons_geometry::Segment;
 use std::f64::consts::PI;
 
@@ -14,16 +14,16 @@ pub trait SegmentExt {
     /// The sine arc from `from` to `to`, bowed `amplitude` to the
     /// left of the direction at its peak (negative bows right) -
     /// `steps + 1` points including the endpoints.
-    fn arc(&self, steps: usize, amplitude: Millimeters) -> Polyline;
+    fn arc(&self, steps: usize, amplitude: Millimeters) -> Polyline<Millimeters>;
 
     /// A rectangle corridor `half_width` mm to each side of the
     /// segment - the obstacle shape tunnels and decorative
     /// streets block houses with.
-    fn corridor(&self, half_width: Millimeters) -> Polygon;
+    fn corridor(&self, half_width: Millimeters) -> Polygon<Millimeters>;
 }
 
 impl SegmentExt for Segment<Millimeters> {
-    fn arc(&self, steps: usize, amplitude: Millimeters) -> Polyline {
+    fn arc(&self, steps: usize, amplitude: Millimeters) -> Polyline<Millimeters> {
         let direction = self.to - self.from;
         let normal = direction.normalized().perpendicular();
         (0..=steps)
@@ -35,7 +35,7 @@ impl SegmentExt for Segment<Millimeters> {
             .collect()
     }
 
-    fn corridor(&self, half_width: Millimeters) -> Polygon {
+    fn corridor(&self, half_width: Millimeters) -> Polygon<Millimeters> {
         let direction = self.to - self.from;
         let normal = direction.normalized().perpendicular() * half_width.as_f64();
         Polygon::new(vec![self.from + normal, self.to + normal, self.to - normal, self.from - normal])

@@ -1,10 +1,11 @@
 //! `RoadRoute` - a route polyline plus its per-segment hop pairs.
 
 use crate::Segment;
-use crate::map::Polyline;
 use crate::map::blocks::BlockCut;
 use crate::map::blocks::CutSegment;
 use crate::station::StationPair;
+use smearor_commons_geometry::Millimeters;
+use smearor_commons_geometry::Polyline;
 
 /// A road route's drawn polyline plus, for every segment, the
 /// station pair the segment's outgoing hop connects - the
@@ -13,7 +14,7 @@ use crate::station::StationPair;
 #[derive(Debug, Clone, PartialEq)]
 pub struct RoadRoute {
     /// The route polyline in map mm.
-    pub polyline: Polyline,
+    pub polyline: Polyline<Millimeters>,
     /// `hops[segment]` = the station pair that segment's hop
     /// connects.
     pub hops: Vec<StationPair>,
