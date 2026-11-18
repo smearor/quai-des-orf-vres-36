@@ -3669,7 +3669,7 @@ checksum = "149309498a5f7334b12ddae0cad8aba81ce785fe91755068867e017cf98fee46"
 [[package]]
 name = "smearor-commons-animation"
 version = "0.1.0"
-source = "git+https://github.com/smearor/smearor-commons.git#81ee9bcf302587a6fc0359e20641e4ba25041ab1"
+source = "git+https://github.com/smearor/smearor-commons.git#ed2c1a3a150ac32d770618b02022a2954bd29c6d"
 dependencies = [
  "serde",
  "smearor-commons-geometry",
@@ -3678,7 +3678,7 @@ dependencies = [
 [[package]]
 name = "smearor-commons-color"
 version = "0.1.0"
-source = "git+https://github.com/smearor/smearor-commons.git#81ee9bcf302587a6fc0359e20641e4ba25041ab1"
+source = "git+https://github.com/smearor/smearor-commons.git#ed2c1a3a150ac32d770618b02022a2954bd29c6d"
 dependencies = [
  "cairo-rs",
  "serde",
@@ -3688,7 +3688,7 @@ dependencies = [
 [[package]]
 name = "smearor-commons-geometry"
 version = "0.1.0"
-source = "git+https://github.com/smearor/smearor-commons.git#81ee9bcf302587a6fc0359e20641e4ba25041ab1"
+source = "git+https://github.com/smearor/smearor-commons.git#ed2c1a3a150ac32d770618b02022a2954bd29c6d"
 dependencies = [
  "cairo-rs",
  "serde",
@@ -3883,7 +3883,7 @@ dependencies = [
 [[package]]
 name = "tangible-objects-analysis"
 version = "0.1.0"
-source = "git+https://github.com/smearor/tangible-objects-rs.git#e7586c0e4c14ec5b8f616102c95b5bb79baa7ab0"
+source = "git+https://github.com/smearor/tangible-objects-rs.git#3493d85c8f4d14d5e6d3a1d46eddb833d5e9db24"
 dependencies = [
  "serde",
  "serde-jsonlines",
@@ -3896,7 +3896,7 @@ dependencies = [
 [[package]]
 name = "tangible-objects-client"
 version = "0.1.0"
-source = "git+https://github.com/smearor/tangible-objects-rs.git#e7586c0e4c14ec5b8f616102c95b5bb79baa7ab0"
+source = "git+https://github.com/smearor/tangible-objects-rs.git#3493d85c8f4d14d5e6d3a1d46eddb833d5e9db24"
 dependencies = [
  "cynic",
  "futures",
@@ -3918,7 +3918,7 @@ dependencies = [
 [[package]]
 name = "tangible-objects-model"
 version = "0.1.0"
-source = "git+https://github.com/smearor/tangible-objects-rs.git#e7586c0e4c14ec5b8f616102c95b5bb79baa7ab0"
+source = "git+https://github.com/smearor/tangible-objects-rs.git#3493d85c8f4d14d5e6d3a1d46eddb833d5e9db24"
 dependencies = [
  "cynic",
  "serde",
