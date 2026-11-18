@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["backdrop","blocks","bridge","cost","district","edge","error","fugitive","game_map","geometry","line","meta","park","slogan","story","toml","transport","water_banks"],"struct":["Projection","Segment","SquareMillimeters"],"trait":["SegmentExt"]};
+window.SIDEBAR_ITEMS = {"mod":["backdrop","blocks","bridge","cost","district","edge","error","fugitive","game_map","line","meta","park","slogan","story","toml","transport","water_banks"],"struct":["Projection","Segment","SquareMillimeters"],"trait":["SegmentExt"]};

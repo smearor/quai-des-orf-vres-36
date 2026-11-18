@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["DocumentSize"]};
+window.SIDEBAR_ITEMS = {"type":["DocumentSize"]};

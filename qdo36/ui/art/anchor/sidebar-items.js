@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["AnchorFrac"]};
+window.SIDEBAR_ITEMS = {"constant":["CENTER","PIN_TIP"],"type":["AnchorFrac"]};

@@ -11,17 +11,17 @@
 <a href=#11 id=11 data-nosnippet>11</a>//! Placement is deterministic per seed - the same face always
 <a href=#12 id=12 data-nosnippet>12</a>//! grows the same houses.
 <a href=#13 id=13 data-nosnippet>13</a>
-<a href=#14 id=14 data-nosnippet>14</a></span><span class="kw">use </span><span class="kw">crate</span>::map::Polygon;
-<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Angle;
-<a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Depth;
-<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Height;
-<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::House;
-<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Obstacles;
-<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::SquareMillimeters;
-<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Steps;
-<a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Units;
-<a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Variant;
-<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::noise::noise;
+<a href=#14 id=14 data-nosnippet>14</a></span><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Angle;
+<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Depth;
+<a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Height;
+<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::House;
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Obstacles;
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::SquareMillimeters;
+<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Steps;
+<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Units;
+<a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::Variant;
+<a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span><span class="kw">crate</span>::map::blocks::noise::noise;
+<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span>smearor_commons_geometry::Polygon;
 <a href=#25 id=25 data-nosnippet>25</a>
 <a href=#26 id=26 data-nosnippet>26</a><span class="kw">use </span>smearor_commons_geometry::Millimeters;
 <a href=#27 id=27 data-nosnippet>27</a><span class="kw">use </span>std::f64::consts::TAU;
@@ -104,7 +104,7 @@
 <a href=#104 id=104 data-nosnippet>104</a>    /// `seed`. `obstacles` are the convex polygons carving the
 <a href=#105 id=105 data-nosnippet>105</a>    /// block (tunnel corridors, decorative streets, parks) -
 <a href=#106 id=106 data-nosnippet>106</a>    /// houses in their way stay out.
-<a href=#107 id=107 data-nosnippet>107</a>    </span><span class="kw">pub fn </span>houses(<span class="kw-2">&amp;</span><span class="self">self</span>, outline: <span class="kw-2">&amp;</span>Polygon, seed: u64, obstacles: <span class="kw-2">&amp;</span>Obstacles) -&gt; Vec&lt;House&gt; {
+<a href=#107 id=107 data-nosnippet>107</a>    </span><span class="kw">pub fn </span>houses(<span class="kw-2">&amp;</span><span class="self">self</span>, outline: <span class="kw-2">&amp;</span>Polygon&lt;Millimeters&gt;, seed: u64, obstacles: <span class="kw-2">&amp;</span>Obstacles) -&gt; Vec&lt;House&gt; {
 <a href=#108 id=108 data-nosnippet>108</a>        <span class="kw">let </span><span class="kw-2">mut </span>placed: Vec&lt;House&gt; = Vec::new();
 <a href=#109 id=109 data-nosnippet>109</a>        <span class="kw">let </span><span class="kw-2">mut </span>ring = outline.clone();
 <a href=#110 id=110 data-nosnippet>110</a>        <span class="kw">for </span>ring_index <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.max_rings {
@@ -173,7 +173,7 @@
 <a href=#173 id=173 data-nosnippet>173</a>    <span class="doccomment">/// Row houses along edge `edge` of the ring, between `head`
 <a href=#174 id=174 data-nosnippet>174</a>    /// and `tail` clearance - widths roll 1-4 units, shrinking to
 <a href=#175 id=175 data-nosnippet>175</a>    /// fit.
-<a href=#176 id=176 data-nosnippet>176</a>    </span><span class="kw">fn </span>row_houses(<span class="kw-2">&amp;</span><span class="self">self</span>, ctx: <span class="kw-2">&amp;mut </span>Placement&lt;<span class="lifetime">'_</span>&gt;, ring: <span class="kw-2">&amp;</span>Polygon, frames: <span class="kw-2">&amp;</span>[EdgeFrame], edge: usize, head: Millimeters, tail: Millimeters) {
+<a href=#176 id=176 data-nosnippet>176</a>    </span><span class="kw">fn </span>row_houses(<span class="kw-2">&amp;</span><span class="self">self</span>, ctx: <span class="kw-2">&amp;mut </span>Placement&lt;<span class="lifetime">'_</span>&gt;, ring: <span class="kw-2">&amp;</span>Polygon&lt;Millimeters&gt;, frames: <span class="kw-2">&amp;</span>[EdgeFrame], edge: usize, head: Millimeters, tail: Millimeters) {
 <a href=#177 id=177 data-nosnippet>177</a>        <span class="kw">let </span>(start, frame) = (ring[edge], <span class="kw-2">&amp;</span>frames[edge]);
 <a href=#178 id=178 data-nosnippet>178</a>        <span class="kw">let </span>end = frame.length - tail;
 <a href=#179 id=179 data-nosnippet>179</a>        <span class="kw">let </span><span class="kw-2">mut </span>offset = head;
@@ -214,7 +214,7 @@
 <a href=#214 id=214 data-nosnippet>214</a>    /// deep; when an obstacle (a tunnel) or a narrow wedge cuts
 <a href=#215 id=215 data-nosnippet>215</a>    /// that build, a smaller variant is allowed. Returns the house
 <a href=#216 id=216 data-nosnippet>216</a>    /// plus the frontage consumed on the previous and next edge.
-<a href=#217 id=217 data-nosnippet>217</a>    </span><span class="kw">fn </span>corner_house(<span class="kw-2">&amp;</span><span class="self">self</span>, ctx: <span class="kw-2">&amp;</span>Placement&lt;<span class="lifetime">'_</span>&gt;, ring: <span class="kw-2">&amp;</span>Polygon, frames: <span class="kw-2">&amp;</span>[EdgeFrame], vertex: usize) -&gt; <span class="prelude-ty">Option</span>&lt;CornerHouse&gt; {
+<a href=#217 id=217 data-nosnippet>217</a>    </span><span class="kw">fn </span>corner_house(<span class="kw-2">&amp;</span><span class="self">self</span>, ctx: <span class="kw-2">&amp;</span>Placement&lt;<span class="lifetime">'_</span>&gt;, ring: <span class="kw-2">&amp;</span>Polygon&lt;Millimeters&gt;, frames: <span class="kw-2">&amp;</span>[EdgeFrame], vertex: usize) -&gt; <span class="prelude-ty">Option</span>&lt;CornerHouse&gt; {
 <a href=#218 id=218 data-nosnippet>218</a>        <span class="kw">let </span>units_roll = noise(ctx.seed, ctx.ring_index, vertex, <span class="number">0</span>, <span class="number">3</span>);
 <a href=#219 id=219 data-nosnippet>219</a>        <span class="kw">let </span>candidates = [
 <a href=#220 id=220 data-nosnippet>220</a>            <span class="comment">// Preferred flatiron: at least 2 units, at least 2 mm.
@@ -255,7 +255,7 @@
 <a href=#255 id=255 data-nosnippet>255</a>    /// `depth`: facade along both edges, tangent nose arc at the
 <a href=#256 id=256 data-nosnippet>256</a>    /// vertex, back wall at `depth`. `None` when the wedge
 <a href=#257 id=257 data-nosnippet>257</a>    /// geometry degenerates.
-<a href=#258 id=258 data-nosnippet>258</a>    </span><span class="kw">fn </span>corner_footprint(<span class="kw-2">&amp;</span><span class="self">self</span>, ring: <span class="kw-2">&amp;</span>Polygon, frames: <span class="kw-2">&amp;</span>[EdgeFrame], vertex: usize, units: Units, depth: Depth) -&gt; <span class="prelude-ty">Option</span>&lt;CornerFootprint&gt; {
+<a href=#258 id=258 data-nosnippet>258</a>    </span><span class="kw">fn </span>corner_footprint(<span class="kw-2">&amp;</span><span class="self">self</span>, ring: <span class="kw-2">&amp;</span>Polygon&lt;Millimeters&gt;, frames: <span class="kw-2">&amp;</span>[EdgeFrame], vertex: usize, units: Units, depth: Depth) -&gt; <span class="prelude-ty">Option</span>&lt;CornerFootprint&gt; {
 <a href=#259 id=259 data-nosnippet>259</a>        <span class="kw">let </span>count = ring.len();
 <a href=#260 id=260 data-nosnippet>260</a>        <span class="kw">let </span>previous_edge = (vertex + count - <span class="number">1</span>) % count;
 <a href=#261 id=261 data-nosnippet>261</a>        <span class="kw">let </span>wedge = CornerWedge {

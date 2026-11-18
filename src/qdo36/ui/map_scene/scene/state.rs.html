@@ -9,14 +9,14 @@
 <a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>qdo36_map::BlockLayout;
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>qdo36_map::BridgeDeck;
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>qdo36_map::GameMap;
-<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>qdo36_map::Polyline;
-<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>qdo36_map::Segment;
-<a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span>qdo36_map::StationId;
-<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span>qdo36_tangibles::AnchorConfig;
-<a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span>qdo36_tangibles::AnchorState;
-<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span>qdo36_tangibles::MapScale;
-<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>qdo36_tangibles::SurfaceMm;
-<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>smearor_commons_geometry::Millimeters;
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>qdo36_map::Segment;
+<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>qdo36_map::StationId;
+<a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span>qdo36_tangibles::AnchorConfig;
+<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span>qdo36_tangibles::AnchorState;
+<a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span>qdo36_tangibles::MapScale;
+<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span>qdo36_tangibles::SurfaceMm;
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>smearor_commons_geometry::Millimeters;
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>smearor_commons_geometry::Polyline;
 <a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>smearor_commons_geometry::Vec2;
 <a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>tangible_objects_model::DisplayRotation;
 <a href=#22 id=22 data-nosnippet>22</a>
@@ -74,7 +74,7 @@
 <a href=#74 id=74 data-nosnippet>74</a>    </span><span class="kw">pub </span>decks: OnceCell&lt;HashMap&lt;StationId, BridgeDeck&gt;&gt;,
 <a href=#75 id=75 data-nosnippet>75</a>    <span class="doccomment">/// The smoothed water courses - computed once on first use;
 <a href=#76 id=76 data-nosnippet>76</a>    /// the map is immutable so they never go stale.
-<a href=#77 id=77 data-nosnippet>77</a>    </span><span class="kw">pub </span>water_courses: OnceCell&lt;Vec&lt;Polyline&gt;&gt;,
+<a href=#77 id=77 data-nosnippet>77</a>    </span><span class="kw">pub </span>water_courses: OnceCell&lt;Vec&lt;Polyline&lt;Millimeters&gt;&gt;&gt;,
 <a href=#78 id=78 data-nosnippet>78</a>    <span class="doccomment">/// The water courses' segments for bridge crossing tests -
 <a href=#79 id=79 data-nosnippet>79</a>    /// computed once on first use.
 <a href=#80 id=80 data-nosnippet>80</a>    </span><span class="kw">pub </span>water_segments: OnceCell&lt;Vec&lt;Segment&lt;Millimeters&gt;&gt;&gt;,
@@ -103,7 +103,7 @@
 <a href=#103 id=103 data-nosnippet>103</a>    <span class="doccomment">/// The Chaikin-smoothed water courses - the same courses feed
 <a href=#104 id=104 data-nosnippet>104</a>    /// the river bands, the Batobus routes and the bridge decks
 <a href=#105 id=105 data-nosnippet>105</a>    /// (lazily computed).
-<a href=#106 id=106 data-nosnippet>106</a>    </span><span class="kw">pub fn </span>water_courses(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[Polyline] {
+<a href=#106 id=106 data-nosnippet>106</a>    </span><span class="kw">pub fn </span>water_courses(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[Polyline&lt;Millimeters&gt;] {
 <a href=#107 id=107 data-nosnippet>107</a>        <span class="self">self</span>.water_courses.get_or_init(|| <span class="self">self</span>.map.smoothed_water())
 <a href=#108 id=108 data-nosnippet>108</a>    }
 <a href=#109 id=109 data-nosnippet>109</a>
