@@ -557,7 +557,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d045de693cb712d0b22c6a64be5b953f67b3ce00ab5ad3dd5d8b441886ab8e1a"
 dependencies = [
  "quote",
- "syn 3.0.10",
+ "syn 2.0.119",
 ]
 
 [[package]]
@@ -810,7 +810,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e35d6e78f4cebb90e51d543db8fe41528851d6deeef6ef21ebd4bfdc1e784776"
 dependencies = [
  "libc",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -1298,7 +1298,7 @@ dependencies = [
  "gobject-sys",
  "libc",
  "system-deps 9.0.1",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -2983,7 +2983,7 @@ dependencies = [
  "once_cell",
  "socket2",
  "tracing",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -3669,7 +3669,7 @@ checksum = "149309498a5f7334b12ddae0cad8aba81ce785fe91755068867e017cf98fee46"
 [[package]]
 name = "smearor-commons-animation"
 version = "0.1.0"
-source = "git+https://github.com/smearor/smearor-commons.git#ed2c1a3a150ac32d770618b02022a2954bd29c6d"
+source = "git+https://github.com/smearor/smearor-commons.git#fec8b977ec0b6457aa05cf63b88c3257bcf912d3"
 dependencies = [
  "serde",
  "smearor-commons-geometry",
@@ -3678,7 +3678,7 @@ dependencies = [
 [[package]]
 name = "smearor-commons-color"
 version = "0.1.0"
-source = "git+https://github.com/smearor/smearor-commons.git#ed2c1a3a150ac32d770618b02022a2954bd29c6d"
+source = "git+https://github.com/smearor/smearor-commons.git#fec8b977ec0b6457aa05cf63b88c3257bcf912d3"
 dependencies = [
  "cairo-rs",
  "serde",
@@ -3688,7 +3688,7 @@ dependencies = [
 [[package]]
 name = "smearor-commons-geometry"
 version = "0.1.0"
-source = "git+https://github.com/smearor/smearor-commons.git#ed2c1a3a150ac32d770618b02022a2954bd29c6d"
+source = "git+https://github.com/smearor/smearor-commons.git#fec8b977ec0b6457aa05cf63b88c3257bcf912d3"
 dependencies = [
  "cairo-rs",
  "serde",
